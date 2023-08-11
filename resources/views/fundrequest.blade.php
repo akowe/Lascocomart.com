@@ -1,0 +1,108 @@
+@extends('layouts.home')
+
+@extends('layouts.sidebar')
+
+
+@section('content')
+
+<!-- ALL CART SECTION -->
+<div class="adminx-content">
+      <!-- <div class="adminx-aside">
+
+        </div> -->
+
+      <div class="adminx-main-content">
+            <div class="container-fluid">
+                  <!-- container -->
+                  <nav aria-label="breadcrumb" role="navigation">
+                        <ol class="breadcrumb adminx-page-breadcrumb">
+                              <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Funds</li>
+                        </ol>
+                  </nav>
+
+                  <div class="pb-3">
+                        <h4>Fund Request</h4>
+                        <p class="text-danger"> To add credit to a member voucher, enter the amount and click "Alocate
+                              fund"<br> To subtract from a member credit enter "-"" amount example: enter -100</p>
+                  </div>
+                  @if(Session::has('credit')== true)
+                  <!--show alert-->
+                  <p class="alert {{ Session::get('alert-class', 'alert-info') }} text-center">
+                        {{ Session::get('credit') }}</p>
+                  @endif
+
+                  @if(Session::has('credit')== false)
+                  <!--show alert-->
+                  <p style="display: none;">{{ Session::get('credit') }}</p>
+                  @endif
+
+                  <!-- row -->
+                  <div class="row">
+                        <div class="col-lg-12  table-responsive">
+                              <table class="table table-striped " id="myTable">
+                                    <thead>
+                                          <tr>
+
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Coop Details</th>
+                                                <th>Amount requested</th>
+                                                <th></th>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+
+                                          @foreach($fund as $details)
+                                          <tr>
+                                                <td>{{ $details->coopname }}</td>
+                                                <td> {{ $details->email }}</td>
+                                                <td>{{ $details->fname }}
+                                                      <br>
+                                                      {{ $details->lname }}
+
+                                                      <br>
+                                                      {{ $details->phone }}
+                                                </td>
+
+                                                <td>{{number_format($details->amount)  }}</td>
+
+                                                <td>
+                                                      <form action="{{ route('allocate_fund') }}" method="post"
+                                                            name="submit">
+                                                            @csrf
+                                                            <input type="hidden" name="user_id" lass="col-sm-3"
+                                                                  value="{{ $details->user_id }}">
+
+                                                            <input type="number" name="credit" style="border:none;"
+                                                                  class="form-control" id="new_bal" placeholder="amount"
+                                                                  required>
+
+                                                            <button type="submit" name="submit"
+                                                                  class="btn btn-outline-danger btn-sm">Allocate
+                                                                  Fund</button>
+
+                                                            <!--   <a href="edit/{{ $details->id }}"> </a> -->
+                                                      </form>
+
+                                                </td>
+                                          </tr> 
+
+                                          @endforeach
+                                    </tbody>
+                              </table>
+
+                        </div>
+                        <!--col 12-->
+                  </div>
+                  <!--roww-->
+            </div>
+      </div> <!-- section -->
+
+      <script type="text/javascript">
+      $(document).ready(function() {
+            $('#myTable').DataTable();
+      });
+      </script>
+
+      @endsection
