@@ -63,7 +63,7 @@
                                                       @foreach($funds as $fund)
 
                                                       <tr class="small">
-                                                            <td>{{ date('d/m/y', strtotime($fund->created_at))}}
+                                                            <td>{{ date('d/M/Y', strtotime($fund->created_at))}}
                                                             </td>
                                                             <td class="text-capitalize"> {{$fund['member_name']}}
                                                             </td>
