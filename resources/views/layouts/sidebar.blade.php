@@ -334,7 +334,8 @@
                    <a class="sidebar-nav-link " href="{{ url('profile') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-user-o"></i>
-                         </span>Profile
+                         </span>
+                         <span class="sidebar-nav-name">Profile</span>
                    </a>
 
              </li>
@@ -346,7 +347,8 @@
             document.getElementById('logout-form').submit();">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-right"></i>
-                         </span>{{ __('Logout') }}
+                         </span>
+                         <span class="sidebar-nav-name">{{ __('Logout') }}</span>
                    </a>
                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                          @csrf
@@ -361,7 +363,8 @@
                    <a class="sidebar-nav-link " href="{{ url('/') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-left"></i>
-                         </span> LascocoMart
+                         </span> 
+                         <span class="sidebar-nav-name">LascocoMart</span>
                    </a>
 
              </li>
