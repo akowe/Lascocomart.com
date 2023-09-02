@@ -113,7 +113,7 @@
                                                       <tbody>
                                                             @foreach($orders as $order)
                                                             <tr class="small">
-                                                                  <td> {{ date('d/m/y', strtotime($order->created_at))}}
+                                                                  <td> {{ date('d/M/Y', strtotime($order->created_at))}}
                                                                   </td>
                                                                   <td>{{$order['fname']}} {{$order['lname']}}</td>
                                                                   <td>{{ number_format($order['grandtotal']) }}</td>
