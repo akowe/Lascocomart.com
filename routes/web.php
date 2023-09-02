@@ -40,19 +40,19 @@ Route::get('/', function () {
     return view('index');
 });
  //Clear route cache
- Route::get('/route-cache', function() {
-    \Artisan::call('route:cache');
+ Route::get('/route-clear', function() {
+    \Artisan::call('route:clear');
     return 'Routes cache cleared';
 });
 
 //Clear config cache
-Route::get('/config-cache', function() {
-    \Artisan::call('config:cache');
+Route::get('/config-clear', function() {
+    \Artisan::call('config:clear');
     return 'Config cache cleared';
 }); 
 
 // Clear application cache
-Route::get('/clear-cache', function() {
+Route::get('/cache-clear', function() {
     \Artisan::call('cache:clear');
     return 'Application cache cleared';
 });
