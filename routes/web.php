@@ -39,13 +39,45 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return view('index');
 });
+ //Clear route cache
+ Route::get('/route-cache', function() {
+    \Artisan::call('route:cache');
+    return 'Routes cache cleared';
+});
+
+//Clear config cache
+Route::get('/config-cache', function() {
+    \Artisan::call('config:cache');
+    return 'Config cache cleared';
+}); 
+
+// Clear application cache
+Route::get('/clear-cache', function() {
+    \Artisan::call('cache:clear');
+    return 'Application cache cleared';
+});
+
+// Clear view cache
+Route::get('/view-clear', function() {
+    \Artisan::call('view:clear');
+    return 'View cache cleared';
+});
+
+// Clear cache using reoptimized class
+Route::get('/optimize-clear', function() {
+    \Artisan::call('optimize:clear');
+    return 'View cache cleared';
+});
+
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
+
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/')->with('success','Verification successful');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
 //register users
 Route::get('cooperative-register', [App\Http\Controllers\Auth\CoopController::class, 'registerCooperative'])->name('cooperative-register');
 Route::get('member-register', [App\Http\Controllers\Auth\CoopController::class, 'registerMember'])->name('member-register');
