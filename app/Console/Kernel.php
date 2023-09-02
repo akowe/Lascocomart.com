@@ -17,12 +17,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        //$schedule->command('model:prune')->daily();
         $now = \Carbon\Carbon::now();
         $schedule->call(function () {
         DB::table('notifications')->delete()
         ->where('read_at', '<', $now->subDays(7));
         })->hourly();
+        
+        $schedule->command('cache:clear')->hourly();
+        $schedule->command('config:clear')->hourly();
+        $schedule->command('view:clear')->hourly();
+        $schedule->command('route:clear')->hourly();
+        $schedule->command('optimize:clear')->hourly();
 
     }
 
