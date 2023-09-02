@@ -277,7 +277,7 @@
                                                 </select> -->
 
                                                 <input class="input search" type="text" name="search" id="search"
-                                                      placeholder="Search for items here" autocomplete="off" style="width:80%;"/>
+                                                      placeholder="Search for products here" autocomplete="off" style="width:80%;"/>
                                                 <button class="search-btn" type="submit"><i class="fa fa-search"></i> Search</button>
 
                                           </form>
