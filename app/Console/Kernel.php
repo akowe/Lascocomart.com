@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -14,20 +15,31 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+    protected $commands = [
+        Commands\ClearCache::class,
+    ];
+     
+
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+
+        $schedule->command('cache:hourly')->hourly();
+        $schedule->command('config:clear')->hourly();
+        $schedule->command('view:clear')->hourly();
+        $schedule->command('route:clear')->hourly();
+        $schedule->command('optimize:clear')->hourly();
+
+        // $schedule->call(function () {
+        //     Artisan::call('cache:clear'); 
+        //     // you can move this part to Job
+        // })
+        // ->daily();
+
         $now = \Carbon\Carbon::now();
         $schedule->call(function () {
         DB::table('notifications')->delete()
         ->where('read_at', '<', $now->subDays(7));
         })->hourly();
-        
-        $schedule->command('cache:clear')->hourly();
-        $schedule->command('config:clear')->hourly();
-        $schedule->command('view:clear')->hourly();
-        $schedule->command('route:clear')->hourly();
-        $schedule->command('optimize:clear')->hourly();
 
     }
 
