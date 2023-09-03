@@ -358,27 +358,29 @@
             <!-- MAIN HEADER -->
             <div id="header" class="">
                   <!-- container -->
+                  <!-- container -->
                   <div class="container">
                         <!-- row -->
                         <div class="row">
                               <!-- LOGO -->
-                              <div class="col-md-3">
-                                    <div class="header-logo">
+                              <div class="col-md-2">
+
+                                    <div class="header-logo ">
                                           <a href="{{ url('/') }}" class="logo">
-                                                <img src=".././images/lascoco-logo.png" alt="LASCOCO" title="LASCOCO"
+                                                <img src="/images/lascoco-logo.png" alt="LASCOCO" title="LASCOCO"
                                                       width="139" height="93">
-                                                <!--  <h1 class="white" style="color:#fff;">Lascoco</h1> -->
                                           </a>
                                     </div>
                               </div>
                               <!-- /LOGO -->
 
                               <!-- SEARCH BAR -->
-                              <div class="col-md-7">
+                              <div class="col-md-7 text-center">
                                     <div class="header-search">
 
-                                          <form action="{{ route('category') }}" method="GET" multipart/form-data>
-                                                <select name="category" id="input" class="input-select">
+                                          <form action="{{ route('category') }}" method="GET"
+                                                enctype="multipart/form-data">
+                                                <!-- <select name="category" id="input" class="input-select ">
                                                       <option value="">All Categories</option>
                                                       @foreach (\App\Models\Categories::select('cat_name')->get() as
                                                       $category)
@@ -387,20 +389,20 @@
                                                                   href="{{route('category')}}?category={{ $category->cat_name }}">{{ $category['cat_name'] }}</a>
                                                       </option>
                                                       @endforeach
-                                                </select>
-
+                                                </select> -->
 
                                                 <input class="input search" type="text" name="search" id="search"
-                                                      placeholder="Search here" autocomplete="off" />
-                                                <button class="search-btn" type="submit">Search</button>
-                                          </form>
+                                                      placeholder="Search for products here" autocomplete="off" style="width:80%;"/>
+                                                <button class="search-btn" type="submit"><i class="fa fa-search"></i> Search</button>
 
+                                          </form>
                                     </div>
                               </div>
+
                               <!-- /SEARCH BAR -->
 
                               <!-- ACCOUNT -->
-                              <div class="col-md-2">
+                              <div class="col-md-3">
                                     <div class="header-ctn">
 
                                           <!-- Cart -->
@@ -441,7 +443,8 @@
                                                                         <h6 class="product-price">
                                                                               <span class="qty">{{ $details['quantity'] }}
                                                                                     &nbsp; x </span>
-                                                                              ₦ {{ number_format($details['price']) }}
+                                                                              ₦
+                                                                              {{ number_format($details['price']) }}
                                                                         </h6>
                                                                   </div>
                                                             </div><!-- product widget-->
@@ -455,11 +458,9 @@
                                                       </div>
                                                       @endif
 
-
-
-
                                                       <div class="cart-btns">
-                                                            <a href="{{ route('cart') }}" class="cursor">View Cart</a>
+                                                            <a href="{{ route('cart') }}" class="cursor">View
+                                                                  Cart</a>
                                                             <a href="{{ url('/checkout')}}"
                                                                   style="cursor:pointer;">Checkout <i
                                                                         class="fa fa-arrow-circle-right"></i></a>
@@ -467,6 +468,104 @@
 
                                                 </div><!-- cart dropdownt -->
                                           </div><!-- /Cart -->
+
+                                          <!-- WishList -->
+                                        
+
+
+
+                                          <div class="hidden-lg hidden-md">
+                                                <!-- <a href="{{ route('seller-register') }}" data-toggle="modal" data-target="#merchantModal"> Sell on LascocoMart</a> -->
+                                                <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
+                                          </div>
+
+                                          <!--show member name-->
+
+                                          <div class="nav-item dropdown hidden-lg hidden-md">
+                                                @if (Route::has('login'))
+                                                @auth
+
+                                                <a href="" class="dropbtn"> My Account</a>
+                                                @if(Auth::user()->role_name == 'cooperative')
+                                                <div class="dropdown-content">
+                                                      <a href="{{ route('cooperative') }}">Dashboard</a>
+
+                                                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                      </a>
+                                                      <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                      </form>
+                                                </div>
+                                                @endif
+
+                                                @if(Auth::user()->role_name == 'merchant')
+                                                <div class="dropdown-content">
+                                                      <a href="{{ route('merchant') }}">Dashboard</a>
+                                                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                      </a>
+                                                      <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                      </form>
+
+                                                </div>
+                                                @endif
+
+                                                @if(Auth::user()->role_name == 'member')
+                                                <div class="dropdown-content">
+                                                      <a href="{{ route('dashboard') }}">Dashboard</a>
+                                                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                      </a>
+                                                      <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                      </form>
+                                                </div>
+                                                @endif
+
+                                                @if(Auth::user()->role_name == 'superadmin')
+                                                <div class="dropdown-content">
+                                                      <a href="{{ route('superadmin') }}">Dashboard</a>
+                                                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                      </a>
+                                                      <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                      </form>
+                                                </div>
+                                                @endif
+                                                @if(Auth::user()->role_name == 'fcmg')
+                                                <div class="dropdown-content">
+                                                      <a href="{{ route('fcmg') }}">Dashboard</a>
+
+                                                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                      </a>
+                                                      <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                      </form>
+                                                </div>
+                                                @endif
+                                                @else
+                                                <a href="{{ route('login') }}"
+                                                      class="text-sm text-gray-700 dark:text-gray-500 underline">
+                                                      Login/Register</a>
+                                                @endauth
+                                                @endif
+                                          </div>
+
+                                          <!-- end show member name-->
 
                                           <!-- Menu Toogle -->
                                           <div class="menu-toggle">
