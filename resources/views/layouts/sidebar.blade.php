@@ -631,7 +631,7 @@
              <li class="sidebar-nav-item">
                    <a class="sidebar-nav-link " href="{{ url('order-history') }}">
                          <span class="sidebar-nav-icon">
-                               <i class="fa fa-product-hunt"></i>
+                               <i class="fa fa-shopping-cart"></i>
                          </span>
                          <span class="sidebar-nav-name">
                                Order History
