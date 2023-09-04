@@ -77,6 +77,7 @@ class ProductController extends Controller
             $getWish = Arr::pluck($wishlist, 'product_id');
             $saveItem = implode(',', $getWish);
             $wish = Product::join('wishlist', 'wishlist.product_id', '=', 'products.id')
+            ->where('wishlist.user_id', $id)
              ->get('products.*');
              return view('products', compact('products', 'wishlist', 'wish'));
          }
@@ -277,9 +278,8 @@ public function wishlist(Request $request){
     if( Auth::user()){
     $id = Auth::user()->id;
     $wishlist = Wishlist::where('user_id', $id)->get();
-
-
     $wish = Product::join('wishlist', 'wishlist.product_id', '=', 'products.id')
+    ->where('wishlist.user_id', $id)
      ->get('products.*');
 
     return view('wish', compact('wishlist', 'wish'));
@@ -292,9 +292,7 @@ public function wishlist(Request $request){
 public function removeWishlist(Request $request){
     if( Auth::user()){
     $id = Auth::user()->id;
-
-    $wishlist = \DB::table('wishlist')
-    ->where('product_id', $request->id)
+    $wishlist = Wishlist::where('product_id', $request->id)
     ->where('user_id', $id)
     ->delete();
     return redirect()->back()->with('success', 'Product successfully removed from your wishlist !');

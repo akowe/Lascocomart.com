@@ -58,7 +58,7 @@
                         @php $items += 1 * $item
                         @endphp
                         @endforeach
-                        <h3>Saved Item(s) {{$items}} </h3>
+                        <h3>Saved Item(s) {{$wish->count()}} </h3>
 
                         <table id="cart" class="table">
                               <thead>
@@ -95,13 +95,13 @@
                                           @else
                                           <a  href="{{ route('add.to.cart', $details['id']) }}"class="btn btn-danger">BUY NOW</a>
                                           @endif
-                                    </td>
+                                    </td> 
 
                                           <td data-th="Remove">
                                                 <form action="{{ route('remove.from.wish') }}" method="POST" class="remove-wrapper">
                                                       @csrf
                                                       <input type="hidden" value="{{ $details['id'] }}" name="id">
-                                                      <button class="btn btn-sm text-danger"><i
+                                                      <button type ="submit" class="btn btn-sm text-danger"><i
                                                                   class="fa fa-trash-o"></i></button>
                                                 </form>
                                           </td>
