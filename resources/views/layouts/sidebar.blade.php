@@ -432,7 +432,7 @@
              <hr style="color:#f7f7f7;">
              </hr>
 
-             <li class="sidebar-nav-item">
+             <!-- <li class="sidebar-nav-item">
                    <a class="sidebar-nav-link " href="{{ url('payout') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-money"></i>
@@ -445,9 +445,8 @@
                          </span>
                    </a>
 
-             </li>
-             <hr style="color:#f7f7f7;">
-             </hr>
+             </li> -->
+          
 
              <li class="sidebar-nav-item">
                    <a class="sidebar-nav-link " href="{{ url('profile') }}">
