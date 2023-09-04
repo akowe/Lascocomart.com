@@ -252,6 +252,7 @@ Route::get('payment-bank-tranfer/{reference}/{order_id}/{order_amount}', [App\Ht
 Route::get('admin-order-history', [App\Http\Controllers\CooperativeController::class, 'adminOrderHistory'])->name('admin-order-history');
 Route::get('admin-products', [App\Http\Controllers\CooperativeController::class, 'adminProducts'])->name('admin-products');
 Route::post('/order-update', [CooperativeController::class, 'approveOrder'])->name('order-update');
+Route::get('cancel-new-order/{id}', [CooperativeController::class, 'cancelMemberNewOrder'])->name('cancel-new-order');
 Route::post('/order-cancel', [CooperativeController::class, 'cancelOrder'])->name('order-cancel');
 Route::get('view-canceled-orders', [App\Http\Controllers\CooperativeController::class, 'viewCanceledOrders'])->name('view-canceled-orders');
 Route::get('autocomplete', [CategoriesController::class,'autocomplete'])->name('autocomplete');

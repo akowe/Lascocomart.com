@@ -120,6 +120,37 @@ class CooperativeController extends Controller
         ->get('credit');  
         return view('cooperative.order-history', compact('credit', 'orders', 'sumApproveOrder'));
     }
+    public function cancelMemberNewOrder($id)
+    {
+        $order = Order::find($id);
+        $user = User::where('id', $order->user_id)->get('fname');
+        $array = Arr::pluck($user,'fname' );
+        $userName = implode(",", $array);
+        return view('cooperative.cancel-new-order', compact('order', 'userName'));
+    }
+
+    public function cancelOrder(Request $request){
+        $credit = $request->credit;
+        $input = 'cancel';
+        $order_id = $request->order_id;
+        Order::where('id', $order_id)
+        ->update([
+        'status' => $input
+        ]); 
+        $getMember = User::join('orders', 'orders.user_id', '=', 'users.id')
+        ->where('orders.id', $order_id)
+        ->get('users.id');
+
+        $getOrderNumber = Order::where('id', $order_id)->get();
+        $order= Arr::pluck($getOrderNumber, 'order_number'); // 
+        $order_number = implode('', $order);
+     
+        $notification = new AdminCancelOrder($order_number, $credit);
+        Notification::send($getMember, $notification);
+
+        return redirect('cooperative')->with('success', 'Canceled successful!');
+    }
+
 
     public function viewCanceledOrders(Request $request){
         $code = Auth::user()->code;
@@ -130,6 +161,7 @@ class CooperativeController extends Controller
         ->paginate( $request->get('per_page', 5));
         return view('cooperative.canceled-orders', compact('orders'));
     }
+    
 
     public function adminProducts(Request $request){
         $id = Auth::user()->id;
@@ -169,28 +201,6 @@ class CooperativeController extends Controller
             return redirect()->back()->with('error', 'Your credit is low kindly contact LascocoMart to get funds');   
         }
        
-    }
-
-    public function cancelOrder(Request $request){
-        $credit = $request->credit;
-        $input = 'cancel';
-        $order_id = $request->order_id;
-        Order::where('id', $order_id)
-        ->update([
-        'status' => $input
-        ]); 
-        $getMember = User::join('orders', 'orders.user_id', '=', 'users.id')
-        ->where('orders.id', $order_id)
-        ->get('users.id');
-
-        $getOrderNumber = Order::where('id', $order_id)->get();
-        $order= Arr::pluck($getOrderNumber, 'order_number'); // 
-        $order_number = implode('', $order);
-     
-        $notification = new AdminCancelOrder($order_number, $credit);
-        Notification::send($getMember, $notification);
-
-        return redirect()->back()->with('success', 'Canceled successful!');
     }
 
     public function members(Request $request ){

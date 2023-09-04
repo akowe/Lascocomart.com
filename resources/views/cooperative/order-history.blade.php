@@ -109,12 +109,11 @@
 
                                                                         <div class="col-md-2">
 
-                                                                              <button type="button"
-                                                                                    class="btn btn-outline-danger "
-                                                                                    data-toggle="modal"
-                                                                                    data-target="#exampleModal">
-                                                                                    <i class="fa fa-cancel"></i>
-                                                                              </button>
+                                                                            
+                                                                        <a href="{{ url('cancel-new-order/'.$order->id) }}"
+                                                                                          class="btn btn-outline-danger ">
+                                                                                          <i
+                                                                                                class="fa fa-cancel"></i></a>
                                                                         </div>
                                                                   </div>
                                                                   @endif
