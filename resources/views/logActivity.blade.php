@@ -1,5 +1,4 @@
-@extends('layouts.user-activity')
-
+@extends('layouts.home')
 @extends('layouts.sidebar')
 @section('content')
 <div class="adminx-content">
@@ -14,26 +13,28 @@
                   </nav>
 
             </div>
-            <div class="container">
+          
+            <div class="container-fluid">
                   <div class="row">
-                        <div class="col-12">
+                  <div class="col-lg-12">
                               <h1>Users Activity Log </h1>
                               <div class="card">
-                                    <div class="card-body">
-                                          <table class="table table-bordered">
-                                                <tr class="text-uppercase">
+                                    <div class="card-body collapse show tabel-resposive">
+                                          <table class="table-striped table" id="table">
+                                                <thead>
+                                                <tr class="text-uppercase small">
                                                       <th>No</th>
                                                       <th>User</th>
                                                       <th>Event</th>
                                                       <th>URL</th>
-
                                                       <th>Ip</th>
-                                                      <th width="40%">User Agent</th>
-                                                      <th width="30%">TimeStamp</th>
-
+                                                      <th >User Agent</th>
+                                                      <th >TimeStamp</th>
                                                       <th>Show</th>
                                                 </tr>
-                                                @if($logs->count())
+                                                </thead>
+                                               <tbody>
+                                               @if($logs->count())
                                                 @foreach($logs as $key => $log)
                                                 <tr class="small">
                                                       <td>{{ ++$key }}</td>
@@ -51,17 +52,14 @@
 
                                                       <td class="text-center" ><a href="" class="text-danger"><i class="fa fa-eye"></i> </a></td>
                                                 </tr>
+                                               </tbody>
                                                 @endforeach
                                                 @endif
                                           </table>
                                     </div>
                               </div>
-
-
-                        </div>
-
+                        </div>             
                   </div>
-
             </div>
       </div>
 </div>

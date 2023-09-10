@@ -263,7 +263,7 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
       <script src="admin/js/vendor.js"></script>
       <script src="admin/js/adminx.js"></script>
-      <script src="admin/js/custom.js"></script>
+
       <!-- Footer row -->
 
       <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -278,7 +278,7 @@
       <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
       <script type="text/javascript">
       $(document).ready(function() {
-            $('#userActivity').DataTable({
+            $('#table').DataTable({
                   responsive: true,
 
                   dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +

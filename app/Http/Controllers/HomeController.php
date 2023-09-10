@@ -40,10 +40,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function logActivity()
+    public function logActivity(Request $request)
     {
         // $logs = \LogActivity::logActivityLists();
         $logs = LogActivityModel::join('users', 'users.id', '=', 'log_activity.user_id')
+        ->orderBy('log_activity.id', 'desc')
         ->get(['log_activity.*', 'users.email', 'users.fname']);
         return view('logActivity',compact('logs'));
     }
