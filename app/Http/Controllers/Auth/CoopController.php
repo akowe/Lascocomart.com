@@ -15,6 +15,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use Session;
+use App\Models\LogActivity ;
+
 
 
 class CoopController extends Controller
@@ -42,8 +44,7 @@ class CoopController extends Controller
         return view('auth.cooperative-register');
     }
 
-     public function coop_insert(Request $request)
-    {
+     public function coop_insert(Request $request){
         $this->validate($request, [
             'fname' => 'required', 'string', 'max:255',
             'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
@@ -69,18 +70,6 @@ class CoopController extends Controller
             $image->move(public_path('assets/cooperativeCert'),$imageName);
             $image_path = "/assets/cooperativeCert/".$imageName; 
            //new User;
-        //     $user = User::create([
-        //     'role' => $role,
-        //     'role_name' =>$role_name,
-        //     'fname' => $request->fname,
-        //     'code' => $request->code,
-        //     'coopname' => $request->coopname,
-        //     'address' => $request->address,
-        //     'cooptype' => $request->cooptype,
-        //     'cooperative_cert' =>$image_path,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request['password']),
-        // ]);
 
         $user = new User();
         $user->role         = $role;
@@ -95,8 +84,6 @@ class CoopController extends Controller
         $user->email        = $request->email;
         $user->password     = Hash::make($request['password']);
         $user->save();
-
-          //event(new Registered($user));
          if($user){
             $voucherDigit = rand(1000000000,9999999999);
               $voucher = new Voucher();
@@ -109,13 +96,20 @@ class CoopController extends Controller
               $wallet->user_id = $user->id;
               $wallet->credit = '0';
               $wallet->save();
+            
+              //LOG NEW REGISTER COOPERATIVE
+                $log = new LogActivity();
+                $log->subject = 'Signup';
+                $log->url = $request->fullUrl();
+                $log->method = $request->method();
+                $log->ip= $request->ip();
+                $log->agent =$request->header('user-agent');
+                $log->user_id = $user->id;
+                $log->save();
        
          }
-           
             Session::flash('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
             Session::flash('alert-class', 'alert-success'); 
-          //return $user;
-
           return redirect('/')->with('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
         
     }
@@ -140,21 +134,28 @@ class CoopController extends Controller
           $user->email        = $request->email;
           $user->password     = Hash::make($request['password']);
           $user->save();
-  
-            //event(new Registered($user));
            if($user){
-             
               $voucherDigit = rand(1000000000,9999999999);
                 $voucher = new Voucher();
                 $voucher->user_id = $user->id;
                 $voucher->voucher = $voucherDigit;
                 $voucher->credit = '0';
                 $voucher->save();
-    
+
                 $wallet = new Wallet();
                 $wallet->user_id = $user->id;
                 $wallet->credit = '0';
                 $wallet->save();
+                //LOG NEW REGISTER MEMBER
+                $log = new LogActivity();
+                $log->subject = 'Signup';
+                $log->url = $request->fullUrl();
+                $log->method = $request->method();
+                $log->ip= $request->ip();
+                $log->agent =$request->header('user-agent');
+                $log->user_id = $user->id;
+                $log->save();
+       
            }
            
             Session::flash('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 

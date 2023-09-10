@@ -80,6 +80,15 @@ class FcmgsController extends Controller
             $wallet->user_id = $user->id;
             $wallet->credit = '0';
             $wallet->save();
+                  //LOG NEW REGISTER FCMG
+                  $log = new LogActivity();
+                  $log->subject = 'Signup';
+                  $log->url = $request->fullUrl();
+                  $log->method = $request->method();
+                  $log->ip= $request->ip();
+                  $log->agent =$request->header('user-agent');
+                  $log->user_id = $user->id;
+                  $log->save();
 
             Session::flash('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
             Session::flash('alert-class', 'alert-success'); 

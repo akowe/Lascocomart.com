@@ -43,30 +43,35 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-    
+     
     switch(Auth::user()->role){
         case 1:
             $this->redirectTo = '/superadmin';
+            \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;
 
         case 2:
             $this->redirectTo = '/cooperative';
+            \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;
 
         case 3:
             $this->redirectTo = '/merchant';
+            \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;
         
         case 4:
             $this->redirectTo = '/checkout';
+            \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;
         
         case 5:
             $this->redirectTo = '/fcmg';
+            \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;
 

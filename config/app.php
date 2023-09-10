@@ -237,6 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'LogActivity' => App\Helpers\LogActivity::class,
 
     ],
 

@@ -59,16 +59,6 @@ class SellerController extends Controller
            $coopID =rand(100,999);
            $code = 'Lascoco'.$coopID;
 
-           //$user = new User;
-        //     $user = User::create([
-        //     'role' => $role,
-        //     'role_name' =>$role_name,
-        //     'fname' => $request->fname,
-        //     'code' => $code,
-        //     'coopname' => $request->coopname,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        // ]);
             $user = new User();
             $user->role         = $role;
             $user->role_name    = $role_name;
@@ -78,10 +68,8 @@ class SellerController extends Controller
             $user->email        = $request->email;
             $user->password     = Hash::make($request['password']);
             $user->save();
-    
-              //event(new Registered($user));
+
              if($user){
-              
                 $voucherDigit = rand(1000000000,9999999999);
                   $voucher = new Voucher();
                   $voucher->user_id = $user->id;
@@ -93,6 +81,16 @@ class SellerController extends Controller
                   $wallet->user_id = $user->id;
                   $wallet->credit = '0';
                   $wallet->save();
+
+                //LOG NEW REGISTER SELLER
+                $log = new LogActivity();
+                $log->subject = 'Signup';
+                $log->url = $request->fullUrl();
+                $log->method = $request->method();
+                $log->ip= $request->ip();
+                $log->agent =$request->header('user-agent');
+                $log->user_id = $user->id;
+                $log->save();
              }
            
             Session::flash('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 

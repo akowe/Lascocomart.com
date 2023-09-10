@@ -42,7 +42,7 @@
                                     </a>
                               </div>
                               <div class="card">
-                                    <div class="card-header text-center ">Cooperative Organization</div>
+                                    <div class="card-header text-center ">Signup as a  member of a cooperative</div>
 
                                     <div class="card-body">
                                           <form method="POST" action="{{ route('create-member') }}"

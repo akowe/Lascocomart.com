@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FcmgProductController;
 use App\Http\Controllers\CategoriesController;
@@ -77,6 +78,18 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/')->with('success','Verification successful');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+//users activity
+
+Route::group([
+    'namespace' => 'App\Haruncpi\LaravelUserActivity\Controllers',
+    'middleware' => config('user-activity.middleware')
+    ], function () {
+    Route::get(config('user-activity.route_path'), 'ActivityController@getIndex');
+    Route::post(config('user-activity.route_path'), 'ActivityController@handlePostRequest');
+});
+Route::get('add-to-log', [App\Http\Controllers\HomeController::class, 'myTestAddToLog']);
+Route::get('logActivity', [App\Http\Controllers\HomeController::class,'logActivity']);
 
 //register users
 Route::get('cooperative-register', [App\Http\Controllers\Auth\CoopController::class, 'registerCooperative'])->name('cooperative-register');

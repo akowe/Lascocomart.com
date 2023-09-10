@@ -15,3 +15,5 @@ yarn-error.log
 /.vscode
 .DS_Store
 .DS_Store
+storage/logs/laravel.log
+.DS_Store
