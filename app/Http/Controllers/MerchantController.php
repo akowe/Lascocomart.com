@@ -91,7 +91,7 @@ class MerchantController extends Controller
             
           $credit = Wallet::join('users', 'users.id', '=', 'wallets.user_id')
            ->where('users.id', $id)->get('credit');
-
+           \LogActivity::addToLog('Merchant dashboard');
        return view('merchants.merchant', compact('approveOrders', 'products', 'count_product', 'count_orders', 'sales', 'credit', 'orders'));
 
        }
@@ -112,7 +112,7 @@ class MerchantController extends Controller
       $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
       ->where('products.prod_status', 'approve')
       ->where('users.id', $id);
-
+      \LogActivity::addToLog('Products');
       return view('merchants.all-products', compact('products', 'count_product'));
         }
       else { return Redirect::to('/login');
@@ -124,7 +124,7 @@ class MerchantController extends Controller
     {
     if( Auth::user()->role_name  == 'merchant'){
         $categories = Categories::all(); 
-
+        \LogActivity::addToLog('Product');
         return view('merchants.add_new_product', compact('categories'));
         }
       else { return Redirect::to('/login');
@@ -158,28 +158,20 @@ class MerchantController extends Controller
             $imageName =  rand(1000000000, 9999999999).'.jpeg';
              $image->move(public_path('assets/products'),$imageName);
              $image_path = "/assets/products/" . $imageName; 
-
              }
-
             else {
             $image_path = "";
              }
-
-
            $img1= $request->file('img1');
             if(isset($img1))
             {
             $img1Name =  rand(1000000000, 9999999999).'.jpeg';
              $img1->move(public_path('assets/products'),$img1Name);
              $img1_path = "/assets/products/" . $img1Name; 
-
              }
-
             else {
             $img1_path = "";
              }
-
-
               $img2= $request->file('img2');
             if(isset($img2))
             {
@@ -188,46 +180,32 @@ class MerchantController extends Controller
              $img2_path = "/assets/products/" . $img2Name; 
 
              }
-
             else {
             $img2_path = "";
              }
-
-
-
             $img3= $request->file('img3');
             if(isset($img3))
             {
             $img3Name =  rand(1000000000, 9999999999).'.jpeg';
              $img3->move(public_path('assets/products'),$img3Name);
              $img3_path = "/assets/products/" . $img3Name; 
-
              }
-
             else {
             $img3_path = "";
              }
-
-
             $img4= $request->file('img4');
             if(isset($img4))
             {
             $img4Name = rand(1000000000, 9999999999).'.jpeg';
              $img4->move(public_path('assets/products'),$img4Name);
              $img4_path = "/assets/products/" . $img4Name; 
-
              }
-
             else {
             $img4_path = "";
              }
 
             // add company and coperative percentage
-
-            //$cop = $request->price * 5 / 100; //cooperative percentage
-
-            $company_percentage = $request->price *  5 / 100;// coopmart percentage //this was changed from 7 to 2
-        
+            $company_percentage = $request->price *  5 / 100;
             $price = $request->price  + $company_percentage;
 
            $product = new Product;
@@ -265,6 +243,7 @@ class MerchantController extends Controller
                 );
  
             Mail::to('info@lascocomart.com')->send(new SendMail($data));
+            \LogActivity::addToLog('Add product');
             return redirect('merchant')->with('status', 'New product added successfully');   
     }   
  
@@ -281,7 +260,7 @@ class MerchantController extends Controller
             Session::flash('remove', ' Product Removed Successful!'); 
             Session::flash('alert-class', 'alert-success'); 
         // }
-
+        \LogActivity::addToLog('Remove product');
         return redirect()->back()->with('success', 'Product Removed Successful!');
     }
 
@@ -292,12 +271,12 @@ class MerchantController extends Controller
                $id = Auth::user()->id; //  
 
           $sales = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
-                           ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                          ->where('orders.status', 'paid')
-                           ->where('products.seller_id', $id) 
-                           ->orderBy('orders.date', 'desc')  
-                            ->paginate( $request->get('per_page', 5));  
-
+          ->join('orders', 'orders.id', '=', 'order_items.order_id')
+          ->where('orders.status', 'paid')
+          ->where('products.seller_id', $id) 
+          ->orderBy('orders.date', 'desc')  
+          ->paginate( $request->get('per_page', 5));  
+          \LogActivity::addToLog('Sales');
        return view('merchants.sales_preview', compact('sales'));
 
          }
@@ -325,7 +304,7 @@ class MerchantController extends Controller
           ->where('products.seller_id', $id) 
          ->where('orders.order_number', $order_number)
          ->get(['orders.*',  'order_items.*',  'products.*']); 
-          
+         \LogActivity::addToLog('Invoice');
           return view('invoice', compact('item', 'orders'));
                 }
 
