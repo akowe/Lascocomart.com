@@ -91,7 +91,7 @@ class SuperAdminController extends Controller
           $sales[++$key] = ["Sales", $value->year];
           $sales[++$key] = ["Other", (int)$value->total_sales];
           }
-     
+          \LogActivity::addToLog('SuperAdmin');
         return view('company.admin', compact('sales', 'funds','cooperatives', 'sellers', 'members', 
         'count_orders', 'count_sales',  'products', 'users', 'onlinePayment', 'sumSales', 'offlinePayment', 'onlinePayment', 'bankPayment'))->with('registeredUsers',json_encode($result));
     }
@@ -109,6 +109,7 @@ class SuperAdminController extends Controller
         ->where('orders.status', '!=', 'awaits approval')
         ->where('orders.status', '!=', 'cancel')  
         ->get(['users.coopname', 'orders.*']);
+        \LogActivity::addToLog('SuperAdmin orderHistory');
         return view('company.order-history', compact('orders'));
     }
 
@@ -148,7 +149,7 @@ class SuperAdminController extends Controller
                   Session::flash('verified', 'Balance not up to Credit amount.'); 
                   Session::flash('alert-class', 'alert-danger'); 
             }
-
+            \LogActivity::addToLog('SuperAdmin addFunds');
              return redirect()->back()->with('credit', 'Fund Allocated successfully!');
   }
 
@@ -157,6 +158,7 @@ class SuperAdminController extends Controller
       $funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
       ->where('users.id', $id)
       ->paginate( $request->get('per_page', 5));
+      \LogActivity::addToLog('SuperAdmin fundsAllocated');
       return view('company.funds-allocated', compact('funds'));
     }
  
@@ -176,7 +178,8 @@ class SuperAdminController extends Controller
         $orders = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
         ->join('products', 'products.id', '=', 'order_items.product_id')
         ->where('orders.order_number', $order_number)
-        ->get(['orders.*',  'order_items.*',  'products.*']);  
+        ->get(['orders.*',  'order_items.*',  'products.*']); 
+        \LogActivity::addToLog('SuperAdmin userInvoice'); 
     return view('company.sales_invoice', compact('item', 'orders'));
            }
 
@@ -197,7 +200,7 @@ class SuperAdminController extends Controller
           ->orderBy('orders.date', 'desc')
                         // ->get(['orders.*', 'users.*', 'order_items.*', 'products.*']);
           ->paginate( $request->get('per_page', 5)); 
-
+          \LogActivity::addToLog('SuperAdmin orderDetails');
     return view('company.order_details', compact('orders'));
            }
 
@@ -219,7 +222,7 @@ class SuperAdminController extends Controller
         ->paginate( $request->get('per_page', 5)); 
         $grandtotal = Order::where('orders.pay_status', 'success')->get('grandtotal');
         $total = Order::where('orders.pay_status', 'success')->get('total');
-
+        \LogActivity::addToLog('SuperAdmin salesDetails');
     return view('company.sales-details', compact('sales', 'grandtotal', 'total'));
            }
 
@@ -240,7 +243,7 @@ class SuperAdminController extends Controller
         $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
                           ->where('products.prod_status', 'pending')
                          ->orwhere('products.prod_status', 'approve');
-       
+                         \LogActivity::addToLog('SuperAdmin productList');
        return view('company.products_list', compact('products', 'count_product'));
 
        }
@@ -289,11 +292,10 @@ class SuperAdminController extends Controller
                 Wallet::where('user_id', $seller_id)->increment('credit',$sellerPrice);
               }
           
-  
-
             Session::flash('pay', ' You have marked this orders as  "Paid !".'); 
             Session::flash('alert-class', 'alert-success'); 
         }
+        \LogActivity::addToLog('SuperAdmin markPaid');
            return redirect()->back()->with('success', 'You have marked this orders as  "Paid !".');
     }
 
@@ -331,6 +333,7 @@ class SuperAdminController extends Controller
            
         }
             //return view('cooperative.credit_limit', compact('credit'));
+            \LogActivity::addToLog('Approve product');
              return redirect()->back()->with('success', 'Product approved successful!..');
 
 }
@@ -357,7 +360,7 @@ class SuperAdminController extends Controller
 
       //view all sellers
        $merchants = User::where('role', '3')->get('*');
-
+       \LogActivity::addToLog('SuperAdmin userList');
        return view('company.users_list', compact('coop', 'members', 'merchants', 'fcmg'));
  
        }
@@ -400,6 +403,7 @@ public function user_update(Request $request, $id)
     $user->account_number = $request->account_number;
     $user->update();
     $data = 'Update successful for ' .$user->fname. '';
+    \LogActivity::addToLog('Update');
     return redirect()->back()->with('status',  $data);
 }
 
@@ -413,6 +417,7 @@ public function user_update(Request $request, $id)
                         ->paginate( $request->get('per_page', 5));
                        //->get(['vouchers.*', 'users.*']);
         // }
+        \LogActivity::addToLog('Transaction details');
        return view('company.transactions', compact('transactions'));
 
        }
@@ -450,6 +455,7 @@ public function about_update(Request $request, $id)
         $about->about = $request->input('about');
         $about->our_story = $request->input('our_story');
         $about->update();
+        \LogActivity::addToLog('Update aboutUs');
         return redirect()->back()->with('status','About page updated');
     }
 
@@ -480,6 +486,7 @@ public function privacy(Request $request){
         $about = Privacy::find($id);
         $about->privacy_policy = $request->input('privacy');
         $about->update();
+        \LogActivity::addToLog('Update privacyPolicy');
         return redirect()->back()->with('status','Privacy page updated');
     }
 
@@ -511,6 +518,7 @@ public function privacy(Request $request){
         $about = ReturnRefund::find($id);
         $about->return_policy = $request->input('return');
         $about->update();
+        \LogActivity::addToLog('Update refundPolicy');
         return redirect()->back()->with('status','Reurn & Refund page updated');
     }
 
@@ -542,6 +550,7 @@ public function tandc(Request $request){
         $about = Terms::find($id);
         $about->terms_c = $request->input('terms_c');
         $about->update();
+        \LogActivity::addToLog('Update TandC');
         return redirect()->back()->with('status','T & C page updated');
     }
 
@@ -552,6 +561,7 @@ public function tandc(Request $request){
         $products = User::join('products', 'products.seller_id', '=', 'users.id')
                          ->where('products.prod_status', 'remove')
                         ->paginate( $request->get('per_page', 4));
+                        \LogActivity::addToLog('Remove product');
         return view('company.removed_product', compact('products'));
       }
 
