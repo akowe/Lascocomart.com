@@ -1,5 +1,7 @@
 @extends('layouts.home')
+
 @extends('layouts.sidebar')
+
 @section('content')
 <div class="adminx-content">
       <div class="adminx-main-content">
@@ -8,20 +10,31 @@
                   <nav aria-label="breadcrumb" role="navigation">
                         <ol class="breadcrumb adminx-page-breadcrumb">
                               <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                              <li class="breadcrumb-item active" aria-current="page">User activity</li>
+                              <li class="breadcrumb-item active" aria-current="page">Superadmin</li>
                         </ol>
                   </nav>
 
+                  <div class="pb-3">
+                        <h1>User Activity History</h1>
+                        </h5>
+
+                  </div>
             </div>
           
+
             <div class="container-fluid">
                   <div class="row">
-                  <div class="col-lg-12">
-                              <h1>Users Activity Log </h1>
+                        <div class="col-lg-12">
+                  
                               <div class="card">
-                                    <div class="card-body collapse show tabel-resposive">
-                                          <table class="table-striped table" id="table">
-                                                <thead>
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+  
+                                    </div>
+                                    <div class="card-body collapse show tabel-resposive" id="card">
+                                          <p class="card-text"></p>
+
+                                          <table class="table-striped table" id="log">
+                                          <thead>
                                                 <tr class="text-uppercase small">
                                                       <th>No</th>
                                                       <th>User</th>
@@ -52,15 +65,54 @@
 
                                                       <td class="text-center" ><a href="" class="text-danger"><i class="fa fa-eye"></i> </a></td>
                                                 </tr>
-                                               </tbody>
                                                 @endforeach
                                                 @endif
+                                               </tbody>
                                           </table>
+                                          <div class="store-filter clearfix">
+
+                                          </div>
                                     </div>
                               </div>
-                        </div>             
+                        </div>
+
                   </div>
             </div>
       </div>
 </div>
+
+
+<script type="text/javascript">
+      $(document).ready(function() {
+            $('#log').DataTable({
+                  responsive: true,
+
+                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                  // dom: 'Bfrtip',
+                  button: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                  ],
+
+                  aLengthMenu: [
+                        [5, 10, 20, -1],
+                        [5, 10, 20, "All"]
+                  ],
+                  iDisplayLength: 5,
+                  "order": [
+                        [0, "asc"]
+                  ],
+
+                  "language": {
+                        "lengthMenu": "_MENU_ Records per page",
+                  }
+
+
+            });
+      });
+</script>
 @endsection
