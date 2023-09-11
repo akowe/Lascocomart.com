@@ -55,7 +55,8 @@ class NewsletterController extends Controller
     public function subscribers(Request $request){
          if( Auth::user()->role_name  == 'superadmin'){
               $news = Newsletter::orderBy('date', 'desc')
-                         ->paginate( $request->get('per_page', 10));
+            ->paginate( $request->get('per_page', 10));
+            \LogActivity::addToLog('subscribers');
               return view('company.subscribers', compact('news'));
          }
           else { return Redirect::to('/login');}

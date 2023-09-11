@@ -36,6 +36,7 @@ class OrderController extends Controller
     }
 
     public function confirm_order(){
+      \LogActivity::addToLog('ConfirmOrder');
         return view('order');
         }
 
@@ -154,7 +155,7 @@ class OrderController extends Controller
 
              Mail::to($adminEmail)->send(new ConfirmOrderEmail($data)); 
              Mail::to('info@lascocomart.com')->send(new OrderEmail($data));              
-
+             \LogActivity::addToLog('New Order');
     return redirect()->route('cart')->with('success', 'Your Order was successfull');
       
   }//isset  
