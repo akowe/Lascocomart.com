@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\LogActivity as LogActivityModel;
 use Auth;
 
@@ -43,9 +44,14 @@ class HomeController extends Controller
     public function logActivity(Request $request)
     {
         // $logs = \LogActivity::logActivityLists();
-        $logs = LogActivityModel::join('users', 'users.id', '=', 'log_activity.user_id')
-        ->orderBy('log_activity.id', 'desc')
-        ->get(['log_activity.*', 'users.email', 'users.fname']);
-        return view('logActivity',compact('logs'));
+        if(Auth::user()->role_name =='superadmin'){
+            $logs = LogActivityModel::join('users', 'users.id', '=', 'log_activity.user_id')
+            ->orderBy('log_activity.id', 'desc')
+            ->get(['log_activity.*', 'users.email', 'users.fname']);
+            return view('logActivity',compact('logs'));
+        }
+        else{
+            return Redirect::to('/login');
+        }
     }
 }
