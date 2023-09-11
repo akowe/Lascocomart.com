@@ -79,8 +79,13 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect('/')->with('success','Verification successful');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
+Route::group(['middleware' => ['auth']], function() {
+    /**
+    * Logout Route
+    */
+    Route::post('logout', [App\Http\Controllers\Auth\LogoutController::class,'logout'])->name('logout');
+ });
 //users activity
-
 Route::group([
     'namespace' => 'App\Haruncpi\LaravelUserActivity\Controllers',
     'middleware' => config('user-activity.middleware')
