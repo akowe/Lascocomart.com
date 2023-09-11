@@ -44,6 +44,14 @@
             overflow: hidden;
             background-color: rgba(209, 0, 36, 0.1);
       }
+      div.dataTables_wrapper div.dataTables_length select {
+            width: 75px !important;
+            display: inline-block;
+      }
+      div.dataTables_wrapper div.dataTables_length  {
+            width: 75px !important;
+            display: inline-block;
+      }
       </style>
       <!--Start of Tawk.to Script-->
       <script type="text/javascript">

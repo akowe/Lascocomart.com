@@ -3,6 +3,7 @@
 @extends('layouts.sidebar')
 
 @section('content')
+
 <div class="adminx-content">
       <div class="adminx-main-content">
             <div class="container-fluid">
@@ -15,7 +16,7 @@
                   </nav>
 
                   <div class="pb-3">
-                        <h1>User Activity History</h1>
+                        <h1>Users Activity History</h1>
                         </h5>
 
                   </div>
@@ -99,8 +100,8 @@
                   ],
 
                   aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
+                        [5, 10, 20,50,100,250,500, -1],
+                        [5, 10, 20,50,100,250,500, "All"]
                   ],
                   iDisplayLength: 5,
                   "order": [
