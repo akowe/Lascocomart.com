@@ -55,6 +55,7 @@ class BankTransferController extends Controller
         ->where('users.code', $code) 
         ->get(['orders.id']);  
        // dd($all_orders);
+      
         return view('cooperative.bank-payment', compact('select_bank', 'all_orders', 'orders'));
     }
 
@@ -104,6 +105,7 @@ public function banTransferPayment(Request $request, $reference, $order_id, $ord
     $get_superadmin_id =Arr::pluck($superadmin, 'id');
     $superadmin_id = implode('', $get_superadmin_id);
     Notification::send($superadmin, $notification);
+    \LogActivity::addToLog('Bank Transfer');
 
     return redirect('cooperative')->with('status', 'Payment successful');
 }

@@ -48,6 +48,7 @@ class CategoriesController extends Controller
                 ->paginate($request->get('per_page', 9));
                 $pagination = $products->appends ( array ('search' => $search) );
                 if (count ( $products ) > 0){
+                    \LogActivity::addToLog('Search');
                     return view ( 'category' , compact('products', 'wishlist', 'wish'))->withDetails ( $products )->withQuery ( $search );
                         
                 }
@@ -62,15 +63,13 @@ class CategoriesController extends Controller
                     ->paginate($request->get('per_page', 9));
                     $pagination = $products->appends ( array ('category' => $search) );
                     if (count ( $products ) > 0){
+                        \LogActivity::addToLog('Search');
                         return view ( 'category' , compact('products', 'wishlist', 'wish'))->withDetails ( $products )->withQuery ( $search );
                         
                     }
                     return view ( 'category', compact('products', 'wishlist', 'wish') )->with('status', 'No Details found. Try to search again !' );
           
-                    }
-
-                    
-           
+                    }   
          }
          else{
             if( $search = $request->input('search')){
@@ -81,6 +80,7 @@ class CategoriesController extends Controller
                 ->paginate($request->get('per_page', 9));
                 $pagination = $products->appends ( array ('search' => $search) );
                 if (count ( $products ) > 0){
+                    \LogActivity::addToLog('Search');
                     return view ( 'category' , compact('products'))->withDetails ( $products )->withQuery ( $search );
                         
                 }
@@ -95,6 +95,7 @@ class CategoriesController extends Controller
                     ->paginate($request->get('per_page', 9));
                     $pagination = $products->appends ( array ('category' => $search) );
                     if (count ( $products ) > 0){
+                        \LogActivity::addToLog('Search');
                         return view ( 'category' , compact('products'))->withDetails ( $products )->withQuery ( $search );
                         
                     }
@@ -103,22 +104,7 @@ class CategoriesController extends Controller
                     }
 
          }
-
-   
-    //     // search from input tag
-    // elseif( $search = $request->input('search')){
-    //              // $searchcategory=$request->input('category');
-    //               $products = Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
-    //               ->orwhere('prod_name', 'LIKE', "%{$search}%") 
-    //                 // ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
-    //                 // ->orWhere('description', 'LIKE', "%{$search}%")// search by product description
-    //                 // ->orwhere('categories.cat_name', 'LIKE', "%{$searchcategory}%") // search by category name
-    //                 ->where('products.prod_status', 'approve')
-    //              // ->get(['products.*', 'categories.cat_name']);
-    //                 ->paginate($request->get('per_page', 9));
-
-    //             return view('category', compact('products'));
-    //             }    
+ 
     }
 
 
@@ -126,7 +112,6 @@ class CategoriesController extends Controller
     public function addToCart($id)
     {
         $product = Product::findOrFail($id);
-          
         $cart = session()->get('cart', []);
   
         if(isset($cart[$id])) {
@@ -141,7 +126,6 @@ class CategoriesController extends Controller
                 "seller_id" => $product->seller_id
             ];
         }
-          
         session()->put('cart', $cart);
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }

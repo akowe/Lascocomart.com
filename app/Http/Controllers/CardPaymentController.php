@@ -242,6 +242,7 @@ class CardPaymentController extends Controller
 
             Mail::to($get_email)->send(new ConfirmOrderEmail($data)); 
             Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
+            \LogActivity::addToLog('Card Payment');
             return redirect()->route('cart')->with('success', 'Your Order was successfull');
         }
     }

@@ -92,7 +92,7 @@ class CooperativeController extends Controller
         ->where('orders.status', 'approve') 
         ->where('users.code', $code) 
         ->get('orders.id');   
-                                               
+        \LogActivity::addToLog('Admin dashboard');                  
         return view('cooperative.cooperative', compact('members', 'orders',  'credit', 'count_product', 'count_orders', 'sales', 'allocated_funds', 'sumApproveOrder', 'all_orders_id'));
     }
     else { return Redirect::to('/login');}
@@ -118,6 +118,7 @@ class CooperativeController extends Controller
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit');  
+        \LogActivity::addToLog('Admin order history');
         return view('cooperative.order-history', compact('credit', 'orders', 'sumApproveOrder'));
     }
     public function cancelMemberNewOrder($id)
@@ -126,6 +127,7 @@ class CooperativeController extends Controller
         $user = User::where('id', $order->user_id)->get('fname');
         $array = Arr::pluck($user,'fname' );
         $userName = implode(",", $array);
+        \LogActivity::addToLog('Admin cancel'.$userName.'order');
         return view('cooperative.cancel-new-order', compact('order', 'userName'));
     }
 
@@ -147,6 +149,7 @@ class CooperativeController extends Controller
      
         $notification = new AdminCancelOrder($order_number, $credit);
         Notification::send($getMember, $notification);
+        \LogActivity::addToLog('Order cancel');
 
         return redirect('cooperative')->with('success', 'Canceled successful!');
     }
@@ -159,6 +162,7 @@ class CooperativeController extends Controller
         ->where('orders.status', '=', 'cancel')
         ->orderBy('date', 'desc')
         ->paginate( $request->get('per_page', 5));
+        \LogActivity::addToLog('Admin view cancel order');
         return view('cooperative.canceled-orders', compact('orders'));
     }
     
@@ -170,6 +174,7 @@ class CooperativeController extends Controller
         ->where('products.prod_status', 'approve')
         ->orwhere('users.id', $id)
         ->paginate( $request->get('per_page', 10));
+        \LogActivity::addToLog('Admin products');
         return view('cooperative.products', compact('products'));
 
     }
@@ -195,6 +200,7 @@ class CooperativeController extends Controller
             'admin_settlement_msg' => 'payment is ' .$payment
             ]);
             \DB::table('vouchers')->where('user_id', Auth::user()->id)->decrement('credit',$order);
+            \LogActivity::addToLog('Admin approve order');
             return redirect()->back()->with('success', 'Approved successful!'); 
            }
         else{
@@ -217,7 +223,7 @@ class CooperativeController extends Controller
             ->paginate( $request->get('per_page', 10));
 
             $members = User::all()->except(Auth::id())->where('code', $code);  
-
+            \LogActivity::addToLog('Admin members');
         return view('cooperative.all_members', compact('credit', 'owncredit', 'members'));
 
         }
@@ -230,6 +236,7 @@ class CooperativeController extends Controller
         $member_id = $request->member;
         $code = Auth::user()->code; //
         $user = User::where('code', $code)->where('id', $member_id)->delete();
+        \LogActivity::addToLog('Admin remove member');
         return redirect()->back()->with('success', 'Member Removed Successfully!');
     }
 
@@ -250,7 +257,7 @@ class CooperativeController extends Controller
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->where('orders.order_number', $order_number)
             ->get(['orders.*',  'order_items.*',  'products.*']);              
-
+            \LogActivity::addToLog('Admin invoice');
         return view('invoice', compact('item', 'orders'));
         }
 
@@ -417,7 +424,7 @@ class CooperativeController extends Controller
                 );
 
              Mail::to('info@lascocomart.com')->send(new SendMail($data));
-            
+             \LogActivity::addToLog('Admin new product');
             return redirect('cooperative')->with('status', 'New product added successfully');   
                
     }   
@@ -442,10 +449,8 @@ class CooperativeController extends Controller
 
             Session::flash('remove', ' Product Removed Successful!'); 
             Session::flash('alert-class', 'alert-success'); 
-          
-           
         }
-
+        \LogActivity::addToLog('Admin remove product');
         return redirect()->back()->with('success', 'Product Removed Successful!');
     }
 
@@ -456,12 +461,12 @@ class CooperativeController extends Controller
                $id = Auth::user()->id; //
 
           $sales = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
-                           ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                          ->where('orders.status', 'Paid')
-                           ->where('products.seller_id', $id) 
-                           ->orderBy('date', 'desc')  
-                            ->paginate( $request->get('per_page', 5));  
-
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->where('orders.status', 'Paid')
+                ->where('products.seller_id', $id) 
+                ->orderBy('date', 'desc')  
+                ->paginate( $request->get('per_page', 5));  
+                \LogActivity::addToLog('Admin view sales');
        return view('cooperatives.sales_preview', compact('sales'));
 
          }
@@ -509,7 +514,7 @@ class CooperativeController extends Controller
 
         }
               
-
+        \LogActivity::addToLog('Admin view FCMG product');
         return view('cooperative.fcmgproductsview', compact('fcmgproductsview'));
     }
 
@@ -581,7 +586,7 @@ class CooperativeController extends Controller
            $voucher = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
                     ->where('vouchers.user_id', $id)
                     ->get(['vouchers.*', 'users.*']); 
-
+                    \LogActivity::addToLog('Admin checkout FCMG');
         return view('cooperative.fcmgcheckout', compact('voucher'));
     }
 
@@ -639,6 +644,7 @@ class CooperativeController extends Controller
         }
           
         session()->put('fcmgcart', $fcmgcart);
+        \LogActivity::addToLog('Admin cview cart FCMG');
         return redirect()->route('cooperative.fcmgcart')->with('success', 'Product added to cart successfully!');
     }
     
