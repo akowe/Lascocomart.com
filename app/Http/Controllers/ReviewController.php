@@ -44,6 +44,7 @@ class ReviewController extends Controller
                 'stars_rated' => $stars_rated,
                 ]);
                 if ($new_review){
+                    \LogActivity::addToLog('Rating');
                     return redirect('/')->with('status', 'Thank you for writing a review');
                 }
         }
@@ -56,6 +57,7 @@ class ReviewController extends Controller
         {
             $review = Product::where('prod_name', $prod_name)->get('id');
             $reviews = Review::where('prod_id', $review)->get();
+            \LogActivity::addToLog('Review');
              return view('preview', compact('reviews'));
         }
 
