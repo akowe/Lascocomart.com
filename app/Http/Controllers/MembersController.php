@@ -61,7 +61,7 @@ public function index(Request $request)
                         
                         ->orderBy('date', 'desc')
                          ->paginate( $request->get('per_page', 5));
-
+                         \LogActivity::addToLog('Member dashboard');
     return view('members.dashboard', compact('credit', 'count_orders', 'orders'));
     }
      else { return Redirect::to('/login');
@@ -86,6 +86,7 @@ public function index(Request $request)
         ->join('products', 'products.id', '=', 'order_items.product_id')
         ->where('orders.order_number', $order_number)
          ->get(['orders.*',  'order_items.*',  'products.*']);  
+         \LogActivity::addToLog('Invoice');
     return view('invoice', compact('item', 'orders'));
            }
 
@@ -118,7 +119,7 @@ public function index(Request $request)
             Session::flash('status', ' Your order has been canceled  successful!'); 
             Session::flash('alert-class', 'alert-success'); 
         }
-
+        \LogActivity::addToLog('Cancel order');
         return redirect()->back()->with('success', 'Your order has been canceled successful!');
     }
 
@@ -127,7 +128,7 @@ public function profile(Request $request)
 
          $id = Auth::user()->id; //
         $users = User::all()->where('id', $id);
-
+        \LogActivity::addToLog('Profile');
         return view('profile', compact('users'));
     } 
 
@@ -159,7 +160,7 @@ public function profile(Request $request)
             Session::flash('profile', ' Profile Update Successful!'); 
             Session::flash('alert-class', 'alert-success'); 
         }
-
+        \LogActivity::addToLog('Update');
         return redirect()->back()->with('status', 'Profile Update Successful!');
     } 
 
@@ -193,7 +194,7 @@ public function profile(Request $request)
            Session::flash('profile', ' Profile Update Successful!'); 
            Session::flash('alert-class', 'alert-success'); 
        }
-
+       \LogActivity::addToLog('Update');
        return redirect()->back()->with('status', 'Profile Update Successful!');
    } 
 
@@ -228,7 +229,7 @@ public function profile(Request $request)
     Session::flash('profile', ' Upload Successful!'); 
     Session::flash('alert-class', 'alert-success'); 
 }
-
+\LogActivity::addToLog('Update');
 return redirect()->back()->with('status', ' Upload Successful!');
 } 
 }//class
