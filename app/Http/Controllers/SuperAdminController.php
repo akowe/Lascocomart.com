@@ -112,51 +112,56 @@ class SuperAdminController extends Controller
         \LogActivity::addToLog('SuperAdmin orderHistory');
         return view('company.order-history', compact('orders'));
     }
-
+ 
     public function allocateFund(Request $request)
-    { 
-        if(null !== $_POST['submit']){
-            $sender = Auth::user()->id;
+    {  
+        // if(null !== $_POST['submit']){
+            $admin_id = Auth::user()->id;
             $user_id  = $request->input('user_id');
-            $input  = $request->input('credit');
-            $member = User::where('id', $user_id)->first();
+            $id       = $request->id;
+            $status   = $request->input('status');
+            $remark   = $request->input('remark');
+            $amount   = $request->input('amount');
+            $member   = User::where('id', $user_id)->first();
 
                 // check if user is verified
                 $verified = \DB::table('users')->where('id', $user_id)->first()->email_verified_at;
                 if($verified){ 
-                    //increase member credit limit
-                    \DB::table('vouchers')->where('user_id', $user_id)->increment('credit',$input);
-                    \DB::table('credit_limits')->insert([
-                        'user_id' => $sender,
-                        'member_name' => $member->fname .$member->lname,
-                        'credit' => $input,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now()
+                  \DB::table('fund_request')->where('id', $id)
+                  ->update([
+                    'status' => $status,
+                    'remark' => $remark
                     ]);
-                    
-                    \DB::table('fund_request')->where('receiver_id', $sender)
-                    ->where('amount', $input)
-                    ->delete();
-                       
-                    Session::flash('credit', ' Fund Allocated successfully!'); 
-                    Session::flash('alert-class', 'alert-success'); 
-            }
-            else{
-                  Session::flash('verified', 'Credit not added. This member has not verified his/her account.'); 
-                  Session::flash('alert-class', 'alert-danger'); 
-            }
-             }else{
-                  Session::flash('verified', 'Balance not up to Credit amount.'); 
-                  Session::flash('alert-class', 'alert-danger'); 
-            }
-            \LogActivity::addToLog('SuperAdmin addFunds');
-             return redirect()->back()->with('credit', 'Fund Allocated successfully!');
+                   
+                    if($status == 'approve'){
+                      //increase user credit limit
+                      \DB::table('vouchers')->where('user_id', $user_id)->increment('credit',$amount);
+                      Session::flash('credit', ' Fund Allocated successfully!'); 
+                      Session::flash('alert-class', 'alert-success'); 
+                      \LogActivity::addToLog('SuperAdmin addFunds');
+                      return redirect()->back()->with('credit', 'Fund Allocated successfully!');
+                    }
+                    else{
+                      Session::flash('credit', ' Fund Decline !'); 
+                      Session::flash('alert-class', 'alert-danger'); 
+                      \LogActivity::addToLog('SuperAdmin declineFund');
+                      return redirect()->back()->with('credit', 'Fund Decline !');
+                    }
+                }
+              else{
+                    Session::flash('verified', 'Credit not added. This member has not verified his/her account.'); 
+                    Session::flash('alert-class', 'alert-danger'); 
+                    return redirect()->back()->with('credit', 'Credit not added. This member has not verified his/her account.');
+              }
+          // }
+           
+
   }
 
     public function fundsAllocated(Request $request){
       $id = Auth::user()->id;
-      $funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
-      ->where('users.id', $id)
+      $funds = User::join('fund_request', 'fund_request.user_id', '=', 'users.id')
+      ->where('fund_request.status', 'approve')
       ->paginate( $request->get('per_page', 5));
       \LogActivity::addToLog('SuperAdmin fundsAllocated');
       return view('company.funds-allocated', compact('funds'));
@@ -341,24 +346,21 @@ class SuperAdminController extends Controller
  public function users_list(Request $request){
   
       if( Auth::user()->role_name  == 'superadmin'){
-       //view all coop 
           $coop = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
           ->where('users.role', '2')
           ->paginate( $request->get('per_page', 5));
-
+ 
     //view all coop members
       //  $members = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
       //   ->where('users.role', '4')
       //   ->paginate( $request->get('per_page', 5));
 
        $members =   User::where('role', '4')->get('*');
-
-       //view all fcmg
+       //fcmg
        $fcmg = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.role', '5')
-        ->paginate( $request->get('per_page', 5));                  
-
-      //view all sellers
+        ->paginate( $request->get('per_page', 5));    
+      //sellers
        $merchants = User::where('role', '3')->get('*');
        \LogActivity::addToLog('SuperAdmin userList');
        return view('company.users_list', compact('coop', 'members', 'merchants', 'fcmg'));

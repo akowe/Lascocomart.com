@@ -31,8 +31,24 @@ class FundRequestController extends Controller
     $this->middleware('auth');
 
 }
+public function fundrequest(Request $request){
+    $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
+    ->where('fund_request.admin_id', Auth::user()->id)
+    ->where('fund_request.status', 'pending')
+    ->orderBy('fund_request.created_at', 'desc')
+     ->get([
+        'fund_request.*', 
+        'users.email', 
+        'users.fname', 
+        'users.lname',
+        'users.coopname',
+        'users.phone'
+    ]);
+    \LogActivity::addToLog('Fund Rquest');
+    return view('fundrequest', compact('fund'));
+}
 
-public function fundRequest(Request $request){
+public function sendFundRequest(Request $request){
     $email = Auth::user()->email;
     $cooperative_name = Auth::user()->coopname;
     $cooperative_code = Auth::user()->code;
@@ -45,14 +61,15 @@ public function fundRequest(Request $request){
     $fundRequest = FundRequest::create([
         'user_id' =>Auth::user()->id,
         'amount'  => $request->amount,
-        'receiver_id' => $superadmin_id
+        'admin_id' => $superadmin_id,
+        'status'   => 'pending'
     ]);
     $fund_id =$fundRequest->id;
      $notification = new CooperativeFundRequest($fund_id, $fundRequest->amount);
      Notification::send($superadmin, $notification);
 
     if($fundRequest){
-         // Email notification to Coopmart
+         // Email notification to LascocoMart
         $data = array(
         'cooperative_name'   => $cooperative_name,
         'cooperative_code'  =>$cooperative_code,
@@ -65,6 +82,7 @@ public function fundRequest(Request $request){
 }
 
 public function requestFund(Request $request){
+    \LogActivity::addToLog('Admin fundRequest');
     return view('cooperative.request_fund');
  }
 
@@ -83,10 +101,17 @@ public function requestFund(Request $request){
     $read = auth()->user()->readNotifications()->where('id', $id)->first();
     // $fund_id =   $read->data['id'];
     $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
-    ->where('fund_request.receiver_id', Auth::user()->id)
-//    ->where('fund_request.id',  $fund_id)
+    ->where('fund_request.admin_id', Auth::user()->id)
+    ->where('fund_request.status', 'pending')
     ->orderBy('fund_request.created_at', 'desc')
-     ->get(['fund_request.*', 'users.*']);
+     ->get([
+        'fund_request.*', 
+        'users.email', 
+        'users.fname', 
+        'users.lname',
+        'users.coopname',
+        'users.phone'
+    ]);
      if($fund){
         auth()->user()->readNotifications()->where('id', $id)->delete();
      }

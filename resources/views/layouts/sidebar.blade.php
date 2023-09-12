@@ -511,7 +511,7 @@
 
 
  <!-- SIDE BAR for Super admin -->
- @auth
+ @auth 
  @if(Auth::user()->role_name == 'superadmin')
  <div class="adminx-sidebar expand-hover push">
        <p></p>
@@ -610,7 +610,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{ url('funds-allocated') }}">
+                   <a class="sidebar-nav-link " href="{{ url('fundrequest') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-credit-card"></i>
                          </span>

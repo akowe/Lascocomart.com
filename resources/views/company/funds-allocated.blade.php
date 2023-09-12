@@ -30,8 +30,8 @@
                                     <div class="card-body">
                                           <h4 class="card-title"></h4>
                                           <p class="card-text">A Voucher is same as cash or credit. </p>
-                                          <a href="{{ route('users_list')}}" class="btn btn-danger">
-                                                Click here to add funds to member </a>
+                                          <a href="{{ route('fundrequest')}}" class="btn btn-danger">
+                                               Add funds to cooperatives </a>
                                     </div>
                               </div>
                               <!--card-->
@@ -65,11 +65,11 @@
                                                       <tr class="small">
                                                             <td>{{ date('d/M/Y', strtotime($fund->created_at))}}
                                                             </td>
-                                                            <td class="text-capitalize"> {{$fund['member_name']}}
+                                                            <td class=""> {{$fund['email']}}
                                                             </td>
 
                                                             <td id="amount">
-                                                                  {{ number_format($fund['credit']) }}
+                                                                  {{ number_format($fund['amount']) }}
                                                             </td>
                                                       </tr>
 

@@ -16,7 +16,10 @@ class CreateFundRequestTable extends Migration
         Schema::create('fund_request', function (Blueprint $table) {
             $table->id();
             $table->string('amount');
-            $table->string('user_id');
+            $table->string('user_id'); 
+            $table->string('admin_id'); 
+            $table->string('status'); 
+            $table->string('remark')->nullable(); 
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@
 
       <div class="adminx-main-content">
             <div class="container-fluid">
-                  <!-- container -->
+                  <!-- container --> 
                   <nav aria-label="breadcrumb" role="navigation">
                         <ol class="breadcrumb adminx-page-breadcrumb">
                               <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
@@ -23,8 +23,8 @@
 
                   <div class="pb-3">
                         <h4>Fund Request</h4>
-                        <p class="text-danger"> To add credit to a member voucher, enter the amount and click "Alocate
-                              fund"<br> To subtract from a member credit enter "-"" amount example: enter -100</p>
+                        <!-- <p class="text-danger"> To add credit to a member voucher, enter the amount and click "Alocate
+                              fund"<br> To subtract from a member credit enter "-"" amount example: enter -100</p> -->
                   </div>
                   @if(Session::has('credit')== true)
                   <!--show alert-->
@@ -46,7 +46,7 @@
 
                                                 <th>Name</th>
                                                 <th>Email</th>
-                                                <th>Coop Details</th>
+                                                <th>Cooperative Details</th>
                                                 <th>Amount requested</th>
                                                 <th></th>
                                           </tr>
@@ -66,21 +66,37 @@
                                                 </td>
 
                                                 <td>{{number_format($details->amount)  }}</td>
-
+ 
                                                 <td>
                                                       <form action="{{ route('allocate_fund') }}" method="post"
                                                             name="submit">
                                                             @csrf
-                                                            <input type="hidden" name="user_id" lass="col-sm-3"
-                                                                  value="{{ $details->user_id }}">
+                                                            <input type="hidden" name="status" lass="col-sm-3" value="approve">
+                                                            <input type="hidden" name="id" lass="col-sm-3" value="{{$details->id}}">
+                                                            <input type="hidden" name="user_id" lass="col-sm-3" value="{{$details->user_id}}">
+                                                            <input type="hidden" name="amount" lass="col-sm-3" value="{{$details->amount}}">
 
-                                                            <input type="number" name="credit" style="border:none;"
-                                                                  class="form-control" id="new_bal" placeholder="amount"
-                                                                  required>
 
                                                             <button type="submit" name="submit"
-                                                                  class="btn btn-outline-danger btn-sm">Allocate
-                                                                  Fund</button>
+                                                                  class="btn btn-outline-success btn-sm"><i class="fa fa-check"></i> Approve</button>
+
+                                                            <!--   <a href="edit/{{ $details->id }}"> </a> -->
+                                                      </form>
+
+                                                </td>
+
+                                                <td>
+                                                <form action="{{ route('allocate_fund') }}" method="post"
+                                                            name="submit">
+                                                            @csrf
+                                                            <input type="hidden" name="status" lass="col-sm-3" value="decline">
+                                                            <input type="hidden" name="id" lass="col-sm-3" value="{{$details->id}}">
+                                                            <input type="hidden" name="user_id" lass="col-sm-3" value="{{$details->user_id}}">
+                                                            <input type="hidden" name="amount" lass="col-sm-3" value="{{$details->amount}}">
+
+
+                                                            <button type="submit" name="submit"
+                                                                  class="btn btn-outline-danger btn-sm"><i class="fa fa-cancel"></i> Decline</button>
 
                                                             <!--   <a href="edit/{{ $details->id }}"> </a> -->
                                                       </form>

@@ -159,7 +159,7 @@ Route::put('user_update/{id}', [App\Http\Controllers\SuperAdminController::class
 Route::get('user_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'user_edit'])->name('user_edit');
 
 Route::get('transactions', [App\Http\Controllers\SuperAdminController::class, 'transactions'])->name('transactions');
-// Super mark an order as paid
+// Super mark an order as paid 
 Route::post('/approved', [App\Http\Controllers\SuperAdminController::class, 'approved'])->name('approved');
 Route::post('allocate_fund', [App\Http\Controllers\SuperAdminController::class, 'allocateFund'])->name('allocate_fund');
 Route::get('order-history', [App\Http\Controllers\SuperAdminController::class, 'orderHistory'])->name('order-history');
@@ -240,11 +240,12 @@ Route::post('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load
 //Route::get('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
 Route::post('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
 Route::get('request_fund', [App\Http\Controllers\VoucherController::class, 'requestFund'])->name('request_fund');    
-//in app notification
-Route::post('request_fund_wallet', [App\Http\Controllers\FundRequestController::class,'fundRequest'])->name('request_fund_wallet');
+//in app notification 
+Route::post('request_fund', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('admin_fund_request');
 Route::get('/mark-as-read', [App\Http\Controllers\FundRequestController::class,'markAllNotificationAsRead'])->name('mark-as-read');
 Route::get('/read/{id}', [App\Http\Controllers\FundRequestController::class,'readNotification'])->name('read');
-Route::get('/fundrequest', [App\Http\Controllers\FundRequestController::class,'fundrequest'])->name('fundrequest');
+Route::get('/fundrequest',  [App\Http\Controllers\FundRequestController::class,'fundrequest'])->name('fundrequest');
+
 Route::post('member_request_fund_wallet', [App\Http\Controllers\FundRequestController::class, 'memberFundWallet'])->name('member_request_fund_wallet'); 
 Route::get('/new-product', [App\Http\Controllers\NotificationController::class,'allNewProductNotification'])->name('new-product');
 Route::get('/read-product/{id}', [App\Http\Controllers\NotificationController::class,'readAProductNotification'])->name('read-product');

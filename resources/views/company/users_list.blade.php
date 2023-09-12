@@ -23,8 +23,7 @@
 
                   <div class="pb-3 bg-dark text-center">
                         <h5>&nbsp;</h5>
-                        <span class="text-white "> To add allocate fund, enter the amount and click "Allocate Fund", To
-                              subtract from a coperative credit enter "-"" amount example: enter -100</span>
+                        <h4 class="text-white">All Users</h4>
                   </div>
                   @if(Session::has('credit')== true)
                   <!--show alert-->
@@ -50,7 +49,7 @@
                   @endif
                   <p></p>
                   <div class="pb-3">
-                        <h4>All Cooperatives</h4>
+                  <h4>Cooperatives</h4>
                   </div>
                   <!-- row -->
                   <div class="row">
@@ -88,7 +87,7 @@
                                                 <td>{{number_format($details['credit'])  }}</td>
 
                                                 <td>
-                                                      <form action="{{ route('allocate_fund') }}" method="post"
+                                                      <!-- <form action="{{ route('allocate_fund') }}" method="post"
                                                             name="submit">
                                                             @csrf
                                                             <input type="hidden" name="user_id" lass="col-sm-3"
@@ -102,9 +101,7 @@
                                                                   class="btn btn-outline-danger btn-sm">Allocate
                                                                   Fund</button>
 
-                                                            <!--   <a href="edit/{{ $details->id }}"> ll
-                            </a> -->
-                                                      </form>
+                                                      </form> -->
 
                                                 </td>
                                           </tr>
@@ -126,7 +123,7 @@
             <div class="container-fluid">
                   <!-- container -->
                   <div class="pb-3">
-                        <h4>All Members </h4>
+                        <h4>Members of cooperatives</h4>
                   </div>
 
                   <!-- row -->
