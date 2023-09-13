@@ -18,8 +18,10 @@ use App\Models\About;
 use App\Models\Privacy;
 use App\Models\ReturnRefund; 
 use App\Models\Terms;
+use App\Models\FundRequest;
 use Carbon\Carbon;
 use App\Notifications\NewCardPayment;
+use App\Notifications\ApproveFund;
 use Notification;
 
 use Auth;
@@ -138,6 +140,20 @@ class SuperAdminController extends Controller
                       \DB::table('vouchers')->where('user_id', $user_id)->increment('credit',$amount);
                       Session::flash('credit', ' Fund Allocated successfully!'); 
                       Session::flash('alert-class', 'alert-success'); 
+
+                      $getUser = User::where('id', $user_id)
+                      ->get('id');
+              
+                      $getFundID = FundRequest::where('id', $id)->get();
+                      $fundID= Arr::pluck($getFundID, 'id'); // 
+                      $fund_id = $id;
+
+                      $getCredit = \DB::table('vouchers')->where('user_id', $user_id)->get('credit');
+                      $arrayCredit = Arr::pluck($getCredit, 'credit');
+                      $credit = implode('', $arrayCredit);
+
+                      $notification = new ApproveFund($fund_id, $amount, $credit);
+                      Notification::send($getUser, $notification);
                       \LogActivity::addToLog('SuperAdmin addFunds');
                       return redirect()->back()->with('credit', 'Fund Allocated successfully!');
                     }
@@ -153,7 +169,7 @@ class SuperAdminController extends Controller
                     Session::flash('alert-class', 'alert-danger'); 
                     return redirect()->back()->with('credit', 'Credit not added. This member has not verified his/her account.');
               }
-          // }
+          // } 
            
 
   }

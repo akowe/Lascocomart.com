@@ -263,6 +263,8 @@ Route::get('/read-admin-order/{id}', [App\Http\Controllers\NotificationControlle
 Route::get('/read-company-order/{id}', [App\Http\Controllers\NotificationController::class,'readAnOrderSuperadmin'])->name('read-company-order');
 Route::get('/read-all-cancel-order', [App\Http\Controllers\NotificationController::class,'AdminCancelOrderNotification'])->name('read-all-cancel-order');
 Route::get('/read-cancel-order/{id}', [App\Http\Controllers\NotificationController::class,'readAdminCancelOrderNotification'])->name('read-cancel-order');
+Route::get('/read-all-approve-funds', [App\Http\Controllers\NotificationController::class,'ApproveFundNotification'])->name('read-all-approve-funds');
+Route::get('/read-approve-funds/{id}', [App\Http\Controllers\NotificationController::class,'readApproveFundNotification'])->name('read-approve-funds');
 
 //Bank transfer
 Route::get('bank-payment', [App\Http\Controllers\BankTransferController::class,'bankPayment'])->name('bank-payment');

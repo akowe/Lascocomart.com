@@ -149,6 +149,36 @@
                                    
                               </ul>
                         </li>
+                           <li class="nav-item dropdown d-flex align-items-center mr-2">
+
+                        </li>
+                        <li class="nav-item dropdown">
+                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false" v-pre title="">
+                                    <i class="fa fa-money"></i>
+                                    <span
+                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->count()}}</span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                    @if (auth()->user()->unreadNotifications->where('type',
+                                    'App\Notifications\ApproveFund'))
+                                    <li class="d-flex justify-content-end mx-1 my-2">
+                                          <a href="{{route('read-all-approve-funds')}}"
+                                                class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
+                                                Read</a>
+                                    </li>
+                                    @endif
+
+                                    @foreach (auth()->user()->unreadNotifications->where('type',
+                                    'App\Notifications\ApproveFund') as $notification)
+                                    <a href="{{ url('read-approve-funds') }}/{{ $notification->id }}"
+                                          data-id="{{$notification->id}}" class="text-success">
+                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
+                                    </a>
+                                    @endforeach
+                                  
+                              </ul>
+                        </li>
 
                         <li class="nav-item dropdown d-flex align-items-center mr-2">
 

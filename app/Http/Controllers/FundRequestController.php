@@ -88,7 +88,7 @@ public function requestFund(Request $request){
 
  public function markAllNotificationAsRead(){
     //$user->notifications()->delete();
-     Auth::user()->unreadNotifications->markAsRead()->delete();
+     Auth::user()->unreadNotifications->markAsRead();
      return redirect()->back();
      
  }
