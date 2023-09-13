@@ -154,8 +154,8 @@
                         </li>
                         <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="">
-                                    <i class="fa fa-money"></i>
+                                    aria-haspopup="true" aria-expanded="false" v-pre title="Wallet">
+                                    <i class="fa fa-credit-card"></i>
                                     <span
                                           class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->count()}}</span>
                               </a>
