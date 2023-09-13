@@ -13,6 +13,7 @@ use App\Notification\NewCardPayment;
 use App\Notifications\ProductReceived;
 use App\Notifications\AdminCancelOrder;
 use App\Notifications\ApproveFund;
+use App\Notifications\CancelFundRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use App\Models\Voucher;
@@ -303,6 +304,27 @@ public function readApproveFundNotification($id){
     }
     auth()->user()->readNotifications()
     ->where('type', 'App\Notifications\ApproveFund')
+    ->where('id', $id)->delete();
+    return redirect()->back();
+}
+
+public function CancelFundNotification(){
+    Auth::user()->unreadNotifications->where('type', 'App\Notifications\CancelFundRequest')->markAsRead();
+    auth()->user()->readNotifications()
+    ->where('type', 'App\Notifications\CancelFundRequest')->delete();
+
+    return redirect()->back();
+}
+
+public function readCancelFundNotification($id){
+    $notification = auth()->user()->unreadNotifications()
+    ->where('type', 'App\Notifications\CancelFundRequest')
+    ->where('id', $id)->first();
+    if ($notification) {
+        $notification->markAsRead();
+    }
+    auth()->user()->readNotifications()
+    ->where('type', 'App\Notifications\CancelFundRequest')
     ->where('id', $id)->delete();
     return redirect()->back();
 }

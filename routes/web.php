@@ -277,3 +277,6 @@ Route::get('cancel-new-order/{id}', [CooperativeController::class, 'cancelMember
 Route::post('/order-cancel', [CooperativeController::class, 'cancelOrder'])->name('order-cancel');
 Route::get('view-canceled-orders', [App\Http\Controllers\CooperativeController::class, 'viewCanceledOrders'])->name('view-canceled-orders');
 Route::get('autocomplete', [CategoriesController::class,'autocomplete'])->name('autocomplete');
+
+Route::get('edit-fund-request/{id}', [SuperAdminController::class, 'editFundRequest'])->name('edit-fund-request');
+Route::post('/cancel-fund', [SuperAdminController::class, 'cancelFundRequest'])->name('cancel-fund');

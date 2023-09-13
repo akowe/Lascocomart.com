@@ -22,6 +22,7 @@ use App\Models\FundRequest;
 use Carbon\Carbon;
 use App\Notifications\NewCardPayment;
 use App\Notifications\ApproveFund;
+use App\Notifications\CancelFundRequest;
 use Notification;
 
 use Auth;
@@ -134,8 +135,6 @@ class SuperAdminController extends Controller
                     'status' => $status,
                     'remark' => $remark
                     ]);
-                   
-                    if($status == 'approve'){
                       //increase user credit limit
                       \DB::table('vouchers')->where('user_id', $user_id)->increment('credit',$amount);
                       Session::flash('credit', ' Fund Allocated successfully!'); 
@@ -156,13 +155,7 @@ class SuperAdminController extends Controller
                       Notification::send($getUser, $notification);
                       \LogActivity::addToLog('SuperAdmin addFunds');
                       return redirect()->back()->with('credit', 'Fund Allocated successfully!');
-                    }
-                    else{
-                      Session::flash('credit', ' Fund Decline !'); 
-                      Session::flash('alert-class', 'alert-danger'); 
-                      \LogActivity::addToLog('SuperAdmin declineFund');
-                      return redirect()->back()->with('credit', 'Fund Decline !');
-                    }
+            
                 }
               else{
                     Session::flash('verified', 'Credit not added. This member has not verified his/her account.'); 
@@ -184,7 +177,41 @@ class SuperAdminController extends Controller
       \LogActivity::addToLog('SuperAdmin fundsAllocated');
       return view('company.funds-allocated', compact('funds'));
     }
- 
+
+    public function editFundRequest($id)
+    {
+        $fund = FundRequest::find($id);
+        $user = User::where('id', $fund->user_id)->get('email');
+        $array = Arr::pluck($user,'email' );
+        $userEmail = implode(",", $array);
+        \LogActivity::addToLog('Cancel fundRequest');
+        return view('cancel-fund-request', compact('fund', 'userEmail'));
+    }
+
+    public function cancelFundRequest(Request $request){
+        $cancel = 'cancel';
+        $remark = $request->remark;
+        $fund_id = $request->id;
+        $amount = $request->amount;
+        FundRequest::where('id', $fund_id)
+        ->update([
+        'status' => $cancel,
+        'remark' => $remark
+        ]); 
+        $getUser = User::join('fund_request', 'fund_request.user_id', '=', 'users.id')
+        ->where('fund_request.id', $fund_id)
+        ->get('users.id');
+
+        $getFundRequest = FundRequest::where('id', $fund_id)->get();
+        $FundRequest= Arr::pluck($getFundRequest, 'fund_id'); // 
+        $order_number = implode('', $FundRequest);
+     
+        $notification = new CancelFundRequest($fund_id, $amount, $remark);
+        Notification::send($getUser, $notification);
+        \LogActivity::addToLog('Cancel fundRequest');
+
+        return redirect('fundrequest')->with('success', 'Canceled successful!');
+    } 
 
     public function sales_invoice(Request $request, $order_number )
     {

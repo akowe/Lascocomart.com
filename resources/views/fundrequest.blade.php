@@ -37,6 +37,18 @@
                   <p style="display: none;">{{ Session::get('credit') }}</p>
                   @endif
 
+                  @if(Session::has('cancel')== true)
+                  <!--show alert-->
+                  <p class="alert {{ Session::get('alert-class', 'alert-info') }} text-center">
+                        {{ Session::get('cancel') }}</p>
+                  @endif
+
+                  @if(Session::has('cancel')== false)
+                  <!--show alert-->
+                  <p style="display: none;">{{ Session::get('cancel') }}</p>
+                  @endif
+                  
+
                   <!-- row -->
                   <div class="row">
                         <div class="col-lg-12  table-responsive">
@@ -85,23 +97,8 @@
 
                                                 </td>
 
-                                                <td>
-                                                <form action="{{ route('allocate_fund') }}" method="post"
-                                                            name="submit">
-                                                            @csrf
-                                                            <input type="hidden" name="status" lass="col-sm-3" value="decline">
-                                                            <input type="hidden" name="id" lass="col-sm-3" value="{{$details->id}}">
-                                                            <input type="hidden" name="user_id" lass="col-sm-3" value="{{$details->user_id}}">
-                                                            <input type="hidden" name="amount" lass="col-sm-3" value="{{$details->amount}}">
-
-
-                                                            <button type="submit" name="submit"
-                                                                  class="btn btn-outline-danger btn-sm"><i class="fa fa-cancel"></i> Decline</button>
-
-                                                            <!--   <a href="edit/{{ $details->id }}"> </a> -->
-                                                      </form>
-
-                                                </td>
+                                                <td> <a href="edit-fund-request/{{ $details->id }}"  class="btn btn-outline-danger btn-sm"> <i class="fa fa-cancel"></i> Decline</a>
+                                                   </td>
                                           </tr> 
 
                                           @endforeach

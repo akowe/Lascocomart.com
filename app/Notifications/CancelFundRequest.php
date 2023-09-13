@@ -62,7 +62,7 @@ class CancelFundRequest extends Notification
      * @return array
      */
     public function toArray($notifiable)
-    {
+    { 
         return [
             //
             'id' => $this->fund_id,

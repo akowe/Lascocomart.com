@@ -45,6 +45,8 @@ public function fundrequest(Request $request){
         'users.phone'
     ]);
     \LogActivity::addToLog('Fund Rquest');
+    Session::flash('cancel', ' Fund Request Canceled !'); 
+    Session::flash('alert-class', 'alert-danger'); 
     return view('fundrequest', compact('fund'));
 }
 
