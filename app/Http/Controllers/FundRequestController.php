@@ -45,8 +45,6 @@ public function fundrequest(Request $request){
         'users.phone'
     ]);
     \LogActivity::addToLog('Fund Rquest');
-    Session::flash('cancel', ' Fund Request Canceled !'); 
-    Session::flash('alert-class', 'alert-danger'); 
     return view('fundrequest', compact('fund'));
 }
 
@@ -100,25 +98,25 @@ public function requestFund(Request $request){
     if ($notification) {
          $notification->markAsRead();
     }
-    $read = auth()->user()->readNotifications()->where('id', $id)->first();
-    // $fund_id =   $read->data['id'];
-    $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
-    ->where('fund_request.admin_id', Auth::user()->id)
-    ->where('fund_request.status', 'pending')
-    ->orderBy('fund_request.created_at', 'desc')
-     ->get([
-        'fund_request.*', 
-        'users.email', 
-        'users.fname', 
-        'users.lname',
-        'users.coopname',
-        'users.phone'
-    ]);
-     if($fund){
-        auth()->user()->readNotifications()->where('id', $id)->delete();
-     }
+    return redirect()->back();
+    // $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
+    // ->where('fund_request.admin_id', Auth::user()->id)
+    // ->where('fund_request.status', 'pending')
+    // ->orderBy('fund_request.created_at', 'desc')
+    //  ->get([
+    //     'fund_request.*', 
+    //     'users.email', 
+    //     'users.fname', 
+    //     'users.lname',
+    //     'users.coopname',
+    //     'users.phone'
+    // ]);
+    //  if($fund){
+    //     auth()->user()->readNotifications()->where('id', $id)->delete();
+    //  }
 
- return view('fundrequest', compact('fund'));
+    //  return view('fundrequest', compact('fund'));
+
 }
 
 public function memberFundWallet(Request $request) {

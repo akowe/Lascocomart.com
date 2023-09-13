@@ -157,7 +157,8 @@
                                     aria-haspopup="true" aria-expanded="false" v-pre title="Wallet">
                                     <i class="fa fa-credit-card"></i>
                                     <span
-                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->count()}}</span>
+                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
+            </span>
                               </a>
                               <ul class="dropdown-menu">
                                     @if (auth()->user()->unreadNotifications->where('type',
@@ -172,6 +173,14 @@
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\ApproveFund') as $notification)
                                     <a href="{{ url('read-approve-funds') }}/{{ $notification->id }}"
+                                          data-id="{{$notification->id}}" class="text-success">
+                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
+                                    </a>
+                                    @endforeach
+
+                                    @foreach (auth()->user()->unreadNotifications->where('type',
+                                    'App\Notifications\CancelFundRequest') as $notification)
+                                    <a href="{{ url('read-cancel-funds') }}/{{ $notification->id }}"
                                           data-id="{{$notification->id}}" class="text-success">
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>

@@ -66,7 +66,7 @@ class CancelFundRequest extends Notification
         return [
             //
             'id' => $this->fund_id,
-            'data'=>' Your fund request of '. number_format($this->amount, 2). ' has been canceled.' .$this->remark,
+            'data'=>' Request of '. number_format($this->amount, 2). ' is not approve because, ' .$this->remark,
         ];
     }
 }
