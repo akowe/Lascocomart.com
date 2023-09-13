@@ -161,14 +161,14 @@
             </span>
                               </a>
                               <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
+                                    <!-- @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\ApproveFund'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
                                           <a href="{{route('read-all-approve-funds')}}"
                                                 class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
-                                    @endif
+                                    @endif -->
 
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\ApproveFund') as $notification)
@@ -477,7 +477,7 @@
 
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\CooperativeFundRequest') as $notification)
-                                    <a href="{{ url('read') }}/{{ $notification->id }}" data-id="{{$notification->id}}"
+                                    <a href="{{ url('/') }}/{{ $notification->id }}" data-id="{{$notification->id}}"
                                           class="text-success">
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>

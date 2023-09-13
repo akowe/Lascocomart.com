@@ -329,4 +329,30 @@ public function readCancelFundNotification($id){
     return redirect()->back();
 }
 
+public function fundRequestNotification($id){
+    $notification = auth()->user()->unreadNotifications()->where('id', $id)->first();
+    if ($notification) {
+         $notification->markAsRead();
+    }
+    // return redirect()->back();
+    $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
+    ->where('fund_request.admin_id', Auth::user()->id)
+    ->where('fund_request.status', 'pending')
+    ->orderBy('fund_request.created_at', 'desc')
+     ->get([
+        'fund_request.*', 
+        'users.email', 
+        'users.fname', 
+        'users.lname',
+        'users.coopname',
+        'users.phone'
+    ]);
+     if($fund){
+        auth()->user()->readNotifications()->where('id', $id)->delete();
+     }
+
+     return view('fundrequest', compact('fund'));
+
+}
+
 }
