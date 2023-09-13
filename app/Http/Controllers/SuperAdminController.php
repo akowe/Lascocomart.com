@@ -64,8 +64,8 @@ class SuperAdminController extends Controller
         ->get('tran_amount');
 
         $products = Product::all(); 
-        $funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
-        ->where('users.id', $id);
+        $funds = User::join('fund_request', 'fund_request.user_id', '=', 'users.id')
+        ->where('fund_request.status', 'approve');
 
         $registeredUsers = User::select(
         \DB::raw("COUNT(*) as total_user"), 
@@ -178,6 +178,8 @@ class SuperAdminController extends Controller
       $id = Auth::user()->id;
       $funds = User::join('fund_request', 'fund_request.user_id', '=', 'users.id')
       ->where('fund_request.status', 'approve')
+      ->where('fund_request.admin_id', $id)// funds approve by superadmin only
+
       ->paginate( $request->get('per_page', 5));
       \LogActivity::addToLog('SuperAdmin fundsAllocated');
       return view('company.funds-allocated', compact('funds'));

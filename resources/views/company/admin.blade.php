@@ -97,7 +97,7 @@
 
                                                       <div class="card-title-sub">
                                                             <i class="fa fa-coins"></i>
-                                                            ₦{{ number_format($funds->sum('credit'))}}
+                                                            ₦{{ number_format($funds->sum('amount'))}}
                                                       </div>
                                                 </div>
 
