@@ -155,7 +155,7 @@
       ------------------------------------- */
       .btn {
             box-sizing: border-box;
-            width: 100%;
+            width: auto;
       }
 
       .btn>tbody>tr>td {
@@ -391,7 +391,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                            <td style="width:10%"> <a href="{{ route('dashboard') }}"
+                                                                                                            <td> <a href="{{ route('dashboard') }}"
                                                                                                                         target="_blank">View
                                                                                                                         dashboard</a>
                                                                                                             </td>
