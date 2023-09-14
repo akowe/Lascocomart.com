@@ -146,7 +146,7 @@
       }
 
       a {
-            color: #3498db;
+            color: #D10024;
             text-decoration: underline;
       }
 
@@ -174,10 +174,10 @@
 
       .btn a {
             background-color: #ffffff;
-            border: solid 1px #3498db;
+            border: solid 1px #D10024;
             border-radius: 5px;
             box-sizing: border-box;
-            color: #3498db;
+            color: #D10024;
             cursor: pointer;
             display: inline-block;
             font-size: 14px;
@@ -189,12 +189,12 @@
       }
 
       .btn-primary table td {
-            background-color: #3498db;
+            background-color: #D10024;
       }
 
       .btn-primary a {
-            background-color: #3498db;
-            border-color: #3498db;
+            background-color: #D10024;
+            border-color: #D10024;
             color: #ffffff;
       }
 
@@ -391,7 +391,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                            <td> <a href="{{ route('dashboard') }}"
+                                                                                                            <td style="width:25%"> <a href="{{ route('dashboard') }}"
                                                                                                                         target="_blank">View
                                                                                                                         dashboard</a>
                                                                                                             </td>
