@@ -390,7 +390,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                            <td style="width:25%"> <a href="{{ route('superadmin') }}"
+                                                                                                            <td style="width:10%"> <a href="{{ route('superadmin') }}"
                                                                                                                         target="_blank">Login</a>
                                                                                                             </td>
                                                                                                       </tr>

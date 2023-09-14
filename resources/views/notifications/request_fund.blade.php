@@ -402,7 +402,7 @@
                                                                                                 <tbody>
                                                                                                       <tr>
                                                                                                             <td
-                                                                                                                  style="width:25%">
+                                                                                                                  style="width:10%">
                                                                                                                   <a href="{{ route('superadmin') }}"
                                                                                                                         target="_blank">View
                                                                                                                         dashboard</a>
