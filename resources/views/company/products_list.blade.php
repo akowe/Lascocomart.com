@@ -142,15 +142,12 @@
                                                                                     style="display:block;">
 
                                                                                     @csrf
-                                                                                    <div class="form-group">
                                                                                           <input type="hidden" name="id"
                                                                                                 value="{{$product->id }}">
-
-                                                                                    </div>
-
-                                                                                    <input type="submit" name="submit"
-                                                                                          value="Approve"
-                                                                                          class="btn btn-outline-primary btn-sm">
+                                                                                    <button type="submit" name="submit"
+                                                                                          class="btn btn-outline-primary btn-sm"><i
+                                                                                                class="fa fa-check"></i>
+                                                                                          Approve</button>
 
                                                                               </form>
                                                                               @endif
@@ -169,14 +166,8 @@
                                                                                     method="post" name="submit">
                                                                                     @csrf
 
-
                                                                                     <input type="hidden" name="id"
                                                                                           value="{{$product->id }}">
-
-                                                                                    <input type="hidden"
-                                                                                          name="prod_status"
-                                                                                          value="remove">
-
 
                                                                                     <button type="submit" name="submit"
                                                                                           class="btn btn-outline-danger btn-sm"><i

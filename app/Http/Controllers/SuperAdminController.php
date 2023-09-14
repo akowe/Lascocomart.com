@@ -372,8 +372,6 @@ class SuperAdminController extends Controller
   {
         if(null !== $_POST['submit']){
             $id  = $request->input('id');
-             //$input  = $request->input('p');
-
              //mark order as paid
             \DB::table('products')
                 ->where('id', $id)
@@ -381,7 +379,6 @@ class SuperAdminController extends Controller
 
             Session::flash('approve', ' Product approved successful!.'); 
             Session::flash('alert-class', 'alert-success'); 
-           
         }
             //return view('cooperative.credit_limit', compact('credit'));
             \LogActivity::addToLog('Approve product');

@@ -534,7 +534,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#products" aria-expanded="false"
+                   <a href="{{ url('products_list') }}" class="sidebar-nav-link collapsed" 
                          aria-controls="products">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-th-list"></i>
@@ -548,18 +548,15 @@
                    </a>
 
                    <ul class="sidebar-sub-nav collapse" id="products">
-                         <li class="sidebar-nav-item">
+                         <!-- <li class="sidebar-nav-item">
                                <a href="{{ url('products_list') }}" class="sidebar-nav-link">
                                      <span class="sidebar-nav-abbr">
-                                           See all 
-                                     </span>
-                                     <span class="sidebar-nav-name">
-
+                                           All
                                      </span>
                                </a>
-                         </li>
+                         </li> -->
 
-                         <li class="sidebar-nav-item">
+                         <!-- <li class="sidebar-nav-item">
                                <a href="{{ url('removed_product') }}" class="sidebar-nav-link">
                                      <span class="sidebar-nav-abbr">
                                            Trashed
@@ -569,7 +566,7 @@
                                            &nbsp;
                                      </span>
                                </a>
-                         </li>
+                         </li> -->
 
 
                    </ul>
