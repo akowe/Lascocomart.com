@@ -283,3 +283,4 @@ Route::get('autocomplete', [CategoriesController::class,'autocomplete'])->name('
  
 Route::get('edit-fund-request/{id}', [SuperAdminController::class, 'editFundRequest'])->name('edit-fund-request');
 Route::post('/cancel-fund', [SuperAdminController::class, 'cancelFundRequest'])->name('cancel-fund');
+Route::get('/reset-user-password/{id}', [SuperAdminController::class, 'resetUserPassword'])->name('reset-user-password');

@@ -38,10 +38,14 @@ class CooperativeController extends Controller
         $this->middleware('cooperative');
     }
 
-    public function index (Request $request)
-    {
+    public function index (Request $request){
     if( Auth::user()->role_name  == 'cooperative'){
-        // check if user has field his/her profile
+
+        if ((Auth::user()->password_reset_at !='null')) {
+            return redirect(route('change-password'));
+         }
+
+        // check if user has filled his/her profile
         $user=Auth::user();
         $address = $user->address;
         $phone = $user->phone;

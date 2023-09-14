@@ -57,11 +57,11 @@
                               <table class="table table-striped " id="table">
                                     <thead>
                                           <tr>
+                                                <th>Edit</th>
                                                 <th>Cooperative</th>
                                                 <th>Email</th>
                                                 <th>Contact person</th>
                                                 <th>Credit</th>
-                                                <th></th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -69,8 +69,9 @@
                                           @foreach($coop as $details)
                                           <tr>
 
-                                                <td> <span class="text-capitalize">{{ $details['coopname'] }} </span><a href="user_edit/{{$details->id}}"> <i
-                                                                  class="fa fa-edit"></i> Edit</a></td>
+                                          <td><a href="user_edit/{{$details->id}}" class="text-danger"> <i
+                                                                  class="fa fa-edit"></i></a></td>      
+                                          <td> <span class="text-capitalize">{{ $details['coopname'] }} </span></td>
                                                 <td><span class="text-lowercase"> {{ $details['email'] }}</span></td>
                                                 <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp; {{ $details['lname'] }}</span>
                                                       <br>
@@ -80,30 +81,11 @@
                                                       <br>
                                                       {{ $details['phone'] }}
                                                 </td>
-
-
                                                 <!--  <td >{{ $details['code'] }}</td> -->
 
                                                 <td>{{number_format($details['credit'])  }}</td>
 
-                                                <td>
-                                                      <!-- <form action="{{ route('allocate_fund') }}" method="post"
-                                                            name="submit">
-                                                            @csrf
-                                                            <input type="hidden" name="user_id" lass="col-sm-3"
-                                                                  value="{{ $details['user_id'] }}">
-
-                                                            <input type="number" name="credit" style="border:none;"
-                                                                  class="form-control" id="new_bal" placeholder="amount"
-                                                                  required>
-
-                                                            <button type="submit" name="submit"
-                                                                  class="btn btn-outline-danger btn-sm">Allocate
-                                                                  Fund</button>
-
-                                                      </form> -->
-
-                                                </td>
+                                            
                                           </tr>
 
                                           @endforeach
@@ -132,6 +114,7 @@
                               <table class="table table-striped " id="table2">
                                     <thead>
                                           <tr>
+                                                <th>Edit</th>
                                                 <th>Member Name</th>
                                                 <th>Email</th>
                                                 <th>Cooperative</th>
@@ -143,9 +126,10 @@
                                           @foreach($members as $details)
                                           <tr>
 
-                                                <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp; {{ $details['lname'] }}</span> <a
-                                                            href="user_edit/{{$details->id}}"> <i
-                                                                  class="fa fa-edit"></i> Edit</a></td>
+                                          <td><a
+                                                            href="user_edit/{{$details->id}}" class="text-danger"> <i
+                                                                  class="fa fa-edit"></i> </a></td>      
+                                          <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp; {{ $details['lname'] }}</span> </td>
 
                                                 <td> <span class="text-lowercase">{{ $details['email'] }}</span></td>
 
@@ -190,6 +174,7 @@
                               <table class="table table-striped " id="table3">
                                     <thead>
                                           <tr>
+                                                <th>Edit</th>
                                                 <th>FMCG </th>
                                                 <th>Email</th>
                                                 <th>Contact Person</th>
@@ -200,8 +185,9 @@
 
                                           @foreach($fcmg as $details)
                                           <tr>
-                                                <td><span class="text-capitalize">{{ $details['coopname'] }}</span> <a href="user_edit/{{$details->id}}"> 
-                                                  <i class="fa fa-edit"></i> Edit</a>
+                                                <td><a href="user_edit/{{$details->id}}" class="text-danger"> 
+                                                  <i class="fa fa-edit"></i> Edit</a></td>
+                                                <td><span class="text-capitalize">{{ $details['coopname'] }}</span> 
                                                 </td>
                                                 <td> <span class="text-lowercase">{{ $details['email'] }}</span></td>
                                                 <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp;{{ $details['lname'] }}</span> </td>
@@ -239,6 +225,7 @@
                               <table class="table table-striped " id="table4">
                                     <thead>
                                           <tr>
+                                                <th>Edit</th>
                                                 <th>Store Name</th>
                                                 <th>Email</th>
                                                 <th>Contact Person</th>
@@ -250,8 +237,9 @@
 
                                           @foreach($merchants as $details)
                                           <tr>
-                                                <td><span class="text-capitalize">{{ $details['coopname'] }}</span> <a href="user_edit/{{$details->id}}"> <i
+                                                <td><a href="user_edit/{{$details->id}}" class="text-danger"> <i
                                                                   class="fa fa-edit"></i> Edit</a></td>
+                                                <td><span class="text-capitalize">{{ $details['coopname'] }}</span> </td>
                                                 <td><span class="text-lowercase">{{ $details['email'] }}</span></td>
                                                 <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp;{{ $details['lname'] }}</span></td>
                                                 <td> <span class="text-lowercase">{{ $details['address'] }}</span>

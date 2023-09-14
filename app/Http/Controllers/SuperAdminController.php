@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\Wallet;
@@ -452,6 +453,24 @@ public function user_update(Request $request, $id)
     $data = 'Update successful for ' .$user->fname. '';
     \LogActivity::addToLog('Update');
     return redirect()->back()->with('status',  $data);
+}
+
+public function resetUserPassword(Request $request, $id){
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $randomString = '';
+  $num = 8;
+  for ($a = 0; $a < $num; $a++) {
+    $index = rand(0, strlen($characters) - 1);
+    $randomString .= $characters[$index];
+  }
+  $tempoaryPassword = str_shuffle($randomString);
+  $user = User::find($id);
+  $user->password = Hash::make($tempoaryPassword);
+  $user->password_reset_at = Carbon::now();
+  $user->update();
+  $data = 'Password reset was successful!. A login code as been sent to' .$user->email ;
+  \LogActivity::addToLog('Reset password');
+  return redirect()->back()->with('status',  $data);
 }
 
  public function transactions(Request $request){
