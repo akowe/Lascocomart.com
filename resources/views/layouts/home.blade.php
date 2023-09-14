@@ -215,6 +215,8 @@
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -310,6 +312,9 @@
                               </a>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -510,6 +515,9 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
 
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <div class="dropdown-divider"></div>
+
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                           {{ __('Logout') }}
@@ -623,6 +631,9 @@
                               </a>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();

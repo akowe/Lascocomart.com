@@ -79,22 +79,17 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect('/')->with('success','Verification successful');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::group(['middleware' => ['auth']], function() {
-    /**
-    * Logout Route
-    */
-    Route::post('logout', [App\Http\Controllers\Auth\LogoutController::class,'logout'])->name('logout');
- });
-//users activity
-Route::group([
-    'namespace' => 'App\Haruncpi\LaravelUserActivity\Controllers',
-    'middleware' => config('user-activity.middleware')
-    ], function () {
-    Route::get(config('user-activity.route_path'), 'ActivityController@getIndex');
-    Route::post(config('user-activity.route_path'), 'ActivityController@handlePostRequest');
-});
+//users activity log
 Route::get('add-to-log', [App\Http\Controllers\HomeController::class, 'myTestAddToLog']);
 Route::get('logActivity', [App\Http\Controllers\HomeController::class,'logActivity']);
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::post('logout', [App\Http\Controllers\Auth\LogoutController::class,'logout'])->name('logout');
+    Route::get('show-change-password',[App\Http\Controllers\HomeController::class, 'showChangePassword'])->name('show-change-password');
+    Route::post('change-password',[App\Http\Controllers\HomeController::class, 'changePassword'])->name('change-password');
+    Route::get('add-review/{product_id}/userreview', [ReviewController::class, 'add']); 
+    Route::post('add-review', [ReviewController::class, 'create']);
+});
 
 //register users
 Route::get('cooperative-register', [App\Http\Controllers\Auth\CoopController::class, 'registerCooperative'])->name('cooperative-register');
@@ -108,11 +103,6 @@ Route::get('cooperative', [App\Http\Controllers\CooperativeController::class, 'i
 Route::get('merchant', [App\Http\Controllers\MerchantController::class, 'index'])->name('merchant');
 Route::get('dashboard', [App\Http\Controllers\MembersController::class, 'index'])->name('dashboard');
 Route::get('fcmg', [App\Http\Controllers\FcmgController::class, 'index'])->name('fcmg');
-
-Route::middleware(['auth'])->group(function (){
-Route::get('add-review/{product_id}/userreview', [ReviewController::class, 'add']); 
-Route::post('add-review', [ReviewController::class, 'create']);
-});
 //product
 Route::get('/', [App\Http\Controllers\ProductController::class, 'index']);  
 Route::get('cart', [App\Http\Controllers\ProductController::class, 'cart'])->name('cart');

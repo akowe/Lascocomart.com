@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
 use App\Models\LogActivity as LogActivityModel;
 use Auth;
 
@@ -53,5 +54,33 @@ class HomeController extends Controller
         else{
             return Redirect::to('/login');
         }
+    }
+
+    public function showChangePassword() {
+        return view('auth.passwords.change-password');
+    }
+
+    public function changePassword(Request $request) {
+        if (!(Hash::check($request->get('old-password'), Auth::user()->password))) {
+            // The passwords matches
+            return redirect()->back()->with("error","Your old password is incorrect.");
+        }
+
+        if(strcmp($request->get('old-password'), $request->get('new-password')) == 0){
+            // Current password and new password same
+            return redirect()->back()->with("error","New Password cannot be same as your old password.");
+        }
+
+        $validatedData = $request->validate([
+            'old-password' => 'required',
+            'new-password' => 'required|string|min:8|confirmed',
+        ]);
+
+        //Change Password   bcrypt();
+        $user = Auth::user();
+        $user->password = Hash::make($request->get('new-password'));
+        $user->save();
+
+        return redirect()->back()->with("success","Password successfully changed!");
     }
 }
