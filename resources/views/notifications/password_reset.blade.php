@@ -4,7 +4,7 @@
 <head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Your LascocoMart Order {{ $data['order_number'] }} is Confirmed</title>
+      <title>LascocoMart Your Temporary Password </title>
       <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -146,7 +146,7 @@
       }
 
       a {
-            color: #3498db;
+            color: #D10024;
             text-decoration: underline;
       }
 
@@ -174,27 +174,27 @@
 
       .btn a {
             background-color: #ffffff;
-            border: solid 1px #3498db;
+            border: solid 1px #D10024;
             border-radius: 5px;
             box-sizing: border-box;
-            color: #3498db;
+            color: #D10024;
             cursor: pointer;
             display: inline-block;
             font-size: 14px;
             font-weight: bold;
             margin: 0;
-            padding: 12px 25px;
+            padding: 6px 25px;
             text-decoration: none;
             text-transform: capitalize;
       }
 
       .btn-primary table td {
-            background-color: #3498db;
+            background-color: #D10024;
       }
 
       .btn-primary a {
-            background-color: #3498db;
-            border-color: #3498db;
+            background-color:#D10024;
+            border-color: #D10024;
             color: #ffffff;
       }
 
@@ -367,7 +367,6 @@
                                                 src="https://lascocomart.com/images/lascoco-logo.png" alt="LascocoMart"
                                                 width="139" height="93"></a>
                               </p>
-
                               <!-- START CENTERED WHITE CONTAINER -->
                               <table role="presentation" class="main">
 
@@ -377,9 +376,15 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                                  <p>Hi {{ $data['name'] }},</p>
-                                                                  <p>Your order {{ $data['order_number'] }} has been
-                                                                        confirmed.</p>
+                                                                  <p>Hi <span
+                                                                              style="text-transform:capitalize;">{{ $data['name'] }}</span>,
+                                                                  </p>
+                                                                  <p>You have requested for a password reset on your
+                                                                        LascocoMart account.</p>
+                                                                  <p>Kindly login using the below code has your
+                                                                        temporary password:</p>
+                                                                  <p> <span style="color:#34495e"><strong>{{ $data['password'] }}</strong>
+                                                                        </span> </p>
                                                                   <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
                                                                         <tbody>
@@ -391,9 +396,8 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                            <td> <a href="{{ route('dashboard') }}"
-                                                                                                                        target="_blank">View
-                                                                                                                        dashboard</a>
+                                                                                                            <td> <a href="{{ route('login') }}"
+                                                                                                                        target="_blank">Login</a>
                                                                                                             </td>
                                                                                                       </tr>
                                                                                                 </tbody>

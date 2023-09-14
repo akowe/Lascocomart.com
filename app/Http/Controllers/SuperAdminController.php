@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use App\Notifications\NewCardPayment;
 use App\Notifications\ApproveFund;
 use App\Notifications\CancelFundRequest;
+use App\Mail\PasswordResetEmail;
 use Notification;
 
 use Auth;
@@ -31,6 +32,7 @@ use Validator;
 use Session;
 use Paystack;
 use PDF;
+use Mail;
 
 
 class SuperAdminController extends Controller
@@ -465,9 +467,24 @@ public function resetUserPassword(Request $request, $id){
   $user->password = Hash::make($tempoaryPassword);
   $user->password_reset_at = Carbon::now();
   $user->update();
-  $data = 'Password reset was successful!. A login code as been sent to' .$user->email ;
+  $msg = 'Password reset was successful!. A login code as been sent to:-> ' .$user->email ;
+  
+  $name =  \DB::table('users')->where('id', $id)->get('fname') ; 
+  $username = Arr::pluck($name, 'fname'); // 
+  $get_name = implode(" ",$username);
+
+  $userEmail = \DB::table('users')->where('id', $id)->get('email') ; 
+  $getEmail= Arr::pluck($userEmail, 'email'); // 
+  $email = implode(" ",$getEmail);
+
+  $data = array(
+    'name'     => $get_name,
+    'password' => $tempoaryPassword,       
+    );
+    //dd($data);
+     Mail::to($email)->send(new PasswordResetEmail($data)); 
   \LogActivity::addToLog('Reset password'); 
-  return redirect()->back()->with('status',  $data);
+  return redirect()->back()->with('status',  $msg);
 }
 
  public function transactions(Request $request){
