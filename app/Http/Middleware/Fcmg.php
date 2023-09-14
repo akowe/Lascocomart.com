@@ -17,6 +17,11 @@ class fcmg
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if (!empty(Auth::user()->password_reset_at)) {
+            return redirect('show-change-password')->with('status', 'Kindly change your password, using the code sent to you.');
+            }
+            else{
+                return $next($request);
+            }
     }
 }

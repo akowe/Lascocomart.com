@@ -34,17 +34,12 @@ class CooperativeController extends Controller
       public function __construct()
     {
          // $this->middleware('auth');
-          $this->middleware(['auth','verified']);
+        $this->middleware(['auth','verified']);
         $this->middleware('cooperative');
     }
 
     public function index (Request $request){
     if( Auth::user()->role_name  == 'cooperative'){
-
-        if ((Auth::user()->password_reset_at !='null')) {
-            return redirect(route('change-password'));
-         }
-
         // check if user has filled his/her profile
         $user=Auth::user();
         $address = $user->address;
@@ -98,6 +93,7 @@ class CooperativeController extends Controller
         ->get('orders.id');   
         \LogActivity::addToLog('Admin dashboard');                  
         return view('cooperative.cooperative', compact('members', 'orders',  'credit', 'count_product', 'count_orders', 'sales', 'allocated_funds', 'sumApproveOrder', 'all_orders_id'));
+    
     }
     else { return Redirect::to('/login');}
     }

@@ -466,7 +466,7 @@ public function resetUserPassword(Request $request, $id){
   $user->password_reset_at = Carbon::now();
   $user->update();
   $data = 'Password reset was successful!. A login code as been sent to' .$user->email ;
-  \LogActivity::addToLog('Reset password');
+  \LogActivity::addToLog('Reset password'); 
   return redirect()->back()->with('status',  $data);
 }
 

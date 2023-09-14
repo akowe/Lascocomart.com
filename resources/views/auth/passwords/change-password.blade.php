@@ -35,6 +35,11 @@
                                                 {{ session('success') }}
                                           </div>
                                           @endif
+                                          @if (session('status'))
+                                          <div class="alert alert-danger">
+                                                {{ session('status') }}
+                                          </div>
+                                          @endif
                                           @if($errors)
                                           @foreach ($errors->all() as $error)
                                           <div class="alert alert-danger">{{ $error }}</div>

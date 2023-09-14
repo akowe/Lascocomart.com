@@ -79,8 +79,9 @@ class HomeController extends Controller
         //Change Password   bcrypt();
         $user = Auth::user();
         $user->password = Hash::make($request->get('new-password'));
+        $user->password_reset_at = '';// set to empty.
         $user->save();
-
+        \LogActivity::addToLog('Change password'); 
         return redirect()->back()->with("success","Password successfully changed!");
     }
 }
