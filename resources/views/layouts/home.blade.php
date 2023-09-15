@@ -105,7 +105,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewOrder'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('read-all-order')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
@@ -271,7 +271,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewCardPayment'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('read-all-payment')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-success  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
@@ -564,7 +564,7 @@
                               <ul class="dropdown-menu">
                                     @if(auth()->user()->unreadNotifications->where('type','App\Notifications\AdminCancelOrder'))
                                     <li class="d-flex">
-                                          <a href="{{ url('read-all-cancel-order')}} "
+                                          <a href="{{ url('mark-as-read')}} "
                                                 class="btn btn-info  btn-xs btn-block text-sm">Mark
                                                 All as Read</a>
                                     </li>
@@ -591,7 +591,7 @@
                               <ul class="dropdown-menu">
                                     @if(auth()->user()->unreadNotifications->where('type','App\Notifications\ProductDelivered'))
                                     <li class="d-flex">
-                                          <a href="{{route('product-delivered')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-success  btn-xs btn-block text-sm">Mark
                                                 All as Read</a>
                                     </li>
