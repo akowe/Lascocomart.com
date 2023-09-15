@@ -365,7 +365,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewCardPayment'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('read-all-payment')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-success btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
@@ -380,7 +380,7 @@
                                     @endforeach
                                    
                               </ul>
-                        </li>
+                        </li> 
 
                         <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
@@ -393,7 +393,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewProduct'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
+                                    <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-warning  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
@@ -428,7 +428,7 @@
                                     @if (auth()->user()->unreadNotifications
                                     ->where('type','App\Notifications\ProductDelivered'))
                                     <li class="d-flex  mx-1 my-2">
-                                          <a href="{{route('product-delivered')}}"
+                                    <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-info  btn-xs text-sm">Mark
                                                 All Delivered as
                                                 Read</a>
@@ -446,7 +446,7 @@
                                     @if (auth()->user()->unreadNotifications
                                     ->where('type', 'App\Notifications\ProductReceived'))
                                     <li class="d-flex  mx-1 my-2">
-                                          <a href="{{route('product-received')}}"
+                                    <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-info  btn-xs text-sm">Mark
                                                 All Received as Read</a>
                                     </li>
@@ -474,7 +474,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\CooperativeFundRequest'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
+                                    <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>

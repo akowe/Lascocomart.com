@@ -232,8 +232,8 @@ Route::post('/payout',  [App\Http\Controllers\VoucherController::class, 'withdra
 Route::get('request_fund', [App\Http\Controllers\VoucherController::class, 'requestFund'])->name('request_fund');    
 //in app notification 
 Route::post('request_fund', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('admin_fund_request');
-Route::get('/mark-as-read', [App\Http\Controllers\FundRequestController::class,'markAllNotificationAsRead'])->name('mark-as-read');
-Route::get('/read/{id}', [App\Http\Controllers\FundRequestController::class,'readNotification'])->name('read');
+Route::get('/mark-as-read', [App\Http\Controllers\NotificationController::class,'markAllNotificationAsRead'])->name('mark-as-read');
+Route::get('/read/{id}', [App\Http\Controllers\NotificationController::class,'readNotification'])->name('read');
 Route::get('/fundrequest',  [App\Http\Controllers\FundRequestController::class,'fundrequest'])->name('fundrequest');
 //superadmin read fund request notification
 Route::get('/{id}', [App\Http\Controllers\NotificationController::class, 'fundRequestNotification']);

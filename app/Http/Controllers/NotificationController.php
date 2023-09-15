@@ -40,6 +40,21 @@ class NotificationController extends Controller
         $this->middleware('auth');
     }
 
+    public function markAllNotificationAsRead(){
+        //$user->notifications()->delete();
+         Auth::user()->unreadNotifications->markAsRead();
+         auth()->user()->readNotifications()->delete();
+         return redirect()->back();  
+     }
+    
+     public function readNotification($id){
+        $notification = auth()->user()->unreadNotifications()->where('id', $id)->first();
+        if ($notification) {
+             $notification->markAsRead();
+        }
+        return redirect()->back();
+    }
+
     public function allNewProductNotification(){
         Auth::user()->unreadNotifications->where('type', 'App\Notifications\NewProduct')->markAsRead();
         auth()->user()->readNotifications()
@@ -101,14 +116,14 @@ class NotificationController extends Controller
          Notification::send($buyer_id, $notification);
 
         if($delivered){
-            // Email notification to Coopmart
-            // $data = array(
-            // 'cooperative_name'   => $cooperative_name,
-            // 'cooperative_code'  =>$cooperative_code,
-            // 'email'             => $email,  
-            // 'amount'            => $amount,       
-            // );
-         //Mail::to('info@coopmart.ng')->send(new RequestFundEmail($data)); 
+           // Email notification to Coopmart
+            $data = array(
+            'cooperative_name'   => $cooperative_name,
+            'cooperative_code'  =>$cooperative_code,
+            'email'             => $email,  
+            'amount'            => $amount,       
+            );
+        // Mail::to('info@lascocomart.com')->send(new RequestFundEmail($data)); 
         }
         return redirect()->back()->with('status', 'Delivered!');
    }
@@ -140,7 +155,7 @@ public function orderReceived($id){
     ->Join('users', 'users.id', '=', 'order_items.seller_id')
     ->where('orders.id', $id)
     ->get('users.id');
-    //dd($seller_id);
+    //dd($seller_id); 
 
     $product_id = OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
     ->Join('products', 'products.id', '=','order_items.product_id')
@@ -166,14 +181,14 @@ public function orderReceived($id){
     Notification::send($superadmin, $notification);
 
     if($received){
-        // Email notification to Coopmart
-        // $data = array(
-        // 'cooperative_name'   => $cooperative_name,
-        // 'cooperative_code'  =>$cooperative_code,
-        // 'email'             => $email,  
-        // 'amount'            => $amount,       
-        // );
-    // Mail::to('info@coopmart.ng')->send(new RequestFundEmail($data)); 
+        // Email notification to LascocoMart
+        $data = array(
+        'cooperative_name'   => $cooperative_name,
+        'cooperative_code'  =>$cooperative_code,
+        'email'             => $email,  
+        'amount'            => $amount,       
+        );
+    //Mail::to('info@lascocomart.com')->send(new RequestFundEmail($data)); 
     }
     return redirect()->back()->with('status', 'Received!');
 }

@@ -31,7 +31,7 @@ class RequestFundEmail extends Mailable
     public function build()
     {
         //return $this->view('view.name');
-        return $this->from('noreply@coopmart.com', 'CoopMart')
+        return $this->from('noreply@lascocomart.com', 'LascocoMart')
         ->subject('Request For Fund')
         ->view('notifications.request_fund')
         ->with('data', $this->data);

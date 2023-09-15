@@ -86,20 +86,7 @@ public function requestFund(Request $request){
     return view('cooperative.request_fund');
  }
 
- public function markAllNotificationAsRead(){
-    //$user->notifications()->delete();
-     Auth::user()->unreadNotifications->markAsRead();
-     return redirect()->back();
-     
- }
 
- public function readNotification($id){
-    $notification = auth()->user()->unreadNotifications()->where('id', $id)->first();
-    if ($notification) {
-         $notification->markAsRead();
-    }
-    return redirect()->back();
-}
 
 public function memberFundWallet(Request $request) {
         $email = Auth::user()->email;
@@ -134,7 +121,7 @@ public function memberFundWallet(Request $request) {
             'email'             => $email,  
             'amount'            => $amount,       
             );
-            //Mail::to($cooperative_email)->send(new MemberRequestFundEmail($data)); 
+            Mail::to($cooperative_email)->send(new MemberRequestFundEmail($data)); 
         }
         return redirect()->back()->with('success', 'Fund requested successfully!');
     }
