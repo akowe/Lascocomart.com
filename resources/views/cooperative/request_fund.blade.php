@@ -47,7 +47,7 @@
                               </h5> -->
                               @auth
                               @if(Auth::user()->role_name == 'cooperative')
-                              <form class="my-5 pb-5 pr-5" method="post" action="{{ route('admin_fund_request') }}">
+                              <form class="my-5 pb-5 pr-5" method="post" action="{{ route('send-fund-request') }}">
                                     @csrf
                                     <div class="form-group">
                                           <label for="amount">Amount requesting</label>

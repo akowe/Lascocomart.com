@@ -31,26 +31,26 @@ class FundRequestController extends Controller
     $this->middleware('auth');
 
 }
-public function fundrequest(Request $request){
-    if( Auth::user()->role_name  == 'superadmin'){
-        $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
-        ->where('fund_request.admin_id', Auth::user()->id)
-        ->where('fund_request.status', 'pending')
-        ->orderBy('fund_request.created_at', 'desc')
-        ->get([
-            'fund_request.*', 
-            'users.email', 
-            'users.fname', 
-            'users.lname', 
-            'users.coopname',
-            'users.phone'
-        ]);
-        \LogActivity::addToLog('Fund Rquest');
-        return view('fundrequest', compact('fund'));
-    }
-    else{
-        return Redirect::to('/login');
-    }
+public function requestFund(Request $request){
+    \LogActivity::addToLog('Admin fundRequest');
+    return view('cooperative.request_fund');
+ }
+
+public function showFundrequest(Request $request){
+    $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
+    ->where('fund_request.admin_id', Auth::user()->id)
+    ->where('fund_request.status', 'pending')
+    ->orderBy('fund_request.created_at', 'desc')
+     ->get([
+        'fund_request.*', 
+        'users.email', 
+        'users.fname', 
+        'users.lname',
+        'users.coopname',
+        'users.phone'
+    ]);
+    \LogActivity::addToLog('Fund Rquest');
+    return view('fundrequest', compact('fund'));
 }
 
 public function sendFundRequest(Request $request){
@@ -86,10 +86,6 @@ public function sendFundRequest(Request $request){
     return redirect()->back()->with('success', 'Fund requested successfully!');
 }
 
-public function requestFund(Request $request){
-    \LogActivity::addToLog('Admin fundRequest');
-    return view('cooperative.request_fund');
- }
 
 
 

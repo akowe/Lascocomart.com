@@ -101,9 +101,6 @@ class VoucherController extends Controller
         return view('merchants.payout', compact('amount','credit'));
     }
 
-    public function requestFund(Request $request){
-       return view('cooperative.request_fund');
-    }
-
+  
 
 }

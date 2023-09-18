@@ -229,14 +229,15 @@ Route::post('seller_insert', [App\Http\Controllers\Auth\SellerController::class,
 Route::post('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load_wallet'])->name('addcredit');
 //Route::get('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
 Route::post('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
-Route::get('request_fund', [App\Http\Controllers\VoucherController::class, 'requestFund'])->name('request_fund');    
+ Route::get('request-fund', [App\Http\Controllers\FundRequestController::class, 'requestFund'])->name('request-fund');    
 //in app notification 
-Route::post('request_fund', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('admin_fund_request');
+Route::post('send-fund-request', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('send-fund-request');
+Route::get('/show-fundrequest',  [App\Http\Controllers\FundRequestController::class,'showFundrequest'])->name('show-fundrequest');
 Route::get('/mark-as-read', [App\Http\Controllers\NotificationController::class,'markAllNotificationAsRead'])->name('mark-as-read');
 Route::get('/read/{id}', [App\Http\Controllers\NotificationController::class,'readNotification'])->name('read');
-Route::get('/fundrequest',  [App\Http\Controllers\FundRequestController::class,'fundrequest'])->name('fundrequest');
+
 //superadmin read fund request notification
-Route::get('/{id}', [App\Http\Controllers\NotificationController::class, 'fundRequestNotification']);
+Route::get('superadmin-read-fund-request/{id}', [App\Http\Controllers\NotificationController::class, 'fundRequestNotification'])->name('superadmin-read-fund-request');
 
 Route::post('member_request_fund_wallet', [App\Http\Controllers\FundRequestController::class, 'memberFundWallet'])->name('member_request_fund_wallet'); 
 Route::get('/new-product', [App\Http\Controllers\NotificationController::class,'allNewProductNotification'])->name('new-product');

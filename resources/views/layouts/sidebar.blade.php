@@ -26,7 +26,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a href="{{ url('request_fund') }}" class="sidebar-nav-link">
+                   <a href="{{ url('request-fund') }}" class="sidebar-nav-link">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-credit-card"></i>
                          </span>
@@ -607,7 +607,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{ url('fundrequest') }}">
+                   <a class="sidebar-nav-link " href="{{ url('show-fundrequest') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-credit-card"></i>
                          </span>
