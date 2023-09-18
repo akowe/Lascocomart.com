@@ -32,20 +32,25 @@ class FundRequestController extends Controller
 
 }
 public function fundrequest(Request $request){
-    $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
-    ->where('fund_request.admin_id', Auth::user()->id)
-    ->where('fund_request.status', 'pending')
-    ->orderBy('fund_request.created_at', 'desc')
-     ->get([
-        'fund_request.*', 
-        'users.email', 
-        'users.fname', 
-        'users.lname',
-        'users.coopname',
-        'users.phone'
-    ]);
-    \LogActivity::addToLog('Fund Rquest');
-    return view('fundrequest', compact('fund'));
+    if( Auth::user()->role_name  == 'superadmin'){
+        $fund =  \DB::table('users')->Join('fund_request', 'fund_request.user_id', '=', 'users.id')
+        ->where('fund_request.admin_id', Auth::user()->id)
+        ->where('fund_request.status', 'pending')
+        ->orderBy('fund_request.created_at', 'desc')
+        ->get([
+            'fund_request.*', 
+            'users.email', 
+            'users.fname', 
+            'users.lname', 
+            'users.coopname',
+            'users.phone'
+        ]);
+        \LogActivity::addToLog('Fund Rquest');
+        return view('fundrequest', compact('fund'));
+    }
+    else{
+        return Redirect::to('/login');
+    }
 }
 
 public function sendFundRequest(Request $request){

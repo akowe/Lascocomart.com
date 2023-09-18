@@ -98,7 +98,7 @@
                                           <div class="card-body collapse show tabel-resposive" id="card">
                                                 <h4 class="card-title">My order history</h4>
 
-                                                <table class="table-striped table" id="table">
+                                                <table class="table-striped table" id="member">
                                                       <thead>
                                                             <tr class="small">
                                                                   <th>Date</th>
@@ -181,4 +181,39 @@
             </div>
       </div>
 </div>
-@endsection
+<script type="text/javascript">
+      $(document).ready(function() {
+            $('#member').DataTable({
+                  responsive: true,
+
+                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                  // dom: 'Bfrtip',
+                  button: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                  ],
+
+                  aLengthMenu: [
+                        [5, 10, 20, -1],
+                        [5, 10, 20, "All"]
+                  ],
+                  iDisplayLength: 5,
+                  "order": [
+                        [0, "asc"]
+                  ],
+
+                  "language": {
+                        "lengthMenu": "_MENU_ Records per page",
+                  }
+
+
+            });
+      });
+
+
+</script>
+@endsection 

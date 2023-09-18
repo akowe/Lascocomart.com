@@ -422,7 +422,7 @@ class SuperAdminController extends Controller
         return view('company.user_edit', compact('users')); 
      }
       else { return Redirect::to('/login');
-}
+    }
 }
 
 //update 

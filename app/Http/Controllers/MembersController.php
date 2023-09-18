@@ -59,7 +59,7 @@ public function index(Request $request)
                          ->where('orders.status', 'paid')
                         ->orwhere('users.id', $id)// also see all orders of a member
                         
-                        ->orderBy('date', 'desc')
+                        ->orderBy('orders.date', 'desc')
                          ->paginate( $request->get('per_page', 5));
                          \LogActivity::addToLog('Member dashboard');
     return view('members.dashboard', compact('credit', 'count_orders', 'orders'));
