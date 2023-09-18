@@ -253,7 +253,7 @@ public function allNewOrderNotification(){
     ->where('type', 'App\Notifications\NewOrder')->delete();
     return redirect()->back();
     
-}
+} 
 //admin
 public function readAnOrderNotification($id){
    $notification = auth()->user()->unreadNotifications()
@@ -265,7 +265,7 @@ public function readAnOrderNotification($id){
    auth()->user()->readNotifications()
    ->where('type', 'App\Notifications\NewOrder')
    ->where('id', $id)->delete();
-   return redirect('order_preview');
+   return redirect('admin-order-history');
 } 
 
 public function readAnOrderSuperadmin($id){

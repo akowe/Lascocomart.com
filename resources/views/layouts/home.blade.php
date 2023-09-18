@@ -110,7 +110,7 @@
                                                 Read</a>
                                     </li>
                                     @endif
-
+ 
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewOrder') as $notification)
                                     <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
