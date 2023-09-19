@@ -51,7 +51,6 @@ class OrderController extends Controller
             . $characters[rand(0, strlen($characters) - 1)];
         // shuffle pin
         $order_number = str_shuffle($pin);
-        //$order_number  = $_POST['order_number'];
         $order_status  = 'awaits approval'; 
         $pay_status  = 'pending';
         $ship_address  = $_POST['ship_address'];
@@ -120,14 +119,13 @@ class OrderController extends Controller
             $shipDetails->save();
        
         $request->session()->forget('cart');
-          //in-app payment notification
           $superadmin = User::where('role_name', '=', 'superadmin')->get();
           $get_superadmin_id =Arr::pluck($superadmin, 'id');
           $superadmin_id = implode('', $get_superadmin_id);
 
           $notification = new NewOrder($order_number);
           Notification::send($superadmin, $notification);
-           // send email notification to Admin
+          
           $name =  \DB::table('users')->where('id', $order->user_id)->get('fname') ; 
           $username = Arr::pluck($name, 'fname'); // 
           $get_name = implode(" ",$username);
@@ -140,6 +138,10 @@ class OrderController extends Controller
           $getEmail= Arr::pluck($coopEmail, 'email'); // 
           $adminEmail = implode(" ",$getEmail);
 
+          $coopName = \DB::table('users')->where('code', $code)->where('role', '2')->get('coopname') ; 
+          $getCoop= Arr::pluck($coopName, 'coopname'); // 
+          $cooperative = implode(" ",$getCoop);
+
           $coopId = User::where('code', $code)->where('role', '=', '2')->get() ; 
           $getId= Arr::pluck($coopId, 'id'); // 
           $adminId = implode('', $getId);
@@ -148,9 +150,10 @@ class OrderController extends Controller
           Notification::send($coopId, $notification);
            
             $data = array(
-            'name'         => $get_name,
+            'cooperative'   => $cooperative,
             'order_number' => $order_number,  
-            'amount'       => $totalAmount,       
+            'amount'       => $grandtotal, // delivery inclusive
+            'member'       => $get_name,       
                 );
 
              Mail::to($adminEmail)->send(new ConfirmOrderEmail($data)); 

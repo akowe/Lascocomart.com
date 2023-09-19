@@ -125,7 +125,7 @@
                                                                               {{ $order['delivery_status']}}</span>
                                                                         @if(empty($order->delivery_status) && $order->status == 'cancel')
                                                                        
-                                                                        @elseif(empty($order->delivery_status) )
+                                                                        @elseif($order->delivery_status == 'delivered' )
                                                                         <form action="{{ url('order-received') }}/{{ $order->id}}"
                                                                               method="POST">
                                                                               @csrf
@@ -143,22 +143,16 @@
                                                                         @elseif($order->status == 'cancel')
                                                                         @elseif($order->status == 'paid')
                                                                         @else
-                                                                        <form action="/cancel_order" method="post"
-                                                                              name="submit">
-                                                                              @csrf
-                                                                              <input type="hidden" name="order_number"
-                                                                                    value="{{$order->order_number }}">
-
+                                                                              <input type="hidden"  id="id"
+                                                                                    value="{{$order->id }}">
+<!-- 
                                                                               <input type="hidden" name="amount"
-                                                                                    value="{{$order->total }}">
+                                                                                    value="{{$order->total }}"> -->
 
-                                                                              <input type="hidden" name="status"
-                                                                                    value="cancel">
-
-                                                                              <button type="submit" name="submit"
-                                                                                    class="btn btn-outline-danger btn-sm"><i
+                                                                              <button type="button" 
+                                                                                    class="btn btn-outline-danger btn-sm" onclick="cancelOrder()"><i
                                                                                           class="fa fa-trash-o"></i></button>
-                                                                        </form>
+                                                                      
                                                                         @endif
 
                                                                   </td>
@@ -181,6 +175,23 @@
             </div>
       </div>
 </div>
+<script>
+function cancelOrder() {
+
+      var answer = window.confirm("Are you sure you want to cancel this order?");
+
+      if (answer) {
+            var id = document.getElementById('id').value;
+            var showRoute = "{{ route('cancel-order', ':id') }}";
+            url = showRoute.replace(':id', id);
+            
+            window.location = url;
+
+      } else {
+            // window.location.reload();
+      }
+}
+</script>
 <script type="text/javascript">
       $(document).ready(function() {
             $('#member').DataTable({

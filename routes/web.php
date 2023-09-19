@@ -118,7 +118,8 @@ Route::match(['get', 'post'],'checkout', [App\Http\Controllers\ProductController
 Route::get('confirm_order',[App\Http\Controllers\OrderController::class, 'confirm_order'])->name('confirm_order');
 Route::post('order', [App\Http\Controllers\OrderController::class, 'order'])->name('order'); 
 //cancel an order.
-Route::post('/cancel_order', [App\Http\Controllers\MembersController::class, 'cancel_order'])->name('cancel_order');
+
+Route::get('cancel-order/{id}', [App\Http\Controllers\MembersController::class, 'cancelOrder'])->name('cancel-order');
 // from  product preview page 
 Route::get('add-cart/{id}', [ProductController::class, 'addToCartPreview'])->name('add.cart');
 Route::get('preview/{prod_name}', [App\Http\Controllers\ProductController::class, 'preview'])->name('preview');

@@ -59,7 +59,7 @@ public function index(Request $request)
                          ->where('orders.status', 'paid')
                         ->orwhere('users.id', $id)// also see all orders of a member
                         
-                        ->orderBy('orders.date', 'desc')
+                        ->orderBy('date', 'desc')
                          ->paginate( $request->get('per_page', 5));
                          \LogActivity::addToLog('Member dashboard');
     return view('members.dashboard', compact('credit', 'count_orders', 'orders'));
@@ -89,36 +89,28 @@ public function index(Request $request)
          \LogActivity::addToLog('Invoice');
     return view('invoice', compact('item', 'orders'));
            }
-
-    else { return Redirect::to('/login');
-    
+    else { 
+        return Redirect::to('/login');
         }
     }
-// cancel order where status is confirmed
-    public function cancel_order(Request $request)
+
+    public function cancelOrder(Request $request, $id)
     {
-         $id = Auth::user()->id; //
-    
-        if(null !== $_POST['submit'])
-        {
-            $order_number  = $request->input('order_number');
-             $input  = $request->input('status');
+         $userId = Auth::user()->id; 
+         $status = 'cancel';
+        //  Order::where('id', $id)
+        //  ->update(['status' => $status]);
+         $order = Order::find($id);
+         $order->status = $status;
+         $order->update();
 
-             //update table
-             Order::where('order_number', $order_number)
-                    ->update([
-                    'status' => $input
-                ]);
+        // refund credit, charge #200 when order is cancel
+        //$amount  = $request->input('amount');
+        //$bal = $amount - 200;
+        //DB::table('vouchers')->where('user_id', $userId)->increment('credit',$bal);
 
-            // refund credit, charge #200
-            $amount  = $request->input('amount');
-
-            $bal = $amount - 200;
-            DB::table('vouchers')->where('user_id', $id)->increment('credit',$bal);
-
-            Session::flash('status', ' Your order has been canceled  successful!'); 
-            Session::flash('alert-class', 'alert-success'); 
-        }
+        Session::flash('status', ' Your order has been canceled  successful!'); 
+        Session::flash('alert-class', 'alert-success'); 
         \LogActivity::addToLog('Cancel order');
         return redirect()->back()->with('success', 'Your order has been canceled successful!');
     }

@@ -377,9 +377,10 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                                  <p>Hi {{ $data['name'] }},</p>
-                                                                  <p>Your order {{ $data['order_number'] }} has been
-                                                                        confirmed.</p>
+                                                                  <p>Hi {{ $data['cooperative'] }},</p>
+                                                                  <p>You have new order <strong>{{ $data['order_number'] }} </strong>
+                                                                  of <strong> ₦{{ number_format($data['amount'])}} </strong> </p>
+                                                                  <p>from your member;<strong> {{ $data['member'] }}. </strong>  Awaiting approval.</p>
                                                                   <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
                                                                         <tbody>
@@ -391,7 +392,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                            <td> <a href="{{ route('dashboard') }}"
+                                                                                                            <td> <a href="{{ route('login') }}"
                                                                                                                         target="_blank">View
                                                                                                                         dashboard</a>
                                                                                                             </td>

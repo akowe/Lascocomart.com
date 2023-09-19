@@ -30,6 +30,6 @@ class OrderEmail extends Mailable
      */
     public function build()
     {
-         return $this->from('noreply@coopmart.com', 'CoopMart')->subject('New Order Notification')->view('notifications.order')->with('data', $this->data);
+         return $this->from('noreply@coopmart.com', 'LascocoMart')->subject('New Order Notification')->view('notifications.order')->with('data', $this->data);
     }
 }

@@ -377,7 +377,7 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                            <p>Hi, You have new order of <strong>₦{{ number_format($data['amount'])}}</strong>, from <strong>{{ $data['name'] }}</strong></p>
+                                                            <p>Hi, You have new order of <strong>₦{{ number_format($data['amount'])}}</strong>, from <strong>{{ $data['member'] }}</strong></p>
                                                                   <p><strong>Order number:</strong> {{ $data['order_number'] }}</p>
                                                                   <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
