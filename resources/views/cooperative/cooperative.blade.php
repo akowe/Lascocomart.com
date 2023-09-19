@@ -147,14 +147,14 @@
 
                               <div class="col-md-6 col-lg-3 d-flex">
                                     <div class="card border-0 bg-info text-dark text-center mb-grid w-100">
-                                          <a href="{{url('request_fund') }}" class="text-decoration-none text-dark">
+                                          <a href="{{url('request-fund') }}" class="text-decoration-none text-dark">
                                                 <div class="d-flex flex-row align-items-center h-100">
                                                       <div
                                                             class="card-icon d-flex align-items-center h-100 justify-content-center">
                                                             <i class="fa fa-credit-card"></i>
                                                       </div>
                                                       <a class="card-body text-dark text-decoration-none"
-                                                            href="{{url('request_fund') }}">
+                                                            href="{{url('request-fund') }}">
                                                             <div class="card-info-title">Fund </div>
                                                             <h3 class="card-title mb-0">
                                                                   Wallet

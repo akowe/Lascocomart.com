@@ -213,7 +213,7 @@ class SuperAdminController extends Controller
         Notification::send($getUser, $notification);
         \LogActivity::addToLog('Cancel fundRequest');
 
-        return redirect('fundrequest')->with('success', 'Fund Request Canceled!');
+        return redirect('show-fundrequest')->with('success', 'Fund Request Canceled!');
     } 
 
     public function sales_invoice(Request $request, $order_number )

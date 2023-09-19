@@ -224,12 +224,12 @@ Route::get('subscribers', [App\Http\Controllers\NewsletterController::class, 'su
 Route::post('coop_insert', [App\Http\Controllers\Auth\CoopController::class, 'coop_insert'])->name('coop_insert');
 Route::post('fcmgs_insert', [App\Http\Controllers\Auth\FcmgsController::class, 'fcmgs_insert'])->name('fcmgs_insert');
 Route::post('seller_insert', [App\Http\Controllers\Auth\SellerController::class, 'seller_insert'])->name('seller_insert');
-// Route::get('payout', [App\Http\Controllers\MerchantController::class, 'payout'])->name('payout');
+//Route::get('payout', [App\Http\Controllers\MerchantController::class, 'payout'])->name('payout');
 //Route::get('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load_wallet'])->name('addcredit');
 Route::post('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load_wallet'])->name('addcredit');
 //Route::get('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
 Route::post('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
- Route::get('request-fund', [App\Http\Controllers\FundRequestController::class, 'requestFund'])->name('request-fund');    
+Route::get('request-fund', [App\Http\Controllers\FundRequestController::class, 'requestFund'])->name('request-fund');    
 //in app notification 
 Route::post('send-fund-request', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('send-fund-request');
 Route::get('/show-fundrequest',  [App\Http\Controllers\FundRequestController::class,'showFundrequest'])->name('show-fundrequest');

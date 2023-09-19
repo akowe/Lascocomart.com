@@ -30,8 +30,8 @@
                                     <div class="card-body">
                                           <h4 class="card-title"></h4>
                                           <p class="card-text">A Voucher is same as cash or credit. </p>
-                                          <a href="{{ route('fundrequest')}}" class="btn btn-danger">
-                                               Add funds to cooperatives </a>
+                                          <a href="{{ route('show-fundrequest')}}" class="btn btn-danger">
+                                               View Funds Request </a>
                                     </div>
                               </div>
                               <!--card-->
