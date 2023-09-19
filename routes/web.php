@@ -183,7 +183,7 @@ Route::get('credit', [App\Http\Controllers\CooperativeController::class, 'member
 Route::post('coopupload-image', [App\Http\Controllers\CooperativeController::class, 'coopstore']);
 Route::get('coopall_products', [App\Http\Controllers\CooperativeController::class, 'coopall_products'])->name('coopall_products');
 //soft delete.
-Route::post('/coopremove_product', [App\Http\Controllers\CooperativeController::class, 'coopremove_product'])->name('coopremove_product');
+Route::get('coopremove_product/{id}', [App\Http\Controllers\CooperativeController::class, 'coopremove_product'])->name('coopremove_product');
 Route::get('coopsales_preview', [App\Http\Controllers\CooperativeController::class, 'coopsales_preview'])->name('coopsales_preview');
 Route::get('fcmgproductsview', [App\Http\Controllers\CooperativeController::class, 'fcmgproductsview'])->name('fcmgproductsview');
 Route::get('fcmgcart', [CooperativeController::class, 'fcmgcart'])->name('fcmgcart');

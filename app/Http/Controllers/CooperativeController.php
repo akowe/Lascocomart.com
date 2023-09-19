@@ -160,7 +160,7 @@ class CooperativeController extends Controller
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
         ->where('users.code', $code)
         ->where('orders.status', '=', 'cancel')
-        ->orderBy('date', 'desc')
+        ->orderBy('orders.date', 'desc')
         ->paginate( $request->get('per_page', 5));
         \LogActivity::addToLog('Admin view cancel order');
         return view('cooperative.canceled-orders', compact('orders'));
@@ -170,9 +170,8 @@ class CooperativeController extends Controller
     public function adminProducts(Request $request){
         $id = Auth::user()->id;
         $products = User::join('products', 'products.seller_id', '=', 'users.id')
-        ->where('products.prod_status', 'pending')
-        ->where('products.prod_status', 'approve')
-        ->orwhere('users.id', $id)
+        ->where('products.prod_status', '!=', 'remove')
+        ->where('products.seller_id', $id)
         ->paginate( $request->get('per_page', 10));
         \LogActivity::addToLog('Admin products');
         return view('cooperative.products', compact('products'));
@@ -428,27 +427,15 @@ class CooperativeController extends Controller
                
     }   
 
-    public function coopremove_product(Request $request)
+    public function coopremove_product(Request $request, $id)
     {
-
-        $code = Auth::user()->code; //
-         $seller_id = Auth::user()->id; //
-    
-
-        if(null !== $_POST['submit'])
-        {
-            $id  = $request->input('id');
-             $input  = $request->input('prod_status');
-
-             //update table
-             Product::where('id', $id)
-                    ->update([
-                    'prod_status' => $input
-                ]);
-
-            Session::flash('remove', ' Product Removed Successful!'); 
-            Session::flash('alert-class', 'alert-success'); 
-        }
+        $code = Auth::user()->code;
+        $seller_id = Auth::user()->id; 
+        $status = 'remove';
+        //update table
+        Product::where('id', $id)->update(['prod_status' => $status]);
+        Session::flash('remove', ' Product Removed Successful!'); 
+        Session::flash('alert-class', 'alert-success'); 
         \LogActivity::addToLog('Admin remove product');
         return redirect()->back()->with('success', 'Product Removed Successful!');
     }

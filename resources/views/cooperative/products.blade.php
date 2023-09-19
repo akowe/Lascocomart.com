@@ -85,23 +85,18 @@
                                                             <td>
                                                                   @if($product->prod_status ==
                                                                   'pending')
-                                                                  <form action="/coopremove_product" method="post"
-                                                                        name="submit">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                              value="{{$product->id }}">
+                                                                 
+                                                                        <input type="hidden" id="product_id" value="{{$product->id }}">
 
-                                                                        <input type="hidden" name="prod_status"
-                                                                              value="remove">
-
-                                                                        <button type="submit" name="submit"
+                                                                        <button type="button" onclick="removeProduct()"
                                                                               class="btn btn-outline-danger btn-sm"><i
                                                                                     class="fa fa-trash-o"></i>
-                                                                              Remove</button>
-                                                                  </form>
+                                                                             </button>
+
+                                                              
                                                                   @endif
                                                             </td>
-                                                      </tr>
+                                                      </tr> 
                                                       @endforeach
 
                                                 </tbody>
@@ -116,5 +111,21 @@
             </div>
       </div>
 </div>
+<script>
+function removeProduct() {
 
+      var answer = window.confirm("Are you sure you want to remove this product?");
+
+      if (answer) {
+            var id = document.getElementById('product_id').value;
+            var showRoute = "{{ route('coopremove_product', ':id') }}";
+            url = showRoute.replace(':id', id);
+            
+            window.location = url;
+
+      } else {
+            // window.location.reload();
+      }
+}
+</script>
 @endsection
