@@ -231,11 +231,10 @@ class CooperativeController extends Controller
     
     }
     
-    public function deleteMember(Request $request )
+    public function deleteMember(Request $request, $id )
     {
-        $member_id = $request->member;
         $code = Auth::user()->code; //
-        $user = User::where('code', $code)->where('id', $member_id)->delete();
+        $user = User::where('code', $code)->where('id', $id)->delete();
         \LogActivity::addToLog('Admin remove member');
         return redirect()->back()->with('success', 'Member Removed Successfully!');
     }

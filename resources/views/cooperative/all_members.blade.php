@@ -51,6 +51,9 @@
             <!--show alert-->
             <p style="display: none;">{{ Session::get('verified') }}</p>
             @endif
+            @if (session('success'))
+                <h6 class="alert alert-success">{{ session('success') }}</h6>
+            @endif
 
 
             <!-- row -->
@@ -78,9 +81,9 @@
                                           <td>{{ $details['phone'] }}</td>
                                           <!--  <td >{{ $details['code'] }}</td> -->
                                           <td>
-                                                <button type="button" class="btn btn-outline-danger "
-                                                      data-toggle="modal" data-target="#exampleModal">
-                                                      <i class="fa fa-trash"></i>
+                                                <input type="hidden" id="user_id" value="{{$details->id}}">
+                                                <button type="button" class="btn btn-outline-danger " onclick="removeMember()">
+                                                      <i class="fa fa-trash"></i> 
                                                 </button>
 
                                           </td>
@@ -103,25 +106,24 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-<script type="text/javascript">
-$('#Button').ready(function() {
-                  $('.show_confirm').click(function(event) {
-                              var id = $(this).data("id");
-                              event.preventDefault();
-                              swal({
-                                          title: `Are you sure you want to remove this member?`,
-                                          text: "If you delete this member, he/she will be removed.",
-                                          icon: "warning",
-                                          buttons: true,
-                                          dangerMode: true,
-                                    })
-                                    .then((willDelete) => {
-                                                if (willDelete) {
-                                                      form.submit();
-                                                }
-                                          }
-                                    });
-                  })
+
+<script>
+function removeMember() {
+
+      var answer = window.confirm("Are you sure you want to remove this member?");
+
+      if (answer) {
+            var id = document.getElementById('user_id').value;
+            var showRoute = "{{ route('delete-member', ':id') }}";
+            url = showRoute.replace(':id', id);
+            
+            window.location = url;
+
+      } else {
+            // window.location.reload();
+      }
+}
+
 </script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
@@ -138,17 +140,7 @@ $('#Button').ready(function() {
                   </div>
                   <div class="modal-footer">
 
-                        <form method="POST" action="{{ route('delete_member') }}">
-                              @csrf
-                              <input name="_method" type="hidden" value="DELETE">
-                              @foreach($members as $details)
-                              <input type="text" name="member" value="{{$details->id}}">
-                              @endforeach
-                              <button type="submit" class="show_confirm btn btn-xs btn-outline-danger btn-flat "
-                                    data-toggle="tooltip" id="Button" onclick="" title='Delete'>
-                                    <i class="fa fa-trash"></i> Remove!
-                              </button>
-                        </form>
+                     
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
             </div>

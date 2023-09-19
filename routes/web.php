@@ -124,7 +124,7 @@ Route::get('add-cart/{id}', [ProductController::class, 'addToCartPreview'])->nam
 Route::get('preview/{prod_name}', [App\Http\Controllers\ProductController::class, 'preview'])->name('preview');
 // view cooperative members
 Route::get('members', [App\Http\Controllers\CooperativeController::class, 'members'])->name('members');
-Route::delete('cooperative/member/delete', [App\Http\Controllers\CooperativeController::class, 'deleteMember'])->name('delete_member');
+Route::get('delete-member/{id}', [App\Http\Controllers\CooperativeController::class, 'deleteMember'])->name('delete-member');
 // view cooperative members
 Route::get('fcmgmembers', [App\Http\Controllers\FcmgController::class, 'fcmgmembers'])->name('fcmgmembers');
 // add credit for members
