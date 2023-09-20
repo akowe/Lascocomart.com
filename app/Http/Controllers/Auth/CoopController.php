@@ -45,17 +45,17 @@ class CoopController extends Controller
     }
 
      public function coop_insert(Request $request){
-        $this->validate($request, [
-            'fname' => 'required', 'string', 'max:255',
-            'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
-            'password' => 'required', 'string', 'min:6', 'confirmed',
-            'code' => 'string',
-            'coopname' => 'string',
-            'address' => 'required', 'varchar', 'max:225',
-            'cooptype' => 'required', 'varchar', 'max:225',
-            'payment_days' => 'required', 'varchar', 'max:225',
-            'file' => 'required|mimes:jpg,jpeg,png|max:300',
-        ]);
+        $request->validate([
+            'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'fname'     => 'required|string|max:255',
+            'password'  => 'required|string|min:6|confirmed',
+            'code'      => 'string',
+            'coopname'  => 'string',
+            'address'   => 'required|max:225',
+            'cooptype'  => 'required|max:225',
+            'payment_days' => 'required|max:225',
+            'file'      => 'required|mimes:jpg,jpeg,png|max:300',
+            ]);
 
            $role = '2';
            $role_name = 'cooperative';
@@ -120,15 +120,19 @@ class CoopController extends Controller
 
     public function createMember(Request $request)
     {
-        $coop = \DB::table('users')->where('code',  $request->code)->first();
-           $coopname = $coop->coopname;
+        $coop = User::where('code',  $request->code)->first();  
+        $coopname = $coop->coopname;
            $role = '4';
            $role_name = 'member';
+
+           $request->validate([
+            'email'=>'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            ]);
 
           $user = new User();
           $user->role         = $role;
           $user->role_name    = $role_name;
-          $user->fname        =$request->fname;
+          $user->fname        = $request->fname;
           $user->code         = $request->code;
           $user->coopname     = $coopname;
           $user->email        = $request->email;

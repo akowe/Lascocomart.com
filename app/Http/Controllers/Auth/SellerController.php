@@ -45,13 +45,12 @@ class SellerController extends Controller
 
     public function seller_insert(Request $request)
     {
-
-        $this->validate($request, [
-            'fname' => 'required', 'string', 'max:255',
-            'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
-            'password' => 'required', 'string', 'min:6', 'confirmed',
-            'code' => 'string',
-             'coopname' => 'string',
+        $request->validate([
+            'email'     =>'required|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'fname'     => 'required|string|max:255', 
+            'password'  => 'required|string|min:6|confirmed', 
+            'code'      => 'string', 
+            'coopname'  => 'required|string|max:255', 
         ]);
  
            $role = '3';
