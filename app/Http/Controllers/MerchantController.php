@@ -247,15 +247,12 @@ class MerchantController extends Controller
             return redirect('merchant')->with('status', 'New product added successfully');   
     }   
  
-    public function remove_product(Request $request){
-        $code = Auth::user()->code; 
-         $seller_id = Auth::user()->id;
-            $id  = $request->id;
-            $input = 'remove';
-             Product::where('id', $id)->update(['prod_status' => $input]);
-
-            Session::flash('remove', ' Product Removed Successful!'); 
-            Session::flash('alert-class', 'alert-success'); 
+    public function removeProduct(Request $request, $id){
+        //$code = Auth::user()->code; 
+        $seller_id = Auth::user()->id;
+        Product::where('id', $id)->where('seller_id', $seller_id)->delete();
+        Session::flash('remove', ' Product Removed Successful!'); 
+        Session::flash('alert-class', 'alert-success'); 
         \LogActivity::addToLog('Remove product');
         return redirect()->back()->with('success', 'Product Removed Successful!');
     }

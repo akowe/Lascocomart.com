@@ -114,19 +114,13 @@
                                                             </td> -->
                                                             <td>
                                                                   @if($product->prod_status == 'pending')
-                                                                  <form action="/remove_product" method="post"
-                                                                        name="submit">
-                                                                        @csrf
+           
 
-
-                                                                        <input type="hidden" name="id"
+                                                                        <input type="hidden" name="id" id="id"
                                                                               value="{{$product->id }}">
 
-                                                                        <input type="hidden" name="prod_status"
-                                                                              value="remove">
 
-
-                                                                        <button type="submit" name="submit"
+                                                                        <button type="button" onclick="removeProduct()"
                                                                               class="btn btn-outline-danger btn-sm"><i
                                                                                     class="fa fa-trash-o"></i>
                                                                               Remove</button>
@@ -148,7 +142,23 @@
             </div>
       </div>
 </div>
+<script>
+function removeProduct() {
 
+      var answer = window.confirm("Are you sure you want to remove this product?");
+
+      if (answer) {
+            var id = document.getElementById('id').value; 
+            var showRoute = "{{ route('remove-product', ':id') }}";
+            url = showRoute.replace(':id', id);
+            
+            window.location = url;
+
+      } else {
+            // window.location.reload();
+      }
+}
+</script>
   <!-- remove Modal -->
 
   <div class="modal fade" id="pModal" tabindex="-1" role="dialog" aria-labelledby="pModalLabel" aria-hidden="true">

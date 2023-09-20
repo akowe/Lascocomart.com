@@ -169,7 +169,7 @@ Route::get('product', [App\Http\Controllers\MerchantController::class, 'product'
 Route::post('upload-image', [App\Http\Controllers\MerchantController::class, 'store']);
 Route::get('all-products', [App\Http\Controllers\MerchantController::class, 'allProducts'])->name('all-products');
 //soft delete.
-Route::post('/remove_product', [App\Http\Controllers\MerchantController::class, 'remove_product'])->name('remove_product');
+Route::get('remove-product/{id}', [App\Http\Controllers\MerchantController::class, 'removeProduct'])->name('remove-product');
 Route::get('sales_preview', [App\Http\Controllers\MerchantController::class, 'sales_preview'])->name('sales_preview');
 //Fcmg upload product
 Route::get('fcmgproduct', [App\Http\Controllers\FcmgController::class, 'fcmgproduct'])->name('fcmgproduct');
