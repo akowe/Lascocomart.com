@@ -118,12 +118,12 @@
                                                       </label>
 
                                                       <div class="col-md-6 form-group ">
-                                                      <span class="small text-danger">image type: jpeg or jpg or png</span>
+                                                      <span class="small text-primary">image type: jpeg or jpg or png</span>
 
                                                             <input type="file" id="file-upload" name="file"
                                                                   accept=".jpg,.jpeg,.png" class="form-control" multiple
                                                                   required />
-                                                                  <span class="small text-danger">image size max: 300 kb</span>
+                                                                  <span class="small text-primary">image size max: 300 kb</span>
 
                                                             @error('cert')
                                                             <span class="invalid-feedback" role="alert">
@@ -180,12 +180,12 @@
                                                             class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
                                                       <div class="col-md-6 ">
-                                                            <input id="password" type="password"
+                                                      <span class="small text-primary">minimum length: 6</span>
+                                                          <div class="form-group">
+                                                          <input id="password" type="password"
                                                                   class="@error('password') is-invalid @enderror input-field form-control "
                                                                   name="password" required autocomplete="new-password">
-
-                                                            <span class="small text-danger">Password minimum length:
-                                                                  6</span>
+                                                          </div>
 
                                                             @error('password')
                                                             <span class="invalid-feedback" role="alert">
@@ -201,9 +201,11 @@
                                                             class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
 
                                                       <div class="col-md-6 ">
+                                                       <div class="form-group">
                                                             <input id="password-confirm" type="password"
                                                                   class="form-control" name="password_confirmation"
                                                                   required autocomplete="new-password">
+                                                            </div>
 
                                                       </div>
                                                 </div>
