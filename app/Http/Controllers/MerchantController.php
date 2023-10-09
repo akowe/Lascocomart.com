@@ -112,7 +112,7 @@ class MerchantController extends Controller
       $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
       ->where('products.prod_status', 'approve')
       ->where('users.id', $id);
-      \LogActivity::addToLog('Products');
+      \LogActivity::addToLog('AllProducts');
       return view('merchants.all-products', compact('products', 'count_product'));
         }
       else { return Redirect::to('/login');
