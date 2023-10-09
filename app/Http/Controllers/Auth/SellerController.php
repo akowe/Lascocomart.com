@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use App\Models\Voucher;
 use App\Models\Wallet;
+use App\Models\LogActivity ;
 use Session;
 
 
