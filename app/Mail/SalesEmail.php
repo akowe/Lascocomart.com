@@ -10,17 +10,17 @@ use Illuminate\Queue\SerializesModels;
 class SalesEmail extends Mailable
 {
   use Queueable, SerializesModels;
-     public $data;
+     public $sellerData;
     /**
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($sellerData)
     {
         //
-        $this->data = $data;
+        $this->sellerData = $sellerData;
     }
 
 
@@ -31,6 +31,6 @@ class SalesEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@coopmart.com', 'CoopMart')->subject('New Sales Notification')->view('notifications.sales')->with('data', $this->data);
+        return $this->from('noreply@coopmart.com', 'CoopMart')->subject('New Sales Notification')->view('email.sales')->with('sellerData', $this->sellerData);
     }
 }

@@ -32,7 +32,7 @@ class MemberRequestFundEmail extends Mailable
         //return $this->view('view.name');
         return $this->from('noreply@coopmart.com', 'CoopMart')
         ->subject('Request For Fund')
-        ->view('notifications.member_request_fund')
+        ->view('email.member_request_fund')
         ->with('data', $this->data);
     }
 }

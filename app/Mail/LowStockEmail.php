@@ -31,6 +31,6 @@ class LowStockEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@coopmart.com', 'CoopMart')->subject('Product Out Of Stock')->view('notifications.out_of_stock_email')->with('data', $this->data);
+        return $this->from('noreply@coopmart.com', 'CoopMart')->subject('Product Out Of Stock')->view('email.out_of_stock_email')->with('data', $this->data);
     }
 }

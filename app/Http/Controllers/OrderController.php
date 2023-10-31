@@ -19,6 +19,7 @@ use App\Models\ShippingDetail;
 use App\Mail\ConfirmOrderEmail;
 use App\Mail\SalesEmail;
 use App\Mail\OrderEmail;
+use App\Mail\AwaitsApprovalEmail;
 use App\Notifications\NewOrder;
 use Notification;
 use App\Models\User;
@@ -91,8 +92,8 @@ class OrderController extends Controller
             ];
             $company_percentage = 0;
             $company_percentage +=  $price * 5/ 100;
-            $total_sales = 0;
-            $total_sales += $price - $company_percentage;
+            $seller_price = 0;
+            $seller_price += $price - $company_percentage;
 
             $orderItem = new OrderItem();
             $orderItem->order_id   = $order->id;
@@ -103,12 +104,12 @@ class OrderController extends Controller
             $orderItem->save();
 
             //upade seller wallet 
-            Wallet::where('user_id', $seller_id)->increment('credit',$total_sales);
+            //Wallet::where('user_id', $seller_id)->increment('credit',$seller_price);
              //for every new order decrease product quantity
-            $stock = \DB::table('products')->where('id', $product_id)->first()->quantity;
-            if($stock > $quantity){
-              \DB::table('products')->where('id', $product_id)->decrement('quantity',$quantity);
-            }
+            // $stock = \DB::table('products')->where('id', $product_id)->first()->quantity;
+            // if($stock > $quantity){
+            //   \DB::table('products')->where('id', $product_id)->decrement('quantity',$quantity);
+            // }
         }
            $shipDetails = new ShippingDetail();
             $shipDetails->shipping_id = $order->id;
@@ -148,15 +149,15 @@ class OrderController extends Controller
           
           $notification = new NewOrder($order_number);
           Notification::send($coopId, $notification);
-           
+           //send emails
             $data = array(
             'cooperative'   => $cooperative,
             'order_number' => $order_number,  
             'amount'       => $grandtotal, // delivery inclusive
-            'member'       => $get_name,       
+            'name'       => $get_name,       
                 );
 
-             Mail::to($adminEmail)->send(new ConfirmOrderEmail($data)); 
+             Mail::to($adminEmail)->send(new AwaitsApprovalEmail($data)); 
              Mail::to('info@lascocomart.com')->send(new OrderEmail($data));              
              \LogActivity::addToLog('New Order');
     return redirect()->route('cart')->with('success', 'Your Order was successfull');

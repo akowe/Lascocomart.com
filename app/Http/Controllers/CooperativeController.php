@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Models\Wallet;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Credit;
@@ -17,6 +18,9 @@ use App\Models\Categories;
 use App\Models\Product;
 use App\Models\FcmgProduct;
 use App\Mail\SendMail;
+use App\Mail\OrderApprovedEmail;
+use App\Mail\SalesEmail;
+use App\Mail\OrderEmail;
 use App\Notifications\AdminCancelOrder;
 use App\Notifications\NewProduct;
 use Carbon\Carbon;
@@ -180,8 +184,11 @@ class CooperativeController extends Controller
 
     public function approveOrder(Request $request){
         $id = Auth::user()->id;
+        $cooperative = Auth::user()->coopname;
         $order_id = $request->order_id;
-        $order = \DB::table('orders')->where('id', $order_id)->first()->grandtotal;
+        $order_number = Order::where('id', $order_id)->get('order_number') ;
+        
+        $grandtotal = \DB::table('orders')->where('id', $order_id)->first()->grandtotal;
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit'); 
@@ -191,15 +198,163 @@ class CooperativeController extends Controller
         $pluckPaymentDays = Arr::pluck($paymentDays, 'payment_days');
         $payment = implode('', $pluckPaymentDays);
 
-        if($getCredit > $order ){
+        if($getCredit > $grandtotal ){
             $input = 'approved'; 
             $approve = Order::where('id', $order_id)
             ->update([
             'status' => $input,
             'admin_settlement_msg' => 'payment is ' .$payment
             ]);
-            \DB::table('vouchers')->where('user_id', Auth::user()->id)->decrement('credit',$order);
-            \LogActivity::addToLog('Admin approve order');
+            \DB::table('vouchers')->where('user_id', Auth::user()->id)->decrement('credit',$grandtotal);
+            $orderItem_quantity= OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('order_items.order_id', $order_id)
+            ->get('order_quantity');
+
+           $seller_id = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+           ->where('order_items.order_id', $order_id)
+           //->distinct()
+           ->pluck('order_items.seller_id')->toArray();
+
+
+           $myArray = Arr::pluck($seller_id,['seller_id']);
+           $ss =json_encode($myArray);
+        
+        
+
+           $seller_price = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
+           ->where('order_items.order_id', $order_id)
+           ->distinct()
+           ->pluck('products.seller_price')
+           ->toArray();
+
+           $product_id = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
+           ->where('order_items.order_id', $order_id)
+           ->distinct()
+           ->pluck('products.id')
+           ->toArray();
+
+        
+           $orderItem_quantity= Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+           ->where('order_items.order_id', $order_id)
+           ->distinct()
+           ->pluck('order_items.order_quantity')
+           ->toArray();
+    
+        //Wallet::whereIn('user_id', $seller_id)->increment('credit', $seller_price); 
+
+            //for every approve order decrease product quantity
+            //  $stock = \DB::table('products')->where('id', $case)->first()->quantity;
+            //  dd($stock);
+            //  if($stock > $orderItem_quantity){
+            //    \DB::table('products')->where('id', $product_id)->decrement('quantity',$orderItem_quantity);
+            //  }
+          
+             \LogActivity::addToLog('Admin approve order');
+             $memberID = Order::where('id',  $order_id)->get('user_id');
+             $memberEmail = User::whereIn('id', $memberID)->get('email');
+    
+             $memberName = User::where('id', $memberID)->get('fname');
+
+             $getSellerName = OrderItem::join('users', 'users.id', '=', 'order_items.seller_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->whereIn('users.id', $seller_id)
+             ->where('order_items.order_id', $order_id)
+             ->get('fname');
+             $getName =Arr::pluck($getSellerName, 'fname');
+             $sellerName = implode('', $getName);
+
+             $product = OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->where('order_items.order_id', $order_id)
+             ->get('products.prod_name');
+
+             $image = OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->where('order_items.order_id', $order_id)
+             ->get('products.image');
+
+             $quantity = OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->where('order_items.order_id', $order_id)
+             ->get('order_items.order_quantity');
+
+             $amount = OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->where('order_items.order_id', $order_id)
+             ->get('order_items.amount');
+
+             $sellerProductImage = OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->whereIn('order_items.seller_id', $seller_id)
+             ->where('order_items.order_id', $order_id)
+             ->get('products.image');
+
+             $sellerProduct = OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->whereIn('order_items.seller_id', $seller_id)
+             ->where('order_items.order_id', $order_id)
+             ->get('products.prod_name');
+
+             $sellerOrderQuantity= OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->whereIn('order_items.seller_id', $seller_id)
+             ->where('order_items.order_id', $order_id)
+             ->get('order_items.order_quantity');
+
+             $sellerProductAmount = OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
+             ->join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->whereIn('order_items.seller_id', $seller_id)
+             ->where('order_items.order_id', $order_id)
+             ->get('products.seller_price');
+
+             $status = Order::where('id', $order_id)->get('status');
+
+             //send emails
+            $memberData = 
+            array(
+                'cooperative'   => $cooperative,
+                'order_number'  => $order_number,  
+                'name'          => $memberName, 
+                'product'       => $product, 
+                'image'         => $image,
+                'quantity'      => $quantity, 
+                'amount'        => $amount,
+                'total'         => $grandtotal, // delivery inclusive
+                'status'        => $status,
+            );
+            $sellerData = 
+            array(
+                'cooperative'   => $cooperative,
+                'order_number'  => $order_number,  
+                'member'        => $memberName, 
+                'product'       => $sellerProduct, 
+                'image'         => $sellerProductImage,
+                'quantity'      => $sellerOrderQuantity, 
+                'amount'        => $sellerProductAmount,  
+                'name'          => $getSellerName,
+                'status'        => $status,
+            );
+
+            $data = 
+            array(
+                'cooperative'   => $cooperative,
+                'order_number'  => $order_number,  
+                'amount'        => $grandtotal, // delivery inclusive
+                'name'          => $memberName, 
+                'status'        => $status,      
+            );
+            $getSellerEmail = OrderItem::join('users', 'users.id', '=', 'order_items.seller_id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->whereIn('users.id', $seller_id)
+            ->where('order_items.order_id', $order_id)
+            ->get('email');
+
+            foreach ($getSellerEmail as $key => $user) {
+           
+                Mail::to($user->email)->send(new SalesEmail($sellerData)); 
+            }
+
+            Mail::to($memberEmail)->send(new OrderApprovedEmail($memberData)); 
+         
+            Mail::to('info@lascocomart.com')->send(new OrderEmail($data));    
             return redirect()->back()->with('success', 'Approved successful!'); 
            }
         else{

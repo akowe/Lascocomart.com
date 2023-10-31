@@ -29,7 +29,7 @@ class PasswordResetEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@lascocomart.com', 'LascocoMart')->subject('Your Temporary Password')->view('notifications.password_reset')->with('data', $this->data);
+        return $this->from('noreply@lascocomart.com', 'LascocoMart')->subject('Your Temporary Password')->view('email.password_reset')->with('data', $this->data);
     
     }
 }

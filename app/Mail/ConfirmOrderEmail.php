@@ -30,6 +30,6 @@ class ConfirmOrderEmail extends Mailable
      */
     public function build()
     {
-         return $this->from('noreply@lascocomart.com', 'LascocoMart')->subject('Order Awaits Approval')->view('notifications.confirm_order')->with('data', $this->data);
+         return $this->from('noreply@lascocomart.com', 'LascocoMart')->subject('Order Is Confirmed')->view('email.confirm_order')->with('data', $this->data);
     }
 }

@@ -123,6 +123,17 @@ class CardPaymentController extends Controller
             $order->pay_status = $pay_status;
             $order->pay_type      = $pay_type;
             $order->save();
+            
+        //     Order::create([
+        //     'user_id' => $member_id,
+        //     'total'       => $totalAmount,
+        //     'delivery_fee'    => $delivery_fee, 
+        //   'grandtotal'       => $amount / 100,
+        //   'order_number' =>$order_number,
+        //     'status'     => $order_status,
+        //     'pay_status' => $pay_status,
+        //   'pay_type'     => $pay_type,
+        // ]);
 
             $data = [];
 
@@ -158,6 +169,8 @@ class CardPaymentController extends Controller
 
                 $seller =  User::where('id', $seller_id)
                 ->get('id');
+                  $sellerEmail =  User::where('id', $seller_id)
+                ->get('email');
                 // dd($seller);
                 // die;
                 $notification = new NewCardPayment($order_number);
@@ -241,6 +254,7 @@ class CardPaymentController extends Controller
                 );
 
             Mail::to($get_email)->send(new ConfirmOrderEmail($data)); 
+              Mail::to($sellerEmail)->send(new SalesEmail($data));
             Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
             \LogActivity::addToLog('Card Payment');
             return redirect()->route('cart')->with('success', 'Your Order was successfull');

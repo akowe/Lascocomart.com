@@ -33,7 +33,7 @@ class RequestFundEmail extends Mailable
         //return $this->view('view.name');
         return $this->from('noreply@lascocomart.com', 'LascocoMart')
         ->subject('Request For Fund')
-        ->view('notifications.request_fund')
+        ->view('email.request_fund')
         ->with('data', $this->data);
     }
 }
