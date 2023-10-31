@@ -214,7 +214,7 @@ function cancelOrder() {
                   ],
                   iDisplayLength: 5,
                   "order": [
-                        [0, "asc"]
+                        [0, "desc"]
                   ],
 
                   "language": {
