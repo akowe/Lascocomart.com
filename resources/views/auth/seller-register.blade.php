@@ -137,7 +137,7 @@
                                                       <p></p>
                                                       <label for="" class="col-md-4 col-form-label text-md-end"></label>
                                                       <div class="col-md-6 " style="font-size:14px;">
-                                                      <p> <input type="checkbox" required>  I agree to receive payment for products within 1 to 14 days after successful delivery to the  cooperative/member</p>
+                                                      <!-- <p> <input type="checkbox" required>  I agree to receive payment for products within 1 to 14 days after successful delivery to the  cooperative/member</p> -->
 
                                                             <input type="checkbox" required> I have read and agree to LascocoMart <a
                                                                   href="https://lascocomart.com/terms" class="text-danger"
