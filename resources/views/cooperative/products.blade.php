@@ -48,6 +48,7 @@
                                                 <thead>
                                                       <tr class="small">
                                                             <th>Date</th>
+                                                            <th>Edit</th>
                                                             <th>Product</th>
                                                             <th>Qty.</th>
                                                             <th>Old Price</th>
@@ -65,6 +66,8 @@
                                                       <tr class="small">
                                                             <td> {{ date('d/m/y', strtotime($product->created_at))}}
                                                             </td>
+                                                            <td><a href="edit-product/{{$product->id}}" class="text-danger"> <i
+                                                                  class="fa fa-edit"></i></a></td>
                                                             <td>{{$product->prod_name }}</td>
                                                             <td>{{$product->quantity }}</td>
                                                             <td>{{number_format($product->old_price )}}

@@ -186,7 +186,7 @@
                                                 <p class="text-danger">For every order approved the value will be
                                                       deducted from for "Credit"</p>
 
-                                                <table class="table-striped table" id="table3">
+                                                <table class="table-striped table" id="orders">
                                                       <thead>
                                                             <tr class="small">
                                                                   <th>Date</th>
@@ -203,7 +203,7 @@
                                                             @foreach($orders as $order)
 
                                                             <tr class="small">
-                                                                  <td>{{ date('d/M/Y', strtotime($order->created_at))}}
+                                                                  <td>{{ date('m-d-Y', strtotime($order->created_at))}}
                                                                   </td>
                                                                   <td>{{$order['fname']}} {{$order['lname']}}</td>
 
@@ -330,5 +330,40 @@ function myFunction() {
       document.getElementById('show').innerHTML = nf.format(credit);
 
 }
+</script>
+
+<script>
+        $(document).ready(function() {
+            $('#orders').DataTable({
+                  responsive: true,
+
+                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                  // dom: 'Bfrtip',
+                  button: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                  ],
+
+                  aLengthMenu: [
+                        [5, 10, 20, -1],
+                        [5, 10, 20, "All"]
+                  ],
+                  iDisplayLength: 5,
+                  "order": [
+                        [0, "desc"]
+                  ],
+
+                  "language": {
+                        "lengthMenu": "_MENU_ Records per page",
+                  }
+
+
+            });
+      });
+
 </script>
 @endsection

@@ -250,13 +250,41 @@ class MerchantController extends Controller
     public function removeProduct(Request $request, $id){
         //$code = Auth::user()->code; 
         $seller_id = Auth::user()->id;
-        Product::where('id', $id)->where('seller_id', $seller_id)->delete();
+        Product::where('id', $id)->where('seller_id', $seller_id)->delete(); 
         Session::flash('remove', ' Product Removed Successful!'); 
         Session::flash('alert-class', 'alert-success'); 
         \LogActivity::addToLog('Remove product');
         return redirect()->back()->with('success', 'Product Removed Successful!');
     }
 
+      //edit product
+  public function editProduct(Request $request, $id){
+    if( Auth::user()){
+        $product = Product::find($id);
+        return view('merchants.edit-product', compact('product')); 
+     }
+      else { return Redirect::to('/login');
+    }
+}
+
+//update product
+public function updateProduct(Request $request, $id)
+{
+  $this->validate($request, [
+    'quantity'      => 'max:255',  
+     'old_price'    => 'max:255',
+     'price'        => 'max:255',
+    ]);
+
+    $product = Product::find($id);
+    $product->quantity      = $request->quantity;
+    $product->old_price     = $request->old_price;
+    $product->seller_price  = $request->price;
+    $product->update();
+    $data = 'Update successful for ' .$request->prod_name. '';
+    \LogActivity::addToLog('ProductUpdate');
+    return redirect()->back()->with('status',  $data);
+}
 
     public function sales_preview(Request $request)
     {

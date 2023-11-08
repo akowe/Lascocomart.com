@@ -80,6 +80,7 @@
                                                 <thead>
                                                       <tr class="small">
                                                             <th>Date</th>
+                                                            <th>Edit</th>
                                                             <th>Product</th>
                                                             <th>Qty.</th>
                                                             <th>Old Price</th>
@@ -92,8 +93,10 @@
                                                 <tbody>
                                                       @foreach($products as $product)
                                                       <tr class="small">
-                                                            <td> {{ date('d/m/y', strtotime($product->created_at))}}
+                                                            <td> {{ date('m-d-Y', strtotime($product->created_at))}}
                                                             </td>
+                                                            <td><a href="edit-product/{{$product->id}}" class="text-danger"> <i
+                                                                  class="fa fa-edit"></i></a></td>
                                                             <td>{{$product->prod_name }}</td>
                                                             <td>{{$product->quantity }}</td>
                                                             <td>{{number_format($product->old_price )}}</td>
@@ -107,24 +110,17 @@
                                                                   @endif
                                                                   {{$product->prod_status }}
                                                             </td>
-                                                            <!-- <td class="text-danger">
-                                                            <a href="" data-toggle="modal" data-target="#pModal" class="btn btn-outline-danger btn-sm"> 
-                                                            Remove
-                                                            </a>
-                                                            </td> -->
                                                             <td>
                                                                   @if($product->prod_status == 'pending')
-           
 
                                                                         <input type="hidden" name="id" id="id"
                                                                               value="{{$product->id }}">
-
 
                                                                         <button type="button" onclick="removeProduct()"
                                                                               class="btn btn-outline-danger btn-sm"><i
                                                                                     class="fa fa-trash-o"></i>
                                                                               Remove</button>
-                                                                  </form>
+                                                               
                                                                   @endif
                                                             </td>
                                                       </tr>

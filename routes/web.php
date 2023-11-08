@@ -168,6 +168,9 @@ Route::post('/fcmgpay', [App\Http\Controllers\FcmgPaymentController::class, 'red
 Route::get('product', [App\Http\Controllers\MerchantController::class, 'product'])->name('product');
 Route::post('upload-image', [App\Http\Controllers\MerchantController::class, 'store']);
 Route::get('all-products', [App\Http\Controllers\MerchantController::class, 'allProducts'])->name('all-products');
+Route::put('update-product/{id}', [App\Http\Controllers\MerchantController::class, 'updateProduct'])->name('update-product');
+Route::get('edit-product/{id}', [App\Http\Controllers\MerchantController::class, 'editProduct'])->name('edit-product');
+
 //soft delete.
 Route::get('remove-product/{id}', [App\Http\Controllers\MerchantController::class, 'removeProduct'])->name('remove-product');
 Route::get('sales_preview', [App\Http\Controllers\MerchantController::class, 'sales_preview'])->name('sales_preview');

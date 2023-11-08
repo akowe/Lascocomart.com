@@ -69,8 +69,8 @@ class CooperativeController extends Controller
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
          ->where('users.code', $code)
          ->where('orders.status', '!=', 'cancel')
-         ->orderBy('date', 'desc')
-         ->paginate( $request->get('per_page', 5));
+         ->orderBy('orders.date', 'desc')
+         ->get();
          
                         
         $allocated_funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
@@ -112,8 +112,8 @@ class CooperativeController extends Controller
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
          ->where('users.code', $code)
          ->where('orders.status', '!=', 'cancel')
-         ->orderBy('date', 'desc')
-         ->paginate( $request->get('per_page', 5)); 
+         ->orderBy('orders.date', 'desc')
+         ->get(); 
         // for bulk payment by cooperative
         $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
         ->where('orders.status', 'approved') 
@@ -384,7 +384,7 @@ class CooperativeController extends Controller
         else { return Redirect::to('/login');}
     
     }
-    
+    //softdelete
     public function deleteMember(Request $request, $id )
     {
         $code = Auth::user()->code; //
@@ -648,7 +648,7 @@ class CooperativeController extends Controller
                                             
                );
              Mail::to($email)->send(new LowStockEmail($data));
-              //soft delete product from landing page - update status
+              //soft delete product from landing page - update status 
              Product::where('id', $prod->id)
                     ->update(['prod_status' => 'remove']);
           }

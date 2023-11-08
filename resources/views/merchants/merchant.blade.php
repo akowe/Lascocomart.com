@@ -57,9 +57,9 @@
                                                 </div>
 
                                                 <div class="progress mt-auto">
-                                                      <div class="progress-bar" role="progressbar" style="width: 75%;"
-                                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                                      </div>
+                                                      <h6>
+                                                            <a href="all-products" class="text-primary"> View all >>></a>
+                                                      </h6>
                                                 </div>
                                           </div>
                                     </div>
@@ -128,9 +128,9 @@
                                                 </a>
                                           </div>
                                     </div>
-                                    </div>
+                              </div>
 
-                                    <div class="col-md-3 col-lg-3 d-flex">
+                              <div class="col-md-3 col-lg-3 d-flex">
                                     <div class="card border-0 bg-primary text-white text-center mb-grid w-100">
                                           <div class="d-flex flex-row align-items-center h-100">
                                                 <div
@@ -138,8 +138,8 @@
                                                       <i class="fa fa-shopping-cart"></i>
                                                       <div class="card-info-title"> Orders</div>
                                                 </div>
-                                                <a href="" class="card-body text-white"
-                                                      title="Click to view sales" style="text-decoration:none;">
+                                                <a href="" class="card-body text-white" title="Click to view sales"
+                                                      style="text-decoration:none;">
 
                                                       <h3 class="card-title mb-0">
 
@@ -148,7 +148,8 @@
                                                             @endphp
 
                                                             @php
-                                                            $company_percentage += $approveOrders->sum('seller_price') * 7/ 100;
+                                                            $company_percentage += $approveOrders->sum('seller_price') *
+                                                            7/ 100;
                                                             @endphp
 
                                                             @php
@@ -179,7 +180,7 @@
                               <div class="col-lg-12">
                                     <div class="card">
                                           <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div class="card-header-title">Products Order History</div>
+                                                <div class="card-header-title">Order History</div>
 
 
                                           </div>
@@ -197,16 +198,16 @@
                                                                   <th>Price</th>
                                                                   <th>Order status</th>
                                                                   <th>Payment</th>
-                                                             
+
 
                                                             </tr>
                                                       </thead>
                                                       <tbody>
-                                                      @foreach($orders as $order)
+                                                            @foreach($orders as $order)
 
 
                                                             <tr class="small">
-                                                                  <td> {{ date('d/M/Y', strtotime($order->created_at))}}
+                                                                  <td> {{ date('m-d-Y', strtotime($order->created_at))}}
                                                                   </td>
                                                                   <td>{{$order->fname }}</td>
                                                                   <td>{{$order->prod_name }}</td>
