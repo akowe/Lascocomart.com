@@ -75,7 +75,7 @@
                                                       @foreach($orders as $order)
 
                                                       <tr class="small">
-                                                            <td>{{ date('m-d-Y', strtotime($order->created_at))}}
+                                                            <td>{{ date('m/d/Y', strtotime($order->created_at))}}
                                                             </td>
                                                             <td>{{$order['fname']}} {{$order['lname']}}</td>
 

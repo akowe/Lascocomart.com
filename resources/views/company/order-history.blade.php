@@ -58,7 +58,7 @@
                                                 @foreach($orders as $order)
                                                 <tr class="small">
                                                       <td>
-                                                            {{ date('d/M/Y', strtotime($order->created_at))}}
+                                                            {{ date('m/d/Y', strtotime($order->created_at))}}
                                                       </td>
  
 

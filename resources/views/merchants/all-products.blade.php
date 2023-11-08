@@ -93,7 +93,7 @@
                                                 <tbody>
                                                       @foreach($products as $product)
                                                       <tr class="small">
-                                                            <td> {{ date('m-d-Y', strtotime($product->created_at))}}
+                                                            <td> {{ date('m/d/Y', strtotime($product->created_at))}}
                                                             </td>
                                                             <td><a href="edit-product/{{$product->id}}" class="text-danger"> <i
                                                                   class="fa fa-edit"></i></a></td>

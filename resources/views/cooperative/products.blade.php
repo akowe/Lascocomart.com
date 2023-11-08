@@ -64,7 +64,7 @@
 
 
                                                       <tr class="small">
-                                                            <td> {{ date('d/m/y', strtotime($product->created_at))}}
+                                                            <td> {{ date('m/d/y', strtotime($product->created_at))}}
                                                             </td>
                                                             <td><a href="edit-product/{{$product->id}}" class="text-danger"> <i
                                                                   class="fa fa-edit"></i></a></td>

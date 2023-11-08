@@ -102,7 +102,7 @@
                                                                   @foreach($products as $product)
                                                                   <tr class="small">
                                                                         <td class="small">
-                                                                              {{ date('d/M/Y', strtotime($product->created_at))}}
+                                                                              {{ date('m/d/Y', strtotime($product->created_at))}}
                                                                         </td>
                                                                         <td>{{$product['fname']}} {{$product['lname']}}
                                                                         </td>

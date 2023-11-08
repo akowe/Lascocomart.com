@@ -52,7 +52,7 @@
                          @foreach($transactions as  $details)
                          <tr >
                                   
-                         <td >{{ date('Dd/M/Y', strtotime($details->date)) }}</td>
+                         <td >{{ date('m/d/Y', strtotime($details->date)) }}</td>
                          <td >{{ $details['email'] }}</td>
                          
                              <td >{{ $details['coopname'] }}</td>

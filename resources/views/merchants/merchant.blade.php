@@ -207,7 +207,7 @@
 
 
                                                             <tr class="small">
-                                                                  <td> {{ date('m-d-Y', strtotime($order->created_at))}}
+                                                                  <td> {{ date('m/d/Y', strtotime($order->created_at))}}
                                                                   </td>
                                                                   <td>{{$order->fname }}</td>
                                                                   <td>{{$order->prod_name }}</td>
