@@ -35,36 +35,34 @@ class FcmgsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //
     }
 
-     public function fcmgs_insert(Request $request)
-    {
+     public function fcmgs_insert(Request $request){
 
         $this->validate($request, [
-            'fname' => 'required', 'string', 'max:255',
-            'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
-            'password' => 'required', 'string', 'min:6', 'confirmed',
-            'code' => 'string',
+           'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',   'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
+           'fname'     => 'required|string|max:255',
+           'password'  => 'required|string|min:6|confirmed',
+           'code'      => 'string',
             // 'coopname' => 'string',
-            // 'rcnumber' => 'required', 'varchar', 'max:225',
-            'address' => 'required', 'varchar', 'max:225',
+           // 'rcnumber' => 'required', 'varchar', 'max:225',
+            // 'address'   => 'required|max:225',
         ]);
 
            $role = '5';
            $role_name = 'fcmg';
+           $lascocoID =rand(100,999);
+           $code = 'Lascoco'.$lascocoID;
 
            //$user = new User;
             $user = User::create([
             'role' => '5',
             'role_name' =>$role_name,
             'fname' => $request->fname,
-            'code' => $request->code,
-            // 'coopname' => $request->coopname,
+            'code' => $code,
             'email' => $request->email,
             'password' => Hash::make($request['password']),
-            'rcnumber' => $request->rcnumber,
-            'address' => $request->address,
         ]);
           event(new Registered($user));
           // $rr = rand(1000000000,9999999999);

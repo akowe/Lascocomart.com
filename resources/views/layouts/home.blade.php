@@ -4,8 +4,8 @@
 <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta http-equiv=“refresh”  content="{{config('session.lifetime') * 60}}">
-   
+      <meta http-equiv=“refresh” content="{{config('session.lifetime') * 60}}">
+
       <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/adminx.css') }}" media="screen" />
       <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -25,7 +25,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
       <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-     <!-- Styles -->
+      <!-- Styles -->
       <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
       <style>
@@ -46,11 +46,13 @@
             overflow: hidden;
             background-color: rgba(209, 0, 36, 0.1);
       }
+
       div.dataTables_wrapper div.dataTables_length select {
             width: 75px !important;
             display: inline-block;
       }
-      div.dataTables_wrapper div.dataTables_length  {
+
+      div.dataTables_wrapper div.dataTables_length {
             width: 75px !important;
             display: inline-block;
       }
@@ -70,7 +72,18 @@
       })();
       </script>
       <!--End of Tawk.to Script-->
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
 
+      function gtag() {
+            dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-R14072TPRF');
+      </script>
 </head>
 
 <body>
@@ -79,8 +92,9 @@
             <!-- COOP NAV BAR-->
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                   <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"  width="139" height="93" alt="Lascoco" title="Lascoco">
-                           
+                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
+                              width="139" height="93" alt="Lascoco" title="Lascoco">
+
                   </a>
                   <div class="d-flex flex-1 d-block d-md-none">
                         <a href="#" class="sidebar-toggle ml-3">
@@ -112,7 +126,7 @@
                                                 Read</a>
                                     </li>
                                     @endif
- 
+
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewOrder') as $notification)
                                     <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
@@ -120,7 +134,7 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                  
+
                               </ul>
                         </li>
 
@@ -148,19 +162,18 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                   
+
                               </ul>
                         </li>
-                           <li class="nav-item dropdown d-flex align-items-center mr-2">
+                        <li class="nav-item dropdown d-flex align-items-center mr-2">
 
                         </li>
                         <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false" v-pre title="Wallet">
                                     <i class="fa fa-credit-card"></i>
-                                    <span
-                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
-            </span>
+                                    <span class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
+                                    </span>
                               </a>
                               <ul class="dropdown-menu">
                                     <!-- @if (auth()->user()->unreadNotifications->where('type',
@@ -187,7 +200,7 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                  
+
                               </ul>
                         </li>
 
@@ -212,12 +225,13 @@
                               <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
                                     data-toggle="dropdown" href="#">
                                     {{ Auth::user()->coopname }} &nbsp;
-                                  
+
                               </a>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
+                                          Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -242,8 +256,9 @@
 
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                   <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                  <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"  width="139" height="93" alt="Lascoco" title="Lascoco">
-                           
+                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
+                              width="139" height="93" alt="Lascoco" title="Lascoco">
+
                   </a>
 
                   <div class="d-flex flex-1 d-block d-md-none">
@@ -286,7 +301,7 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                  
+
                               </ul>
                         </li>
                         <li class="nav-item dropdown d-flex align-items-center mr-2">
@@ -310,13 +325,14 @@
                               <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
                                     data-toggle="dropdown" href="#">
                                     {{ Auth::user()->coopname }}
-                                  
+
                               </a>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
+                                          Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -342,8 +358,9 @@
             @if(Auth::user()->role_name == 'superadmin')
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                   <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                  <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"  width="139" height="93" alt="Lascoco" title="Lascoco">
-                           
+                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
+                              width="139" height="93" alt="Lascoco" title="Lascoco">
+
                   </a>
                   <div class="d-flex flex-1 d-block d-md-none">
                         <a href="#" class="sidebar-toggle ml-3">
@@ -380,9 +397,9 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                   
+
                               </ul>
-                        </li> 
+                        </li>
 
                         <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
@@ -395,7 +412,7 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\NewProduct'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                    <a href="{{route('mark-as-read')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-warning  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
@@ -408,7 +425,7 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                   
+
                               </ul>
                         </li>
                         <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
@@ -430,8 +447,7 @@
                                     @if (auth()->user()->unreadNotifications
                                     ->where('type','App\Notifications\ProductDelivered'))
                                     <li class="d-flex  mx-1 my-2">
-                                    <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-info  btn-xs text-sm">Mark
+                                          <a href="{{route('mark-as-read')}}" class="btn btn-info  btn-xs text-sm">Mark
                                                 All Delivered as
                                                 Read</a>
                                     </li>
@@ -448,8 +464,7 @@
                                     @if (auth()->user()->unreadNotifications
                                     ->where('type', 'App\Notifications\ProductReceived'))
                                     <li class="d-flex  mx-1 my-2">
-                                    <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-info  btn-xs text-sm">Mark
+                                          <a href="{{route('mark-as-read')}}" class="btn btn-info  btn-xs text-sm">Mark
                                                 All Received as Read</a>
                                     </li>
                                     @foreach (auth()->user()->unreadNotifications
@@ -464,7 +479,7 @@
                         </li>
                         <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
 
-                        </li> --> 
+                        </li> -->
                         <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false" v-pre title="Fund Request">
@@ -476,12 +491,12 @@
                                     @if (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\CooperativeFundRequest'))
                                     <li class="d-flex justify-content-end mx-1 my-2">
-                                    <a href="{{route('mark-as-read')}}"
+                                          <a href="{{route('mark-as-read')}}"
                                                 class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
                                                 Read</a>
                                     </li>
                                     @endif
- 
+
                                     @foreach (auth()->user()->unreadNotifications->where('type',
                                     'App\Notifications\CooperativeFundRequest') as $notification)
                                     <!-- <a href="{{ url('superadmin-read-fund-request') }}/{{ $notification->id }}" data-id="{{$notification->id}}"
@@ -489,12 +504,11 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a> -->
 
-                                    <a href="{{route('mark-as-read')}}" 
-                                          class="text-success">
+                                    <a href="{{route('mark-as-read')}}" class="text-success">
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                                  
+
                               </ul>
                         </li>
                         <!-- Notifications -->
@@ -522,7 +536,8 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
+                                          Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -546,8 +561,9 @@
             @if(Auth::user()->role_name == 'member')
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                   <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                  <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"  width="139" height="93" alt="Lascoco" title="Lascoco">
-                           
+                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
+                              width="139" height="93" alt="Lascoco" title="Lascoco">
+
                   </a>
 
                   <div class="d-flex flex-1 d-block d-md-none">
@@ -582,9 +598,9 @@
                                     <a href="   {{ url('read-cancel-order') }}/{{ $notification->id }}"
                                           data-id="{{$notification->id}}" class="text-success">
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a> 
+                                    </a>
                                     @endforeach
-                                   
+
                               </ul>
                         </li>
 
@@ -611,7 +627,7 @@
                                           <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
                                     </a>
                                     @endforeach
-                               
+
                               </ul>
                         </li>
                         <li class="nav-item dropdown d-flex align-items-center mr-2">
@@ -640,7 +656,8 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
                                     <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change Password</a>
+                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
+                                          Password</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();

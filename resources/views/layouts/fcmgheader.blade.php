@@ -78,38 +78,23 @@
             transform: translate(0, -11px) rotate(45deg);
       }
       </style>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-4376FNT1XB"></script>
-      <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-            dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-4376FNT1XB');
-      </script>
-
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-232659603-1">
-      </script>
-      <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-            dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'UA-232659603-1');
-      </script>
-
 
       <script>
       function memucoopmartheremyFunction(x) {
             x.classList.toggle("changecoopmartmenu");
       }
+      </script>
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+            dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-R14072TPRF');
       </script>
 </head>
 
@@ -236,8 +221,8 @@
                               <div class="col-md-2 ">
 
                                     <div class="header-logo">
-                                          <a href="{{ url('/') }}">  <img src="./images/lascoco-logo.png" alt="LASCOCO" 
-                                                      title="LASCOCO" width="139" height="93" >
+                                          <a href="{{ url('/') }}"> <img src="./images/lascoco-logo.png" alt="LASCOCO"
+                                                      title="LASCOCO" width="139" height="93">
                                           </a>
                                     </div>
 
@@ -342,7 +327,7 @@
 
                                                 </div><!-- cart dropdownt -->
                                           </div><!-- /Cart -->
-                                        
+
                                           <!--show member name-->
 
                                           <div class=" nav-item dropdown hidden-lg hidden-md">

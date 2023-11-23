@@ -46,7 +46,18 @@
             background-color: rgba(209, 0, 36, 0.1);
       }
       </style>
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
 
+      function gtag() {
+            dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-R14072TPRF');
+      </script>
 </head>
 
 <body>
@@ -54,8 +65,9 @@
             <!-- COOP NAV BAR-->
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                   <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                  <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"  width="139" height="93" alt="Lascoco" title="Lascoco">
-                        
+                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
+                              width="139" height="93" alt="Lascoco" title="Lascoco">
+
                   </a>
                   <div class="d-flex flex-1 d-block d-md-none">
                         <a href="#" class="sidebar-toggle ml-3">

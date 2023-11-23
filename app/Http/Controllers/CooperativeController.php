@@ -180,12 +180,13 @@ class CooperativeController extends Controller
         \LogActivity::addToLog('Admin products');
         return view('cooperative.products', compact('products'));
 
-    }
+    } 
 
-    public function approveOrder(Request $request){
+    public function approveOrder(Request $request, $order_id){
         $id = Auth::user()->id;
         $cooperative = Auth::user()->coopname;
-        $order_id = $request->order_id;
+        //$order_id = $request->order_id;
+        $order = Order::find($order_id);
         $order_number = Order::where('id', $order_id)->get('order_number') ;
         
         $grandtotal = \DB::table('orders')->where('id', $order_id)->first()->grandtotal;
@@ -345,7 +346,7 @@ class CooperativeController extends Controller
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->whereIn('users.id', $seller_id)
             ->where('order_items.order_id', $order_id)
-            ->get('email');
+            ->get('email'); 
 
             foreach ($getSellerEmail as $key => $user) {
            

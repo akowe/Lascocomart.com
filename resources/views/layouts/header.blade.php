@@ -72,38 +72,6 @@
             transform: translate(0, -11px) rotate(45deg);
       }
       </style>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-4376FNT1XB"></script>
-      <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-            dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-4376FNT1XB');
-      </script>
-
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-232659603-1">
-      </script>
-      <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-            dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'UA-232659603-1');
-      </script>
-
-      <script>
-      function memucoopmartheremyFunction(x) {
-            x.classList.toggle("changecoopmartmenu");
-      }
-      </script>
 
       <!--Start of Tawk.to Script-->
       <script type="text/javascript">
@@ -120,7 +88,18 @@
       })();
       </script>
       <!--End of Tawk.to Script-->
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
 
+      function gtag() {
+            dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-R14072TPRF');
+      </script>
 </head>
 
 <body class="antialiased">
@@ -277,8 +256,10 @@
                                                 </select> -->
 
                                                 <input class="input search" type="text" name="search" id="search"
-                                                      placeholder="Search for products here" autocomplete="off" style="width:80%;"/>
-                                                <button class="search-btn" type="submit"><i class="fa fa-search"></i> Search</button>
+                                                      placeholder="Search for products here" autocomplete="off"
+                                                      style="width:80%;" />
+                                                <button class="search-btn" type="submit"><i class="fa fa-search"></i>
+                                                      Search</button>
 
                                           </form>
                                     </div>
@@ -378,7 +359,8 @@
                                                       @if($wish)
                                                       <div class="cart-summary">
                                                             <h5> {{$items}} saved Item(s). </h5>
-                                                            <a href="{{url('wishlist') }}"  class="btn btn-danger btn-block">View all</a>
+                                                            <a href="{{url('wishlist') }}"
+                                                                  class="btn btn-danger btn-block">View all</a>
 
                                                       </div>
                                                       @endif

@@ -379,7 +379,7 @@
                                                             <td>
                                                                   <p>Hi {{ $data['name'] }},</p>
                                                                   <p>Your order <strong>{{ $data['order_number'] }} </strong>
-                                                                  of <strong> ₦{{ number_format($data['amount'])}} </strong>  <strong>confirmed</strong>; payment status <strong style="text-transform:uppercase;">{{$data['payment']}}</strong>.</p>
+                                                                  of <strong> ₦{{ number_format($data['amount'])}} </strong> is  <strong>confirmed</strong>.</p>
                                                                   <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
                                                                         <tbody>

@@ -276,10 +276,15 @@ public function updateProduct(Request $request, $id)
      'price'        => 'max:255',
     ]);
 
+     // add company and coperative percentage
+     $company_percentage = $request->price *  5 / 100;
+     $price = $request->price  + $company_percentage;
+
     $product = Product::find($id);
     $product->quantity      = $request->quantity;
     $product->old_price     = $request->old_price;
     $product->seller_price  = $request->price;
+    $product->price         = $price;
     $product->update();
     $data = 'Update successful for ' .$request->prod_name. '';
     \LogActivity::addToLog('ProductUpdate');

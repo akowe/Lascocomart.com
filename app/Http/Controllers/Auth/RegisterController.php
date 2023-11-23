@@ -61,7 +61,6 @@ class RegisterController extends Controller
             // 'rcnumber' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-          
             'role_name' => ['string'],
             'code' => ['string'],
         ]);
@@ -81,18 +80,6 @@ class RegisterController extends Controller
            $role = '4';
            $role_name = 'member';
 
-        //     $user = User::create([
-        //     'role' => $role,
-        //     'role_name' => $role_name,
-        //     'fname' => $data['fname'],
-        //     // 'rcnumber' => $data['rcnumber'],
-        //     'code' => $data['code'],
-        //     'coopname'=> $coopname,
-        //     'email' => $data['email'],
-        //     'password' => Hash::make($data['password']),
-        // ]);
-        //   event(new Registered($user));
-
           $user = new User();
           $user->role         = $role;
           $user->role_name    = $role_name;
@@ -103,7 +90,6 @@ class RegisterController extends Controller
           $user->password     = Hash::make($request['password']);
           $user->save();
   
-            //event(new Registered($user));
            if($user){
               $coopID =rand(100,999);
               $cooperativeId = 'Lascoco'.$coopID;

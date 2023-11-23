@@ -73,7 +73,7 @@ class CardPaymentController extends Controller
         $ship_city     = $request->input('ship_city');
         $ship_phone    = $request->input('ship_phone');
         $note          = $request->input('note');
-        $amount = "0";
+        //$amount = "0";
      
         $payment = json_decode(json_encode($paymentDetails),true);
        //get individual payment data from to store in DB
@@ -188,6 +188,24 @@ class CardPaymentController extends Controller
                       \DB::table('products')->where('id', $product_id)->decrement('quantity',$quantity);
                      }
 
+                     $name =  \DB::table('users')->where('id', $order->user_id)->get('fname') ; 
+                     $username = Arr::pluck($name, 'fname'); // 
+                     $get_name = implode(" ",$username);
+          
+                      $email =  \DB::table('users')->where('id', $order->user_id)->get('email') ; 
+                     $useremail = Arr::pluck($email, 'email'); // 
+                     $get_email = implode(" ",$useremail);
+          
+                   // send email notification to member
+                      $data = array(
+                      'name'         => $get_name,
+                      'order_number' => $order_number,  
+                      'amount'       => $totalAmount,       
+                          );
+           
+                      Mail::to($get_email)->send(new ConfirmOrderEmail($data)); 
+                        Mail::to($sellerEmail)->send(new SalesEmail($data));
+                      Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
                 }
                        
                 //in-app payment notification
@@ -238,24 +256,7 @@ class CardPaymentController extends Controller
             //remove item from cart
             $request->session()->forget('cart');
 
-           $name =  \DB::table('users')->where('id', $order->user_id)->get('fname') ; 
-           $username = Arr::pluck($name, 'fname'); // 
-           $get_name = implode(" ",$username);
-
-            $email =  \DB::table('users')->where('id', $order->user_id)->get('email') ; 
-           $useremail = Arr::pluck($email, 'email'); // 
-           $get_email = implode(" ",$useremail);
-
-         // send email notification to member
-            $data = array(
-            'name'         => $get_name,
-            'order_number' => $order_number,  
-            'amount'       => $totalAmount,       
-                );
-
-            Mail::to($get_email)->send(new ConfirmOrderEmail($data)); 
-              Mail::to($sellerEmail)->send(new SalesEmail($data));
-            Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
+          
             \LogActivity::addToLog('Card Payment');
             return redirect()->route('cart')->with('success', 'Your Order was successfull');
         }

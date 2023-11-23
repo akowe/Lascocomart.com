@@ -109,7 +109,7 @@
                                                       class="card-icon d-flex align-items-center h-100 justify-content-center">
                                                       <i class="fa fa-coins"></i>
 
-                                                      <div class="card-info-title">Transfer</div>
+                                                      <div class="card-info-title">Online Payment</div>
                                                 </div>
                                                 <div class="card-body">
                                                       <h3 class="card-title mb-0">
@@ -155,9 +155,9 @@
                                                       </div>
                                                       <a class="card-body text-dark text-decoration-none"
                                                             href="{{url('request-fund') }}">
-                                                            <div class="card-info-title">Fund </div>
+                                                            <div class="card-info-title">Request </div>
                                                             <h3 class="card-title mb-0">
-                                                                  Wallet
+                                                                  Fund
                                                             </h3>
                                                       </a>
                                                 </div>
@@ -220,19 +220,22 @@
                                                                         @else
                                                                         <div class="row">
                                                                               <div class="col-md-2">
-                                                                                    <form action="/order-update"
-                                                                                          method="post" name="submit">
+                                                                                    <!-- <form action="/order-update"
+                                                                                          method="post" name="submit"> -->
                                                                                           @csrf
                                                                                           <input type="hidden"
                                                                                                 name="order_id"
-                                                                                                value="{{$order->id}}">
+                                                                                                value="{{$order->id}}" id="id">
+                                                                                          <input type="hidden"
+                                                                                                name="order_number"
+                                                                                                value="{{$order->order_number}}" id="order_number">
                                                                                           <button type="submit"
                                                                                                 name="submit"
                                                                                                 class="btn btn-outline-success btn-sm"
-                                                                                                title="Approve">
+                                                                                                title="Approve" onclick="approveOrder()">
                                                                                                 <i
                                                                                                       class="fa fa-check"></i></button>
-                                                                                    </form>
+                                                                                    <!-- </form> -->
                                                                               </div>
                                                                               <div class="col-md-2">
                                                                               </div>
@@ -272,54 +275,7 @@
 
 <!-- modal-->
 <!--modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                  <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to Cancel this order
-                        </h5>
 
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                        </button>
-                  </div>
-                  <div class="modal-body">
-                        <p> <span>Order number:
-                                    @foreach($orders as $order)
-                                    {{$order->order_number}}
-                                    @endforeach
-                              </span></p>
-                        <form action="/order-cancel" method="post" name="submit">
-                              @csrf
-                              @foreach($orders as $order)
-                              <input type="hidden" name="order_id" value="{{$order->id}}">
-                              @endforeach
-                              <div class="form-group">
-                                    <label for="">Enter <strong>
-                                                @foreach($orders as $order)
-                                                {{$order->fname}}'s
-                                                @endforeach
-                                          </strong> current credit worth
-                                    </label>
-                                    <input type="number" name="credit" value="" placeholder="Enter Amount" required
-                                          class="form-control" id="credit" onkeyup="myFunction()">
-                                    <span class="text-danger text-xs">enter the figures without comma.</span>
-                                    <h4> ₦ <span id="show"></span></h4>
-
-
-                              </div>
-                              <button type="submit" name="submit" class="btn btn-outline-danger btn-xs" title="Cancel">
-                                    Cancel Now</button>
-                        </form>
-                  </div>
-                  <div class="modal-footer">
-
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </div>
-            </div>
-      </div>
-</div>
 <script>
 function myFunction() {
       var credit = document.getElementById("credit").value;
@@ -331,7 +287,23 @@ function myFunction() {
 
 }
 </script>
+<script>
+function approveOrder() {
+var order = document.getElementById('order_number').value;
+      var answer = window.confirm("Are you sure you want to approve this order  " + order );
 
+      if (answer) {
+            var id = document.getElementById('id').value;
+            var showRoute = "{{ route('order-update', ':id') }}";
+            url = showRoute.replace(':id', id);
+            
+            window.location = url;
+
+      } else {
+            // window.location.reload();
+      }
+}
+</script>
 <script>
         $(document).ready(function() {
             $('#orders').DataTable({
