@@ -68,7 +68,7 @@ input:focus+label {
                               <div class="row">
                                     @foreach($users as $user)
                                     <div class="col-md-6">
-                                          <form method="post" action="/update_profile" name="submit"
+                                          <form method="post" action="/cooperative-update-profile" name="submit"
                                                 enctype="multipart/form-data">
                                                 @csrf
 
@@ -211,7 +211,7 @@ input:focus+label {
                               <div class="row">
                                     @foreach($users as $user)
                                     <div class="col-md-6">
-                                          <form method="post" action="/update_profile" name="submit"
+                                          <form method="post" action="/seller-update-profile" name="submit"
                                                 enctype="multipart/form-data">
                                                 @csrf
 
@@ -326,7 +326,7 @@ input:focus+label {
                               <div class="row">
                                     @foreach($users as $user)
                                     <div class="col-md-6">
-                                          <form method="post" action="/update_profile" name="submit"
+                                          <form method="post" action="/member-update-profile" name="submit"
                                                 enctype="multipart/form-data">
                                                 @csrf
 
@@ -408,7 +408,7 @@ input:focus+label {
                               <div class="row">
                                     @foreach($users as $user)
                                     <div class="col-md-6">
-                                          <form method="post" action="/update_profile" name="submit"
+                                          <form method="post" action="/fmcg-update-profile" name="submit"
                                                 enctype="multipart/form-data">
                                                 @csrf
 

@@ -97,8 +97,6 @@ class HomeController extends Controller
             $id = Auth::user()->id; //
             $users = User::all()->where('id', $id);
             \LogActivity::addToLog('Profile');
-            // Session::flash('status', 'Complete Your Profile To Proceed.'); 
-            // Session::flash('alert-class', 'alert-success'); 
             return view('profile', compact('users'));
         }
         else{
@@ -113,8 +111,7 @@ class HomeController extends Controller
             'fname'         => 'max:255',  
             'address'       => 'required|string|max:255',
             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-            'bank'          => 'required|string|max:255',
-            'account_name'  => 'required|string|max:255', 
+           
         
             ]);
             if(null !== $_POST['submit']){
@@ -124,9 +121,6 @@ class HomeController extends Controller
                         'fname' =>  $request->fname,
                         'address' => $request->address,
                         'phone' => $request->phone,
-                        'bank' =>$request->bank,
-                        'account_name' =>$request->account_name,
-                        'account_number' =>$request->account_number,
                     ]);
 
                 Session::flash('status', ' Profile Update Successful!'); 
@@ -139,6 +133,143 @@ class HomeController extends Controller
         return Redirect::to('/login');
        }
     } 
+
+    public function sellerUpdateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [
+             'fname'         => 'max:255',  
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'bank'          => 'required|string|max:255',
+             'account_name'  => 'required|string|max:255', 
+         
+             ]);
+             if(null !== $_POST['submit']){
+                 //update table
+                 User::where('id', $user_id)
+                         ->update([
+                         'fname' =>  $request->fname,
+                         'address' => $request->address,
+                         'phone' => $request->phone,
+                         'bank' =>$request->bank,
+                         'account_name' =>$request->account_name,
+                         'account_number' =>$request->account_number,
+                     ]);
+ 
+                 Session::flash('status', ' Profile Update Successful!'); 
+                 Session::flash('alert-class', 'alert-success'); 
+             }
+             \LogActivity::addToLog('Update');
+             return redirect('/merchant')->with('status', 'Profile Update Successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+     public function cooperativeUpdateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [
+             'fname'         => 'max:255',  
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'bank'          => 'required|string|max:255',
+             'account_name'  => 'required|string|max:255', 
+         
+             ]);
+             if(null !== $_POST['submit']){
+                 //update table
+                 User::where('id', $user_id)
+                         ->update([
+                         'fname' =>  $request->fname,
+                         'address' => $request->address,
+                         'phone' => $request->phone,
+                         'bank' =>$request->bank,
+                         'account_name' =>$request->account_name,
+                         'account_number' =>$request->account_number,
+                     ]);
+ 
+                 Session::flash('status', ' Profile Update Successful!'); 
+                 Session::flash('alert-class', 'alert-success'); 
+             }
+             \LogActivity::addToLog('Update');
+             return redirect('cooperative')->with('status', 'Profile Update Successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+     public function fmcgUpdateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [
+             'fname'         => 'max:255',  
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'bank'          => 'required|string|max:255',
+             'account_name'  => 'required|string|max:255', 
+         
+             ]);
+             if(null !== $_POST['submit']){
+                 //update table
+                 User::where('id', $user_id)
+                         ->update([
+                         'fname' =>  $request->fname,
+                         'address' => $request->address,
+                         'phone' => $request->phone,
+                         'bank' =>$request->bank,
+                         'account_name' =>$request->account_name,
+                         'account_number' =>$request->account_number,
+                     ]);
+ 
+                 Session::flash('status', ' Profile Update Successful!'); 
+                 Session::flash('alert-class', 'alert-success'); 
+             }
+             \LogActivity::addToLog('Update');
+             return redirect('fmcg')->with('status', 'Profile Update Successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+     public function memberUpdateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [
+             'fname'         => 'max:255',  
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'bank'          => 'required|string|max:255',
+             'account_name'  => 'required|string|max:255', 
+         
+             ]);
+             if(null !== $_POST['submit']){
+                 //update table
+                 User::where('id', $user_id)
+                         ->update([
+                         'fname' =>  $request->fname,
+                         'address' => $request->address,
+                         'phone' => $request->phone,
+                         'bank' =>$request->bank,
+                         'account_name' =>$request->account_name,
+                         'account_number' =>$request->account_number,
+                     ]);
+ 
+                 Session::flash('status', ' Profile Update Successful!'); 
+                 Session::flash('alert-class', 'alert-success'); 
+             }
+             \LogActivity::addToLog('Update');
+             return redirect('dashboard')->with('status', 'Profile Update Successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
 
 
     public function updateProfileImage(Request $request){

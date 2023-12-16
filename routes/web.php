@@ -227,6 +227,11 @@ Route::get('delete-user/{id}', [App\Http\Controllers\SuperAdminController::class
 //update profile
 Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
 Route::post('/update_profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
+Route::post('/seller-update-profile', [App\Http\Controllers\HomeController::class, 'sellerUpdateProfile'])->name('seller-update-profile');
+Route::post('/cooperative-update-profile', [App\Http\Controllers\HomeController::class, 'cooperativeUpdateProfile'])->name('cooperative-update-profile');
+Route::post('/fmcg-update-profile', [App\Http\Controllers\HomeController::class, 'fmcgUpdateProfile'])->name('fmcg-update-profile');
+Route::post('/member-update-profile', [App\Http\Controllers\HomeController::class, 'memberUpdateProfile'])->name('member-update-profile');
+
 Route::post('/update_profile_image', [App\Http\Controllers\HomeController::class, 'updateProfileImage'])->name('update_profile_image');
 Route::post('/update_certificate', [App\Http\Controllers\HomeController::class, 'updateCertificate'])->name('update_certificate');
 Route::post('newsletter', [App\Http\Controllers\NewsletterController::class, 'store']);
