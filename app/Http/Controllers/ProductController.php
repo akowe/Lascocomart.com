@@ -105,12 +105,10 @@ class ProductController extends Controller
             ->where('users.code', $vendorName)
             ->orderBy('users.coopname', 'desc')
              ->get('products.*');
-             $users = User::with(['products' => function ($query) {
-                $query->limit(6);
-            }])->has('products')->get();
+           
             
              \LogActivity::addToLog('Product page');
-             return view('products', compact('products', 'wishlist', 'wish'))->with($users);
+             return view('products', compact('products', 'wishlist', 'wish'));
          }
          else{
             \LogActivity::addToLog('Product page');
