@@ -384,7 +384,7 @@
                                                                   <ol>
                                                                     
                                                                         <li>Place order (s) and request approval from you cooperative admin</li>  
-                                                                        <li>Pay for order (s) instanly with your debit card</li>    
+                                                                        <li>Pay for order (s) instantly with your debit card</li>    
                                                                         <li>Get notification when your order is approved/cancel by your admin</li>
                                                                         <li>Cancel your order (s)</li>
                                                                         <li>Click on vendor name to see all his/her product</li>
