@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 // use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
+use App\Mail\SellerWelcomeEmail;
 
 use Auth;
 use Validator;
@@ -33,10 +34,26 @@ class MerchantController extends Controller
         $this->middleware('merchant');
     }
 
-
-    public function index(Request $request)
-    {
-   if( Auth::user()->role_name  == 'merchant'){
+    public function index(Request $request){
+    if( Auth::user()->role_name  == 'merchant'){
+        $firstTimeLoggedIn = Auth::user()->last_login;
+        if (empty($firstTimeLoggedIn)) {
+          $data = 
+          array( 
+          'name'      => Auth::user()->fname,
+          'coopname'  => Auth::user()->coopname,
+            'email'     => Auth::user()->email,
+        );
+          Mail::to(Auth::user()->email)->send(new SellerWelcomeEmail($data));  
+          $user = Auth::user();
+          $user->last_login = Carbon::now();
+          $user->save();
+        }
+        elseif (!empty($firstTimeLoggedIn)) {
+          $user = Auth::user();
+          $user->last_login = Carbon::now();
+          $user->save();
+        }
 
         // check if user has field his/her profile
         $user=Auth::user();

@@ -12,6 +12,7 @@ use App\Models\OrderItem;
 use App\Models\ShippingDetail;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
+use App\Mail\MemberWelcomeEmail;
 
 use Auth;
 use Validator;
@@ -30,6 +31,24 @@ class MembersController extends Controller
 public function index(Request $request)
 {
      if( Auth::user()->role_name  == 'member'){
+        $firstTimeLoggedIn = Auth::user()->last_login;
+        if (empty($firstTimeLoggedIn)) {
+          $data = 
+          array( 
+           'name'      => Auth::user()->fname,
+           'coopname'  => Auth::user()->coopname,
+            'email'     => Auth::user()->email,
+        );
+          Mail::to(Auth::user()->email)->send(new MemberWelcomeEmail($data));  
+          $user = Auth::user();
+          $user->last_login = Carbon::now();
+          $user->save();
+        }
+        elseif (!empty($firstTimeLoggedIn)) {
+           $user = Auth::user();
+           $user->last_login = Carbon::now();
+           $user->save();
+        }
         // check if user has field his/her profile
         $user=Auth::user();
         $address = $user->address;

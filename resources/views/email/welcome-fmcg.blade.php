@@ -386,6 +386,7 @@
                                                                         <li>Add product (s) for sale on LascocoMart</li>  
                                                                         <li>Add sub-admin(s)</li>
                                                                         <li>Remove a member</li>
+                                                                        <li>Click on <strong>"Home"</strong> or click on the logo; to view all products from any page you find yourself.  </li>
                                                                         <li>And Many More >>>></li>
                                                                        
                                                                   </ol>

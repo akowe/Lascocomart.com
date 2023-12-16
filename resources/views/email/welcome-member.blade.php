@@ -377,22 +377,18 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                            <h4>Welcome Onboard {{ $data['coopname'] }},  </h4>
-                                                            <p>Here is a unique ID for your cooperative <strong >{{ $data['user_id'] }} </strong> </p>
-                                                            <p>Share this ID with your members only, so they can onboard on the platform under your cooperative</p>
-                                                            <p>Optionally you can <a href="{{ route('cooperative') }}">onboard your members</a> yourself. </p>
+                                                            <h4>Welcome Onboard {{ $data['name'] }},  </h4>
+                                                            <p>You have be assign under your cooperative <strong >{{ $data['coopname'] }} </strong> </p>
                                                              <p>
-                                                                  <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart Head Admin</h4>
+                                                                  <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart</h4>
                                                                   <ol>
                                                                     
-                                                                        <li>Buy cheaper product (s) directly from FMCG (Fast Moving Consumer Goods)</li>  
-                                                                        <li>Add product (s) for sale on LascocoMart</li>    
-                                                                        <li>Add new members</li>
-                                                                        <li>Add sub-admin(s)</li>
-                                                                        <li>Approve member order (s)</li>
-                                                                        <li>Cancel member order (s)</li>
-                                                                        <li>Make payment for all orders made by your members</li>
-                                                                        <li>Remove a member</li>
+                                                                        <li>Place order (s) and request approval from you cooperative admin</li>  
+                                                                        <li>Pay for order (s) instanly with your debit card</li>    
+                                                                        <li>Get notification when your order is approved/cancel by your admin</li>
+                                                                        <li>Cancel your order (s)</li>
+                                                                        <li>Click on vendor name to see all his/her product</li>
+                                                                        <li>Search for your cooperative name to see all products by your cooperative..</li>
                                                                         <li>Click on <strong>"Home"</strong> or click on the logo; to view all products from any page you find yourself.  </li>
                                                                         <li>And Many More >>>></li>
                                                                        
@@ -411,7 +407,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                      <td> <a href="{{ route('cooperative') }}"
+                                                                                                      <td> <a href="{{ route('dashboard') }}"
                                                                                                                         target="_blank">Proceed to dashboard</a>
                                                                                                             </td>
                                                                                                       </tr>

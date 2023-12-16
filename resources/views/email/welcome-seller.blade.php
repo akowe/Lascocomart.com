@@ -377,22 +377,18 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                            <h4>Welcome Onboard {{ $data['coopname'] }},  </h4>
-                                                            <p>Here is a unique ID for your cooperative <strong >{{ $data['user_id'] }} </strong> </p>
-                                                            <p>Share this ID with your members only, so they can onboard on the platform under your cooperative</p>
-                                                            <p>Optionally you can <a href="{{ route('cooperative') }}">onboard your members</a> yourself. </p>
+                                                            <h4>Welcome Onboard {{ $data['name'] }},  </h4>
+                                                            <p>Your store name is {{ $data['coopname'] }}</p>
                                                              <p>
-                                                                  <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart Head Admin</h4>
+                                                                  <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart as a vendor</h4>
                                                                   <ol>
-                                                                    
-                                                                        <li>Buy cheaper product (s) directly from FMCG (Fast Moving Consumer Goods)</li>  
+                                                                     
                                                                         <li>Add product (s) for sale on LascocoMart</li>    
-                                                                        <li>Add new members</li>
-                                                                        <li>Add sub-admin(s)</li>
-                                                                        <li>Approve member order (s)</li>
-                                                                        <li>Cancel member order (s)</li>
-                                                                        <li>Make payment for all orders made by your members</li>
-                                                                        <li>Remove a member</li>
+                                                                        <li>Edit product price and quantity</li>
+                                                                        <li>Remove product (s)</li>
+                                                                        <li>Get notification on each sales</li>
+                                                                        <li>Get notification when you stock is low</li>
+                                                                        <li>Search for your vendor name ({{ $data['coopname'] }}) to see all your products only.</li>
                                                                         <li>Click on <strong>"Home"</strong> or click on the logo; to view all products from any page you find yourself.  </li>
                                                                         <li>And Many More >>>></li>
                                                                        
@@ -411,7 +407,7 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                      <td> <a href="{{ route('cooperative') }}"
+                                                                                                      <td> <a href="{{ route('merchant') }}"
                                                                                                                         target="_blank">Proceed to dashboard</a>
                                                                                                             </td>
                                                                                                       </tr>
