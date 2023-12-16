@@ -194,6 +194,26 @@ input:focus+label {
                                           @else
                                           <label for="">Cooperative Certificate</label>
                                           <img src="{{ asset ($user->cooperative_cert) }}" alt="" class="form-control">
+                                          <p><form method="post" action="/update_certificate" name="submit"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="form-group ">
+                                                      <label for="">Replace Cooperative Certificate <i class="text-danger">jpg,
+                                                                  jpeg or png </i></label>
+                                                      <span class=" cert-upload">
+                                                            <input type="file" id="file-upload" name="cert"
+                                                                  accept=".jpg,.jpeg,.png" class="form-control" multiple
+                                                                  required />
+                                                         
+                                                      </span>
+                                                      <div class="form-group">
+                                                      <button type="submit" name="submit"
+                                                                  class="btn btn-outline-danger  ">
+                                                                  Upload Certificate </button>
+                                                      </div>
+
+                                                </div>
+                                          </form></p>
                                           @endif
                                     </div>
                                     @endforeach
