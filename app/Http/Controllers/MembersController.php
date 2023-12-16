@@ -17,6 +17,7 @@ use App\Mail\MemberWelcomeEmail;
 use Auth;
 use Validator;
 use Session;
+use Mail;
 
 
 class MembersController extends Controller
