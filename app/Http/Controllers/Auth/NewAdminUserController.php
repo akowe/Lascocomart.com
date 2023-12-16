@@ -62,6 +62,7 @@ class NewAdminUserController extends Controller
           $user->fname        =$request->fname;
           $user->code         = $code;
           $user->coopname     = $request->coopname;
+          $user->phone        = $request->phone;
           $user->email        = $request->email;
           $user->password     = Hash::make($password);
           $user->password_reset_at = Carbon::now();
