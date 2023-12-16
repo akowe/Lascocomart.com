@@ -243,8 +243,7 @@ class HomeController extends Controller
              'fname'         => 'max:255',  
              'address'       => 'required|string|max:255',
              'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-             'bank'          => 'required|string|max:255',
-             'account_name'  => 'required|string|max:255', 
+            
          
              ]);
              if(null !== $_POST['submit']){
@@ -254,9 +253,6 @@ class HomeController extends Controller
                          'fname' =>  $request->fname,
                          'address' => $request->address,
                          'phone' => $request->phone,
-                         'bank' =>$request->bank,
-                         'account_name' =>$request->account_name,
-                         'account_number' =>$request->account_number,
                      ]);
  
                  Session::flash('status', ' Profile Update Successful!'); 

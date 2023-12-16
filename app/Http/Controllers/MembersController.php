@@ -52,12 +52,13 @@ public function index(Request $request)
         }
         // check if user has field his/her profile
         $user=Auth::user();
-        $address = $user->address;
-        $phone = $user->phone;
-          if($address == '' && $phone =='')
+        $address        = $user->address;
+        $phone          = $user->phone;
+          if($address == ''  && $phone =='' )
           {
-             Session::flash('profile', ' You are yet to update your profile! <br> Kindly navigate to profile page.'); 
-                Session::flash('alert-class', 'alert-success'); 
+            Session::flash('status', ' You are yet to complete your profile!'); 
+            Session::flash('alert-class', 'alert-success'); 
+            return Redirect::to('/profile');     
           }
 
         $id = Auth::user()->id; 
