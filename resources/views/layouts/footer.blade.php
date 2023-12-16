@@ -418,7 +418,7 @@
                                                          data-target="#coopModal"> Register as a Cooperative
                                                          Organization here</a>
                                                    <br>
-                                                   <!--<a class="text-primary" href="" data-toggle="modal" data-target="#fcmgModal"> Register as a FCMG here</a>-->
+                                                   <!--<a class="text-primary" href="" data-toggle="modal" data-target="#fmcgModal"> Register as a FCMG here</a>-->
 
                                                    @endif
                                              </p>
@@ -729,7 +729,7 @@
    <!--coop modal end-->
 
    <!-- FCMG Modal -->
-   <div class="modal fade" id="fcmgModal" tabindex="-1" role="dialog" aria-labelledby="fcmgModalLabel"
+   <div class="modal fade" id="fmcgModal" tabindex="-1" role="dialog" aria-labelledby="fmcgModalLabel"
          aria-hidden="true">
          <div class="modal-dialog" role="document">
                <div class="modal-content">
@@ -737,7 +737,7 @@
                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                  <span aria-hidden="true">&times;</span>
                            </button>
-                           <h5 class="modal-title" id="coopModalLabel">Register your FCMG and give your members a
+                           <h5 class="modal-title" id="coopModalLabel">Register your FMCG and give your members a
                                  splendid shopping experience...</h5>
                            <p></p>
 
@@ -745,7 +745,7 @@
                      <div class="modal-body">
 
                            <p>
-                           <form method="POST" action="{{ route('fcmgs_insert') }}">
+                           <form method="POST" action="{{ route('fmcgs_insert') }}">
                                  @csrf
 
                                  <div class="row mb-3">
@@ -877,7 +877,7 @@
                </div>
          </div>
    </div>
-   <!--fcmg modal end-->
+   <!--fmcg modal end-->
 
    <!-- jQuery Plugins -->
   

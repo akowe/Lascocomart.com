@@ -182,9 +182,9 @@
                                           </form>
                                     </div>
                                     @endif
-                                    @if(Auth::user()->role_name == 'fcmg')
+                                    @if(Auth::user()->role_name == 'fmcg')
                                     <div class="dropdown-content">
-                                          <a href="{{ route('fcmg') }}">Dashboard</a>
+                                          <a href="{{ route('fmcg') }}">Dashboard</a>
 
                                           <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
