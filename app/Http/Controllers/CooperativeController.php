@@ -71,7 +71,7 @@ class CooperativeController extends Controller
         $account_name   = $user->account_name;
           if($address == ''  && $phone ==''  && $account_number =='' && $account_name =='')
           {
-            Session::flash('profile', ' You are yet to update your profile! <br> Kindly navigate to profile page.'); 
+            Session::flash('status', ' You are yet to update your profile! <br> Kindly navigate to profile page.'); 
             Session::flash('alert-class', 'alert-success'); 
             return Redirect::to('/profile');  
               

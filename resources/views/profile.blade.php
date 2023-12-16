@@ -18,22 +18,7 @@ input:focus+label {
 
 <!-- adminx-content-aside -->
 <div class="adminx-content">
-      <span class="profile">
-            @foreach($users as $user)
-            <form method="post" action="/update_profile_image" name="submit" enctype="multipart/form-data">
-                  @csrf
-                  <span class="input--file">
-                        <img src="{{$user['profile_img']}}" class="text-center" placeholder="Profile Image">
-
-                        <i class="fa fa-camera"></i>
-
-                        <input name="image" type="file" accept=".jpg,.jpeg,.png" />
-                        <button type="submit" name="submit" class="profile-send-button">Change</button>
-                  </span>
-            </form>
-
-            @endforeach
-      </span>
+     
       <div class="adminx-main-content">
 
             <div class="container-fluid">
@@ -54,12 +39,17 @@ input:focus+label {
                         <h4 class="text-center">Update Profile</h4>
                         <div class="card-body">
                               <p>All filed mark <i class="text-danger">*</i> are compulsory </p>
-
+                              @if (!session('status'))
+                              <div class="alert alert-danger" role="alert">
+                                  Kindly Complete Your Profile 
+                              </div>
+                              @endif
                               @if (session('status'))
                               <div class="alert alert-success" role="alert">
                                     {{ session('status') }}
                               </div>
                               @endif
+                            
                               @if ($errors->any())
                               <div class="alert alert-danger">
                                     <ul>

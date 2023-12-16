@@ -97,6 +97,8 @@ class HomeController extends Controller
             $id = Auth::user()->id; //
             $users = User::all()->where('id', $id);
             \LogActivity::addToLog('Profile');
+            // Session::flash('status', 'Complete Your Profile To Proceed.'); 
+            // Session::flash('alert-class', 'alert-success'); 
             return view('profile', compact('users'));
         }
         else{
@@ -110,9 +112,9 @@ class HomeController extends Controller
             $this->validate($request, [
             'fname'         => 'max:255',  
             'address'       => 'required|string|max:255',
-            'phone'         => 'required|string|max:255',
+            'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
             'bank'          => 'required|string|max:255',
-            'account_name'  => 'required|string|max:255',
+            'account_name'  => 'required|string|max:255', 
         
             ]);
             if(null !== $_POST['submit']){
@@ -127,7 +129,7 @@ class HomeController extends Controller
                         'account_number' =>$request->account_number,
                     ]);
 
-                Session::flash('profile', ' Profile Update Successful!'); 
+                Session::flash('status', ' Profile Update Successful!'); 
                 Session::flash('alert-class', 'alert-success'); 
             }
             \LogActivity::addToLog('Update');
