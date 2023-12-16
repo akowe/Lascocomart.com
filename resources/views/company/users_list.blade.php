@@ -211,7 +211,7 @@
                                     </thead>
                                     <tbody>
 
-                                          @foreach($fcmg as $details)
+                                          @foreach($fmcg as $details)
                                           <tr>
                                                 <td><a href="user_edit/{{$details->id}}" class="text-danger">
                                                             <i class="fa fa-edit"></i> Edit</a></td>

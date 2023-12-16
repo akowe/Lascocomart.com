@@ -402,9 +402,9 @@ class SuperAdminController extends Controller
         ->where('deleted_at',  NULL)
         ->orderBy('created_at', 'desc')
         ->get();
-        //fcmg
-        $fcmg = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
-          ->where('users.role', '5')
+        //fmcg
+        $fmcg = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
+          ->where('users.role', '33')
           ->where('users.deleted_at',    NULL)
           ->orderBy('users.created_at', 'desc')
           ->get();  
@@ -414,7 +414,7 @@ class SuperAdminController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
         \LogActivity::addToLog('SuperAdmin userList');
-        return view('company.users_list', compact('coop', 'members', 'merchants', 'fcmg'));
+        return view('company.users_list', compact('coop', 'members', 'merchants', 'fmcg'));
  
        }
 
