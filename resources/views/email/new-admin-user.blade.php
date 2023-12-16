@@ -380,7 +380,8 @@
                                                             <p>Welcome to LascocoMart,</p>
                                                             <p>FMCG acount has been created for {{ $data['email'] }}</p>
                                                                   <p><strong>Use the below code to login and change your password afterward:</strong> </p>
-                                                                  <p>{{ $data['password'] }}</p>
+                                                                  <p><span style="color:#34495e"><strong>{{ $data['password'] }} </strong> </span></p>
+                                                                  <p><strong>Remember to use this code as "Old Password" while setting your new password.</strong></p>
                                                                   <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
                                                                         <tbody>
