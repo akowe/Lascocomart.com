@@ -225,10 +225,10 @@ Route::post('/add_admin', [App\Http\Controllers\Auth\NewAdminUserController::cla
 Route::get('delete-user/{id}', [App\Http\Controllers\SuperAdminController::class, 'deleteUser'])->name('delete-user');
 
 //update profile
-Route::get('profile', [App\Http\Controllers\MembersController::class, 'profile'])->name('profile');
-Route::post('/update_profile', [App\Http\Controllers\MembersController::class, 'update_profile'])->name('update_profile');
-Route::post('/update_profile_image', [App\Http\Controllers\MembersController::class, 'updateProfileImage'])->name('update_profile_image');
-Route::post('/update_certificate', [App\Http\Controllers\MembersController::class, 'updateCertificate'])->name('update_certificate');
+Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+Route::post('/update_profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
+Route::post('/update_profile_image', [App\Http\Controllers\HomeController::class, 'updateProfileImage'])->name('update_profile_image');
+Route::post('/update_certificate', [App\Http\Controllers\HomeController::class, 'updateCertificate'])->name('update_certificate');
 Route::post('newsletter', [App\Http\Controllers\NewsletterController::class, 'store']);
 Route::get('subscribers', [App\Http\Controllers\NewsletterController::class, 'subscribers'])->name('subscribers');
 Route::post('coop_insert', [App\Http\Controllers\Auth\CoopController::class, 'coop_insert'])->name('coop_insert');

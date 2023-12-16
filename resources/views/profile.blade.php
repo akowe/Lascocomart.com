@@ -53,6 +53,7 @@ input:focus+label {
 
                         <h4 class="text-center">Update Profile</h4>
                         <div class="card-body">
+                              <p>All filed mark <i class="text-danger">*</i> are compulsory </p>
 
                               @if (session('status'))
                               <div class="alert alert-success" role="alert">
@@ -111,7 +112,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Mobile Number</label>
+                                                                  <label>Mobile Number <i class="text-danger">*</i></label>
                                                                   <input class="form-control" name="phone" type="number"
                                                                         value="{{$user['phone']}}" id="first-name" />
                                                                   @error('phone')
@@ -121,7 +122,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Address</label>
+                                                                  <label>Cooperative Office Address<i class="text-danger">*</i>  </label>
                                                                   <input class="form-control" name="address" type="text"
                                                                         value="{{$user['address']}}" />
                                                                   @error('address')
@@ -131,18 +132,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>State</label>
-                                                                  <input class="form-control" name="location"
-                                                                        type="text" value="{{$user['location']}}" />
-                                                                  @error('location')
-                                                                  <div class="alert alert-danger mt-1 mb-1">
-                                                                        {{ $message }}</div>
-                                                                  @enderror
-                                                            </div>
-                                                            @auth
-                                                            @if(Auth::user()->role_name == 'merchant')
-                                                            <div class="form-group">
-                                                                  <label>Bank Name</label>
+                                                                  <label>Bank Name <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="bank" type="text"
                                                                         value="{{$user['bank']}}" />
                                                                   @error('bank')
@@ -152,7 +142,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Account Name</label>
+                                                                  <label>Account Name <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="account_name"
                                                                         type="text" value="{{$user['account_name']}}" />
                                                                   @error('account_name')
@@ -162,7 +152,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Account Number</label>
+                                                                  <label>Account Number <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="account_number"
                                                                         type="number"
                                                                         value="{{$user['account_number']}}" />
@@ -171,9 +161,14 @@ input:focus+label {
                                                                         {{ $message }}</div>
                                                                   @enderror
                                                             </div>
-                                                            @else
-                                                            @endif
-                                                            @endauth
+
+                                                            <div class="form-group">
+                                                                  <label>State</label>
+                                                                  <input class="form-control" name="location"
+                                                                        type="text" value="{{$user['location']}}"  readonly/>
+                                                                
+                                                            </div>
+
                                                             <div class="form-submit">
                                                                   <button type="submit" name="submit"
                                                                         class="btn btn-outline-danger">
@@ -219,6 +214,10 @@ input:focus+label {
                               <!-- END Cooperative-->
                               <!-- other Users profile--->
 
+
+
+                              @auth
+                              @if(Auth::user()->role_name == 'merchant')
                               <div class="row">
                                     @foreach($users as $user)
                                     <div class="col-md-6">
@@ -256,7 +255,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Mobile Number</label>
+                                                                  <label>Mobile Number <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="phone" type="number"
                                                                         value="{{$user['phone']}}" id="first-name" />
                                                                   @error('phone')
@@ -266,7 +265,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Address</label>
+                                                                  <label>Store / Office Address <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="address" type="text"
                                                                         value="{{$user['address']}}" />
                                                                   @error('address')
@@ -276,18 +275,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>State</label>
-                                                                  <input class="form-control" name="location"
-                                                                        type="text" value="{{$user['location']}}" />
-                                                                  @error('location')
-                                                                  <div class="alert alert-danger mt-1 mb-1">
-                                                                        {{ $message }}</div>
-                                                                  @enderror
-                                                            </div>
-                                                            @auth
-                                                            @if(Auth::user()->role_name == 'merchant')
-                                                            <div class="form-group">
-                                                                  <label>Bank Name</label>
+                                                                  <label>Bank Name <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="bank" type="text"
                                                                         value="{{$user['bank']}}" />
                                                                   @error('bank')
@@ -297,7 +285,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Account Name</label>
+                                                                  <label>Account Name <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="account_name"
                                                                         type="text" value="{{$user['account_name']}}" />
                                                                   @error('account_name')
@@ -307,7 +295,7 @@ input:focus+label {
                                                             </div>
 
                                                             <div class="form-group">
-                                                                  <label>Account Number</label>
+                                                                  <label>Account Number <i class="text-danger">*</i> </label>
                                                                   <input class="form-control" name="account_number"
                                                                         type="number"
                                                                         value="{{$user['account_number']}}" />
@@ -316,9 +304,15 @@ input:focus+label {
                                                                         {{ $message }}</div>
                                                                   @enderror
                                                             </div>
-                                                            @else
-                                                            @endif
-                                                            @endauth
+
+
+                                                            <div class="form-group">
+                                                                  <label>State</label>
+                                                                  <input class="form-control" name="location"
+                                                                        type="text" value="{{$user['location']}}"  readonly/>
+                                                                
+                                                            </div>
+
                                                             <div class="form-submit">
                                                                   <button type="submit" name="submit"
                                                                         class="btn btn-outline-danger">
@@ -330,10 +324,206 @@ input:focus+label {
                                           </form>
                                     </div>
                                     @endforeach
+                                    @endif
+                                    @endauth
 
                               </div> <!-- row--->
-                              <!-- END Users profile-->
+                              <!-- END Merchant Users profile-->
 
+
+                              @auth
+                              @if(Auth::user()->role_name == 'member')
+                              <div class="row">
+                                    @foreach($users as $user)
+                                    <div class="col-md-6">
+                                          <form method="post" action="/update_profile" name="submit"
+                                                enctype="multipart/form-data">
+                                                @csrf
+
+                                                <div class="card">
+                                                      <div
+                                                            class="card-header d-flex justify-content-between align-items-center">
+                                                            <div class="card-header-title"></div>
+
+                                                      </div>
+                                                      <div class="card-body collapse show tabel-resposive text-left"
+                                                            id="card">
+                                                            <h4 class="card-title"></h4>
+
+
+                                                            <!-- {{ csrf_field() }} -->
+                                                            <div class="form-group">
+                                                                  <input class="form-control" type="email"
+                                                                        id="email-address" value="{{$user['email']}}"
+                                                                        readonly />
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Full Name</label>
+
+                                                                  <input class="form-control" type="text" name="fname"
+                                                                        value="{{$user['fname']}}" />
+                                                                  @error('fname')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Mobile Number <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="phone" type="number"
+                                                                        value="{{$user['phone']}}" id="first-name" />
+                                                                  @error('phone')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Resident Address <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="address" type="text"
+                                                                        value="{{$user['address']}}" />
+                                                                  @error('address')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>State</label>
+                                                                  <input class="form-control" name="location"
+                                                                        type="text" value="{{$user['location']}}"  readonly/>
+                                                                
+                                                            </div>
+
+                                                            <div class="form-submit">
+                                                                  <button type="submit" name="submit"
+                                                                        class="btn btn-outline-danger">
+                                                                        Update Profile </button>
+                                                            </div>
+
+                                                      </div>
+                                                </div><!-- card-6-->
+                                          </form>
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                    @endauth
+
+                              </div> <!-- row--->
+                              <!-- END Memmber Users profile-->
+
+                              @auth
+                              @if(Auth::user()->role_name == 'fmcg')
+                              <div class="row">
+                                    @foreach($users as $user)
+                                    <div class="col-md-6">
+                                          <form method="post" action="/update_profile" name="submit"
+                                                enctype="multipart/form-data">
+                                                @csrf
+
+                                                <div class="card">
+                                                      <div
+                                                            class="card-header d-flex justify-content-between align-items-center">
+                                                            <div class="card-header-title"></div>
+
+                                                      </div>
+                                                      <div class="card-body collapse show tabel-resposive text-left"
+                                                            id="card">
+                                                            <h4 class="card-title"></h4>
+
+
+                                                            <!-- {{ csrf_field() }} -->
+                                                            <div class="form-group">
+                                                                  <input class="form-control" type="email"
+                                                                        id="email-address" value="{{$user['email']}}"
+                                                                        readonly />
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Full Name</label>
+
+                                                                  <input class="form-control" type="text" name="fname"
+                                                                        value="{{$user['fname']}}" />
+                                                                  @error('fname')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Mobile Number<i class="text-danger">*</i>  </label>
+                                                                  <input class="form-control" name="phone" type="number"
+                                                                        value="{{$user['phone']}}" id="first-name" />
+                                                                  @error('phone')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Office Address <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="address" type="text"
+                                                                        value="{{$user['address']}}" />
+                                                                  @error('address')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+                                                            <div class="form-group">
+                                                                  <label>Bank Name <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="bank" type="text"
+                                                                        value="{{$user['bank']}}" />
+                                                                  @error('bank')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Account Name <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="account_name"
+                                                                        type="text" value="{{$user['account_name']}}" />
+                                                                  @error('account_name')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>Account Number <i class="text-danger">*</i> </label>
+                                                                  <input class="form-control" name="account_number"
+                                                                        type="number"
+                                                                        value="{{$user['account_number']}}" />
+                                                                  @error('account_number')
+                                                                  <div class="alert alert-danger mt-1 mb-1">
+                                                                        {{ $message }}</div>
+                                                                  @enderror
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                  <label>State</label>
+                                                                  <input class="form-control" name="location"
+                                                                        type="text" value="{{$user['location']}}"  readonly/>
+                                                                
+                                                            </div>
+
+                                                            <div class="form-submit">
+                                                                  <button type="submit" name="submit"
+                                                                        class="btn btn-outline-danger">
+                                                                        Update Profile </button>
+                                                            </div>
+
+                                                      </div>
+                                                </div><!-- card-6-->
+                                          </form>
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                    @endauth
+
+                              </div> <!-- row--->
+                              <!-- END FMCG Users profile-->
                         </div>
                   </div>
                   <!--pb-3-->

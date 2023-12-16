@@ -65,12 +65,16 @@ class CooperativeController extends Controller
          }
         // check if user has filled his/her profile
         $user=Auth::user();
-        $address = $user->address;
-        $phone = $user->phone;
-          if($address == '' && $phone =='')
+        $address        = $user->address;
+        $phone          = $user->phone;
+        $account_number = $user->account_number;
+        $account_name   = $user->account_name;
+          if($address == ''  && $phone ==''  && $account_number =='' && $account_name =='')
           {
-             Session::flash('profile', ' You are yet to update your profile! <br> Kindly navigate to profile page.'); 
-                Session::flash('alert-class', 'alert-success'); 
+            Session::flash('profile', ' You are yet to update your profile! <br> Kindly navigate to profile page.'); 
+            Session::flash('alert-class', 'alert-success'); 
+            return Redirect::to('/profile');  
+              
           }
         $code = Auth::user()->code; 
         $id = Auth::user()->id; //
