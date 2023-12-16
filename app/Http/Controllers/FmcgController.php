@@ -116,7 +116,7 @@ class FmcgController extends Controller
 
     public function fmcgmembers(Request $request )
     {
-    if( Auth::user()->role_name  == 'fcmg'){
+    if( Auth::user()->role_name  == 'fmcg'){
 
         $code = Auth::user()->code; //
         // Product::paginate( $request->get('per_page', 4));
@@ -140,7 +140,7 @@ class FmcgController extends Controller
    
     public function invoice(Request $request, $order_number )
     {
-     if( Auth::user()->role_name  == 'fcmg'){
+     if( Auth::user()->role_name  == 'fmcg'){
          $code = Auth::user()->code; //
            $item = Order::join('users', 'users.id', '=', 'orders.user_id')
                           ->leftjoin('order_items', 'order_items.order_id', '=', 'orders.id')
@@ -176,7 +176,7 @@ class FmcgController extends Controller
         //add new fcmgproducts
      public function fcmgproduct(Request $request)
     {
-    if( Auth::user()->role_name  == 'fcmg'){
+    if( Auth::user()->role_name  == 'fmcg'){
         $categories = Categories::all(); 
 
         return view('fcmg.add_new_product', compact('categories'));
