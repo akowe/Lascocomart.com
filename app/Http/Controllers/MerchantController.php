@@ -236,9 +236,10 @@ class MerchantController extends Controller
           $notification = new NewProduct($product_id, $product_name);
           Notification::send($superadmin, $notification);
 
-           // send email notification to coopmart for approval
+           // send email notification to superadmin for approval
+           $name = Auth::user()->coopname;
                    $data = array(
-                    'name'      =>  'coopmart',
+                    'name'      =>  $name,
                     'message'   =>   'approve'
                 );
  

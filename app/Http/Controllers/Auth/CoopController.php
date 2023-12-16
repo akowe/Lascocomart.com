@@ -49,11 +49,9 @@ class CoopController extends Controller
             'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'fname'     => 'required|string|max:255',
             'password'  => 'required|string|min:6|confirmed',
-            'code'      => 'string',
-            'coopname'  => 'string',
+            'coopname'  => 'required|string|max:255',
             'address'   => 'required|max:225',
             'cooptype'  => 'required|max:225',
-            'payment_days' => 'required|max:225',
             'file'      => 'required|mimes:jpg,jpeg,png|max:300',
             ]);
 
@@ -79,7 +77,7 @@ class CoopController extends Controller
         $user->coopname     = $request->coopname;
         $user->address      = $request->address;
         $user->cooptype     = $request->cooptype; 
-        $user->payment_days = $request->payment_days; 
+        // $user->payment_days = $request->payment_days; 
         $user->cooperative_cert = $image_path;
         $user->email        = $request->email;
         $user->password     = Hash::make($request['password']);

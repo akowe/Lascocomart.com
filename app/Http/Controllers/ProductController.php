@@ -36,13 +36,24 @@ class ProductController extends Controller
     }
 
     public function index( Request $request){
-        $products = Product::where('prod_status', 'approve')
-        ->orderBy('created_at', 'desc')
-        ->paginate($request->get('per_page', 16));
+     
+        $stars = DB::table('reviews')->selectRaw('ROUND(AVG(rating))')
+    //   ->selectRaw('ROUND(count(user_id)) as user')
+        ->whereColumn('product_id', 'products.id');
 
+        $products =  DB::table('products')
+        ->join('users', 'users.id', '=', 'products.seller_id')
+        ->select('products.*', 'users.coopname')
+     
+        ->selectSub($stars, 'rating')
+        ->where('products.prod_status', 'approve')
+        ->orderBy('products.created_at', 'desc')
+        ->paginate($request->get('per_page', 16));
+      
         $seller = Arr::pluck($products, 'seller_id');
         $get_seller_id = implode(" ",$seller);
 
+     
         //get sellers details
         $email          = User::where('id', $get_seller_id)->get('email');
         $seller_details = User::where('id', $get_seller_id)->get();
@@ -52,6 +63,8 @@ class ProductController extends Controller
 
         //send email notification of low stock
         foreach($products   as $key => $prod){
+        
+       
             $date = Carbon::now();
             if($prod->quantity < 1){
                 Product::where('id', $prod->id)
@@ -70,7 +83,59 @@ class ProductController extends Controller
             ->where('quantity', $quantity)
             ->update(['prod_status' => 'remove']);
             }
+           
         }  
+        if(Auth::user()){
+            $vendorName =  DB::table('users')
+            ->where('coopname', Auth::user()->coopname)->first()->coopname;
+
+            $id = Auth::user()->id;
+            $wishlist = Wishlist::where('user_id', $id)->get('product_id');
+            $getWish = Arr::pluck($wishlist, 'product_id');
+            $saveItem = implode(',', $getWish);
+
+        //     $wish['wish'] = Product::join('users', 'users.id', '=', 'products.seller_id')
+        // ->join('wishlist', 'wishlist.product_id', '=', 'products.id')
+        //     ->where('users.code','=',Auth::user()->code)
+        //     ->where('wishlist.user_id', $id);
+
+            $wish = Product::join('wishlist', 'wishlist.product_id', '=', 'products.id')
+            ->join('users', 'users.id', '=', 'products.seller_id')
+            ->where('wishlist.user_id', $id)
+            ->where('users.code', $vendorName)
+            ->orderBy('users.coopname', 'desc')
+             ->get('products.*');
+             $users = User::with(['products' => function ($query) {
+                $query->limit(6);
+            }])->has('products')->get();
+            
+             \LogActivity::addToLog('Product page');
+             return view('products', compact('products', 'wishlist', 'wish'))->with($users);
+         }
+         else{
+            \LogActivity::addToLog('Product page');
+            return view('products', compact('products'));
+         }
+       
+    }
+
+    public function vendorProduct( Request $request, $vendor){
+        $vendorName =  DB::table('users')
+        ->where('coopname', $vendor)->first()->coopname;
+     
+        $stars = DB::table('reviews')->selectRaw('ROUND(AVG(rating))')
+    //   ->selectRaw('ROUND(count(user_id)) as user')
+        ->whereColumn('product_id', 'products.id');
+
+        $products =  DB::table('products')
+        ->join('users', 'users.id', '=', 'products.seller_id')
+        ->select('products.*', 'users.coopname')
+     
+        ->selectSub($stars, 'rating')
+        ->where('products.prod_status', 'approve')
+        ->where('users.coopname', $vendor)
+        ->orderBy('products.created_at', 'desc')
+        ->paginate($request->get('per_page', 16));
         if(Auth::user()){
             $id = Auth::user()->id;
             $wishlist = Wishlist::where('user_id', $id)->get('product_id');
@@ -80,12 +145,13 @@ class ProductController extends Controller
             ->where('wishlist.user_id', $id)
              ->get('products.*');
              \LogActivity::addToLog('Product page');
-             return view('products', compact('products', 'wishlist', 'wish'));
+             return view('vendor-products', compact('products', 'wishlist', 'wish', 'vendorName'));
          }
          else{
             \LogActivity::addToLog('Product page');
-            return view('products', compact('products'));
+            return view('vendor-products', compact('products', 'vendorName'));
          }
+     
        
     }
  
@@ -230,9 +296,24 @@ public function preview(Request $request, $prod_name)
     $id = implode(" ",$prod_id);
     
     $reviews = Review::Join('users', 'users.id', '=', 'reviews.user_id')
-     ->where('prod_id', $id)->get('*');
-     \LogActivity::addToLog('Preview product');
-     return view('preview', compact('products', 'reviews'));
+     ->where('product_id', $id)->get('*');
+
+     if(Auth::user()){
+        $id = Auth::user()->id;
+        $wishlist = Wishlist::where('user_id', $id)->get('product_id');
+        $getWish = Arr::pluck($wishlist, 'product_id');
+        $saveItem = implode(',', $getWish);
+        $wish = Product::join('wishlist', 'wishlist.product_id', '=', 'products.id')
+        ->where('wishlist.user_id', $id)
+         ->get('products.*');
+         \LogActivity::addToLog('Product page');
+         return view('preview', compact('products', 'wishlist', 'wish', 'reviews'));
+     }
+     else{
+        \LogActivity::addToLog('Preview product');
+        return view('preview', compact('products', 'reviews'));
+     }
+    
 }
 
 

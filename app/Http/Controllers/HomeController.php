@@ -84,4 +84,6 @@ class HomeController extends Controller
         \LogActivity::addToLog('Change password'); 
         return redirect()->back()->with("success","Password successfully changed!");
     } 
+
+   
 }

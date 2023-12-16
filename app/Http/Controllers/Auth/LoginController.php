@@ -69,8 +69,8 @@ class LoginController extends Controller
             return $this->redirectTo;
             break;
         
-        case 5:
-            $this->redirectTo = '/fcmg';
+        case 33:
+            $this->redirectTo = '/fmcg';
             \LogActivity::addToLog('Login');
             return $this->redirectTo;
             break;

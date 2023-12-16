@@ -61,7 +61,7 @@ class RegisterController extends Controller
             // 'rcnumber' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role_name' => ['string'],
+          
             'code' => ['string'],
         ]);
     }
@@ -83,7 +83,7 @@ class RegisterController extends Controller
           $user = new User();
           $user->role         = $role;
           $user->role_name    = $role_name;
-          $user->fname        =$request->fname;
+          $user->fname        = $request->fname;
           $user->code         = $request->code;
           $user->coopname     = $coopname;
           $user->email        = $request->email;

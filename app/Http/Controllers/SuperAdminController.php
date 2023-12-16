@@ -393,22 +393,28 @@ class SuperAdminController extends Controller
       if( Auth::user()->role_name  == 'superadmin'){
           $coop = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
           ->where('users.role', '2')
-          ->paginate( $request->get('per_page', 5));
- 
-    //view all coop members
-      //  $members = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
-      //   ->where('users.role', '4')
-      //   ->paginate( $request->get('per_page', 5));
+          ->where('users.deleted_at',   NULL)
+          ->orderBy('users.created_at', 'desc')
+          ->get();
+          
 
-       $members =   User::where('role', '4')->get('*');
-       //fcmg
-       $fcmg = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
-        ->where('users.role', '5')
-        ->paginate( $request->get('per_page', 5));    
-      //sellers
-       $merchants = User::where('role', '3')->get('*');
-       \LogActivity::addToLog('SuperAdmin userList');
-       return view('company.users_list', compact('coop', 'members', 'merchants', 'fcmg'));
+        $members =   User::where('role', '4')
+        ->where('deleted_at',  NULL)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        //fcmg
+        $fcmg = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
+          ->where('users.role', '5')
+          ->where('users.deleted_at',    NULL)
+          ->orderBy('users.created_at', 'desc')
+          ->get();  
+        //sellers
+        $merchants = User::where('role', '3')
+        ->where('deleted_at',   NULL)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        \LogActivity::addToLog('SuperAdmin userList');
+        return view('company.users_list', compact('coop', 'members', 'merchants', 'fcmg'));
  
        }
 
@@ -479,7 +485,7 @@ public function resetUserPassword(Request $request, $id){
 
   $data = array(
     'name'     => $get_name,
-    'password' => $tempoaryPassword,       
+    'password' => $tempoaryPassword,        
     );
     //dd($data);
      Mail::to($email)->send(new PasswordResetEmail($data)); 
@@ -649,4 +655,36 @@ public function tandc(Request $request){
     }
   }
 
+  public function deleteUser(Request $request, $id )
+  {
+      $user = User::where('id', $id)->delete();
+      \LogActivity::addToLog('SuperAdmin remove user');
+      return redirect()->back()->with('success', 'User Removed Successfully!');
+  }
+  public function addNewAdmin(){
+    return view('company.add-new-admin');
+  }
+
+  
+  public function showSetPassword(Request $request){
+    // $email = $email;
+    return view('set-password');
+}
+
+public function setPassword(Request $request) {
+    $validatedData = $request->validate([
+        'email'        =>'required|email',
+        'new-password' => 'required|string|min:8|confirmed',
+    ]);
+
+    //Set Password   bcrypt();
+    $user = User::where('email', $request->email)
+    ->update(['password' => Hash::make($request->get('new-password'))]);
+    if($user){
+        \LogActivity::addToLog('Set password'); 
+        return redirect('login')->with("success","You have successfully set your password!");
+    }else{
+        return redirect()->back()->with("success","Password Not Set!");
+    } 
+} 
 }//class

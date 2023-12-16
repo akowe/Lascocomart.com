@@ -41,7 +41,13 @@ class CategoriesController extends Controller
              ->get('products.*');
 
              if( $search = $request->input('search')){
-                $products = Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                $vendor = DB::table('users')->selectRaw('coopname')
+                ->whereColumn('id', 'products.seller_id');
+
+                $products = DB::table('products')
+                ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                ->select('*')
+                ->selectSub($vendor, 'coopname')
                 ->orwhere('prod_name', 'LIKE', "%{$search}%") // search by product name
                 ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
                 ->where('products.prod_status', 'approve')
@@ -56,7 +62,13 @@ class CategoriesController extends Controller
                 }
                         
                 elseif ($search = $request->input('category')) {
-                    $products =Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                    $vendor = DB::table('users')->selectRaw('coopname')
+                    ->whereColumn('id', 'products.seller_id');
+    
+                    $products = DB::table('products')
+                    ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                    ->select('*')
+                    ->selectSub($vendor, 'coopname')
                     ->where('categories.cat_name', 'LIKE', "%{$search}%")
                     ->where('products.prod_status', 'approve') 
                     // ->get(['products.*', 'categories.cat_name']);
@@ -73,9 +85,15 @@ class CategoriesController extends Controller
          }
          else{
             if( $search = $request->input('search')){
-                $products = Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
-                ->orwhere('prod_name', 'LIKE', "%{$search}%") // search by product name
-                ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
+                $vendor = DB::table('users')->selectRaw('coopname')
+                ->whereColumn('id', 'products.seller_id');
+
+                $products = DB::table('products')
+                ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                ->select('*')
+                ->selectSub($vendor, 'coopname')
+                ->orwhere('products.prod_name', 'LIKE', "%{$search}%") // search by product name
+                ->orwhere('products.prod_brand', 'LIKE', "%{$search}%") //search by brand name
                 ->where('products.prod_status', 'approve')
                 ->paginate($request->get('per_page', 9));
                 $pagination = $products->appends ( array ('search' => $search) );
@@ -88,7 +106,13 @@ class CategoriesController extends Controller
                 }
                         
                 elseif ($search = $request->input('category')) {
-                    $products =Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                    $vendor = DB::table('users')->selectRaw('coopname')
+                    ->whereColumn('id', 'products.seller_id');
+    
+                    $products = DB::table('products')
+                    ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                    ->select('*')
+                    ->selectSub($vendor, 'coopname')
                     ->where('categories.cat_name', 'LIKE', "%{$search}%")
                     ->where('products.prod_status', 'approve') 
                     // ->get(['products.*', 'categories.cat_name']);

@@ -69,6 +69,6 @@ class Kernel extends HttpKernel
         'merchant' => \App\Http\Middleware\Merchant::class,
         'members' => \App\Http\Middleware\Members::class,
         'slashes' => \App\Http\Middleware\trailingSlashes::class,
-        'fcmg' => \App\Http\Middleware\Fcmg::class,   
+        'fmcg' => \App\Http\Middleware\Fmcg::class,   
     ];
 }

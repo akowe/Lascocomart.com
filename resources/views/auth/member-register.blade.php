@@ -52,7 +52,7 @@
                                                 <div class="row mb-3">
                                                       <label for="name"
                                                             class="col-md-4 col-form-label text-md-end">Cooperative
-                                                            Code</label>
+                                                            Code <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
                                                       <span class="small text-primary">get code from your cooperative
@@ -65,7 +65,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="name" class="col-md-4 col-form-label text-md-end">Full
-                                                            Name</label>
+                                                            Name <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
                                                             <input id="fname" type="text" name="fname" value="" required
@@ -80,7 +80,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="email"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}  <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group ">
                                                             <input id="email" type="email"
@@ -98,7 +98,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="password"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }}  <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 ">
                                                       <span class="small text-primary">minimum length: 6</span>
@@ -120,7 +120,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="password-confirm"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}  <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 ">
                                                             <div class="form-group">

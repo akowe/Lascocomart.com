@@ -52,7 +52,7 @@
                                                 <div class="row mb-3">
                                                       <label for="name"
                                                             class="col-md-4 col-form-label text-md-end">Cooperative
-                                                            Name</label>
+                                                            Name<i class="text-danger">*</i></label>
                                                       <div class="col-md-6 form-group">
                                                             <input id="coopname" type="text" name="coopname" required
                                                                   class="form-control">
@@ -62,7 +62,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="name" class="col-md-4 col-form-label text-md-end">
-                                                            Address</label>
+                                                            Address <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group ">
                                                             <input id="address" type="text" name="address" value=""
@@ -79,7 +79,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="type" class="col-md-4 col-form-label text-md-end">
-                                                            Cooperative Type</label>
+                                                            Cooperative Type <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
                                                             <input id="type" list="browsers" name="cooptype" 
@@ -98,7 +98,7 @@
                                                 <div class="row mb-3">
                                                       <label for="name"
                                                             class="col-md-4 col-form-label text-md-end">Admin Full
-                                                            Name</label>
+                                                            Name <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
                                                             <input id="fname" type="text" name="fname" value="" required
@@ -114,7 +114,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="name"
-                                                            class="col-md-4 col-form-label text-md-end">Upload Certificate
+                                                            class="col-md-4 col-form-label text-md-end">Upload Certificate <i class="text-danger">*</i>
                                                       </label>
 
                                                       <div class="col-md-6 form-group ">
@@ -133,33 +133,10 @@
                                                       </div>
                                                 </div>
 
-                                                <div class="row mb-3">
-                                                      <label for="name"
-                                                            class="col-md-4 col-form-label text-md-end">Payment Days
-                                                      </label>
-
-                                                      <div class="col-md-6 form-group ">
-                                                      <input id="payment" list="days" name="payment_days" 
-                                                                  required class="form-control">
-                                                            <datalist id="days">
-                                          
-                                                                  <option value="immediately after delivery">
-                                                                  <option value="1 - 7 days after delivery">
-                                                                  <option value="7 - 14 days after delivery">
-                                                            </datalist>
-
-
-                                                            @error('payment_days')
-                                                            <span class="invalid-feedback" role="alert">
-                                                                  <strong>{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                      </div>
-                                                </div>
 
                                                 <div class="row mb-3">
                                                       <label for="email"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }} <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group ">
                                                             <input id="email" type="email"
@@ -177,7 +154,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="password"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }} <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 ">
                                                       <span class="small text-primary">minimum length: 6</span>
@@ -198,7 +175,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="password-confirm"
-                                                            class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+                                                            class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }} <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 ">
                                                        <div class="form-group">

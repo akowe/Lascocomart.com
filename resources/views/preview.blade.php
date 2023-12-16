@@ -469,8 +469,40 @@
                                                 </div><!-- cart dropdownt -->
                                           </div><!-- /Cart -->
 
-                                          <!-- WishList -->
-                                        
+            <!-- WishList -->
+            @if (Route::has('login'))
+                                          @auth
+                                          <div class="dropdown">
+                                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"
+                                                      style="cursor: pointer;">
+                                                      <i class="fa fa-heart"></i>
+                                                      <span>WishList</span>
+                                                      <div class="qty">{{ $wishlist->count() }}</div>
+                                                </a>
+                                                @php $total = 0 @endphp
+                                                @php $items = 0 @endphp
+                                                @php $item = 1 @endphp
+                                                @foreach($wish as $id => $details)
+                                                @php $total += $details['price'] * 1
+                                                @endphp
+
+                                                @php $items += 1 * $item
+                                                @endphp
+                                                @endforeach
+                                                <div class="cart-dropdown">
+                                                      @if($wish)
+                                                      <div class="cart-summary">
+                                                            <h5> {{$items}} saved Item(s). </h5>
+                                                            <a href="{{url('wishlist') }}"
+                                                                  class="btn btn-danger btn-block">View all</a>
+
+                                                      </div>
+                                                      @endif
+                                                </div><!-- Wish dropdownt -->
+                                          </div><!-- /WishList -->
+                                          @endauth
+                                          @endif
+
 
 
 

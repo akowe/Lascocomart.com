@@ -50,14 +50,14 @@ class FcmgsController extends Controller
             // 'address'   => 'required|max:225',
         ]);
 
-           $role = '5';
-           $role_name = 'fcmg';
+           $role = '33';
+           $role_name = 'fmcg';
            $lascocoID =rand(100,999);
            $code = 'Lascoco'.$lascocoID;
 
            //$user = new User;
             $user = User::create([
-            'role' => '5',
+            'role' => '33',
             'role_name' =>$role_name,
             'fname' => $request->fname,
             'code' => $code,

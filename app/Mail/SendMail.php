@@ -28,10 +28,10 @@ class SendMail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build() 
     {
         //return $this->view('view.name');
-          return $this->from('noreply@coopmart.com', 'CoopMart')->subject('New Product Added')->view('notifications.sendmail')->with('data', $this->data);
+          return $this->from('noreply@lascocomart.com', 'LascocoMart')->subject('New Product Added')->view('email.sendmail')->with('data', $this->data);
 
     
     }

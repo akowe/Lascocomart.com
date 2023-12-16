@@ -43,7 +43,7 @@
       <!-- row -->
       <div class="row">
             <div class="col-md-5 ">
-            <img src="/images/lascoco-banner.jpg" alt="" style="width:100%;">
+                  <img src="/images/lascoco-banner.jpg" alt="" style="width:100%;">
             </div>
 
 
@@ -167,17 +167,26 @@
                               <h4 class="product-price"> ₦{{ number_format($product->price )}}
                                     <del class="product-old-price">{{number_format($product->old_price)  }}</del>
                               </h4>
+                             
+                              <span class="vendor" style="font-size:12px;">VENDOR: <a
+                                          href="{{ route('vendor-product', $product->coopname) }}" title="view store"
+                                          class="text-danger"> {{$product->coopname}}</a>
+                              </span>
+
+
+
 
                               <div class="product-btns">
                                     <button class="quick-view">
-                                          <a href="{{ route('preview', $product->prod_name) }}">
-                                                <i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
+                                          <a href="{{ route('preview', $product->prod_name) }}" title="view">
+                                                <i class="fa fa-eye"></i>
                                           </a>
                                     </button>
 
                                     <button class="quick-view">
-                                          <a href="{{ route('add.to.wish', $product->id) }}" class="text-danger">
-                                                <i class="fa fa-heart"></i><span class="tooltipp">Wishlist</span>
+                                          <a href="{{ route('add.to.wish',$product->id) }}" class="text-danger"
+                                                title="Wishlist">
+                                                <i class="fa fa-heart-o"></i>
                                           </a>
                                     </button>
 
@@ -190,7 +199,8 @@
                         </div>
 
                         <button type="button" class="add-to-cart">
-                              <a class="add-to-cart-btn btn" href="{{ route('add.to.cart', $product->id) }}">
+
+                              <a class="add-to-cart-btn btn" href="{{route('add.to.cart',$product->id)}}">
                                     <i class="fa fa-shopping-cart"></i>
                                     add to cart</a>
                         </button>

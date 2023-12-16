@@ -62,8 +62,7 @@
                         <table class="table table-striped " id="table">
                               <thead>
                                     <tr>
-                                          <th>First name</th>
-                                          <th>Last name</th>
+                                          <th>Name</th>
                                           <th>Email</th>
                                           <th>Phone</th>
                                           <!--  <th>Lascoco ID</th> -->
@@ -76,15 +75,13 @@
                                     <tr>
 
                                           <td>{{ $details['fname'] }}</td>
-                                          <td>{{ $details['lname'] }}</td>
                                           <td>{{ $details['email'] }}</td>
                                           <td>{{ $details['phone'] }}</td>
                                           <!--  <td >{{ $details['code'] }}</td> -->
                                           <td>
-                                                <input type="hidden" id="user_id" value="{{$details->id}}">
-                                                <button type="button" class="btn btn-outline-danger " onclick="removeMember()">
-                                                      <i class="fa fa-trash"></i> 
-                                                </button>
+                                              
+                                                <a onclick="return confirm('Do you want to delete? {{$details->fname}}')"
+                                                            href="delete-member/{{$details->id}}" class="text-danger"> <i class="fa fa-trash"></i></a>
 
                                           </td>
                                     </tr>
@@ -109,8 +106,8 @@
 
 <script>
 function removeMember() {
-
-      var answer = window.confirm("Are you sure you want to remove this member?");
+      var name = document.getElementById('user_id').value;
+      var answer = window.confirm("Are you sure you want to remove this member?" +name);
 
       if (answer) {
             var id = document.getElementById('user_id').value;

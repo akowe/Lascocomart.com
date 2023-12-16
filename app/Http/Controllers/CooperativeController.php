@@ -617,14 +617,14 @@ class CooperativeController extends Controller
          } 
     }
 
-    public function fcmgproductsview(Request $request)
+    public function fmcgproductsview(Request $request)
     {
 
-        $fcmgproductsview = FcmgProduct::where('prod_status', 'approve')
+        $fmcgproductsview = FcmgProduct::where('prod_status', 'approve')
                     ->orderBy('created_at', 'desc')
                     ->paginate($request->get('per_page', 16));
         
-        $seller = Arr::pluck($fcmgproductsview, 'seller_id');
+        $seller = Arr::pluck($fmcgproductsview, 'seller_id');
         $get_seller_id = implode(" ",$seller);
 
         //get sellers details
@@ -637,7 +637,7 @@ class CooperativeController extends Controller
 
           //send email notification of low stock
         
-        foreach($fcmgproductsview   as $key => $prod){
+        foreach($fmcgproductsview   as $key => $prod){
              $date = Carbon::tomorrow();
               if($prod->quantity < 1 & $prod->created_at <= $date){
            
@@ -656,8 +656,8 @@ class CooperativeController extends Controller
 
         }
               
-        \LogActivity::addToLog('Admin view FCMG product');
-        return view('cooperative.fcmgproductsview', compact('fcmgproductsview'));
+        \LogActivity::addToLog('Admin view FMCG product');
+        return view('cooperative.fmcgproductsview', compact('fmcgproductsview'));
     }
 
   
@@ -689,7 +689,7 @@ class CooperativeController extends Controller
     }
 
     
-    public function fcmgcheckout(Request $request){
+    public function fmcgcheckout(Request $request){
 
          if( Auth::user()){
      
@@ -729,7 +729,7 @@ class CooperativeController extends Controller
                     ->where('vouchers.user_id', $id)
                     ->get(['vouchers.*', 'users.*']); 
                     \LogActivity::addToLog('Admin checkout FCMG');
-        return view('cooperative.fcmgcheckout', compact('voucher'));
+        return view('cooperative.fmcgcheckout', compact('voucher'));
     }
 
         else { return Redirect::to('/login');}
@@ -737,16 +737,16 @@ class CooperativeController extends Controller
         }
 
           
-    public function fcmgcart()
+    public function fmcgcart()
     {
-        return view('cooperative.fcmgcart');
+        return view('cooperative.fmcgcart');
     }
   
-    public function fcmgaddToCart($id)
+    public function fmcgaddToCart($id)
     {
         $fcmgproducts = FcmgProduct::findOrFail($id);
           
-        $fcmgcart = session()->get('fcmgcart', []);
+        $fcmgcart = session()->get('fmcgcart', []);
   
         if(isset($fcmgcart[$id])) {
             $fcmgcart[$id]['quantity']++;
@@ -762,15 +762,15 @@ class CooperativeController extends Controller
             ];
         }
           
-        session()->put('fcmgcart', $fcmgcart);
+        session()->put('fmcgcart', $fcmgcart);
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
-  public function fcmgaddToCartPreview($id)
+  public function fmcgaddToCartPreview($id)
     {
         $fcmgproducts = FcmgProduct::findOrFail($id);
           
-        $fcmgcart = session()->get('fcmgcart', []);
+        $fcmgcart = session()->get('fmcgcart', []);
   
         if(isset($fcmgcart[$id])) {
             $fcmgcart[$id]['quantity']++;
@@ -785,9 +785,9 @@ class CooperativeController extends Controller
             ];
         }
           
-        session()->put('fcmgcart', $fcmgcart);
-        \LogActivity::addToLog('Admin cview cart FCMG');
-        return redirect()->route('cooperative.fcmgcart')->with('success', 'Product added to cart successfully!');
+        session()->put('fmcgcart', $fcmgcart);
+        \LogActivity::addToLog('Admin cview cart FMCG');
+        return redirect()->route('cooperative.fmcgcart')->with('success', 'Product added to cart successfully!');
     }
     
     

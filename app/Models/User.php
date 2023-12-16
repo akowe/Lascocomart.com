@@ -60,5 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function wallet() {
         return $this->hasOne(Wallet::class);
     }
+
+   public function products(): \Illuminate\Database\Eloquent\Relations\HasMany{
+
+    return $this->hasMany(Product::class,'user_id','id');
+
+    }  
 }
 

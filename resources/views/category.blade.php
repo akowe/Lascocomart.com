@@ -50,7 +50,7 @@
                                           <label for="category-1">
                                                 <span></span>
                                                 {{ $category['cat_name'] }}
-                                                ee
+                                             
                                           </label>
                                     </div>
 
@@ -218,6 +218,9 @@
                                           <h4 class="product-price">₦{{ number_format($product->price )}} <del
                                                       class="product-old-price">₦{{number_format($product->old_price)  }}</del>
                                           </h4>
+                                          <p class="small vendor">VENDOR: <span class="text-danger">
+                                                      {{$product->coopname}} </span>
+                                          </p>
 
 
                                           <div class="product-btns">
@@ -225,11 +228,13 @@
                                                       data-target="#product_view{{ $product->id }}"><i
                                                             class="fa fa-eye"></i><span class="tooltipp">quick
                                                             view</span></button>
-                                                            <button class="quick-view">
-                                          <a href="{{ route('add.to.wish', $product->id) }}" class="text-danger">
-                                                <i class="fa fa-heart"></i><span class="tooltipp">Wishlist</span>
-                                          </a>
-                                    </button>
+                                                <button class="quick-view">
+                                                      <a href="{{ route('add.to.wish', $product->id) }}"
+                                                            class="text-danger">
+                                                            <i class="fa fa-heart"></i><span
+                                                                  class="tooltipp">Wishlist</span>
+                                                      </a>
+                                                </button>
                                           </div>
                                     </div>
 

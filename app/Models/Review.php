@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class Review extends Model
 {
@@ -12,9 +13,9 @@ class Review extends Model
     protected $table = 'reviews';
     protected $fillable = [
         'user_id',
-        'prod_id',
-        'user_review',
-        'stars_rated'
+        'product_id',
+        'reviews',
+        'rating'
         ];
     
     public function user(){
@@ -24,4 +25,9 @@ class Review extends Model
     public function review(){
         return $this->belongsTo(Review::class, 'user_id','user_id');
     }
+    public function products()
+    {
+        return $this->belongsTo(Product::class);
+    }
+    
 }

@@ -33,7 +33,7 @@
       <!-- Font Awesome Icon -->
       <link rel="stylesheet" href="css/font-awesome.min.css">
       <!-- Custom stlylesheet -->
-      <link type="text/css" rel="stylesheet" href="css/style.css" />
+      <link type="text/css" rel="stylesheet" href="css/style.css?v=echo filemtime();" />
 
 
       <style>
@@ -255,10 +255,11 @@
                                                       @endforeach
                                                 </select> -->
 
-                                                <input class="input search" type="text" name="search" id="search"
+                                              
+                                                       <input class="input search" type="text" name="search" id="search"
                                                       placeholder="Search for products here" autocomplete="off"
-                                                      style="width:80%;" />
-                                                <button class="search-btn" type="submit"><i class="fa fa-search"></i>
+                                                      style="width:76%;" />
+                                                <button class="search-btn" type="submit">
                                                       Search</button>
 
                                           </form>
