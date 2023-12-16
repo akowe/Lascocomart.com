@@ -5,6 +5,11 @@
 <div class="section">
       <!-- container -->
       <div class="container">
+            @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                  {{ session('status') }}
+            </div>
+            @endif
             <!-- row -->
             <div class="row">
                   <div class="col-md-6">
@@ -100,7 +105,7 @@
 
 
                               @php $total = 0 @endphp
-					@php $delivery = 2000 @endphp
+                              @php $delivery = 2000 @endphp
                               @if(session('cart'))
                               @foreach(session('cart') as $prod => $details)
                               @php $total += $details['price'] * $details['quantity'] @endphp
@@ -128,14 +133,15 @@
                                     <!--submit each item in cart-->
                                     <div class="order-col">
                                           <div>Delivery fee</div>
-                                          <div >
+                                          <div>
                                                 <!-- <strong>FREE</strong> -->
-								<strong>₦{{ number_format($delivery) }}</strong>
+                                                <strong>₦{{ number_format($delivery) }}</strong>
                                           </div>
                                     </div>
                                     <div class="order-col">
                                           <div><strong>Total</strong></div>
-                                          <div id='total'><strong class="">₦{{ number_format($totalAmount) }}</strong></div>
+                                          <div id='total'><strong class="">₦{{ number_format($totalAmount) }}</strong>
+                                          </div>
 
 
                                     </div>
@@ -146,7 +152,7 @@
                                     <div class="form-group">
                                           <input type="hidden" name="order_number" value="{{ $ran }}" id="order_number">
                                           <input type="hidden" name="delivery" value="{{$delivery}}">
-  
+
                                           <!--- get value of shipping details-->
                                           <div class="form-group">
                                                 <input class="input" type="hidden" name="ship_address"
@@ -167,7 +173,7 @@
                                           </div>
                                           <!--- end value of shipping details-->
 
-                                  
+
                                     </div>
 
                                     <!-- hide-->
@@ -199,7 +205,7 @@
                               <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8"
                                     class="form-horizontal" role="form">
                                     @csrf
-                                  
+
                                     <input type="hidden" name="amount" value="{{ $totalAmount*100  }}">
                                     <input type="hidden" name="email" value="{{Auth::user()->email}}">
                                     <input type="hidden" name="ship_address" placeholder="Delivery Address"
@@ -208,8 +214,7 @@
                                     <input type="hidden" name="ship_phone" placeholder="Mobile Number"
                                           id="get_ship_phone">
                                     <input type="hidden" name="currency" value="NGN">
-                                    <input type="hidden" name="metadata"
-                                          value="{{ json_encode($array = ['user_id' => Auth::user()->id, 
+                                    <input type="hidden" name="metadata" value="{{ json_encode($array = ['user_id' => Auth::user()->id, 
                                                 'delivery' => '2000',]) }}">
                                     <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
 
@@ -221,7 +226,7 @@
                         <!--col-summary-->
 
 
-                        
+
 
                   </div>
                   <!-- /Order Details -->

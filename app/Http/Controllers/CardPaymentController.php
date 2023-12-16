@@ -35,6 +35,16 @@ class CardPaymentController extends Controller
 {
    public function redirectToGateway(Request $request)
     {
+          // check if user has field his/her profile
+          $user=Auth::user();
+          $address        = $user->address;
+          $phone          = $user->phone;
+            if($address == ''  && $phone =='' )
+            {
+              Session::flash('status', ' You are yet to complete your profile!'); 
+              Session::flash('alert-class', 'alert-success'); 
+              return Redirect::to('/profile');     
+            }
         try{
             return Paystack::getAuthorizationUrl()->redirectNow();
         }catch(\Exception $e) {

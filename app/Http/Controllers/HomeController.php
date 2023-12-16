@@ -259,7 +259,7 @@ class HomeController extends Controller
                  Session::flash('alert-class', 'alert-success'); 
              }
              \LogActivity::addToLog('Update');
-             return redirect('dashboard')->with('status', 'Profile Update Successful!');
+             return redirect('checkout')->with('status', 'Profile Update Successful!');
          } 
         else{
          return Redirect::to('/login');
