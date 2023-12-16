@@ -377,16 +377,21 @@
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                       <tr>
                                                             <td>
-                                                            <p>Welcome Onboard,</p>
-                                                            <p>Now that you are verified, To get started:</p>
-                                                                  <p><strong>things you could do ane more.</strong> </p>
+                                                            <h4>Welcome Onboard {{ $data['coopname'] }},  </h4>
+                                                            <p>Here is a unique ID for your organization <strong >{{ $data['user_id'] }} </strong> </p>
+                                                             <p>
+                                                                  <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart Head Admin</h4>
                                                                   <ol>
-                                                                  <li>Login to your account</li>      
-                                                                  <li>Update your profile with your bank account, store/office address, working contact number</li>
-                                                                  <li>Add your products</li>
+               
+                                                                        <li>Add product (s) for sale on LascocoMart</li>  
+                                                                        <li>Add sub-admin(s)</li>
+                                                                        <li>Remove a member</li>
+                                                                        <li>And Many More >>>></li>
+                                                                       
                                                                   </ol>
-                                                                  <p>when cooperative make payment for any of your products you will be notify.</p>
-                                                                  <p>Remember to update your product prices if changes occur. And if product is not available kindly remove </p>
+
+                                                             </p>  
+                        
                                                                 <table role="presentation" border="0" cellpadding="0"
                                                                         cellspacing="0" class="btn btn-primary">
                                                                         <tbody>
@@ -398,8 +403,8 @@
                                                                                                 cellspacing="0">
                                                                                                 <tbody>
                                                                                                       <tr>
-                                                                                                      <td> <a href="{{ route('login') }}"
-                                                                                                                        target="_blank">Login Here</a>
+                                                                                                      <td> <a href="{{ route('fmcg') }}"
+                                                                                                                        target="_blank">Proceed to dashboard</a>
                                                                                                             </td>
                                                                                                       </tr>
                                                                                                 </tbody>
@@ -409,7 +414,7 @@
                                                                         </tbody>
                                                                   </table>
                                                                   <p>Thank you for choosing LascocoMart.</p>
-                                                                  <p></p>
+                                                                  <p>(Your online marketplace for cooperatives)</p>
                                                             </td>
                                                       </tr>
                                                 </table>

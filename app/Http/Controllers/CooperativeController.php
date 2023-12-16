@@ -21,6 +21,7 @@ use App\Mail\SendMail;
 use App\Mail\OrderApprovedEmail;
 use App\Mail\SalesEmail;
 use App\Mail\OrderEmail;
+use App\Mail\CooperativeWelcomeEmail;
 use App\Notifications\AdminCancelOrder;
 use App\Notifications\NewProduct;
 use Carbon\Carbon;
@@ -44,6 +45,24 @@ class CooperativeController extends Controller
 
     public function index (Request $request){
     if( Auth::user()->role_name  == 'cooperative'){
+        $firstTimeLoggedIn = Auth::user()->last_login;
+         if (empty($firstTimeLoggedIn)) {
+           $data = 
+           array( 
+            'user_id'   => Auth::user()->code,
+            'coopname'  => Auth::user()->coopname,
+             'email'     => Auth::user()->email,
+         );
+           Mail::to(Auth::user()->email)->send(new CooperativeWelcomeEmail($data));  
+           $user = Auth::user();
+           $user->last_login = Carbon::now();
+           $user->save();
+         }
+         elseif (!empty($firstTimeLoggedIn)) {
+            $user = Auth::user();
+            $user->last_login = Carbon::now();
+            $user->save();
+         }
         // check if user has filled his/her profile
         $user=Auth::user();
         $address = $user->address;

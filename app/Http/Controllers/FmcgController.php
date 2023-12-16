@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use App\Models\Categories;
 use App\Models\FcmgProduct;
 use App\Mail\SendMail;
+use App\Mail\FmcgWelcomeEmail;
 
 use Auth;
 use Validator;
@@ -28,7 +29,7 @@ class FmcgController extends Controller
       public function __construct()
     {
          // $this->middleware('auth');
-          $this->middleware(['auth','verified']);
+        $this->middleware(['auth','verified']);
         $this->middleware('fmcg');
         
     }
@@ -37,6 +38,24 @@ class FmcgController extends Controller
     public function index (Request $request)
     {
     if( Auth::user()->role_name  == 'fmcg'){
+      $firstTimeLoggedIn = Auth::user()->last_login;
+         if (empty($firstTimeLoggedIn)) {
+           $data = 
+           array( 
+            'user_id'   => Auth::user()->code,
+            'coopname'  => Auth::user()->coopname,
+             'email'     => Auth::user()->email,
+         );
+           Mail::to(Auth::user()->email)->send(new FmcgWelcomeEmail($data));  
+           $user = Auth::user();
+           $user->last_login = Carbon::now();
+           $user->save();
+         }
+         elseif (!empty($firstTimeLoggedIn)) {
+            $user = Auth::user();
+            $user->last_login = Carbon::now();
+            $user->save();
+         }
         // check if user has field his/her profile
         $user=Auth::user();
         $address = $user->address;

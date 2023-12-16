@@ -29,7 +29,7 @@ class WelcomeNewUserEmail
     {
         if ($event->user instanceof MustVerifyEmail && $event->user->hasVerifiedEmail()) {
            //cooperative
-            if($event->user->role == '2'){
+            if($event->user->role === 2){
                 
                 Mail::send('email.welcome-cooperative', $event->user, function($message) use ($event) {
                     $message->to($event->user->email);
@@ -37,21 +37,21 @@ class WelcomeNewUserEmail
                 });
             }
             //merchant
-            if($event->user->role == '3'){
+            if($event->user->role === 3){
                 Mail::send('email.welcome-merchant', $event->user, function($message) use ($event) {
                     $message->to($event->user->email);
                     $message->subject('Welcome Onboard');
                 });
             }
             //member
-            if($event->user->role == '4'){
+            if($event->user->role === 4){
                 Mail::send('email.welcome-member', $event->user, function($message) use ($event) {
                     $message->to($event->user->email);
                     $message->subject('Welcome Onboard');
                 });
             }
             //fmcg
-            if($event->user->role = 33){
+            if($event->user->role === 33){
                 Mail::send('email.welcome-fmcg', $event->user, function($message) use ($event) {
                     $message->to($event->user->email);
                     $message->subject('Welcome Onboard');
