@@ -21,6 +21,7 @@ use App\Models\ReturnRefund;
 use App\Models\Terms;
 use App\Models\Review;
 use App\Models\Wishlist;
+use App\Mail\MemberWelcomeEmail;
 
 use Session;
 use Validator;
@@ -237,6 +238,24 @@ class ProductController extends Controller
     public function checkout(Request $request){
 
          if( Auth::user()){
+            $firstTimeLoggedIn = Auth::user()->last_login;
+            if (empty($firstTimeLoggedIn)) {
+              $data = 
+              array( 
+              'name'      => Auth::user()->fname,
+              'coopname'  => Auth::user()->coopname,
+                'email'     => Auth::user()->email,
+            );
+              Mail::to(Auth::user()->email)->send(new MemberWelcomeEmail($data));  
+              $user = Auth::user();
+              $user->last_login = Carbon::now();
+              $user->save();
+            }
+            elseif (!empty($firstTimeLoggedIn)) {
+              $user = Auth::user();
+              $user->last_login = Carbon::now();
+              $user->save();
+            }
             $id = Auth::user()->id;// get user id for the login member
             $cart = session()->get('cart');
             $cart[$request->id]["quantity"] = $request->quantity;
