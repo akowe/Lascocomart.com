@@ -18,7 +18,7 @@ class PdfServiceProvider extends ServiceProvider
         //
          $this->app->bind(Pdf::class, function ($app) {
             return new Pdf($app['config']['dompdf']);
-        });
+        }); 
     }
 
 

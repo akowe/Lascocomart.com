@@ -10,11 +10,14 @@
         "dp-0/user-activity": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "hpd/captcha": "^1.0",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "livewire/livewire": "^2.12",
+        "mews/captcha": "^3.3",
         "unicodeveloper/laravel-paystack": "^1.0"
     },
     "require-dev": {

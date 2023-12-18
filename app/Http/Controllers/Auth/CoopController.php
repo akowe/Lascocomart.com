@@ -16,12 +16,17 @@ use App\Models\Voucher;
 use App\Models\Wallet;
 use Session;
 use App\Models\LogActivity ;
+use App\Hpd\Captcha\helper;
+use App\Hpd\Captcha\CaptchaServiceProvider;
+use App\Hpd\Captcha\CaptchaController;
+use App\Hpd\Captcha\Captcha;
 
 
 
 class CoopController extends Controller
 {
      use RegistersUsers;
+     public $app;
 
     /**
      * Where to redirect users after registration.
@@ -39,8 +44,10 @@ class CoopController extends Controller
     {
       //
     }
-
+   
     public function registerCooperative(Request $request){
+    
+    
         return view('auth.cooperative-register');
     }
 
@@ -49,12 +56,14 @@ class CoopController extends Controller
             'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'fname'     => 'required|string|max:255',
             'password'  => 'required|string|min:6|confirmed',
-            'coopname'  => 'required|string|max:255',
+            'cooperative'=> 'required|string|max:255',
             'address'   => 'required|max:225',
             'cooptype'  => 'required|max:225',
             'file'      => 'required|mimes:jpg,jpeg,png|max:300',
-            ]);
-
+            'captcha'   => 'required|captcha',
+            ],
+            ['captcha.captcha'  =>'Wrong code.'],);
+            // dd("You are here :) .");
            $role = '2';
            $role_name = 'cooperative';
            $coopID =rand(100,999);
@@ -74,7 +83,7 @@ class CoopController extends Controller
         $user->role_name    = $role_name;
         $user->fname        =$request->fname;
         $user->code         = $code;
-        $user->coopname     = $request->coopname;
+        $user->coopname     = $request->cooperative;
         $user->address      = $request->address;
         $user->cooptype     = $request->cooptype; 
         // $user->payment_days = $request->payment_days; 
@@ -125,7 +134,9 @@ class CoopController extends Controller
 
            $request->validate([
             'email'=>'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            ]);
+            'fname'   => 'required|fullname',
+            'captcha'   => 'required|captcha',
+          ]);
 
           $user = new User();
           $user->role         = $role;

@@ -92,8 +92,7 @@ Route::group(['middleware' => ['auth']], function() {
 });
 Route::get('show-set-password',[App\Http\Controllers\SuperAdminController::class, 'showSetPassword'])->name('show-set-password');
 Route::post('set-password',[App\Http\Controllers\SuperAdminController::class, 'setPassword'])->name('set-password');
-
-
+Route::get('/reload-captcha', [App\Http\Controllers\Auth\RegisterController::class, 'reloadCaptcha']);
 //register users
 Route::get('cooperative-register', [App\Http\Controllers\Auth\CoopController::class, 'registerCooperative'])->name('cooperative-register');
 Route::get('member-register', [App\Http\Controllers\Auth\CoopController::class, 'registerMember'])->name('member-register');

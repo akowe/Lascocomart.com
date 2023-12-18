@@ -161,8 +161,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-      
-
         /*
          * Package Service Providers...
          */
@@ -175,11 +173,15 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-       
          //paystack
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        //captcha
+        Mews\Captcha\CaptchaServiceProvider::class,
+         // ...
+        //'Mews\Captcha\CaptchaServiceProvider',
+        //Intervention\Image\ImageServiceProvider::class,
+        
 
     ],
 
@@ -238,6 +240,8 @@ return [
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'LogActivity' => App\Helpers\LogActivity::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        //'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

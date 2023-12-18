@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Arr;
+use App\Hpd\Captcha\helper;
+use App\Hpd\Captcha\CaptchaServiceProvider;
+use App\Hpd\Captcha\CaptchaController;
+use App\Hpd\Captcha\Captcha;
 
 use App\Models\Voucher;
 use App\Models\Wallet;
@@ -54,6 +58,11 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img('flat')]);
+    }
+
     protected function validator(array $data)
     {
           return Validator::make($data, [
@@ -65,6 +74,7 @@ class RegisterController extends Controller
             'code' => ['string'],
         ]);
     }
+    
 
     /**
      * Create a new user instance after a valid registration.
@@ -112,6 +122,8 @@ class RegisterController extends Controller
 
           return redirect('/')->with('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
         
-        
     }
+
+   
+
 }
