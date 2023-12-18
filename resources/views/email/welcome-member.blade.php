@@ -381,9 +381,9 @@
                                                             <p>You have be assign under your cooperative <strong >{{ $data['coopname'] }} </strong> </p>
                                                              <p>
                                                                   <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart</h4>
-                                                                  <ol>
+                                                                  <ul>
                                                                     
-                                                                        <li>Place order (s) and request approval from you cooperative admin</li>  
+                                                                        <li>Place order (s) and request approval from your cooperative admin</li>  
                                                                         <li>Pay for order (s) instantly with your debit card</li>    
                                                                         <li>Get notification when your order is approved/cancel by your admin</li>
                                                                         <li>Cancel your order (s)</li>
@@ -392,7 +392,7 @@
                                                                         <li>Click on <strong>"Home"</strong> or click on the logo; to view all products from any page you find yourself.  </li>
                                                                         <li>And Many More >>>></li>
                                                                        
-                                                                  </ol>
+                                                                  </ul>
 
                                                              </p>  
                         

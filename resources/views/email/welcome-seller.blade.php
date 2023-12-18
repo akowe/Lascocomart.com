@@ -381,18 +381,18 @@
                                                             <p>Your store name is {{ $data['coopname'] }}</p>
                                                              <p>
                                                                   <h4 style=" text-decoration: underline; font-weight:bold;">Few of many things you can do on Lascocomart as a vendor</h4>
-                                                                  <ol>
+                                                                  <ul>
                                                                      
                                                                         <li>Add product (s) for sale on LascocoMart</li>    
                                                                         <li>Edit product price and quantity</li>
                                                                         <li>Remove product (s)</li>
                                                                         <li>Get notification on each sales</li>
                                                                         <li>Get notification when you stock is low</li>
-                                                                        <li>Search for your vendor name ({{ $data['coopname'] }}) to see all your products only.</li>
+                                                                        <li>Search for your vendor name ({{ $data['coopname'] }}) to see all products by you.</li>
                                                                         <li>Click on <strong>"Home"</strong> or click on the logo; to view all products from any page you find yourself.  </li>
                                                                         <li>And Many More >>>></li>
                                                                        
-                                                                  </ol>
+                                                                  </ul>
 
                                                              </p>  
                         
