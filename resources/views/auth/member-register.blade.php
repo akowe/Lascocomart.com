@@ -43,7 +43,15 @@
                               </div>
                               <div class="card">
                                     <div class="card-header text-center ">Signup as a  member of a cooperative</div>
-
+                                    @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                          <ul>
+                                                @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                                @endforeach
+                                          </ul>
+                                    </div><br />
+                                    @endif
                                     <div class="card-body">
                                           <form method="POST" action="{{ route('create-member') }}"
                                                 enctype="multipart/form-data">
@@ -68,9 +76,9 @@
                                                             Name <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
-                                                            <input id="fname" type="text" name="fname" value="" required
+                                                            <input id="fname" type="text" name="fullname" value="" required
                                                                   class="form-control">
-                                                            @error('name')
+                                                            @error('fullname')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -130,6 +138,32 @@
                                                             </div>
                                                       </div>
                                                 </div>
+                                                <div
+                                                      class="form-group row {{ $errors->has('captcha') ? ' has-error' : '' }}">
+                                                      <label for="password" class="col-md-4 control-label"></label>
+                                                      <div class="col-md-6">
+                                                            <div class="captcha">
+                                                                  <span> {!! captcha_img('flat') !!}</span>
+                                                                  <button type="button" class="btn btn-danger"
+                                                                        class="reload" id="reload">
+                                                                        &#x21bb;
+                                                                  </button>
+                                                            </div>
+
+                                                      </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                      <label for="captcha"
+                                                            class="col-md-4 col-form-label text-md-right">I am
+                                                            not a robot</label>
+                                                      <div class="col-md-6">
+                                                            <input id="captcha" type="text" class="form-control"
+                                                                  placeholder="Enter the above code here"
+                                                                  name="captcha">
+                                                      </div>
+
+                                                </div>
+                                             
                                                 <div class="form-group text-center">
                                                       <br>
                                                       <button type="submit" class="btn btn-danger btn-block">Create
@@ -174,6 +208,18 @@
       <script src="admin/js/vendor.js"></script>
       <script src="admin/js/adminx.js"></script>
       <script src="admin/js/custom.js"></script>
+
+      <script type="text/javascript">
+      $('#reload').click(function() {
+            $.ajax({
+                  type: 'GET',
+                  url: 'reload-captcha',
+                  success: function(data) {
+                        $(".captcha span").html(data.captcha);
+                  }
+            });
+      });
+      </script>
 </body>
 
 </html>

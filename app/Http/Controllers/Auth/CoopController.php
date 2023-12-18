@@ -54,7 +54,7 @@ class CoopController extends Controller
      public function coop_insert(Request $request){
         $request->validate([
             'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fname'     => 'required|string|max:255',
+            'fullname'     => 'required|string|max:255',
             'password'  => 'required|string|min:6|confirmed',
             'cooperative'=> 'required|string|max:255',
             'address'   => 'required|max:225',
@@ -81,7 +81,7 @@ class CoopController extends Controller
         $user = new User();
         $user->role         = $role;
         $user->role_name    = $role_name;
-        $user->fname        =$request->fname;
+        $user->fname        =$request->fullname;
         $user->code         = $code;
         $user->coopname     = $request->cooperative;
         $user->address      = $request->address;
@@ -134,14 +134,14 @@ class CoopController extends Controller
 
            $request->validate([
             'email'=>'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fname'   => 'required|fullname',
+            'fullname'   => 'required|fullname',
             'captcha'   => 'required|captcha',
-          ]);
-
+          ],
+          ['captcha.captcha'  =>'Wrong code.'],);
           $user = new User();
           $user->role         = $role;
           $user->role_name    = $role_name;
-          $user->fname        = $request->fname;
+          $user->fname        = $request->fullname;
           $user->code         = $request->code;
           $user->coopname     = $coopname;
           $user->email        = $request->email;

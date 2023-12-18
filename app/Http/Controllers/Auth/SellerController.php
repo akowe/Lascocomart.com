@@ -50,12 +50,13 @@ class SellerController extends Controller
     {
         $request->validate([
             'email'     =>'required|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fname'     => 'required|string|max:255', 
+            'fullname'     => 'required|string|max:255', 
             'password'  => 'required|string|min:6|confirmed', 
             'code'      => 'string', 
-            'coopname'  => 'required|string|max:255', 
+            'seller'  => 'required|string|max:255', 
             'captcha'   => 'required|captcha',
-        ]);
+          ],
+          ['captcha.captcha'  =>'Wrong code.'],);
  
            $role = '3';
            $role_name = 'merchant';
@@ -65,9 +66,9 @@ class SellerController extends Controller
             $user = new User();
             $user->role         = $role;
             $user->role_name    = $role_name;
-            $user->fname        =$request->fname;
+            $user->fname        =$request->fullname;
             $user->code         = $code;
-            $user->coopname     = $request->coopname;
+            $user->coopname     = $request->seller;
             $user->email        = $request->email;
             $user->password     = Hash::make($request['password']);
             $user->save();

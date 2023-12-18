@@ -76,7 +76,7 @@
                                                             <input id="address" type="text" name="address" value=""
                                                                   required class="form-control">
 
-                                                            @error('name')
+                                                            @error('address')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -109,10 +109,10 @@
                                                             Name <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
-                                                            <input id="fname" type="text" name="fname" value="" required
+                                                            <input id="fname" type="text" name="fullname" value="" required
                                                                   class="form-control">
 
-                                                            @error('fname')
+                                                            @error('fullname')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -136,7 +136,7 @@
                                                             <span class="small text-primary">image size max: 300
                                                                   kb</span>
 
-                                                            @error('cert')
+                                                            @error('file')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -234,12 +234,12 @@
                                                             not a robot</label>
                                                       <div class="col-md-6">
                                                             <input id="captcha" type="text" class="form-control"
-                                                                  placeholder="Enter the above code here" name="captcha">
-                                                          
+                                                                  placeholder="Enter the above code here"
+                                                                  name="captcha">
                                                       </div>
 
                                                 </div>
-                                                <div>
+                                               
 
                                                 </div>
                                                 <div class="form-group text-center">
