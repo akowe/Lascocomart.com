@@ -88,6 +88,12 @@
                                                             @else
                                                             @endif
                                                       </p>
+                                                      <p>@if(!empty($details['last_login']))
+                                                            <span class="small ">Last login:</span> <span
+                                                                  class="small text-danger">{{ date('m/d/Y', strtotime($details->last_login))}}</span>
+                                                            @else
+                                                            @endif
+                                                      </p>
                                                 </td>
                                                 <td><span class="text-capitalize">{{ $details['fname'] }} &nbsp;
                                                             {{ $details['lname'] }}</span>

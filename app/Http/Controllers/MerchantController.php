@@ -62,7 +62,7 @@ class MerchantController extends Controller
         $phone          = $user->phone;
         $account_number = $user->account_number;
         $account_name   = $user->account_name;
-          if($address == ''  && $phone ==''  && $account_number =='' && $account_name =='')
+          if($account_number =='' && $account_name =='')
           {
             Session::flash('status', ' You are yet to complete your profile!'); 
             Session::flash('alert-class', 'alert-success'); 
