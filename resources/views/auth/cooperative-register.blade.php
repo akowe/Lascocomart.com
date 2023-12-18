@@ -221,7 +221,7 @@
                                                                   <span> {!! captcha_img('flat') !!}</span>
                                                                   <button type="button" class="btn btn-danger"
                                                                         class="reload" id="reload">
-                                                                        &#x21bb;
+                                                                        &#x21bb;<small> Reset</small>
                                                                   </button>
                                                             </div>
 
