@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 use App\Models\Categories;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Wishlist;
 use Auth;
 
@@ -28,7 +29,6 @@ class CategoriesController extends Controller
             $details = Arr::pluck($result, 'result');
             return response()->json($details);
         }
-     
     }
 
     public function category(Request $request){ 
@@ -40,16 +40,18 @@ class CategoriesController extends Controller
             $wish = Product::join('wishlist', 'wishlist.product_id', '=', 'products.id')
              ->get('products.*');
 
-             if( $search = $request->input('search')){
+            if( $search = $request->input('search')){
                 $vendor = DB::table('users')->selectRaw('coopname')
                 ->whereColumn('id', 'products.seller_id');
 
                 $products = DB::table('products')
                 ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                ->join('users', 'users.id', '=', 'products.seller_id')
                 ->select('*')
                 ->selectSub($vendor, 'coopname')
                 ->orwhere('prod_name', 'LIKE', "%{$search}%") // search by product name
-                ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
+               // ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
+                ->orwhere('users.coopname', 'LIKE', "%{$search}%") //search by vendor name
                 ->where('products.prod_status', 'approve')
                 ->paginate($request->get('per_page', 9));
                 $pagination = $products->appends ( array ('search' => $search) );
@@ -59,9 +61,9 @@ class CategoriesController extends Controller
                         
                 }
                 return view ( 'category', compact('products', 'wishlist', 'wish') )->with('status', 'No Details found. Try to search again !' );
-                }
+            }
                         
-                elseif ($search = $request->input('category')) {
+            elseif ($search = $request->input('category')) {
                     $vendor = DB::table('users')->selectRaw('coopname')
                     ->whereColumn('id', 'products.seller_id');
     
@@ -81,19 +83,21 @@ class CategoriesController extends Controller
                     }
                     return view ( 'category', compact('products', 'wishlist', 'wish') )->with('status', 'No Details found. Try to search again !' );
           
-                    }   
-         }
-         else{
+            }   
+        }
+        else{
             if( $search = $request->input('search')){
                 $vendor = DB::table('users')->selectRaw('coopname')
                 ->whereColumn('id', 'products.seller_id');
 
                 $products = DB::table('products')
                 ->join('categories', 'categories.cat_id', '=', 'products.cat_id')
+                ->join('users', 'users.id', '=', 'products.seller_id')
                 ->select('*')
                 ->selectSub($vendor, 'coopname')
                 ->orwhere('products.prod_name', 'LIKE', "%{$search}%") // search by product name
-                ->orwhere('products.prod_brand', 'LIKE', "%{$search}%") //search by brand name
+               // ->orwhere('products.prod_brand', 'LIKE', "%{$search}%") //search by brand name
+                ->orwhere('users.coopname', 'LIKE', "%{$search}%") //search by vendor name
                 ->where('products.prod_status', 'approve')
                 ->paginate($request->get('per_page', 9));
                 $pagination = $products->appends ( array ('search' => $search) );
