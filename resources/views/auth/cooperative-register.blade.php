@@ -105,8 +105,7 @@
 
                                                 <div class="row mb-3">
                                                       <label for="name"
-                                                            class="col-md-4 col-form-label text-md-end">Admin Full
-                                                            Name <i class="text-danger">*</i></label>
+                                                            class="col-md-4 col-form-label text-md-end">Admin Fullname <i class="text-danger">*</i></label>
 
                                                       <div class="col-md-6 form-group">
                                                             <input id="fname" type="text" name="fullname" value="" required
