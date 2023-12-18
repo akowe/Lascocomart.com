@@ -532,7 +532,29 @@
              </li>
              <hr style="color:#f7f7f7;">
              </hr>
+             <li class="sidebar-nav-item">
+                   <a href="{{ url('logActivity') }}" class="sidebar-nav-link collapsed" 
+                         aria-controls="products">
+                         <span class="sidebar-nav-icon">
+                               <i class="fa fa-eye"></i>
+                         </span>
+                         <span class="sidebar-nav-name">
+                              Activities
+                         </span>
+                         <span class="sidebar-nav-end">
+                               <i data-feather="chevron-right" class="nav-collapse-icon"></i>
+                         </span>
+                   </a>
 
+                   <ul class="sidebar-sub-nav collapse" id="products">
+                       
+
+
+                   </ul>
+             </li>
+             <hr style="color:#f7f7f7;">
+             </hr>
+           
              <li class="sidebar-nav-item">
                    <a href="{{ url('products_list') }}" class="sidebar-nav-link collapsed" 
                          aria-controls="products">

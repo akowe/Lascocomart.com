@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Review extends Model
 {
-    use HasFactory;
+    use HasFactory, Loggable;
 
     protected $table = 'reviews';
     protected $fillable = [

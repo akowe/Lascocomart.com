@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Review;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Loggable;
     
      protected $fillable = [
         'cat_id', 'prod_name', 'quantity', 'prod_brand', 'description',  'old_price', 'price',  'image', 

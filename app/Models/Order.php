@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Loggable;
     protected $table = 'orders';
     protected $guarded=['id'];
     
