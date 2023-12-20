@@ -154,7 +154,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                       <label for="captcha"
-                                                            class="col-md-4 col-form-label text-md-right">I am
+                                                            class="col-md-4 col-form-label text-md-right">I'm
                                                             not a robot</label>
                                                       <div class="col-md-6">
                                                             <input id="captcha" type="text" class="form-control"
