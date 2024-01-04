@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FcmgOrderItem extends Model
 {
     use HasFactory;
-     protected $table = 'fcmgorder_items';
+     protected $table = 'fmcgorder_items';
 
     //   public function attributes()
     // {

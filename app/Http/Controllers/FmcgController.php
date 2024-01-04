@@ -21,6 +21,7 @@ use Session;
 use Paystack;
 use Storage;
 use Mail;
+use Carbon\Carbon;
 
 
 class FmcgController extends Controller
@@ -62,14 +63,14 @@ class FmcgController extends Controller
         $phone          = $user->phone;
         $account_number = $user->account_number;
         $account_name   = $user->account_name;
-          if($address == ''  && $phone ==''  && $account_number =='' && $account_name =='')
+          if($account_number =='' && $account_name =='')
           {
             Session::flash('status', ' You are yet to complete your profile!'); 
             Session::flash('alert-class', 'alert-success'); 
             return Redirect::to('/profile');     
           }
           
-     // count all members belonging to a fcmg
+     // count all members belonging to a fmcg
         $code = Auth::user()->code; // get the code for the logedin fcmg
         $id = Auth::user()->id; //
       // select all user except the current login
@@ -77,14 +78,14 @@ class FmcgController extends Controller
                     ->where('code', $code);
                    
 // count products from members
-        $count_product = User::join('fcmg_products', 'fcmg_products.seller_id', '=', 'users.id')
-                          // ->where('fcmg_products.prod_status', 'pending')
-                         ->where('fcmg_products.prod_status', 'approve')
+        $count_product = User::join('fmcg_products', 'fmcg_products.seller_id', '=', 'users.id')
+                          // ->where('fmcg_products.prod_status', 'pending')
+                         ->where('fmcg_products.prod_status', 'approve')
                           ->where('users.id', $id);
                           
-        $fmcgproduct = User::join('fcmg_products', 'fcmg_products.seller_id', '=', 'users.id')
-                         ->where('fcmg_products.prod_status', 'pending')
-                         ->where('fcmg_products.prod_status', 'approve')
+        $fmcgproduct = User::join('fmcg_products', 'fmcg_products.seller_id', '=', 'users.id')
+                         ->where('fmcg_products.prod_status', 'pending')
+                         ->where('fmcg_products.prod_status', 'approve')
                          ->orwhere('users.id', $id)
 
                         ->paginate( $request->get('per_page', 10));
