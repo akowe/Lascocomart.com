@@ -117,7 +117,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{ url('fcmgproductsview') }}">
+                   <a class="sidebar-nav-link " href="{{ url('fmcgproductsview') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-product-hunt"></i>
                          </span> <span class="sidebar-nav-name">FMCG Products</span>
@@ -133,10 +133,10 @@
                    <a class="sidebar-nav-link " href="{{ url('profile') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-user-o"></i>
-                         </span> 
+                         </span>
                          <span class="sidebar-nav-name">Profile</span>
 
-                   <span class="sidebar-nav-end">
+                         <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
                          </span>
                    </a>
@@ -177,7 +177,7 @@
 
  <!-- Sidebar FCMG -->
  @auth
- @if(Auth::user()->role_name == 'fcmg')
+ @if(Auth::user()->role_name == 'fmcg')
  <div class="adminx-sidebar expand-hover push">
        <p></p>
 
@@ -186,7 +186,7 @@
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a href="{{ url('fcmg') }}" class="sidebar-nav-link active">
+                   <a href="{{ url('fmcg') }}" class="sidebar-nav-link active">
                          <span class="sidebar-nav-icon">
                                <i data-feather="home"></i>
                          </span>
@@ -202,7 +202,7 @@
              <hr style="color:#f7f7f7;">
              </hr>
 
-             <li class="sidebar-nav-item">
+             <!-- <li class="sidebar-nav-item">
                    <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#member" aria-expanded="false"
                          aria-controls="member">
                          <span class="sidebar-nav-icon">
@@ -228,38 +228,23 @@
                                </a>
                          </li>
                    </ul>
-             </li>
-             <hr style="color:#f7f7f7;">
+             </li> -->
+
              </hr>
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#products" aria-expanded="false"
-                         aria-controls="members">
+                   <a href="{{url('fcmgproduct')}}" class="sidebar-nav-link">
                          <span class="sidebar-nav-icon">
-                               <i data-feather="users"></i>
+                               <i class="fa fa-list"></i>
                          </span>
                          <span class="sidebar-nav-name">
                                Products
                          </span>
                          <span class="sidebar-nav-end">
-                               <i data-feather="chevron-right" class="nav-collapse-icon"></i>
+
                          </span>
+
                    </a>
 
-                   <ul class="sidebar-sub-nav collapse" id="products">
-
-                         <li class="sidebar-nav-item">
-                               <a href="{{url('fcmgproduct')}}" class="sidebar-nav-link">
-                                     <span class="sidebar-nav-abbr">
-                                           Add
-                                     </span>
-
-                                     <span class="sidebar-nav-name">
-                                           &nbsp; new
-                                     </span>
-                               </a>
-                         </li>
-
-                   </ul>
              </li>
 
              <hr style="color:#f7f7f7;">
@@ -269,7 +254,13 @@
                    <a class="sidebar-nav-link " href="{{ url('profile') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-user-o"></i>
-                         </span>Profile
+                         </span>
+                         <span class="sidebar-nav-name">
+                               Profile
+                         </span>
+                         <span class="sidebar-nav-end">
+
+                         </span>
                    </a>
 
              </li>
@@ -281,7 +272,13 @@
             document.getElementById('logout-form').submit();">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-right"></i>
-                         </span>{{ __('Logout') }}
+                         </span>
+                         <span class="sidebar-nav-name">
+                         {{ __('Logout') }}
+                         </span>
+                         <span class="sidebar-nav-end">
+
+                         </span>
                    </a>
                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                          @csrf
@@ -296,7 +293,13 @@
                    <a class="sidebar-nav-link " href="{{ url('/') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-left"></i>
-                         </span> LascocoMart
+                         </span> 
+                         <span class="sidebar-nav-name">
+                         FMCG
+                         </span>
+                         <span class="sidebar-nav-end">
+
+                         </span>
                    </a>
 
              </li>
@@ -363,7 +366,7 @@
                    <a class="sidebar-nav-link " href="{{ url('/') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-left"></i>
-                         </span> 
+                         </span>
                          <span class="sidebar-nav-name">LascocoMart</span>
                    </a>
 
@@ -415,7 +418,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link "href="{{url('all-products')}}" >
+                   <a class="sidebar-nav-link " href="{{url('all-products')}}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-product-hunt"></i>
                          </span>
@@ -427,7 +430,7 @@
                          </span>
                    </a>
 
-                  
+
              </li>
              <hr style="color:#f7f7f7;">
              </hr>
@@ -446,7 +449,7 @@
                    </a>
 
              </li> -->
-          
+
 
              <li class="sidebar-nav-item">
                    <a class="sidebar-nav-link " href="{{ url('profile') }}">
@@ -454,9 +457,9 @@
                                <i class="fa fa-user-o"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                         Profile
+                               Profile
                          </span>
-                         
+
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
                          </span>
@@ -473,7 +476,7 @@
                                <i class="fa fa-arrow-circle-right"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                         {{ __('Logout') }}
+                               {{ __('Logout') }}
                          </span>
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -491,9 +494,9 @@
                    <a class="sidebar-nav-link " href="{{ url('/') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-left"></i>
-                         </span> 
+                         </span>
                          <span class="sidebar-nav-name">
-                         LascocoMart
+                               LascocoMart
                          </span>
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -511,7 +514,7 @@
 
 
  <!-- SIDE BAR for Super admin -->
- @auth 
+ @auth
  @if(Auth::user()->role_name == 'superadmin')
  <div class="adminx-sidebar expand-hover push">
        <p></p>
@@ -533,13 +536,12 @@
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a href="{{ url('logActivity') }}" class="sidebar-nav-link collapsed" 
-                         aria-controls="products">
+                   <a href="{{ url('logActivity') }}" class="sidebar-nav-link collapsed" aria-controls="products">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-eye"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                              Activities
+                               Activities
                          </span>
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -547,17 +549,16 @@
                    </a>
 
                    <ul class="sidebar-sub-nav collapse" id="products">
-                       
+
 
 
                    </ul>
              </li>
              <hr style="color:#f7f7f7;">
              </hr>
-           
+
              <li class="sidebar-nav-item">
-                   <a href="{{ url('products_list') }}" class="sidebar-nav-link collapsed" 
-                         aria-controls="products">
+                   <a href="{{ url('products_list') }}" class="sidebar-nav-link collapsed" aria-controls="products">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-th-list"></i>
                          </span>
@@ -703,8 +704,7 @@
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link c"  href="{{url('about_us') }}" 
-                         aria-controls="about">
+                   <a class="sidebar-nav-link c" href="{{url('about_us') }}" aria-controls="about">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-file"></i>
                          </span>
@@ -716,14 +716,13 @@
                          </span>
                    </a>
 
-                  
+
              </li>
 
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link "  href="{{url('privacy') }}" 
-                         aria-controls="privacy">
+                   <a class="sidebar-nav-link " href="{{url('privacy') }}" aria-controls="privacy">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-file"></i>
                          </span>
@@ -735,14 +734,14 @@
                          </span>
                    </a>
 
-                
+
              </li>
 
 
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{url('refund') }}" class="sidebar-nav-link" 
+                   <a class="sidebar-nav-link " href="{{url('refund') }}" class="sidebar-nav-link"
                          aria-controls="return">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-file"></i>
@@ -753,7 +752,7 @@
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
                          </span>
-                   </a> 
+                   </a>
 
              </li>
 
@@ -761,8 +760,7 @@
              <hr style="color:#f7f7f7;">
              </hr>
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link "   href="{{url('tandc') }}" class="sidebar-nav-link" 
-                         aria-controls="terms">
+                   <a class="sidebar-nav-link " href="{{url('tandc') }}" class="sidebar-nav-link" aria-controls="terms">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-file"></i>
                          </span>

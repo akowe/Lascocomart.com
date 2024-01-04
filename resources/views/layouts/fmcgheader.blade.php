@@ -268,12 +268,12 @@
                                                       style="cursor: pointer;">
                                                       <i class="fa fa-shopping-cart"></i>
                                                       <span>Cart</span>
-                                                      <div class="qty">{{ count((array) session('fcmgcart')) }}</div>
+                                                      <div class="qty">{{ count((array) session('fmcgcart')) }}</div>
                                                 </a>
                                                 @php $total = 0 @endphp
                                                 @php $items = 0 @endphp
                                                 @php $item = 1 @endphp
-                                                @foreach((array) session('fcmgcart') as $id => $details)
+                                                @foreach((array) session('fmcgcart') as $id => $details)
                                                 @php $total += $details['price'] * $details['quantity']
                                                 @endphp
 
@@ -281,10 +281,10 @@
                                                 @endphp
                                                 @endforeach
                                                 <div class="cart-dropdown">
-                                                      @if(session('fcmgcart'))
+                                                      @if(session('fmcgcart'))
                                                       <div class="cart-list">
 
-                                                            @foreach(session('fcmgcart') as $id => $details)
+                                                            @foreach(session('fmcgcart') as $id => $details)
                                                             <div class="product-widget">
 
                                                                   <div class="product-img">
@@ -318,9 +318,9 @@
 
 
                                                       <div class="cart-btns">
-                                                            <a href="{{ route('fcmgcart') }}" class="cursor">View
+                                                            <a href="{{ route('fmcgcart') }}" class="cursor">View
                                                                   Cart</a>
-                                                            <a href="{{ url('/fcmgcheckout')}}"
+                                                            <a href="{{ url('/fmcgcheckout')}}"
                                                                   style="cursor:pointer;">Checkout <i
                                                                         class="fa fa-arrow-circle-right"></i></a>
                                                       </div>
@@ -395,9 +395,9 @@
                                                       </form>
                                                 </div>
                                                 @endif
-                                                @if(Auth::user()->role_name == 'fcmg')
+                                                @if(Auth::user()->role_name == 'fmcg')
                                                 <div class="dropdown-content">
-                                                      <a href="{{ route('fcmg') }}">Dashboard</a>
+                                                      <a href="{{ route('fmcg') }}">Dashboard</a>
 
                                                       <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

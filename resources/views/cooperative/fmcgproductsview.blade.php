@@ -1,4 +1,4 @@
-@extends('layouts.fcmgheader')
+@extends('layouts.fmcgheader')
 
 
        @section('content')
@@ -70,7 +70,7 @@
                     <!-- products start -->
 
                    
-                          @foreach($fcmgproductsview as $product)
+                          @foreach($fmcgproductsview as $product)
                              <div class="col-md-3">
                        
                                 <div class="product ">
@@ -132,7 +132,7 @@
                                             </div>
                         
                                           <button type="button" class="add-to-cart"> 
-                                             <a class="add-to-cart-btn btn" href="{{ route('fcmgaddToCart', $product->id) }}">
+                                             <a class="add-to-cart-btn btn" href="{{ route('fmcgaddToCart', $product->id) }}">
                                                 <i class="fa fa-shopping-cart"></i> 
                                              add to cart</a>
                                          </button>
@@ -183,7 +183,7 @@
                              <div class="space-ten"></div>
                                 <div class="add-to-cart">
                                     <button type="button" class="add-to-cart btn"> 
-                                    <a class="add-to-cart-btn btn" href="{{ route('fcmgaddToCart', $product->id) }}">
+                                    <a class="add-to-cart-btn btn" href="{{ route('fmcgaddToCart', $product->id) }}">
                                     <i class="fa fa-shopping-cart"></i> Add To Cart</a></button>     
                                     </div>
                          </div>
@@ -198,10 +198,10 @@
                     <!-- store bottom filter -->
                         <div class="store-filter clearfix">
                              <!-- count number of item per page -->
-                           <!--  <span class="store-qty">Showing {{ $fcmgproductsview->firstItem() }} - {{ $fcmgproductsview->lastItem() }} of {{$fcmgproductsview->total()}} products</span> -->
+                           <!--  <span class="store-qty">Showing {{ $fmcgproductsview->firstItem() }} - {{ $fmcgproductsview->lastItem() }} of {{$fmcgproductsview->total()}} products</span> -->
                     
                     <!-- pagination -->
-                    {{ $fcmgproductsview->links() }}
+                    {{ $fmcgproductsview->links() }}
                         </div>
                         <!-- /store bottom filter -->
 

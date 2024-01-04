@@ -641,7 +641,7 @@ class CooperativeController extends Controller
 
     public function fmcgproductsview(Request $request)
     {
-
+ 
         $fmcgproductsview = FcmgProduct::where('prod_status', 'approve')
                     ->orderBy('created_at', 'desc')
                     ->paginate($request->get('per_page', 16));
