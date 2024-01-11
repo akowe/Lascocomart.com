@@ -110,18 +110,6 @@ class CardPaymentController extends Controller
 
         if($status == "success"){ 
             //Checking to Ensure the transaction was succesful
-        
-            //$voucher = Voucher::where('user_id', $member)->first();
-            //$balance = $voucher->credit + $totalAmount;
-            //$user = User::where('id', $member)->where('role_name','cooperative')->first();
-            //oucher::where('user_id', $user->id)->update(['credit' => $balance]);
-                
-                // if($user->role_name == 'cooperative'){
-                //     $user_voucher = Voucher::where('user_id', $id)->first();
-                //     $user_voucher = $user_voucher->credit + $totalAmount;
-                //     $user_voucher->save();
-                // }
-        
             $totalAmount = $total - $delivery_fee;
             $order = new Order();
             $order->user_id     = Auth::user()->id;
@@ -133,17 +121,7 @@ class CardPaymentController extends Controller
             $order->pay_status = $pay_status;
             $order->pay_type      = $pay_type;
             $order->save();
-            
-        //     Order::create([
-        //     'user_id' => $member_id,
-        //     'total'       => $totalAmount,
-        //     'delivery_fee'    => $delivery_fee, 
-        //   'grandtotal'       => $amount / 100,
-        //   'order_number' =>$order_number,
-        //     'status'     => $order_status,
-        //     'pay_status' => $pay_status,
-        //   'pay_type'     => $pay_type,
-        // ]);
+           
 
             $data = [];
 

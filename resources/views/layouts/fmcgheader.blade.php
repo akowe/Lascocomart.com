@@ -307,9 +307,9 @@
                                                       @endif
 
                                                       <div class="cart-btns">
-                                                            <a href="{{ route('cart') }}" class="cursor">View
+                                                            <a href="{{ route('fmcgcart') }}" class="cursor">View
                                                                   Cart</a>
-                                                            <a href="{{ url('/checkout')}}"
+                                                            <a href="{{ url('/fmcgcheckout')}}"
                                                                   style="cursor:pointer;">Checkout <i
                                                                         class="fa fa-arrow-circle-right"></i></a>
                                                       </div>

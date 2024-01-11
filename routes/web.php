@@ -108,13 +108,11 @@ Route::get('fmcg', [App\Http\Controllers\FmcgController::class, 'index'])->name(
 //product
 Route::get('/', [App\Http\Controllers\ProductController::class, 'index']);  
 Route::get('/vendor-product/{vendor}', [App\Http\Controllers\ProductController::class, 'vendorProduct'])->name('vendor-product');
-
 Route::get('cart', [App\Http\Controllers\ProductController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{id}', [App\Http\Controllers\ProductController::class, 'addToCart'])->name('add.to.cart');
 Route::get('add-to-wish/{id}', [App\Http\Controllers\ProductController::class, 'addWishList'])->name('add.to.wish');
 Route::get('wishlist', [App\Http\Controllers\ProductController::class, 'wishlist'])->name('wishlist');
 Route::post('remove-from-wish', [App\Http\Controllers\ProductController::class, 'removeWishlist'])->name('remove.from.wish');
-
 Route::post('update-cart', [App\Http\Controllers\ProductController::class, 'update'])->name('update.cart');
 Route::post('remove-from-cart', [App\Http\Controllers\ProductController::class, 'remove'])->name('remove.from.cart');
 Route::get('/category/', [App\Http\Controllers\CategoriesController::class,'category'])->name('category');
@@ -175,12 +173,11 @@ Route::get('remove-product/{id}', [App\Http\Controllers\MerchantController::clas
 Route::get('sales_preview', [App\Http\Controllers\MerchantController::class, 'sales_preview'])->name('sales_preview');
 //Fcmg  product
 Route::get('fmcg-add-to-cart/{id}', [App\Http\Controllers\FmcgProductController::class, 'fmcgAddToCart'])->name('add.product.to.cart');
-//Route::get('fmcgproductsview', [App\Http\Controllers\CooperativeController::class, 'fmcgproductsview'])->name('fmcgproductsview');
-//Route::get('fmcgcart', [CooperativeController::class, 'fmcgcart'])->name('fmcgcart');
-//Route::get('fmcgaddToCart/{id}', [CooperativeController::class, 'fmcgaddToCart'])->name('fmcgaddToCart');
-//Route::patch('fmcg-update-cart', [CooperativeController::class, 'fmcgupdate'])->name('fmcg-update.cart');
-//Route::delete('fmcg-remove-cart', [CooperativeController::class, 'fmcgremove'])->name('fmcg.remove.cart');
-//Route::match(['get', 'post'],'fmcgcheckout', [CooperativeController::class, 'fmcgcheckout']); 
+Route::get('fmcgCart', [App\Http\Controllers\FmcgProductController::class, 'cart'])->name('fmcgcart');
+Route::get('add-to-wish/{id}', [App\Http\Controllers\ProductController::class, 'addWishList'])->name('add.to.wish');
+Route::get('wishlist', [App\Http\Controllers\ProductController::class, 'wishlist'])->name('wishlist');
+Route::post('remove-from-wish', [App\Http\Controllers\ProductController::class, 'removeWishlist'])->name('remove.from.wish');
+Route::match(['get', 'post'],'fmcgcheckout', [App\Http\Controllers\FmcgProductController::class, 'checkout']); 
 Route::get('/fmcg_category/', [App\Http\Controllers\FmcgProductController::class,'fmcgCategory'])->name('fmcg_category');
 Route::get('fmcgs_products', [App\Http\Controllers\FmcgProductController::class, 'fmcgsProducts'])->name('fmcgs_products');
 Route::get('fmcg_add_product', [App\Http\Controllers\FmcgController::class, 'addProduct'])->name('fmcg_add_product');
