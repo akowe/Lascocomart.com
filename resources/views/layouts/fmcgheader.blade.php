@@ -8,9 +8,8 @@
         Cooperatives, Cooperatives in Nigeria, Blender, phones, smart phones, tv, television, Phones, Computer, Accessories, Electronics, Foodstuffs, Furniture, Home Appliances, Kitchen, Automobile, Groceries, Fashion, online store, ecommerce website, shopping cart, ecommerce, cooperatives ecommerce,
         cooperatives eccomerce in Nigeria, Buy, Sell, cooperative ecommerce platform in Nigeria" />
 
-      <title>LascocoMart - FMCG Products</title>
-      <link rel="icon" type="image/x-icon" href="./images/lascoco-logo.png">
-
+      <title>LascocoMart</title>
+      <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
 
       <!-- dataTable css -->
       <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -22,10 +21,8 @@
       <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
       <!-- Bootstrap -->
+      <!-- <link type="text/css" rel="stylesheet" href="css/bootstrap4.min.css" /> -->
       <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
-
-
-
       <!-- Slick -->
       <link type="text/css" rel="stylesheet" href="css/slick.css" />
       <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
@@ -35,15 +32,12 @@
 
       <!-- Font Awesome Icon -->
       <link rel="stylesheet" href="css/font-awesome.min.css">
-
       <!-- Custom stlylesheet -->
-      <link type="text/css" rel="stylesheet" href="css/style.css" />
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <link type="text/css" rel="stylesheet" href="css/style.css?v=echo filemtime();" />
+
 
       <style>
       /**Added CSS***/
-
       .productnamecssnew {
 
             white-space: nowrap;
@@ -79,11 +73,21 @@
       }
       </style>
 
-      <script>
-      function memucoopmartheremyFunction(x) {
-            x.classList.toggle("changecoopmartmenu");
-      }
+      <!--Start of Tawk.to Script-->
+      <script type="text/javascript">
+      var Tawk_API = Tawk_API || {},
+            Tawk_LoadStart = new Date();
+      (function() {
+            var s1 = document.createElement("script"),
+                  s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/64973fe5cc26a871b0247a7d/1h3nd36r6';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+      })();
       </script>
+      <!--End of Tawk.to Script-->
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
       <script>
@@ -106,22 +110,21 @@
             <div id="top-header" class="hidden-xs hidden-sm">
                   <div class="container">
                         <ul class="header-links pull-left">
-                              <li><a href="#"><i class="fa fa-phone"></i> +234 (0) 906 496 5041</a></li>
+
                               <li><a href="mailto:info@lascocomart.com"><i
                                                 class="fa fa-envelope-o"></i>info@lascocomart.com</a>
                               </li>
 
                         </ul>
                         <ul class="header-links pull-right">
-                              <!--   <li><a href="" data-toggle="modal" data-target="#coopModal"><i class="fa fa-users"></i>  Cooperative</a></li> -->
-                              <!--<li><a href="" data-toggle="modal" data-target="#merchantModal"><i class="fa fa-user-o"></i> Sell on CoopMart</a></li>-->
+                           
                               <li>
                                     <!--show member name-->
                                     @if (Route::has('login'))
                                     @auth
                               <li class="nav-item dropdown">
 
-                                    <a href="" class="dropbtn"> My Account</a>
+                                    <a href="" class="dropbtn"> <i class="fa fa-user"></i> My Account</a>
                                     @if(Auth::user()->role_name == 'cooperative')
                                     <div class="dropdown-content">
                                           <a href="{{ route('cooperative') }}">Dashboard</a>
@@ -168,7 +171,6 @@
                                     </div>
                                     @endif
 
-
                                     @if(Auth::user()->role_name == 'superadmin')
                                     <div class="dropdown-content">
                                           <a href="{{ route('superadmin') }}">Dashboard</a>
@@ -197,8 +199,8 @@
                                     </div>
                                     @endif
                                     @else
-                                    <a href="" data-toggle="modal" data-target="#loginModal"
-                                          class="text-sm text-gray-700 dark:text-gray-500 underline">Log in /
+                                    <a href="{{ route('login') }}"
+                                          class="text-sm text-gray-700 dark:text-gray-500 underline">Login /
                                           Register</a>
                               </li>
                               @endauth
@@ -218,48 +220,37 @@
                         <!-- row -->
                         <div class="row">
                               <!-- LOGO -->
-                              <div class="col-md-2 ">
+                              <div class="col-md-2">
 
-                                    <div class="header-logo">
-                                          <a href="{{ url('/') }}"> <img src="./images/lascoco-logo.png" alt="LASCOCO"
-                                                      title="LASCOCO" width="139" height="93">
+                                    <div class="header-logo ">
+                                          <a href="{{ url('/') }}" class="logo">
+                                                <img src="./images/lascoco-logo.png" alt="LASCOCO" title="LASCOCO"
+                                                      width="139" height="93">
                                           </a>
                                     </div>
-
                               </div>
-
-
-
                               <!-- /LOGO -->
 
                               <!-- SEARCH BAR -->
-                              <div class="col-md-8">
+                              <div class="col-md-7 text-center">
                                     <div class="header-search">
 
-                                          <form action="{{ route('category') }}" method="GET" multipart/form-data>
-                                                <select name="category" id="input" class="input-select">
-                                                      <option value="">All Categories</option>
-                                                      @foreach (\App\Models\Categories::select('cat_name')->get() as
-                                                      $category)
-                                                      <option value="{{ $category->cat_name }}">
-                                                            <a
-                                                                  href="{{route('category')}}?category={{ $category->cat_name }}">{{ $category['cat_name'] }}</a>
-                                                      </option>
-                                                      @endforeach
-                                                </select>
+                                          <form action="{{ route('fmcg_category') }}" method="GET"
+                                                enctype="multipart/form-data">
+                                                       <input class="input search" type="text" name="search" id="search"
+                                                      placeholder="Search for FMCG or products" autocomplete="off"
+                                                      style="width:76%;" />
+                                                <button class="search-btn" type="submit">
+                                                      Search</button>
 
-
-                                                <input class="input" type="text" name="search"
-                                                      placeholder="Search here" />
-                                                <button class="search-btn" type="submit">Search</button>
                                           </form>
-
                                     </div>
                               </div>
+
                               <!-- /SEARCH BAR -->
 
                               <!-- ACCOUNT -->
-                              <div class="col-md-2">
+                              <div class="col-md-3">
                                     <div class="header-ctn">
 
                                           <!-- Cart -->
@@ -268,12 +259,12 @@
                                                       style="cursor: pointer;">
                                                       <i class="fa fa-shopping-cart"></i>
                                                       <span>Cart</span>
-                                                      <div class="qty">{{ count((array) session('fmcgcart')) }}</div>
+                                                      <div class="qty">{{ count((array) session('cart')) }}</div>
                                                 </a>
                                                 @php $total = 0 @endphp
                                                 @php $items = 0 @endphp
                                                 @php $item = 1 @endphp
-                                                @foreach((array) session('fmcgcart') as $id => $details)
+                                                @foreach((array) session('cart') as $id => $details)
                                                 @php $total += $details['price'] * $details['quantity']
                                                 @endphp
 
@@ -281,10 +272,10 @@
                                                 @endphp
                                                 @endforeach
                                                 <div class="cart-dropdown">
-                                                      @if(session('fmcgcart'))
+                                                      @if(session('cart'))
                                                       <div class="cart-list">
 
-                                                            @foreach(session('fmcgcart') as $id => $details)
+                                                            @foreach(session('cart') as $id => $details)
                                                             <div class="product-widget">
 
                                                                   <div class="product-img">
@@ -300,7 +291,8 @@
                                                                         <h6 class="product-price">
                                                                               <span class="qty">{{ $details['quantity'] }}
                                                                                     &nbsp; x </span>
-                                                                              ₦ {{ number_format($details['price']) }}
+                                                                              ₦
+                                                                              {{ number_format($details['price']) }}
                                                                         </h6>
                                                                   </div>
                                                             </div><!-- product widget-->
@@ -314,13 +306,10 @@
                                                       </div>
                                                       @endif
 
-
-
-
                                                       <div class="cart-btns">
-                                                            <a href="{{ route('fmcgcart') }}" class="cursor">View
+                                                            <a href="{{ route('cart') }}" class="cursor">View
                                                                   Cart</a>
-                                                            <a href="{{ url('/fmcgcheckout')}}"
+                                                            <a href="{{ url('/checkout')}}"
                                                                   style="cursor:pointer;">Checkout <i
                                                                         class="fa fa-arrow-circle-right"></i></a>
                                                       </div>
@@ -328,13 +317,24 @@
                                                 </div><!-- cart dropdownt -->
                                           </div><!-- /Cart -->
 
+                                          <!-- WishList -->
+                                          @if (Route::has('login'))
+                                          @auth
+                                        
+                                          @endauth
+                                          @endif
+                                          <div class="hidden-lg hidden-md">
+                                                <!-- <a href="{{ route('seller-register') }}" data-toggle="modal" data-target="#merchantModal"> Sell on LascocoMart</a> -->
+                                                <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
+                                          </div>
+
                                           <!--show member name-->
 
-                                          <div class=" nav-item dropdown hidden-lg hidden-md">
+                                          <div class="nav-item dropdown hidden-lg hidden-md">
                                                 @if (Route::has('login'))
                                                 @auth
 
-                                                <a href="" class="dropbtn"> My Account</a>
+                                                <a href="" class="dropbtn"><i class="fa fa-user"></i> My Account</a>
                                                 @if(Auth::user()->role_name == 'cooperative')
                                                 <div class="dropdown-content">
                                                       <a href="{{ route('cooperative') }}">Dashboard</a>
@@ -349,7 +349,6 @@
                                                       </form>
                                                 </div>
                                                 @endif
-
 
                                                 @if(Auth::user()->role_name == 'merchant')
                                                 <div class="dropdown-content">
@@ -366,7 +365,6 @@
                                                 </div>
                                                 @endif
 
-
                                                 @if(Auth::user()->role_name == 'member')
                                                 <div class="dropdown-content">
                                                       <a href="{{ route('dashboard') }}">Dashboard</a>
@@ -380,7 +378,6 @@
                                                       </form>
                                                 </div>
                                                 @endif
-
 
                                                 @if(Auth::user()->role_name == 'superadmin')
                                                 <div class="dropdown-content">
@@ -410,10 +407,9 @@
                                                 </div>
                                                 @endif
                                                 @else
-                                                <a href="" data-toggle="modal" data-target="#loginModal"
-                                                      class="text-sm text-gray-700 dark:text-gray-500 underline">Login
-                                                      /
-                                                      Register</a>
+                                                <a href="{{ route('login') }}"
+                                                      class="text-sm text-gray-700 dark:text-gray-500 underline">
+                                                      Login/Register</a>
                                                 @endauth
                                                 @endif
                                           </div>
@@ -446,8 +442,32 @@
       </header>
       <!-- /HEADER -->
 
-      <div class="container">
+      <!-- NAVIGATION -->
+      <nav id="navigation" class="">
+            <!-- container -->
+            <div class="container">
+                  <!-- responsive-nav -->
+                  <div id="responsive-nav">
+                        <!-- NAV -->
+                        <ul class="main-nav nav navbar-nav" style="font-size:14px;">
+                              <li class="active"><a href="{{ url('fmcgs_products')}}">FMCG</a></li>
+                              @foreach (\App\Models\Categories::select('cat_name')->limit(8)->get() as
+                              $id => $category)
+                              <li class="myClass" data-option-id="{{ $category->cat_name }}">
+                                    <a
+                                          href="{{route('fmcg_category')}}?category={{ $category->cat_name }}">{{ $category->cat_name }}</a>
+                              </li>
 
+                              @endforeach
+                        </ul>
+                        <!-- /NAV -->
+                  </div>
+                  <!-- /responsive-nav -->
+            </div>
+            <!-- /container -->
+      </nav>
+
+      <div class="container">
             @if(session('success'))
             <div class="alert alert-success">
                   {{ session('success') }}
@@ -455,42 +475,13 @@
             @endif
       </div>
 
-
-
-
       <!-- /NAVIGATION -->
       @yield('content')
       @extends('layouts.footer')
       @yield('scripts')
 
 
-      <script type="text/javascript">
-      $('#search').on('keyup', function() {
-            $value = $(this).val();
-            $.ajax({
-                  headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                        "X-Requested-With": "XMLHttpRequest"
-                  }
-                  type: 'get',
-                  url: '{{URL::to('
-                  category ')}}',
-                  data: {
-                        'search': $value
-                  },
-                  success: function(data) {
-                        $('tbody').html(data);
-                  }
-            });
-      })
-      </script>
-      <script type="text/javascript">
-      $.ajaxSetup({
-            headers: {
-                  'csrftoken': '{{ csrf_token() }}'
-            }
-      });
-      </script>
+
 
 
 </body>

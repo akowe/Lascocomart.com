@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ReviewController;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 use App\Models\FcmgProduct;
 use App\Models\Categories;
 use App\Models\Voucher;
@@ -20,7 +21,7 @@ use App\Models\Privacy;
 use App\Models\ReturnRefund;
 use App\Models\Terms;
 use App\Models\Review;
-
+use App\Models\Wishlist;
 use Session;
 use Validator;
 use Auth;
@@ -28,56 +29,64 @@ use Mail;
 
 use Carbon\Carbon;
 
-class FcmgProductController extends Controller
+class FmcgProductController extends Controller
 {
 
-      public function __construct()
-    {
-         // $this->middleware('auth');
-       
+    public function __construct(){
+          $this->middleware('auth');      
     }
     //
-      public function index( Request $request)
-    {
-
-        $products = Product::where('prod_status', 'approve')
-                    ->orderBy('created_at', 'desc')
-                    ->paginate($request->get('per_page', 16));
-
-        $seller = Arr::pluck($fcmgproducts, 'seller_id');
-        $get_seller_id = implode(" ",$seller);
-
-        //get sellers details
-        $email          = User::where('id', $get_seller_id)->get('email');
-        $seller_details = User::where('id', $get_seller_id)->get();
-
-        $seller_name    = Arr::pluck($seller_details, 'fname');
-        $name           = implode(" ",$seller_name);
-       
-
-          //send email notification of low stock
-        
-        foreach($products   as $key => $prod){
-             $date = Carbon::tomorrow();
-              if($prod->quantity < 1 & $prod->created_at <= $date){
+    public function fmcgsProducts( Request $request){
+        $stars = DB::table('reviews')->selectRaw('ROUND(AVG(rating))')
+            ->whereColumn('product_id', 'fmcg_products.id');
+    
+            $products =  DB::table('fmcg_products')
+            ->join('users', 'users.id', '=', 'fmcg_products.seller_id')
+            ->select('fmcg_products.*', 'users.coopname')
+         
+            ->selectSub($stars, 'rating')
+            ->where('fmcg_products.prod_status', 'approve')
+            ->orderBy('fmcg_products.created_at', 'desc')
+            ->paginate($request->get('per_page', 8));
+          
+            $seller = Arr::pluck($products, 'seller_id');
+            $get_seller_id = implode(" ",$seller);
+            
+            //get sellers details
+            $email          = User::where('id', $get_seller_id)->get('email');
+            $seller_details = User::where('id', $get_seller_id)->get();
+    
+            $seller_name    = Arr::pluck($seller_details, 'fname');
+            $name           = implode(" ",$seller_name);
+    
+            //send email notification of low stock
+            foreach($products   as $key => $prod){
+                $date = Carbon::now();
+                if($prod->quantity < 1){
+                    FcmgProduct::where('id', $prod->id)
+                    ->update(['date' => $date]);
+    
+                $data = array(
+                    'name'      => $name,
+                    'prod_name' => $prod->prod_name,
+                    'quantity'  => $prod->quantity,  
+                    'message'   => 'Your product'  
+                                                
+                );
+                Mail::to($email)->send(new LowStockEmail($data));
+                $quantity='0';
+                FcmgProduct::whereDate( 'date', '<=', now()->subDays(7))
+                ->where('quantity', $quantity)
+                ->update(['prod_status' => 'remove']);
+                }
+               
+            }  
+                 
+                \LogActivity::addToLog('FmcgProduct page');
+                return view('fmcgs_products', compact('products'));
            
-            $data = array(
-                'name'      => $name,
-                'prod_name' => $prod->prod_name,
-                'quantity'  => $prod->quantity,  
-                'message'   => 'Your product'  
-                                            
-               );
-             Mail::to($email)->send(new LowStockEmail($data));
-              //soft delete product from landing page - update status
-             Product::where('id', $prod->id)
-                    ->update(['prod_status' => 'remove']);
-          }
-
+           
         }
-              
-        return view('products', compact('products'));
-    }
   
     /**
      * my code on Method
@@ -91,32 +100,138 @@ class FcmgProductController extends Controller
   
 
     //Search by product, join product and category table
-    public function fmcgcategory(Request $request){
+    public function fmcgCategory(Request $request){
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $wishlist = Wishlist::where('user_id', $id)->get('product_id');
+            $getWish = Arr::pluck($wishlist, 'product_id');
+            $saveItem = implode(',', $getWish);
+            $wish = FcmgProduct::join('wishlist', 'wishlist.product_id', '=', 'fmcg_products.id')
+             ->get('fmcg_products.*');
 
-        //$products = Product::paginate( $request->get('per_page', 4));
-        // ->paginate( $request->get('per_page', 1));
-       
-        // search  from select option tag
-        if ( $search = $request->input('category')) {
+            if( $search = $request->input('search')){
+                $vendor = DB::table('users')->selectRaw('coopname')
+                ->whereColumn('id', 'fmcg_products.seller_id');
 
-             $products =Product::join('categories', 'categories.cat_id', '=', 'products.cat_id')
-                   
-                    ->where('categories.cat_name', 'LIKE', "%{$search}%") 
-                   ->get(['products.*', 'categories.cat_name']);
-                return view('products', compact('products'));
+                $products = DB::table('fmcg_products')
+                ->join('categories', 'categories.cat_id', '=', 'fmcg_products.cat_id')
+                ->join('users', 'users.id', '=', 'fmcg_products.seller_id')
+                ->select('*')
+                ->selectSub($vendor, 'coopname')
+                ->orwhere('prod_name', 'LIKE', "%{$search}%") // search by product name
+               // ->orWhere('prod_brand', 'LIKE', "%{$search}%") //search by brand name
+                ->orwhere('users.coopname', 'LIKE', "%{$search}%") //search by vendor name
+                ->where('fmcg_products.prod_status', 'approve')
+                ->paginate($request->get('per_page', 9));
+                $pagination = $products->appends ( array ('search' => $search) );
+                if (count ( $products ) > 0){
+                    \LogActivity::addToLog('Search');
+                    return view ( 'fmcg_category' , compact('products', 'wishlist', 'wish'))->withDetails ( $products )->withQuery ( $search );
+                        
+                }
+                return view ( 'fmcg_category', compact('products', 'wishlist', 'wish') )->with('status', 'No Details found. Try to search again !' );
             }
+                        
+            elseif ($search = $request->input('category')) {
+                    $vendor = DB::table('users')->selectRaw('coopname')
+                    ->whereColumn('id', 'fmcg_products.seller_id');
+    
+                    $products = DB::table('fmcg_products')
+                    ->join('categories', 'categories.cat_id', '=', 'fmcg_products.cat_id')
+                    ->select('*')
+                    ->selectSub($vendor, 'coopname')
+                    ->where('categories.cat_name', 'LIKE', "%{$search}%")
+                    ->where('fmcg_products.prod_status', 'approve') 
+                    // ->get(['fmcg_products.*', 'categories.cat_name']);
+                    ->paginate($request->get('per_page', 9));
+                    $pagination = $products->appends ( array ('category' => $search) );
+                    if (count ( $products ) > 0){
+                        \LogActivity::addToLog('Search');
+                        return view ( 'fmcg_category' , compact('products', 'wishlist', 'wish'))->withDetails ( $products )->withQuery ( $search );
+                        
+                    }
+                    return view ( 'fmcg_category', compact('products', 'wishlist', 'wish') )->with('status', 'No Details found. Try to search again !' );
+          
+            }   
         }
+        else{
+            if( $search = $request->input('search')){
+                $vendor = DB::table('users')->selectRaw('coopname')
+                ->whereColumn('id', 'fmcg_products.seller_id');
+
+                $products = DB::table('fmcg_products')
+                ->join('categories', 'categories.cat_id', '=', 'fmcg_products.cat_id')
+                ->join('users', 'users.id', '=', 'fmcg_products.seller_id')
+                ->select('*')
+                ->selectSub($vendor, 'coopname')
+                ->orwhere('fmcg_products.prod_name', 'LIKE', "%{$search}%") // search by product name
+               // ->orwhere('fmcg_products.prod_brand', 'LIKE', "%{$search}%") //search by brand name
+                ->orwhere('users.coopname', 'LIKE', "%{$search}%") //search by vendor name
+                ->where('fmcg_products.prod_status', 'approve')
+                ->paginate($request->get('per_page', 9));
+                $pagination = $products->appends ( array ('search' => $search) );
+                if (count ( $products ) > 0){
+                    \LogActivity::addToLog('Search');
+                    return view ( 'fmcg_category' , compact('products'))->withDetails ( $products )->withQuery ( $search );
+                        
+                }
+                return view ( 'fmcg_category', compact('products') )->with('status', 'No Details found. Try to search again !' );
+                }
+                        
+                elseif ($search = $request->input('category')) {
+                    $vendor = DB::table('users')->selectRaw('coopname')
+                    ->whereColumn('id', 'fmcg_products.seller_id');
+    
+                    $products = DB::table('fmcg_products')
+                    ->join('categories', 'categories.cat_id', '=', 'fmcg_products.cat_id')
+                    ->select('*')
+                    ->selectSub($vendor, 'coopname')
+                    ->where('categories.cat_name', 'LIKE', "%{$search}%")
+                    ->where('fmcg_products.prod_status', 'approve') 
+                    // ->get(['fmcg_products.*', 'categories.cat_name']);
+                    ->paginate($request->get('per_page', 9));
+                    $pagination = $products->appends ( array ('category' => $search) );
+                    if (count ( $products ) > 0){
+                        \LogActivity::addToLog('Search');
+                        return view ( 'fmcg_category' , compact('products'))->withDetails ( $products )->withQuery ( $search );
+                        
+                    }
+                    return view ( 'fmcg_category', compact('products') )->with('status', 'No Details found. Try to search again !' );
+          
+                    }
+
+         }
+    }
 
    
-    public function fmcgaddToCart($id)
-    {
-        $product = Product::findOrFail($id);
-          
+    
+    public function cart(){
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $wishlist = Wishlist::where('user_id', $id)->get('product_id');
+            $getWish = Arr::pluck($wishlist, 'product_id');
+            $saveItem = implode(',', $getWish);
+            $wish = FcmgProduct::join('wishlist', 'wishlist.product_id', '=', 'fmcg_products.id')
+             ->get('fmcg_products.*');
+             \LogActivity::addToLog('Cart');
+             return view('cart', compact( 'wishlist', 'wish'));
+         }
+         else{
+            return view('cart');
+         }
+     
+    }
+
+
+
+   
+    public function fmcgAddToCart($id){
+        $product = FcmgProduct::findOrFail($id);
         $cart = session()->get('cart', []);
   
         if(isset($cart[$id])) {
             $cart[$id]['quantity']++;
-        } else {
+        } else { 
             $cart[$id] = [
                 "prod_name" => $product->prod_name,
                 "quantity" => 1,
@@ -127,92 +242,90 @@ class FcmgProductController extends Controller
 
             ];
         }
-          
         session()->put('cart', $cart);
+        \LogActivity::addToLog('New cart');
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
   
-   
 
-    public function fmcgupdate(Request $request)
-    {
+    public function update(Request $request){ 
         if($request->id && $request->quantity){
             $cart = session()->get('cart');
             $cart[$request->id]["quantity"] = $request->quantity;
             session()->put('cart', $cart);
             session()->flash('success', 'Cart updated successfully');
         }
+        \LogActivity::addToLog('Update cart');
+        return redirect()->back()->with('success', 'Cart Updated Successfully !');
     }
   
-   
-
-    public function fmcgremove(Request $request)
+    public function remove(Request $request)
     {
         if($request->id) {
             $cart = session()->get('cart');
             if(isset($cart[$request->id])) {
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
+                session()->flash('success', 'Product removed successfully');
+               
             }
-            session()->flash('success', 'Product removed successfully');
-
+            \LogActivity::addToLog('Remove cart');
+             return redirect()->back()->with('success', 'Product removed successfully');
         }
     }
 
     
-    public function fmcgcheckout(Request $request){
+    public function checkout(Request $request){
 
          if( Auth::user()){
-     
-        //get voucher from input
-        $id = Auth::user()->id;// get user id for the login member
-
-          $cart = session()->get('cart');
-          $cart[$request->id]["quantity"] = $request->quantity;
-          $cart[$request->id]["price"] = $request->price;
-           $cart[$request->id]["seller_id"] = $request->seller_id;
-
-          $totalAmount = 0;
-
-        foreach ($cart as $item) {
-            $totalAmount += $item['price'] * $item['quantity'];
-
-            // check if sufficient credit limit
-             //$getcredit = \DB::table('vouchers')->where('user_id', $id)->first()->credit;
-
-
-    //$getcredit = \DB::table('vouchers')->where('user_id', $id)->get('credit')->first();
-
-           //   $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
-           //          ->where('vouchers.user_id', $id)
-           //          ->get(['vouchers.credit'])->first(); 
-
-           // if($credit < $totalAmount){
-
-           //  Session::flash('credit', ' Your balance is low. Reduce your  items or contact your cooperative admin!'); 
-           //  Session::flash('alert-class', 'alert-danger'); 
-
-           // }
+            $firstTimeLoggedIn = Auth::user()->last_login;
+            if (empty($firstTimeLoggedIn)) {
+              $data = 
+              array( 
+              'name'      => Auth::user()->fname,
+              'coopname'  => Auth::user()->coopname,
+                'email'     => Auth::user()->email,
+            );
+              Mail::to(Auth::user()->email)->send(new MemberWelcomeEmail($data));  
+              $user = Auth::user();
+              $user->last_login = Carbon::now();
+              $user->save();
+            }
+            elseif (!empty($firstTimeLoggedIn)) {
+              $user = Auth::user();
+              $user->last_login = Carbon::now();
+              $user->save();
+            }
+            $id = Auth::user()->id;// get user id for the login member
+            $cart = session()->get('cart');
+            $cart[$request->id]["quantity"] = $request->quantity;
+            $cart[$request->id]["price"] = $request->price;
+            $cart[$request->id]["seller_id"] = $request->seller_id;
+            $totalAmount = 0;
+            foreach ($cart as $item) {
+                $totalAmount += $item['price'] * $item['quantity'];
 
             }//foreach
-
            $voucher = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
-                    ->where('vouchers.user_id', $id)
-                    ->get(['vouchers.*', 'users.*']); 
+            ->where('vouchers.user_id', $id)
+            ->get(['vouchers.*', 'users.*']); 
 
-        return view('checkout', compact('voucher'));
-    }
-
+            $wishlist = Wishlist::where('user_id', $id)->get('product_id');
+            $getWish = Arr::pluck($wishlist, 'product_id');
+            $saveItem = implode(',', $getWish);
+            $wish = FcmgProduct::join('wishlist', 'wishlist.product_id', '=', 'fmcg_products.id')
+            ->get('products.*');
+            \LogActivity::addToLog('Checkout');
+            return view('checkout', compact('voucher', 'wishlist', 'wish'));
+        }
         else { return Redirect::to('/login');}
 
         }
 
-      
-
-  public function fmcgaddToCartPreview($id)
+    
+  public function addToCartPreview($id)
     {
         $product = Product::findOrFail($id);
-          
         $cart = session()->get('cart', []);
   
         if(isset($cart[$id])) {
@@ -224,18 +337,17 @@ class FcmgProductController extends Controller
                 "price" => $product->price,
                 "image" => $product->image,
                 "id" => $product->id
-
             ];
         }
-          
         session()->put('cart', $cart);
+        \LogActivity::addToLog('View cart');
         return redirect()->route('cart')->with('success', 'Product added to cart successfully!');
     }
 
 
 public function fmcgpreview(Request $request, $prod_name)
 {
-   $products = Product::where('prod_name', $prod_name)->get('*');
+   $products = FcmgProduct::where('prod_name', $prod_name)->get('*');
      return view('preview', compact('products'));
      
 }

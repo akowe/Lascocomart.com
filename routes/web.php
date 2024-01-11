@@ -129,8 +129,6 @@ Route::get('preview/{prod_name}', [App\Http\Controllers\ProductController::class
 // view cooperative members
 Route::get('members', [App\Http\Controllers\CooperativeController::class, 'members'])->name('members');
 Route::get('delete-member/{id}', [App\Http\Controllers\CooperativeController::class, 'deleteMember'])->name('delete-member');
-// view cooperative members
-Route::get('fmcgmembers', [App\Http\Controllers\FmcgController::class, 'fmcgmembers'])->name('fmcgmembers');
 // add credit for members
 Route::post('/credit_limit', [App\Http\Controllers\VoucherController::class, 'credit_limit'])->name('credit_limit');
 Route::post('limit', [App\Http\Controllers\VoucherController::class, 'limit'])->name('limit');
@@ -172,14 +170,23 @@ Route::post('upload-image', [App\Http\Controllers\MerchantController::class, 'st
 Route::get('all-products', [App\Http\Controllers\MerchantController::class, 'allProducts'])->name('all-products');
 Route::put('update-product/{id}', [App\Http\Controllers\MerchantController::class, 'updateProduct'])->name('update-product');
 Route::get('edit-product/{id}', [App\Http\Controllers\MerchantController::class, 'editProduct'])->name('edit-product');
-
 //soft delete.
 Route::get('remove-product/{id}', [App\Http\Controllers\MerchantController::class, 'removeProduct'])->name('remove-product');
 Route::get('sales_preview', [App\Http\Controllers\MerchantController::class, 'sales_preview'])->name('sales_preview');
-//Fcmg upload product
-Route::get('fmcgproduct', [App\Http\Controllers\FmcgController::class, 'fmcgproduct'])->name('fmcgproduct');
-Route::post('fmcgupload-image', [App\Http\Controllers\FmcgController::class, 'fmcgstore']);
-Route::get('fmcgall_products', [App\Http\Controllers\FmcgController::class, 'fmcgall_products'])->name('fmcgall_products');
+//Fcmg  product
+Route::get('fmcg-add-to-cart/{id}', [App\Http\Controllers\FmcgProductController::class, 'fmcgAddToCart'])->name('add.product.to.cart');
+//Route::get('fmcgproductsview', [App\Http\Controllers\CooperativeController::class, 'fmcgproductsview'])->name('fmcgproductsview');
+//Route::get('fmcgcart', [CooperativeController::class, 'fmcgcart'])->name('fmcgcart');
+//Route::get('fmcgaddToCart/{id}', [CooperativeController::class, 'fmcgaddToCart'])->name('fmcgaddToCart');
+//Route::patch('fmcg-update-cart', [CooperativeController::class, 'fmcgupdate'])->name('fmcg-update.cart');
+//Route::delete('fmcg-remove-cart', [CooperativeController::class, 'fmcgremove'])->name('fmcg.remove.cart');
+//Route::match(['get', 'post'],'fmcgcheckout', [CooperativeController::class, 'fmcgcheckout']); 
+Route::get('/fmcg_category/', [App\Http\Controllers\FmcgProductController::class,'fmcgCategory'])->name('fmcg_category');
+Route::get('fmcgs_products', [App\Http\Controllers\FmcgProductController::class, 'fmcgsProducts'])->name('fmcgs_products');
+Route::get('fmcg_add_product', [App\Http\Controllers\FmcgController::class, 'addProduct'])->name('fmcg_add_product');
+Route::post('fmcgstore', [App\Http\Controllers\FmcgController::class, 'fmcgstore']);
+Route::get('fmcgall_products', [App\Http\Controllers\FmcgController::class, 'allProducts'])->name('fmcgall_products');
+Route::get('fmcgmembers', [App\Http\Controllers\FmcgController::class, 'fmcgmembers'])->name('fmcgmembers');
 //soft delete.
 Route::post('/fmcgremove_product', [App\Http\Controllers\FmcgController::class, 'fmcgremove_product'])->name('fmcgremove_product');
 Route::get('fmcgsales_preview', [App\Http\Controllers\FmcgController::class, 'fmcgsales_preview'])->name('fmcgsales_preview');
@@ -191,16 +198,7 @@ Route::get('coopall_products', [App\Http\Controllers\CooperativeController::clas
 //soft delete.
 Route::get('coopremove_product/{id}', [App\Http\Controllers\CooperativeController::class, 'coopremove_product'])->name('coopremove_product');
 Route::get('coopsales_preview', [App\Http\Controllers\CooperativeController::class, 'coopsales_preview'])->name('coopsales_preview');
-Route::get('fmcgproductsview', [App\Http\Controllers\CooperativeController::class, 'fmcgproductsview'])->name('fmcgproductsview');
-Route::get('fmcgcart', [CooperativeController::class, 'fmcgcart'])->name('fmcgcart');
-Route::get('fmcgaddToCart/{id}', [CooperativeController::class, 'fmcgaddToCart'])->name('fmcgaddToCart');
-//Route::patch('fmcg-update-cart', [CooperativeController::class, 'fmcgupdate'])->name('fmcg-update.cart');
-Route::delete('fmcg-remove-cart', [CooperativeController::class, 'fmcgremove'])->name('fmcg.remove.cart');
-Route::match(['get', 'post'],'fmcgcheckout', [CooperativeController::class, 'fmcgcheckout']); 
-Route::get('fmcgconfirm_order',[OrderController::class, 'fmcgconfirm_order'])->name('fmcgconfirm_order');
-Route::post('fmcgorder', [OrderController::class, 'fmcgorder'])->name('fmcgorder'); 
 Route::get('about', [App\Http\Controllers\ProductController::class, 'about_us'])->name('about');
-
 Route::put('about_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'about_update'])->name('about_update');
 Route::get('about_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'about_edit'])->name('about_edit');
 Route::get('about_us', [App\Http\Controllers\SuperAdminController::class, 'about'])->name('about_us');
@@ -222,7 +220,6 @@ Route::get('terms', [App\Http\Controllers\ProductController::class, 'terms'])->n
 Route::get('add-new-admin', [App\Http\Controllers\SuperAdminController::class, 'addNewAdmin'])->name('add-new-admin');
 Route::post('/add_admin', [App\Http\Controllers\Auth\NewAdminUserController::class, 'newAdminUser'])->name('add_admin');
 Route::get('delete-user/{id}', [App\Http\Controllers\SuperAdminController::class, 'deleteUser'])->name('delete-user');
-
 //update profile
 Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
 Route::post('/update_profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
@@ -230,7 +227,6 @@ Route::post('/seller-update-profile', [App\Http\Controllers\HomeController::clas
 Route::post('/cooperative-update-profile', [App\Http\Controllers\HomeController::class, 'cooperativeUpdateProfile'])->name('cooperative-update-profile');
 Route::post('/fmcg-update-profile', [App\Http\Controllers\HomeController::class, 'fmcgUpdateProfile'])->name('fmcg-update-profile');
 Route::post('/member-update-profile', [App\Http\Controllers\HomeController::class, 'memberUpdateProfile'])->name('member-update-profile');
-
 Route::post('/update_profile_image', [App\Http\Controllers\HomeController::class, 'updateProfileImage'])->name('update_profile_image');
 Route::post('/update_certificate', [App\Http\Controllers\HomeController::class, 'updateCertificate'])->name('update_certificate');
 Route::post('newsletter', [App\Http\Controllers\NewsletterController::class, 'store']);

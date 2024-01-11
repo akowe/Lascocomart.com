@@ -262,7 +262,7 @@
                                           <p class="card-text">Note that all uploaded products would be review and
                                                 approve by LascocoMart before it becomes visible. This is within
                                                 48hours.</p>
-                                          <a href="{{ route('fmcgproduct') }}" class="btn btn-danger">Add Products</a>
+                                          <a href="{{ route('fmcg_add_product') }}" class="btn btn-danger">Add Products</a>
 
 
                                     </div>

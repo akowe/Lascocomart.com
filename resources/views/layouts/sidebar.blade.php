@@ -117,7 +117,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{ url('fmcgproductsview') }}">
+                   <a class="sidebar-nav-link " href="{{ url('fmcgs_products') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-product-hunt"></i>
                          </span> <span class="sidebar-nav-name">FMCG Products</span>
@@ -232,7 +232,7 @@
 
              </hr>
              <li class="sidebar-nav-item">
-                   <a href="{{url('fcmgproduct')}}" class="sidebar-nav-link">
+                   <a href="{{url('fmcgall_products')}}" class="sidebar-nav-link">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-list"></i>
                          </span>
@@ -290,7 +290,7 @@
              </hr>
 
              <li class="sidebar-nav-item">
-                   <a class="sidebar-nav-link " href="{{ url('/') }}">
+                   <a class="sidebar-nav-link " href="{{ url('fmcgs_products') }}">
                          <span class="sidebar-nav-icon">
                                <i class="fa fa-arrow-circle-left"></i>
                          </span> 

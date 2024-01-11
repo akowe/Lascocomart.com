@@ -257,7 +257,7 @@
 
                                               
                                                        <input class="input search" type="text" name="search" id="search"
-                                                      placeholder="Search for products here" autocomplete="off"
+                                                      placeholder="Search for products or vendor" autocomplete="off"
                                                       style="width:76%;" />
                                                 <button class="search-btn" type="submit">
                                                       Search</button>
