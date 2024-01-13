@@ -132,7 +132,7 @@
                                     @if(Auth::user()->role_name == 'cooperative')
                                     <div class="dropdown-content">
                                           <a href="{{ route('cooperative') }}">Dashboard</a>
-
+                                          <a href="{{ url('fmcgs_products') }}">FMCG</a>
                                           <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}
@@ -387,7 +387,7 @@
                                                 @if(Auth::user()->role_name == 'cooperative')
                                                 <div class="dropdown-content">
                                                       <a href="{{ route('cooperative') }}">Dashboard</a>
-
+                                                      <a href="{{ url('fmcgs_products') }}">FMCG </a>
                                                       <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                                             {{ __('Logout') }}
