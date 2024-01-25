@@ -48,7 +48,8 @@ class ProductController extends Controller
      
         ->selectSub($stars, 'rating')
         ->where('products.prod_status', 'approve')
-        ->orderBy('products.created_at', 'desc')
+       ->orderBy('products.created_at', 'desc')
+        ->inRandomOrder()
         ->paginate($request->get('per_page', 16));
       
         $seller = Arr::pluck($products, 'seller_id');
@@ -104,7 +105,8 @@ class ProductController extends Controller
             ->join('users', 'users.id', '=', 'products.seller_id')
             ->where('wishlist.user_id', $id)
             ->where('users.code', $vendorName)
-            ->orderBy('users.coopname', 'desc')
+           ->orderBy('users.coopname', 'desc')
+            ->inRandomOrder()
              ->get('products.*');
            
             
