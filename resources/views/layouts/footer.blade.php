@@ -56,7 +56,7 @@
                                        <p style="font-size:12px;">Our mission keeps us focused and accountable, Our
                                              vision drives is and our values dictate how we succeed.</p>
                                        <ul class="footer-links" style="font-size:12px;">
-                                             <li><i class="fa fa-map-marker"></i>2A Mabinu Ori Street,</li>
+                                             <li><i class="fa fa-map-marker"></i>12A Mabinu Ori Street,</li>
                                              <li><i class="">&nbsp; &nbsp;</i> Charly Boy Gbagada Lagos</li>
                                              <li><a href="#"><i class="fa fa-phone"></i>+234 (0) 906 496 5041</a></li>
                                              <li><a href="mailto:info@lascocomart.com"><i
