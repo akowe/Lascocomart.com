@@ -17,7 +17,7 @@
                   <div class="pb-3">
                         <h1>Products</h1>
                        <h4 class="text-end">
-                        <a href="{{ route('add_new_product') }}" class="btn btn-outline-danger"><i class="fa fa-plus"></i> Add New Product</a></h4>
+                        <a href="{{ route('add_new_product') }}" class="btn btn-danger"><i class="fa fa-plus"></i> Add New Product</a></h4>
                   </div>
             </div>
             <div class="container-fluid">
