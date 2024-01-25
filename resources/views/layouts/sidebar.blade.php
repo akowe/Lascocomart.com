@@ -73,7 +73,7 @@
                                <i class="fa fa-product-hunt"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                               Products
+                               Store
                          </span>
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -237,7 +237,7 @@
                                <i class="fa fa-list"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                               Products
+                               Store
                          </span>
                          <span class="sidebar-nav-end">
 
@@ -423,7 +423,7 @@
                                <i class="fa fa-product-hunt"></i>
                          </span>
                          <span class="sidebar-nav-name">
-                               Products
+                               Store
                          </span>
                          <span class="sidebar-nav-end">
                                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
