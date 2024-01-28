@@ -170,7 +170,7 @@
                              
                               <span class="vendor" style="font-size:12px;">VENDOR: <a
                                           href="{{ route('vendor-product', $product->coopname) }}" title="view store"
-                                          class="text-danger"> {{$product->coopname}}</a>
+                                          class=" text-capitalize text-danger "> {{$product->coopname}}</a>
                               </span>
 
 

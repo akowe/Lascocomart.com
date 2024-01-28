@@ -1120,6 +1120,9 @@ align-content: center;
   font-size:12px;
   /* height: 2em ; */
 }
+.product .vendor a{
+  text-transform: lowercase ;
+}
 
 
 .checked {
