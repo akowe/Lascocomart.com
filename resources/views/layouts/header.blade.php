@@ -506,8 +506,9 @@
                                     <a
                                           href="{{route('category')}}?category={{ $category->cat_name }}">{{ $category->cat_name }}</a>
                               </li>
-
                               @endforeach
+                              <!--MEGA MENU -->
+                              
                         </ul>
                         <!-- /NAV -->
                   </div>

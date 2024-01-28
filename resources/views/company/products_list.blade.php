@@ -102,10 +102,9 @@
                                                                   @foreach($products as $product)
                                                                   <tr class="small">
                                                                         <td class="small">
-                                                                              {{ date('m/d/Y', strtotime($product->created_at))}}
+                                                                              {{ date('d/m/Y', strtotime($product->created_at))}}
                                                                         </td>
-                                                                        <td>{{$product['fname']}} {{$product['lname']}}
-                                                                        </td>
+                                                                        <td><span class="text-capitalize">{{$product['coopname']}} </span></td>
 
                                                                         <td>{{$product['prod_name']}}</td>
                                                                         <td>{{$product['quantity'] }}</td>

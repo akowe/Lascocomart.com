@@ -289,8 +289,8 @@ class SuperAdminController extends Controller
       if( Auth::user()->role_name  == 'superadmin'){
         $products = User::join('products', 'products.seller_id', '=', 'users.id')
         ->where('products.prod_status', '!=', 'remove')
-        ->orderBy('products.date', 'desc')
-        ->get(['products.*', 'users.fname', 'users.lname']); 
+        ->orderBy('products.created_at', 'desc') 
+        ->get(['products.*', 'users.fname', 'users.lname', 'users.coopname']); 
                         
                          // count products from members
         $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
