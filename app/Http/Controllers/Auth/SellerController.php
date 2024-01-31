@@ -50,10 +50,10 @@ class SellerController extends Controller
     {
         $request->validate([
             'email'     =>'required|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fullname'     => 'required|string|max:255', 
+            'fullname'  => 'required|string|max:255', 
             'password'  => 'required|string|min:6|confirmed', 
             'code'      => 'string', 
-            'seller'  => 'required|string|max:255', 
+            'seller'    => 'required|string|max:255', 
             'captcha'   => 'required|captcha',
           ],
           ['captcha.captcha'  =>'Wrong code.'],);

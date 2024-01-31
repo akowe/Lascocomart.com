@@ -53,14 +53,14 @@ class CoopController extends Controller
 
      public function coop_insert(Request $request){
         $request->validate([
-            'email'     =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fullname'     => 'required|string|max:255',
-            'password'  => 'required|string|min:6|confirmed',
-            'cooperative'=> 'required|string|max:255',
-            'address'   => 'required|max:225',
-            'cooptype'  => 'required|max:225',
-            'file'      => 'required|mimes:jpg,jpeg,png|max:300',
-            'captcha'   => 'required|captcha',
+            'email'       =>'required|email|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'fullname'    => 'required|string|max:255',
+            'password'    => 'required|string|min:6|confirmed',
+            'cooperative' => 'required|string|max:255',
+            'address'     => 'required|max:225',
+            'cooptype'    => 'required|max:225',
+            'file'        => 'required|mimes:jpg,jpeg,png|max:300',
+            'captcha'     => 'required|captcha',
             ],
             ['captcha.captcha'  =>'Wrong code.'],);
             // dd("You are here :) .");
@@ -133,9 +133,9 @@ class CoopController extends Controller
            $role_name = 'member';
 
            $request->validate([
-            'email'=>'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'fullname'   => 'required|fullname',
-            'captcha'   => 'required|captcha',
+            'email'       =>'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'fullname'    => 'required|string|max:255',
+            'captcha'     => 'required|captcha',
           ],
           ['captcha.captcha'  =>'Wrong code.'],);
           $user = new User();
