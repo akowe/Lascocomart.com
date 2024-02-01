@@ -143,6 +143,8 @@ Route::get('sales-details', [App\Http\Controllers\SuperAdminController::class, '
 // Super mark an order as paid
 Route::post('/mark_paid', [App\Http\Controllers\SuperAdminController::class, 'mark_paid'])->name('mark_paid');
 Route::get('products_list', [App\Http\Controllers\SuperAdminController::class, 'products_list'])->name('products_list');
+Route::get('edit-vendor-product/{id}', [App\Http\Controllers\SuperAdminController::class, 'editVendorProduct'])->name('edit-vendor-product');
+
 Route::get('removed_product', [App\Http\Controllers\SuperAdminController::class, 'removed_product'])->name('removed_product');
 Route::get('users_list', [App\Http\Controllers\SuperAdminController::class, 'users_list'])->name('users_list');
 Route::put('user_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'user_update'])->name('user_update');

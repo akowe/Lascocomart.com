@@ -13,7 +13,11 @@
                               <li class="breadcrumb-item active" aria-current="page">Edit product</li>
                         </ol>
                   </nav>
-
+<div class="container bg-warning">
+      <div class="row">
+            <div class="col-12 text-center"><b>Confirm from vendor before editing their product</b></div>
+      </div>
+</div>
                   <div class="pb-3">
                         <h4> @if (session('status'))
                               <div class="alert alert-success" role="alert">
@@ -34,7 +38,7 @@
                                     <div class="form-group">
                                           <h6>Product Name</h6>
                                           <input type="text" value="{{$product->prod_name}}" name="productname"
-                                                class="form-control" readonly>
+                                                class="form-control">
                                     </div>
                                     <div class="form-group">
                                           <h6> Quantity </h6>
@@ -51,7 +55,7 @@
                                                 class="form-control">
                                     </div>
                                     <div class="form-group">
-                                          <h6>New Price</h6>
+                                          <h6>Seller (new) Price</h6>
                                           <input type="text" value="{{$product->seller_price}}" name="price"
                                                 class="form-control">
                                     </div>

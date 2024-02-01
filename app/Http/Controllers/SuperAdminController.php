@@ -305,6 +305,16 @@ class SuperAdminController extends Controller
    
     }
 
+    //edit product
+  public function editVendorProduct(Request $request, $id){
+    if( Auth::user()->role_name  == 'superadmin'){
+        $product = Product::find($id);
+        return view('company.edit-vendor-product', compact('product')); 
+     }
+      else { return Redirect::to('/login');
+    }
+}
+
     public function mark_paid(Request $request)
     {
         if(null !== $_POST['submit']){

@@ -80,34 +80,42 @@
                                                             CoopMart landing page.</p>
 
                                                       <p class="card-text text-danger">Click "Remove" if you want to
-                                                            stop products from being visible on LascocoMart landing page.
+                                                            stop products from being visible on LascocoMart landing
+                                                            page.
                                                       </p>
                                                       <table class="table-striped table" id="table">
                                                             <thead>
                                                                   <tr class="small">
+                                                                  <th class="small"></th>
                                                                         <th class="small">Date</th>
                                                                         <th>Seller</th>
                                                                         <th>Product</th>
-                                                                        <th>Quantity</th>
                                                                         <th>Seller's Price</th>
                                                                         <th>Price</th>
                                                                         <th>Images</th>
                                                                         <th>Status</th>
                                                                         <th>Approve</th>
-                                                                        <th></th>
+                                                                        <th>Remove</th>
 
                                                                   </tr>
                                                             </thead>
                                                             <tbody>
                                                                   @foreach($products as $product)
                                                                   <tr class="small">
+                                                                        <td>
+                                                                              <a href="edit-vendor-product/{{$product->id}}"
+                                                                                    class="text-danger"> <i
+                                                                                          class="fa fa-edit"></i></a>
+                                                                        </td>
                                                                         <td class="small">
                                                                               {{ date('d/m/Y', strtotime($product->created_at))}}
                                                                         </td>
-                                                                        <td><span class="text-capitalize">{{$product['coopname']}} </span></td>
+                                                                        <td><span class="text-capitalize">{{$product['coopname']}}
+                                                                              </span></td>
 
-                                                                        <td>{{$product['prod_name']}}</td>
-                                                                        <td>{{$product['quantity'] }}</td>
+                                                                        <td><p>{{$product['prod_name']}}</p>
+                                                                              <p><span class="small"><b>Qty:</b></span> <span>{{$product['quantity'] }}</span></p>
+                                                                        </td>
                                                                         <td>₦{{number_format($product['seller_price']) }}
                                                                         </td>
                                                                         <td>₦{{number_format($product['price']) }}</td>
@@ -141,11 +149,10 @@
                                                                                     style="display:block;">
 
                                                                                     @csrf
-                                                                                          <input type="hidden" name="id"
-                                                                                                value="{{$product->id }}">
+                                                                                    <input type="hidden" name="id"
+                                                                                          value="{{$product->id }}">
                                                                                     <button type="submit" name="submit"
-                                                                                          class="btn btn-outline-primary btn-sm"><i
-                                                                                                class="fa fa-check"></i>
+                                                                                          class="btn btn-success btn-sm">
                                                                                           Approve</button>
 
                                                                               </form>
@@ -169,9 +176,9 @@
                                                                                           value="{{$product->id }}">
 
                                                                                     <button type="submit" name="submit"
-                                                                                          class="btn btn-outline-danger btn-sm"><i
+                                                                                          class="btn text-danger btn-sm"><i
                                                                                                 class="fa fa-trash-o"></i>
-                                                                                          Remove</button>
+                                                                                          </button>
 
 
                                                                               </form>
@@ -221,7 +228,7 @@
                   <div class="modal-body">
                         <p> <span>Product
                                     name
-                                    
+
                                     {{$product->prod_name}}
                               </span></p>
                         <form action="/remove_product" method="post" name="submit">

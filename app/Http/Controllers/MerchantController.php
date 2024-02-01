@@ -296,6 +296,7 @@ public function updateProduct(Request $request, $id)
     'quantity'      => 'max:255',  
      'old_price'    => 'max:255',
      'price'        => 'max:255',
+     'productname'    => 'max:255',
     ]);
 
      // add company and coperative percentage
@@ -303,6 +304,7 @@ public function updateProduct(Request $request, $id)
      $price = $request->price  + $company_percentage;
 
     $product = Product::find($id);
+    $product->prod_name     = $request->productname;
     $product->quantity      = $request->quantity;
     $product->old_price     = $request->old_price;
     $product->seller_price  = $request->price;
