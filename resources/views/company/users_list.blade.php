@@ -82,14 +82,15 @@
                                                 <p><a href="{{ $details['cooperative_cert'] }} "  target="_blank" class="text-success"> View certificate</a></p>
                                                 </td>
                                                 <td><span class="text-lowercase"> {{ $details['email'] }}</span>
+                                                <p> <span class="small"><b>Code:</b></span> {{ $details['code'] }}</p>
                                                       <p>@if(!empty($details['email_verified_at']))
-                                                            <span class="small ">Status:</span> <span
+                                                            <span class="small "><b>Status:</b></span> <span
                                                                   class="small text-success">verified</span>
                                                             @else
                                                             @endif
                                                       </p>
                                                       <p>@if(!empty($details['last_login']))
-                                                            <span class="small ">Last login:</span> <span
+                                                            <span class="small "><b>Last login:</b></span> <span
                                                                   class="small text-danger">{{ date('m/d/Y', strtotime($details->last_login))}}</span>
                                                             @else
                                                             @endif
@@ -157,14 +158,15 @@
                                                             {{ $details['lname'] }}</span> </td>
 
                                                 <td> <span class="text-lowercase">{{ $details['email'] }}</span>
+                                                <p> <span class="small"><b>Code:</b></span> {{ $details['code'] }}</p>
                                                       <p>@if(!empty($details['email_verified_at']))
-                                                            <span class="small">Status:</span> <span
+                                                            <span class="small"><b>Status:</b></span> <span
                                                                   class="small text-success">verified</span>
                                                             @else
                                                             @endif
                                                       </p>
                                                       <p>@if(!empty($details['last_login']))
-                                                            <span class="small ">Last login:</span> <span
+                                                            <span class="small "><b>Last login:</b></span> <span
                                                                   class="small text-danger">{{ date('m/d/Y', strtotime($details->last_login))}}</span>
                                                             @else
                                                             @endif
@@ -230,14 +232,15 @@
                                                 <td><span class="text-capitalize">{{ $details['coopname'] }}</span>
                                                 </td>
                                                 <td> <span class="text-lowercase">{{ $details['email'] }}</span>
+                                                <p> <span class="small"><b>Code:</b></span> {{ $details['code'] }}</p>
                                                       <p>@if(!empty($details['email_verified_at']))
-                                                            <span class="small">Status:</span> <span
+                                                            <span class="small"><b>Status:</b></span> <span
                                                                   class="small text-success">verified</span>
                                                             @else
                                                             @endif
                                                       </p>
                                                       <p>@if(!empty($details['last_login']))
-                                                            <span class="small ">Last login:</span> <span
+                                                            <span class="small "><b>Last login:</b></span> <span
                                                                   class="small text-danger">{{ date('m/d/Y', strtotime($details->last_login))}}</span>
                                                             @else
                                                             @endif
@@ -302,14 +305,15 @@
                                                 <td><span class="text-capitalize">{{ $details['coopname'] }}</span>
                                                 </td>
                                                 <td><span class="text-lowercase">{{ $details['email'] }}</span>
+                                                <p> <span class="small"><b>Code:</b></span> {{ $details['code'] }}</p>
                                                       <p>@if(!empty($details['email_verified_at']))
-                                                            <span class="small">Status:</span> <span
+                                                            <span class="small"><b>Status:</b></span> <span
                                                                   class="small text-success">verified</span>
                                                             @else
                                                             @endif
                                                       </p>
                                                       <p>@if(!empty($details['last_login']))
-                                                            <span class="small ">Last login:</span> <span
+                                                            <span class="small "><b>Last login:</b></span> <span
                                                                   class="small text-danger">{{ date('m/d/Y', strtotime($details->last_login))}}</span>
                                                             @else
                                                             @endif
