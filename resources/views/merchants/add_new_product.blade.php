@@ -64,6 +64,7 @@
                                                       @error('prod_name')
                                                       <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                                                       @enderror
+                                                      <small><b>forward slash (" / ") is not allowed in product naming rather use " and " or " & "</b></small>
                                                 </div>
 
                                                 <div class="form-group">
