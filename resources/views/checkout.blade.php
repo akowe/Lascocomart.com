@@ -10,18 +10,18 @@
                   {{ session('status') }}
             </div>
             @endif
-          
+
             <!-- row -->
             <div class="row">
                   <div class="col-md-6">
                         <!-- Billing Details -->
                         <!-- <div class="billing-details"> -->
                         <div class="shiping-details">
- 
+
                               <div class="section-title">
                                     <h3 class="title">Shipping Details</h3>
                               </div>
-                               <!-- cooperative name, vendor store name, fmcg name -->
+                              <!-- cooperative name, vendor store name, fmcg name -->
                               <h4 class="small text-danger"><b>{{ auth()->user()->coopname }}</b></h4>
                               <!-- get a member cooperative address -->
                               @foreach (\App\Models\User::select('address')
@@ -30,16 +30,16 @@
                               ->get() as
                               $id => $cooperative)
                               <div class="form-group">
-                                    <input class="input" type="hidden" name="address" value="{{ $cooperative->address }}"
-                                          placeholder="{{ $cooperative->address }}">
+                                    <input class="input" type="hidden" name="address"
+                                          value="{{ $cooperative->address }}" placeholder="{{ $cooperative->address }}">
                                     {{ $cooperative->address }}
                               </div>
                               @endforeach
                               <hr>
 
                               <div class="form-group">
-                                    <input class="input" type="hidden" name="first-name" value="{{ auth()->user()->fname }}"
-                                          placeholder="{{ auth()->user()->fname }}">
+                                    <input class="input" type="hidden" name="first-name"
+                                          value="{{ auth()->user()->fname }}" placeholder="{{ auth()->user()->fname }}">
                                     <label>Fullname:</label> {{ auth()->user()->fname }}
                               </div>
 
@@ -54,7 +54,7 @@
                                           placeholder="Telephone">
                                     <label>Mobile:</label> {{ auth()->user()->phone }}
                               </div>
-                           
+
                               <!-- /Billing Details -->
 
 
@@ -98,7 +98,12 @@
                         <div class="section-title text-center">
                               <h3 class="title">Your Order</h3>
                         </div>
-
+                        @if(empty(session('cart')))
+                        <h5 class="text-center">Empty cart.</h5>
+                        <a href="/" class="primary-btn order-submit form-control">
+                              Continue Shopping <i class="fa fa-shopping-cart"></i>
+                        </a>
+                        @else
                         <div class="order-summary">
                               <div class="order-col">
                                     <div><strong>PRODUCT</strong></div>
@@ -226,7 +231,7 @@
                               </form>
                         </div>
                         <!--col-summary-->
-
+                        @endif
 
 
 
