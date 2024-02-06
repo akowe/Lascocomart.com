@@ -72,8 +72,8 @@
                               <div class="col-lg-5">
                                     <div class="form-group">
                                           <h6> Address</h6>
-                                          <textarea type="text" value="{{$users->emaaddressil}}" name="address" row="3"
-                                                col="3" class="form-control"></textarea>
+                                          <textarea type="text" value="{{$users->address}}" name="address" row="3"
+                                                col="3" class="form-control">{{$users->address}}</textarea>
                                     </div>
                                     <div class="form-group">
                                           <h6>Location</h6>
