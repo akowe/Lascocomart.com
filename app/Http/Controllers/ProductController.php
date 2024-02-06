@@ -266,8 +266,8 @@ class ProductController extends Controller
             $totalAmount = 0;
             foreach ($cart as $item) {
                 $totalAmount += $item['price'] * $item['quantity'];
-
             }//foreach
+            //member pay with their credit
            $voucher = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('vouchers.user_id', $id)
             ->get(['vouchers.*', 'users.*']); 

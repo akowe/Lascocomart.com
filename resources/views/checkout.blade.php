@@ -10,49 +10,51 @@
                   {{ session('status') }}
             </div>
             @endif
+          
             <!-- row -->
             <div class="row">
                   <div class="col-md-6">
                         <!-- Billing Details -->
                         <!-- <div class="billing-details"> -->
                         <div class="shiping-details">
-
+ 
                               <div class="section-title">
                                     <h3 class="title">Shipping Details</h3>
                               </div>
-                              @foreach($voucher as $user)
+                               <!-- cooperative name, vendor store name, fmcg name -->
+                              <h4 class="small text-danger"><b>{{ auth()->user()->coopname }}</b></h4>
+                              <!-- get a member cooperative address -->
+                              @foreach (\App\Models\User::select('address')
+                              ->where('role_name', 'cooperative')
+                              ->where('code', auth()->user()->code)
+                              ->get() as
+                              $id => $cooperative)
                               <div class="form-group">
-                                    <input class="input" type="hidden" name="first-name" value="{{ $user->fname }}"
-                                          placeholder="{{$user->fname}}">
-                                    <label>Name:</label> {{ $user->fname }}
+                                    <input class="input" type="hidden" name="address" value="{{ $cooperative->address }}"
+                                          placeholder="{{ $cooperative->address }}">
+                                    {{ $cooperative->address }}
                               </div>
-
-                              <div class="form-group">
-                                    <input class="input" type="hidden" name="email" value="{{$user->email}}"
-                                          placeholder="{{$user->email}}">
-                                    <label>Email:</label> {{$user->email}}
-                              </div>
-
-                              <div class="form-group">
-                                    <input class="input" type="hidden" name="address" value="{{$user->address}}"
-                                          placeholder="{{$user->address}}">
-                                    <label>Address:</label> {{$user->address}}
-                              </div>
-
-                              <div class="form-group">
-                                    <input class="input" type="hidden" name="city" value="{{$user->location}}"
-                                          placeholder="City">
-                                    <label>City:</label> {{$user->location}}
-                              </div>
-
-                              <div class="form-group">
-                                    <input class="input" type="hidden" name="tel" value="{{$user->phone}}"
-                                          placeholder="Telephone">
-                                    <label>Mobile:</label> {{$user->phone}}
-                              </div>
-
-                              <!-- </div> -->
                               @endforeach
+                              <hr>
+
+                              <div class="form-group">
+                                    <input class="input" type="hidden" name="first-name" value="{{ auth()->user()->fname }}"
+                                          placeholder="{{ auth()->user()->fname }}">
+                                    <label>Fullname:</label> {{ auth()->user()->fname }}
+                              </div>
+
+                              <div class="form-group">
+                                    <input class="input" type="hidden" name="email" value="{{ auth()->user()->email }}"
+                                          placeholder="{{ auth()->user()->email }}">
+                                    <label>Email:</label> {{ auth()->user()->email }}
+                              </div>
+
+                              <div class="form-group">
+                                    <input class="input" type="hidden" name="tel" value="{{ auth()->user()->phone }}"
+                                          placeholder="Telephone">
+                                    <label>Mobile:</label> {{ auth()->user()->phone }}
+                              </div>
+                           
                               <!-- /Billing Details -->
 
 
