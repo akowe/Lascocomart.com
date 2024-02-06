@@ -1,8 +1,5 @@
 @extends('layouts.home')
-
 @extends('layouts.sidebar')
-
-
 @section('content')
 <!-- adminx-content-aside -->
 <div class="adminx-content">
@@ -16,15 +13,17 @@
                   <nav aria-label="breadcrumb" role="navigation">
                         <ol class="breadcrumb adminx-page-breadcrumb">
                               <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                              <li class="breadcrumb-item active" aria-current="page">Member</li>
+                              <li class="breadcrumb-item active" aria-current="page"> Dashboard</li>
                         </ol>
                   </nav>
 
                   <div class="pb-3">
-                        <h1>Dashboard</h1>
-
+                        <h6 class="text-capitalize">Cooperative: <b>{{auth()->user()->coopname}} </b></h6>
+                        <h6 class="text-capitalize">Cooperative code: <b>{{auth()->user()->code}}</b></h6>
+                        <h6 class="text-capitalize">Account: <b>Member</b></h6>
+                       
                         <div class="card-body text-center">
-
+          
                               @if (session('profile'))
                               <div class="alert alert-danger" role="alert">
                                     <a href="{{url('profile') }}" class="cursor"> {!! session('profile') !!}</a>
