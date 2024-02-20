@@ -218,38 +218,38 @@
                                                                         @if($order['status'] =='approved')
                                                                         @elseif($order['status'] =='paid')
                                                                         @else
-                                                                        <div class="row">
-                                                                              <div class="col-md-2">
-                                                                                    <!-- <form action="/order-update"
-                                                                                          method="post" name="submit"> -->
-                                                                                          @csrf
-                                                                                          <input type="hidden"
-                                                                                                name="order_id"
-                                                                                                value="{{$order->id}}" id="id">
-                                                                                          <input type="hidden"
-                                                                                                name="order_number"
-                                                                                                value="{{$order->order_number}}" id="order_number">
-                                                                                          <button type="submit"
-                                                                                                name="submit"
-                                                                                                class="btn btn-outline-success btn-sm"
-                                                                                                title="Approve" onclick="approveOrder()">
-                                                                                                <i
-                                                                                                      class="fa fa-check"></i></button>
-                                                                                    <!-- </form> -->
-                                                                              </div>
-                                                                              <div class="col-md-2">
-                                                                              </div>
+                                                                        <div class="dropdown">
+                                                                              <button
+                                                                                    class="btn btn-outline-danger dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
+                                                                                    Action
+                                                                              </button>
+                                                                              <div class="dropdown-menu"
+                                                                                    aria-labelledby="dropdownMenuButton">
+                                                                                   <input type="hidden" name="order_id"
+                                                                                          value="{{$order->id}}"
+                                                                                          id="id">
+                                                                                    <input type="hidden"
+                                                                                          name="order_number"
+                                                                                          value="{{$order->order_number}}"
+                                                                                          id="order_number">
+                                                                                    <button type="submit" name="submit"
+                                                                                          class="dropdown-item"
+                                                                                          title="Approve"
+                                                                                          onclick="approveOrder()">
+                                                                                          Approve</button>
 
-                                                                              <div class="col-md-2">
-
-                                                                                    <a href="{{ url('cancel-new-order/'.$order->id) }}"
-                                                                                          class="btn btn-outline-danger ">
-                                                                                          <i
-                                                                                                class="fa fa-cancel"></i></a>
-
-
+                                                                                          <a href="{{ url('cancel-new-order/'.$order->id) }}"
+                                                                                          class="dropdown-item">
+                                                                                          Cancel</a>
+                                                                                   
                                                                               </div>
                                                                         </div>
+                        
                                                                         @endif
 
 
@@ -289,14 +289,14 @@ function myFunction() {
 </script>
 <script>
 function approveOrder() {
-var order = document.getElementById('order_number').value;
-      var answer = window.confirm("Are you sure you want to approve this order  " + order );
+      var order = document.getElementById('order_number').value;
+      var answer = window.confirm("Are you sure you want to approve this order  " + order);
 
       if (answer) {
             var id = document.getElementById('id').value;
             var showRoute = "{{ route('order-update', ':id') }}";
             url = showRoute.replace(':id', id);
-            
+
             window.location = url;
 
       } else {
@@ -305,37 +305,36 @@ var order = document.getElementById('order_number').value;
 }
 </script>
 <script>
-        $(document).ready(function() {
-            $('#orders').DataTable({
-                  responsive: true,
+$(document).ready(function() {
+      $('#orders').DataTable({
+            responsive: true,
 
-                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                  // dom: 'Bfrtip',
-                  button: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5',
-                  ],
+            dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
+                  "<'row'<'col-sm-12'tr>>" +
+                  "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            // dom: 'Bfrtip',
+            button: [
+                  'copyHtml5',
+                  'excelHtml5',
+                  'csvHtml5',
+                  'pdfHtml5',
+            ],
 
-                  aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
-                  ],
-                  iDisplayLength: 5,
-                  "order": [
-                        [0, "desc"]
-                  ],
+            aLengthMenu: [
+                  [5, 10, 20, -1],
+                  [5, 10, 20, "All"]
+            ],
+            iDisplayLength: 5,
+            "order": [
+                  [0, "desc"]
+            ],
 
-                  "language": {
-                        "lengthMenu": "_MENU_ Records per page",
-                  }
+            "language": {
+                  "lengthMenu": "_MENU_ Records per page",
+            }
 
 
-            });
       });
-
+});
 </script>
 @endsection
