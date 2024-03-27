@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FundRequest;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Notifications\CooperativeFundRequest;
 use App\Notifications\MemberFundRequest;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +56,10 @@ public function showFundrequest(Request $request){
 }
 
 public function sendFundRequest(Request $request){
+    $this->validate($request, [
+       'amount' => 'required|string|max:100',
+       ]);
+   
     $email = Auth::user()->email;
     $cooperative_name = Auth::user()->coopname;
     $cooperative_code = Auth::user()->code;
@@ -63,21 +69,22 @@ public function sendFundRequest(Request $request){
     $get_superadmin_id =Arr::pluck($superadmin, 'id');
     $superadmin_id = implode('', $get_superadmin_id);
     
-    $fundRequest = FundRequest::create([
-        'user_id' =>Auth::user()->id,
-        'amount'  => $request->amount,
-        'admin_id' => $superadmin_id,
-        'status'   => 'pending'
-    ]);
-    $fund_id =$fundRequest->id;
-     $notification = new CooperativeFundRequest($fund_id, $fundRequest->amount);
-     Notification::send($superadmin, $notification);
-
+    $fundRequest = new FundRequest;
+    $fundRequest->user_id   = Auth::user()->id;
+    $fundRequest->amount    = $request->amount;
+    $fundRequest->admin_id  = $superadmin_id;
+    $fundRequest->status    = 'pending';
+    $fundRequest->save();
+    
     if($fundRequest){
+        $fund_id =$fundRequest->id;
+        $notification = new CooperativeFundRequest($fund_id, $fundRequest->amount);
+        Notification::send($superadmin, $notification);
+
          // Email notification to LascocoMart
         $data = array(
-        'cooperative_name'   => $cooperative_name,
-        'cooperative_code'  =>$cooperative_code,
+        'cooperative_name'  => $cooperative_name,
+        'cooperative_code'  => $cooperative_code,
         'email'             => $email,  
         'amount'            => $amount,       
         );

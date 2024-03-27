@@ -83,7 +83,7 @@ class SellerController extends Controller
       
                   $wallet = new Wallet();
                   $wallet->user_id = $user->id;
-                  $wallet->credit = '0';
+                  $wallet->balance = '0';
                   $wallet->save();
 
                 //LOG NEW REGISTER SELLER
@@ -97,11 +97,11 @@ class SellerController extends Controller
                 $log->save();
              }
            
-            Session::flash('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
+            Session::flash('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
             Session::flash('alert-class', 'alert-success'); 
           //return $user;
 
-          return redirect('/')->with('status', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
+          return redirect('/')->with('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
         
          
 

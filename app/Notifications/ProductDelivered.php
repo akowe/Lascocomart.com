@@ -63,10 +63,6 @@ class ProductDelivered extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'id' => $this->product_id ,
-            'data'=>'item(s) ' .$this->product_name. ' has been delivered by ' .$fname. ' ' .$lname,
-        ];
+        return ''.$this->product_name. ' has been delivered by ' .$fname. '';
     }
 }

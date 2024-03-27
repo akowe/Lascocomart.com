@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Order;
@@ -59,7 +61,7 @@ class BankTransferController extends Controller
         return view('cooperative.bank-payment', compact('select_bank', 'all_orders', 'orders'));
     }
 
-public function banTransferPayment(Request $request, $reference, $order_id, $order_amount){
+public function bankTransferPayment(Request $request, $reference, $order_id, $order_amount){
     $ids = $request->order_id;
     $asset_requst = Order::whereIn('id', explode(",", $ids))->get();
     $order_id = Arr::pluck($asset_requst, 'id');
@@ -68,7 +70,7 @@ public function banTransferPayment(Request $request, $reference, $order_id, $ord
         \DB::table('orders')->where('id',$item )->update([
             'status'=> 'paid', 
             'pay_status' =>'success',
-            'pay_type' =>'Bank Transfer',
+            'pay_type' =>'Cooperative',
             'admin_settlement_msg' => 'paid'
         ]);
         $tranx = new Transaction();
@@ -107,7 +109,7 @@ public function banTransferPayment(Request $request, $reference, $order_id, $ord
     Notification::send($superadmin, $notification);
     \LogActivity::addToLog('Bank Transfer');
 
-    return redirect('cooperative')->with('status', 'Payment successful');
+    return redirect('cooperative')->with('success', 'Payment successful');
 }
 
 

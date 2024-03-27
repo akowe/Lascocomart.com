@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Wallet extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'user_id', 'voucher', 'credit'
-    ];
+    protected $fillable = 'wallet';
     public function initiator() {
         return $this->belongsTo(User::class, 'sender_id');
     }

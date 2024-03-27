@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Mail\LowStockEmail;
 use App\Models\About;
 use App\Models\Privacy;
@@ -240,23 +242,57 @@ class ProductController extends Controller
     public function checkout(Request $request){
 
          if( Auth::user()){
+            $id = Auth::user()->id; //
+            $profile =  Profile::where('user_id', $id)->get('user_id')->first();
+    
             $firstTimeLoggedIn = Auth::user()->last_login;
             if (empty($firstTimeLoggedIn)) {
               $data = 
               array( 
-              'name'      => Auth::user()->fname,
-              'coopname'  => Auth::user()->coopname,
+                'name'      => Auth::user()->fname,
+                'coopname'  => Auth::user()->coopname,
                 'email'     => Auth::user()->email,
             );
               Mail::to(Auth::user()->email)->send(new MemberWelcomeEmail($data));  
               $user = Auth::user();
               $user->last_login = Carbon::now();
               $user->save();
+    
+              $profile =  new Profile;
+              $profile->user_id           =     Auth::user()->id;
+              $profile->fname             =     Auth::user()->fname;
+              $profile->address           =     Auth::user()->address;
+              $profile->phone             =     Auth::user()->phone;
+              $profile->bank              =     Auth::user()->bank;
+              $profile->account_number    =     Auth::user()->account_number;
+              $profile->account_name      =     Auth::user()->account_name;
+              $profile->cooperative_cert  =     Auth::user()->cooperative_cert;
+              $profile->rcnumber          =     Auth::user()->rcnumber;
+              $profile->profile_img       =     Auth::user()->profile_img;
+              $profile->save(); 
+    
+              return redirect('/account-settings')->with('status', ' You are yet to complete your profile!');  
+          
             }
             elseif (!empty($firstTimeLoggedIn)) {
-              $user = Auth::user();
-              $user->last_login = Carbon::now();
-              $user->save();
+               $user = Auth::user();
+               $user->last_login = Carbon::now();
+               $user->save();
+    
+               if (empty($profile)){ 
+                   $profile =  new Profile;
+                   $profile->user_id           =     Auth::user()->id;
+                   $profile->fname             =     Auth::user()->fname;
+                   $profile->address           =     Auth::user()->address;
+                   $profile->phone             =     Auth::user()->phone;
+                   $profile->bank              =     Auth::user()->bank;
+                   $profile->account_number    =     Auth::user()->account_number;
+                   $profile->account_name      =     Auth::user()->account_name;
+                   $profile->cooperative_cert  =     Auth::user()->cooperative_cert;
+                   $profile->rcnumber          =     Auth::user()->rcnumber;
+                   $profile->profile_img       =     Auth::user()->profile_img;
+                   $profile->save(); 
+               }
             }
             $id = Auth::user()->id;// get user id for the login member
             $cart = session()->get('cart');

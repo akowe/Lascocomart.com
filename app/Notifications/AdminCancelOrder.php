@@ -65,10 +65,7 @@ class AdminCancelOrder extends Notification
         $lname = Auth::user()->lname;
         $coopname = Auth::user()->coopname;
         
-        return [
-            //
-            'data'=>'Admin of ' .$coopname. ' has cancel your Order with number ' .$this->order_number. ' your current limit is ' .$this->credit. ' kindly reorder.'
-        ];
+        return 'Admin has cancel your Order ' .$this->order_number. '';
     
     }
 }

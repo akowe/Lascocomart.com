@@ -117,11 +117,14 @@
 
                         </ul>
                         <ul class="header-links pull-right">
+
                               <li>
-                                    <!-- <a href="" data-toggle="modal" data-target="#merchantModal"><i
-                                                class="fa fa-user-o"></i> Sell on LascocoMart</a> -->
                                     <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
                               </li>
+                              <li> <a href="{{ url('cooperative-loan') }}">
+
+                                          Loan Management
+                                    </a></li>
                               <li>
                                     <!--show member name-->
                                     @if (Route::has('login'))
@@ -203,9 +206,7 @@
                                     </div>
                                     @endif
                                     @else
-                                    <!-- <a href="" data-toggle="modal" data-target="#loginModal"
-                                          class="text-sm text-gray-700 dark:text-gray-500 underline">Login /
-                                          Register</a> -->
+                                    >
                                     <a href="{{ route('login') }}"
                                           class="text-sm text-gray-700 dark:text-gray-500 underline">Login /
                                           Register</a>
@@ -244,19 +245,7 @@
 
                                           <form action="{{ route('category') }}" method="GET"
                                                 enctype="multipart/form-data">
-                                                <!-- <select name="category" id="input" class="input-select ">
-                                                      <option value="">All Categories</option>
-                                                      @foreach (\App\Models\Categories::select('cat_name')->get() as
-                                                      $category)
-                                                      <option value="{{ $category->cat_name }}">
-                                                            <a
-                                                                  href="{{route('category')}}?category={{ $category->cat_name }}">{{ $category['cat_name'] }}</a>
-                                                      </option>
-                                                      @endforeach
-                                                </select> -->
-
-                                              
-                                                       <input class="input search" type="text" name="search" id="search"
+                                                <input class="input search" type="text" name="search" id="search"
                                                       placeholder="Search for products or vendor" autocomplete="off"
                                                       style="width:76%;" />
                                                 <button class="search-btn" type="submit">
@@ -370,11 +359,15 @@
                                           @endauth
                                           @endif
 
-
+                                          <!--Mobile TopBar here--->
 
                                           <div class="hidden-lg hidden-md">
-                                                <!-- <a href="{{ route('seller-register') }}" data-toggle="modal" data-target="#merchantModal"> Sell on LascocoMart</a> -->
                                                 <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
+                                          </div>
+
+                                          <div class="hidden-lg hidden-md"> 
+                                                <a href="{{ url('cooperative-loan') }}">
+                                                Loan Management</a> 
                                           </div>
 
                                           <!--show member name-->
@@ -383,7 +376,7 @@
                                                 @if (Route::has('login'))
                                                 @auth
 
-                                                <a href="" class="dropbtn"> My Account</a>
+                                                <a href="" class=""> My<br>Account</a>
                                                 @if(Auth::user()->role_name == 'cooperative')
                                                 <div class="dropdown-content">
                                                       <a href="{{ route('cooperative') }}">Dashboard</a>
@@ -508,7 +501,7 @@
                               </li>
                               @endforeach
                               <!--MEGA MENU -->
-                              
+
                         </ul>
                         <!-- /NAV -->
                   </div>

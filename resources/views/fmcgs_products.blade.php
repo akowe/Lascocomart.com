@@ -4,12 +4,6 @@
 @section('content')
 <!-- SECTION -->
 <span class="text-center">
-      @if (session('status'))
-      <div class="alert alert-success" role="alert">
-            {!! session('status') !!}
-      </div>
-      @endif
-
       @if (session('error'))
       <div class="alert alert-danger" role="alert">
             {!! session('error') !!}
@@ -178,12 +172,12 @@
 
                                                       </div>
                                                       <!-- end col -->
-                                                </div>
+                                                </div> 
                                                 <div class="space-ten"></div>
                                                 <div class="add-to-cart">
                                                       <button type="button" class="add-to-cart btn">
                                                             <a class="add-to-cart-btn btn"
-                                                                  href="{{ route('add.to.cart', $product->id) }}">
+                                                                  href="{{ route('add.product.to.cart', $product->id) }}">
                                                                   <i class="fa fa-shopping-cart"></i> Add To
                                                                   Cart</a></button>
                                                 </div>

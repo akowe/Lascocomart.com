@@ -22,7 +22,9 @@
                                     <h3 class="title">Shipping Details</h3>
                               </div>
                               <!-- cooperative name, vendor store name, fmcg name -->
-                              <h4 class="small text-danger"><b>{{ auth()->user()->coopname }}</b></h4>
+                              @php $companyName = Auth::user()->coopname; 
+                              @endphp 
+                              <h4 class="text-danger"><b>{!! Str::limit("$companyName", 21, '...') !!}</b></h4>
                               <!-- get a member cooperative address -->
                               @foreach (\App\Models\User::select('address')
                               ->where('role_name', 'cooperative')
@@ -32,7 +34,7 @@
                               <div class="form-group">
                                     <input class="input" type="hidden" name="address"
                                           value="{{ $cooperative->address }}" placeholder="{{ $cooperative->address }}">
-                                    {{ $cooperative->address }}
+                                    {!! Str::limit("$cooperative->address", 30, '...') !!}
                               </div>
                               @endforeach
                               <hr>
@@ -109,20 +111,16 @@
                                     <div><strong>PRODUCT</strong></div>
                                     <div><strong></strong></div>
                               </div>
-
-
                               @php $total = 0 @endphp
                               @php $delivery = 3000 @endphp
                               @if(session('cart'))
                               @foreach(session('cart') as $prod => $details)
                               @php $total += $details['price'] * $details['quantity'] @endphp
 
-
                               <div class="order-products">
                                     <div class="order-col">
                                           <div>
                                                 {{ $details['quantity'] }} x {{ $details['prod_name'] }}</div>
-
                                           <div>₦{{number_format($details['price'] * $details['quantity'] ) }} </div>
                                     </div>
 
@@ -170,7 +168,6 @@
                                                       id="get_ship_city">
                                           </div>
 
-
                                           <div class="form-group">
                                                 <input class="input" type="hidden" name="ship_phone"
                                                       placeholder="Mobile Number" id="get_ship_phone">
@@ -180,9 +177,7 @@
                                           </div>
                                           <!--- end value of shipping details-->
 
-
                                     </div>
-
                                     <!-- hide-->
                                     <div class="form-group" id="#hide">
                                           <a href="{{ route('cart')}}" class="text-danger">Modify Your Order.
@@ -190,29 +185,28 @@
                                     </div>
 
                                     <!--show button alert-->
+                                    @auth
+                                    @if(Auth::user()->role_name == 'member')
                                     <div class="form-group" style="display: block;">
-
                                           <br><br>
                                           <input type="checkbox" id="terms" required>
-
                                           <label for="terms">
                                                 <span></span>
                                                 Yes I want this order
                                           </label>
-
                                           <button type="submit" class="primary-btn order-submit form-control">
                                                 Request Approval
                                           </button>
                                           <br>
                                           <center>OR</center>
-
                                     </div>
+                                    @endif 
+                                    @endauth 
                                     <!-- show balance-->
                               </form>
                               <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8"
                                     class="form-horizontal" role="form">
                                     @csrf
-
                                     <input type="hidden" name="amount" value="{{ $totalAmount*100  }}">
                                     <input type="hidden" name="email" value="{{Auth::user()->email}}">
                                     <input type="hidden" name="ship_address" placeholder="Delivery Address"
@@ -222,12 +216,11 @@
                                           id="get_ship_phone">
                                     <input type="hidden" name="currency" value="NGN">
                                     <input type="hidden" name="metadata" value="{{ json_encode($array = ['user_id' => Auth::user()->id, 
-                                                'delivery' => '2000',]) }}">
+                                                'transaction_type' => 'product', 'delivery' => '3000']) }}">
                                     <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
 
-                                    <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!"><i
-                                                class="fa fa-plus-circle fa-lg"></i>Pay with
-                                          debit card</button>
+                                    <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
+                                         Pay Now <i class="fa fa-money fa-lg"></i> </button>
                               </form>
                         </div>
                         <!--col-summary-->

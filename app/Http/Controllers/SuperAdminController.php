@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Order;
@@ -84,6 +86,8 @@ class SuperAdminController extends Controller
         $result[++$key] = [$value->year,  (int)$value->total_user ];
         }
 
+        //dd(json_encode($result));
+        
         $salesChart = Order::select(
           \DB::raw("COUNT(*) as total_sales"),
           \DB::raw('YEAR(created_at) as year')
@@ -685,7 +689,7 @@ public function setPassword(Request $request) {
     $validatedData = $request->validate([
         'email'        =>'required|email',
         'new-password' => 'required|string|min:8|confirmed',
-    ]);
+    ]); 
 
     //Set Password   bcrypt();
     $user = User::where('email', $request->email)

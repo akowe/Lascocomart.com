@@ -23,6 +23,8 @@ use App\Mail\AwaitsApprovalEmail;
 use App\Notifications\NewOrder;
 use Notification;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use Session;
 use Validator;
 use Auth;
@@ -94,13 +96,14 @@ class OrderController extends Controller
             $company_percentage +=  $price * 5/ 100;
             $seller_price = 0;
             $seller_price += $price - $company_percentage;
-
+            $amount = $item['price'] * $item['quantity'];
             $orderItem = new OrderItem();
             $orderItem->order_id   = $order->id;
             $orderItem->product_id = $item['id'];
             $orderItem->seller_id = $item['seller_id'];
             $orderItem->order_quantity   = $item['quantity'];
-            $orderItem->amount     = $item['price'];
+            $orderItem->unit_cost     = $item['price'];
+            $orderItem->amount     = $amount;
             $orderItem->save();
 
             //upade seller wallet 

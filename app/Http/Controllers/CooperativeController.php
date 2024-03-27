@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Order;
@@ -32,6 +34,7 @@ use Paystack;
 use Storage;
 use Mail;
 use Notification;
+use DateTime;
 
 class CooperativeController extends Controller
 {
@@ -45,13 +48,16 @@ class CooperativeController extends Controller
 
     public function index (Request $request){
     if( Auth::user()->role_name  == 'cooperative'){
+        $code = Auth::user()->code; 
+        $id = Auth::user()->id; //
+        
         $firstTimeLoggedIn = Auth::user()->last_login;
          if (empty($firstTimeLoggedIn)) {
            $data = 
            array( 
             'user_id'   => Auth::user()->code,
             'coopname'  => Auth::user()->coopname,
-             'email'     => Auth::user()->email,
+            'email'     => Auth::user()->email,
          );
            Mail::to(Auth::user()->email)->send(new CooperativeWelcomeEmail($data));  
            $user = Auth::user();
@@ -62,91 +68,294 @@ class CooperativeController extends Controller
             $user = Auth::user();
             $user->last_login = Carbon::now();
             $user->save();
-         }
+         }      
         // check if user has filled his/her profile
         $user=Auth::user();
-        $address        = $user->address;
         $phone          = $user->phone;
-        $account_number = $user->account_number;
-        $account_name   = $user->account_name;
-          if($account_number =='' && $account_name =='')
-          {
-            Session::flash('status', ' You are yet to complete your profile!'); 
+        $bank           = $user->bank;
+          if(empty($phone && $bank )){
+            Session::flash('profile', ' You are yet to complete your profile!'); 
             Session::flash('alert-class', 'alert-success'); 
-            return Redirect::to('/profile');     
+            return Redirect::to('/account-settings');     
           }
-        $code = Auth::user()->code; 
-        $id = Auth::user()->id; //
-      // select all user except the current login
-        $members = User::all()->except(Auth::id())->where('code', $code);        
-        // count products 
-        $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
-        ->where('products.prod_status', 'approve')
-        ->where('users.id', $id);
-        // count approved orders 
-        $count_orders = User::join('orders', 'orders.user_id', '=', 'users.id')
-        ->where('orders.status','!=', 'cancel')
-        ->where('users.code', $code);
-
-        $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
-         ->where('users.code', $code)
-         ->where('orders.status', '!=', 'cancel')
-         ->orderBy('orders.date', 'desc')
-         ->get();
-         
-                        
-        $allocated_funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
-        ->where('users.id', $id)
-        ->paginate( $request->get('per_page', 5));
-        // count credit from members
+   
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit');
-        // sum total order paid for by cooperative for his from members
-        $sales = Transaction::Join('orders', 'orders.id', '=', 'transactions.order_id')
-        ->where('transactions.user_id', $id)
-        ->get('grandtotal');
-        //sum all order for payment
-        $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
-        ->where('orders.status', 'approved') 
-        ->where('users.code', $code) 
-        ->get('orders.*');  
-        
-        // for bulk payment by cooperative
-        $all_orders_id = User::join('orders', 'orders.user_id', '=', 'users.id')
-        ->where('orders.status', 'approve') 
-        ->where('users.code', $code) 
-        ->get('orders.id');   
-        \LogActivity::addToLog('Admin dashboard');                  
-        return view('cooperative.cooperative', compact('members', 'orders',  'credit', 'count_product', 'count_orders', 'sales', 'allocated_funds', 'sumApproveOrder', 'all_orders_id'));
     
+        $members = User::all()->except(Auth::id())->where('code', $code);  
+         //sum all member order that is approve for payment
+         $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
+         ->where('orders.status', 'approved') 
+         ->where('users.code', $code) 
+         ->where('orders.user_id', '!=', Auth::user()->id)
+         ->get('orders.*');  
+         
+         // for bulk payment by cooperative
+         $all_orders_id = User::join('orders', 'orders.user_id', '=', 'users.id')
+         ->where('orders.status', 'approve') 
+         ->where('users.code', $code) 
+         ->where('orders.user_id', '!=', Auth::user()->id)
+         ->get('orders.id');  
+
+        //users logged during a period of month ago from now
+       // $adminActiveMember =  User::where('last_login_at', '>=', new DateTime('-1 months'))->get(); 
+        //users logged from the beggining of current callendar month
+        $adminActiveMember =  User::where('code', $code)
+        ->where('id', '!=', Auth::user()->id)
+        ->where('last_login', '>=',Carbon::now()->startOfMonth())
+        ->get(); 
+        
+        $countApprovedProduct = User::join('products', 'products.seller_id', '=', 'users.id')
+        ->where('products.prod_status', 'approve')
+        ->where('products.seller_id', $id);
+
+        $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
+        ->where('products.seller_id', $id);
+
+        $countSoldProducts = OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+         ->join('products', 'products.id', '=', 'order_items.product_id')
+         ->where('orders.status', 'paid')
+         ->where('orders.user_id', '!=', Auth::user()->id)
+        ->where('order_items.seller_id', $id);
+
+       $allocated_funds = User::join('credit_limits', 'credit_limits.user_id', '=', 'users.id')
+       ->where('users.id', $id)
+       ->paginate( $request->get('per_page', 5));
+       
+       $memberOrders = DB::table('users')->join('orders', 'orders.user_id', '=', 'users.id')
+       ->select(['orders.*', 'users.fname', 'users.lname'])
+       ->where('users.code', $code)
+       ->where('orders.status', '!=', 'cancel')
+       ->where('orders.user_id', '!=', Auth::user()->id);
+   
+        $countMyCustomerOrder = OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+         ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+          ->join('products', 'products.id', '=', 'order_items.product_id')
+          ->where('orders.status', 'paid')
+          ->where('orders.user_id', '!=', Auth::user()->id)
+         ->where('order_items.seller_id', $id);
+
+         $countShippedItem= OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+         ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+         ->join('products', 'products.id', '=', 'order_items.product_id')
+         ->where('order_items.delivery_status', 'delivered')
+         ->where('orders.user_id', '!=', Auth::user()->id)
+         ->where('order_items.seller_id', $id);
+
+         $sales =  DB::table('order_items')
+         ->join('orders', 'orders.id', '=', 'order_items.order_id')
+         ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+          ->join('products', 'products.id', '=', 'order_items.product_id')
+         ->select(['orders.*','order_items.*','users.fname', 'users.phone',
+          'products.prod_name','products.image','products.seller_price'])
+          ->where('orders.status', 'paid')
+          ->where('orders.user_id', '!=', Auth::user()->id)
+         ->where('order_items.seller_id', $id);
+
+         $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+         ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+          ->select(['loan.*', 'loan_type.name', 'users.fname'])
+          ->where('loan.cooperative_code', $code);
+
+          $payOutLoan = DB::table('loan')
+           ->select(['loan.*'])
+           ->where('loan.loan_status', 'paid')
+           ->where('loan.cooperative_code', $code);
+ 
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
+        
+        $wallets = DB::table('wallet_history')->join('users', 'users.id', '=', 'wallet_history.user_id')
+        ->select(['wallet_history.*', 'users.fname'])
+        ->where('wallet_history.user_id', $id)
+        ->orderBy('wallet_history.created_at', 'desc')
+        ->where(function ($query) use ($search) {  // <<<
+        $query->where('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_history.payment_status', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_history.amount', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_history.reciever', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_history.payment_ref', 'LIKE', '%'.$search.'%')
+            ->orderBy('wallet_history.created_at', 'desc');
+        })->paginate($perPage, $columns = ['*'], $pageName = 'wallets')
+            ->appends(['per_page'   => $perPage]);
+        
+        $pagination = $wallets->appends ( array ('search' => $search) );
+            if (count ( $pagination ) > 0){
+                return view ('cooperative.cooperativ' ,  compact(
+                'perPage', 'wallets', 'members', 'memberOrders',  'credit', 
+                'count_product', 'countMyCustomerOrder', 'sales', 
+                'allocated_funds', 'sumApproveOrder', 'all_orders_id',
+                'countSoldProducts', 'countApprovedProduct', 'adminActiveMember',
+                'countShippedItem', 'loan', 'payOutLoan'))->withDetails( $pagination );     
+            } 
+            else{redirect()->back()->with('status', 'No record order found'); }   
+            
+            \LogActivity::addToLog('Admin dashboard'); 
+            //search
+            return view('cooperative.cooperative', compact(
+                'perPage', 'wallets', 'members', 'memberOrders',  'credit', 
+                'count_product', 'countMyCustomerOrder', 'sales', 
+                'allocated_funds', 'sumApproveOrder', 'all_orders_id',
+                'countSoldProducts', 'countApprovedProduct', 'adminActiveMember',
+                'countShippedItem', 'loan', 'payOutLoan'));
+        }
+        else { return Redirect::to('/login');}
     }
-    else { return Redirect::to('/login');}
-    }
+    
 
     public function adminOrderHistory(Request $request){
         $id = Auth::user()->id;
         $code = Auth::user()->code;
-        $count_orders = User::join('orders', 'orders.user_id', '=', 'users.id')
+        $countMyOrders = User::join('orders', 'orders.user_id', '=', 'users.id')
         ->where('orders.status','!=', 'cancel')
-        ->where('users.code', $code);
+        ->where('orders.user_id', $id);
+        
+        $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
+        ->where('users.id', $id)
+        ->get('credit');  
 
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
-         ->where('users.code', $code)
-         ->where('orders.status', '!=', 'cancel')
+         ->where('orders.user_id', $id)
          ->orderBy('orders.date', 'desc')
-         ->get(); 
+         ->where(function ($query) use ($search) {  // <<<
+        $query->where('users.coopname', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.order_number', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.grandtotal', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.date', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.status', 'LIKE', '%'.$search.'%')
+            ->orderBy('orders.created_at', 'desc');
+         })->paginate($perPage, $columns = ['*'], $pageName = 'orders'
+         )->appends([
+        'per_page'   => $perPage
+         ]);
+         $pagination = $orders->appends ( array ('search' => $search) );
+        if (count ( $pagination ) > 0){
+            return view('cooperative.order-history', compact(
+            'perPage',
+            'countMyOrders', 
+            'credit', 
+            'orders'))->withDetails ( $pagination );     
+             } 
+             else{
+                 redirect()->back()->with('status', 'No order record found'); 
+             }
+        \LogActivity::addToLog('Admin order history');
+        return view('cooperative.order-history', compact(
+        'perPage',
+        'countMyOrders', 
+        'credit', 
+        'orders'));
+    }
+
+    public function cooperativeCustomerOrder(Request $request){
+        $id = Auth::user()->id;
+       // count customer  orders for admin/seller product that has been paid
+       $countMyCustomerOrder = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+       ->join('users', 'users.id', '=', 'orders.user_id')
+       ->where('orders.status','!=', 'cancel')
+       ->where('orders.pay_status',  'paid')
+       ->where('order_items.seller_id', $id);
+
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
+        $orders =Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+        ->join('users', 'users.id', '=', 'orders.user_id')//get the customer details
+        ->where('orders.status', '!=', 'cancel')
+        ->where('orders.pay_status',  'paid')
+        ->where('order_items.seller_id', $id)
+         ->orderBy('orders.date', 'desc')
+         ->where(function ($query) use ($search) {  // <<<
+        $query->where('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.lname', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.order_number', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.grandtotal', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.date', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.status', 'LIKE', '%'.$search.'%')
+            ->orderBy('orders.created_at', 'desc');
+         })->paginate($perPage, $columns = ['*'], $pageName = 'orders'
+         )->appends([
+        'per_page'   => $perPage
+         ]);
+         $pagination = $orders->appends ( array ('search' => $search) );
+        if (count ( $pagination ) > 0){
+            return view('cooperative.customer-order', compact(
+            'perPage',
+            'countMyCustomerOrder', 
+            'orders', ))->withDetails ( $pagination );     
+             } 
+             else{
+                 redirect()->back()->with('status', 'No customer order found'); 
+             }
+        \LogActivity::addToLog('Admin member order');
+        return view('cooperative.customer-order', compact(
+        'perPage',
+        'countMyCustomerOrder', 
+        'orders', ));
+    }
+
+
+    public function cooperativeMemberOrder(Request $request){
+        $id = Auth::user()->id;
+        $code = Auth::user()->code;
+        $countMemberOrders = User::join('orders', 'orders.user_id', '=', 'users.id')
+        ->where('orders.status','!=', 'cancel')
+        ->where('users.code', $code)
+        ->where('orders.user_id', '!=', Auth::user()->id);
         // for bulk payment by cooperative
         $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
         ->where('orders.status', 'approved') 
         ->where('users.code', $code) 
+        ->where('users.id', '!=', Auth::user()->id)
         ->get('orders.*'); 
+        
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit');  
-        \LogActivity::addToLog('Admin order history');
-        return view('cooperative.order-history', compact('credit', 'orders', 'sumApproveOrder'));
+
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
+        $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
+         ->where('users.code', $code)
+         ->where('orders.user_id', '!=', Auth::user()->id)
+         ->where('orders.status', '!=', 'cancel')
+         ->orderBy('orders.date', 'desc')
+         ->where(function ($query) use ($search) {  // <<<
+        $query->where('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.lname', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.order_number', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.grandtotal', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.date', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.status', 'LIKE', '%'.$search.'%')
+            ->orderBy('orders.created_at', 'desc');
+         })->paginate($perPage, $columns = ['*'], $pageName = 'orders'
+         )->appends([
+        'per_page'   => $perPage
+         ]);
+         $pagination = $orders->appends ( array ('search' => $search) );
+        if (count ( $pagination ) > 0){
+            return view('cooperative.member-order', compact(
+            'perPage',
+            'countMemberOrders', 
+            'credit', 
+            'orders', 
+            'sumApproveOrder'))->withDetails ( $pagination );     
+             } 
+             else{
+                 redirect()->back()->with('status', 'No record found'); 
+             }
+        \LogActivity::addToLog('Admin member order');
+        return view('cooperative.member-order', compact(
+        'perPage',
+        'countMemberOrders', 
+        'credit', 
+        'orders', 
+        'sumApproveOrder'));
     }
+
     public function cancelMemberNewOrder($id)
     {
         $order = Order::find($id);
@@ -158,7 +367,10 @@ class CooperativeController extends Controller
     }
 
     public function cancelOrder(Request $request){
-        $credit = $request->credit;
+        $this->validate($request, [
+            'amount'         => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:2|max:9',
+            ]);
+        $credit = $request->amount;
         $input = 'cancel';
         $order_id = $request->order_id;
         Order::where('id', $order_id)
@@ -183,31 +395,267 @@ class CooperativeController extends Controller
 
     public function viewCanceledOrders(Request $request){
         $code = Auth::user()->code;
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
-        ->where('users.code', $code)
-        ->where('orders.status', '=', 'cancel')
-        ->orderBy('orders.date', 'desc')
-        ->paginate( $request->get('per_page', 5));
+         ->where('users.code', $code)
+         ->where('orders.user_id', '!=', Auth::user()->id)
+         ->where('orders.status', 'cancel')
+         ->orderBy('orders.date', 'desc')
+         ->where(function ($query) use ($search) {  // <<<
+        $query->where('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.lname', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.order_number', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.grandtotal', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.date', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.status', 'LIKE', '%'.$search.'%')
+            ->orderBy('orders.created_at', 'desc');
+         })->paginate($perPage, $columns = ['*'], $pageName = 'orders'
+         )->appends([
+        'per_page'   => $perPage
+         ]);
+         $pagination = $orders->appends ( array ('search' => $search) );
+        if (count ( $pagination ) > 0){
+            return view('cooperative.canceled-orders', compact(
+            'perPage',
+            'orders'))->withDetails ( $pagination );     
+             } 
+             else{
+                 redirect()->back()->with('status', 'No record found'); 
+             }
         \LogActivity::addToLog('Admin view cancel order');
-        return view('cooperative.canceled-orders', compact('orders'));
+        return view('cooperative.canceled-orders', compact('perPage','orders'));
     }
     
+    public function cooperativeSales(Request $request){
+        if( Auth::user()->role_name  == 'cooperative'){
+            $id = Auth::user()->id; //
+
+             $countSoldProducts = OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+              ->join('products', 'products.id', '=', 'order_items.product_id')
+              ->where('orders.status', 'paid')
+              ->where('orders.user_id', '!=', Auth::user()->id)
+             ->where('order_items.seller_id', $id);
+
+             $countMyCustomerOrder = OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+              ->join('products', 'products.id', '=', 'order_items.product_id')
+              ->where('orders.status', 'paid')
+              ->where('orders.user_id', '!=', Auth::user()->id)
+             ->where('order_items.seller_id', $id);
+
+             $countShippedItem= OrderItem::join('orders', 'orders.id', '=', 'order_items.order_id')
+             ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+             ->join('products', 'products.id', '=', 'order_items.product_id')
+             ->where('order_items.delivery_status', 'delivered')
+             ->where('orders.user_id', '!=', Auth::user()->id)
+             ->where('order_items.seller_id', $id);
+
+            $sumSales =  DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+             ->join('products', 'products.id', '=', 'order_items.product_id')
+            ->select([
+             'orders.*',
+             'order_items.*',
+             'users.fname', 
+             'users.phone',
+             'products.prod_name',
+             'products.image',
+             'products.seller_price'
+             ])->where('orders.status', 'paid')
+              ->where('orders.user_id', '!=', Auth::user()->id)
+             ->where('order_items.seller_id', $id);
+
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+
+           $sales =  DB::table('order_items')
+           ->join('orders', 'orders.id', '=', 'order_items.order_id')
+           ->join('users', 'users.id', '=', 'orders.user_id')// get the buyer
+            ->join('products', 'products.id', '=', 'order_items.product_id')
+           ->select([
+            'orders.*',
+            'order_items.*',
+            'users.fname', 
+            'users.phone',
+            'products.prod_name',
+            'products.image',
+            'products.seller_price'
+            ])
+            ->where('orders.status', 'paid')
+            ->where('products.seller_id', $id)
+            ->orderBy('date', 'desc')
+            ->where(function ($query) use ($search) {  // <<<
+            $query->where('orders.order_number', 'LIKE', '%'.$search.'%')
+            ->orWhere('orders.date', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('products.prod_name', 'LIKE', '%'.$search.'%')
+            ->orWhere('products.seller_price', 'LIKE', '%'.$search.'%')
+            ->orderBy('orders.created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'sales')
+            ->appends(['per_page'   => $perPage]);
+            $pagination = $sales->appends ( array ('search' => $search) );
+            if (count ( $pagination ) > 0){
+                    return view('cooperative.sales', compact(
+                    'perPage',
+                    'countSoldProducts',
+                    'sales',
+                    'sumSales',
+                    'countMyCustomerOrder',
+                    'countShippedItem'))->withDetails ( $pagination );     
+            } 
+            else{ redirect()->back()->with('status', 'No record found'); }
+
+            \LogActivity::addToLog('Admin view sales');
+            return view('cooperative.sales', compact(
+            'perPage',
+            'countSoldProducts',
+            'sales',
+            'sumSales',
+            'countMyCustomerOrder',
+            'countShippedItem'));
+         }
+         else{ return Redirect::to('/login');} 
+    }
 
     public function adminProducts(Request $request){
         $id = Auth::user()->id;
-        $products = User::join('products', 'products.seller_id', '=', 'users.id')
-        ->where('products.prod_status', '!=', 'remove')
+        // count seller/cooperative products 
+        $count_product = User::join('products', 'products.seller_id', '=', 'users.id')
+        ->where('users.id', $id);
+        // count seller/cooperative approved products 
+        $countApprovedProduct = User::join('products', 'products.seller_id', '=', 'users.id')
+        ->where('products.prod_status', 'approve')
+        ->where('users.id', $id);
+        // sum total sales for seller/cooperative products that was paid for
+        $sales = Transaction::join('order_items', 'order_items.order_id', '=', 'transactions.order_id')
+        ->join('products', 'products.seller_id', '=', 'order_items.seller_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->where('orders.pay_status', 'paid')
+        ->where('transactions.pay_status', 'success')
         ->where('products.seller_id', $id)
-        ->paginate( $request->get('per_page', 10));
-        \LogActivity::addToLog('Admin products');
-        return view('cooperative.products', compact('products'));
+        ->get('products.seller_price');
+        // count seller/cooperative products that was sold 
+        $countSoldProducts = Transaction::join('order_items', 'order_items.order_id', '=', 'transactions.order_id')
+        ->join('products', 'products.seller_id', '=', 'order_items.seller_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->where('orders.pay_status', 'paid')
+        ->where('transactions.pay_status', 'success')
+        ->where('products.seller_id', $id);
 
+        $perPage = $request->perPage ?? 10;
+        $search = $request->input('search');
+        $products = DB::table('products')->select(['*'])
+        ->where('products.deleted_at',  null)
+        ->where('seller_id', $id)
+        ->orderBy('created_at', 'desc')
+        ->where(function ($query) use ($search) {  // <<<
+       $query->where('prod_status', 'LIKE', '%'.$search.'%')
+           ->orWhere('prod_name', 'LIKE', '%'.$search.'%')
+           ->orWhere('created_at', 'LIKE', '%'.$search.'%')
+           ->orderBy('created_at', 'desc');
+        })->paginate($perPage, $columns = ['*'], $pageName = 'products'
+        )->appends([
+       'per_page'   => $perPage
+        ]);
+        $pagination = $products->appends ( array ('search' => $search) );
+            if (count ( $pagination ) > 0){
+                  \LogActivity::addToLog('Admin products');
+                return view ('cooperative.products',  compact(
+                'perPage', 
+                'products',
+                'countSoldProducts',
+                'sales',
+                'count_product',
+                'countApprovedProduct'))->withDetails ( $pagination );    
+            }  
+            else{
+                redirect()->back()->with('status', 'No record found'); 
+            }
+            return view ('cooperative.products',  compact(
+                'perPage', 
+                'products',
+                'countSoldProducts',
+                'sales',
+                'count_product',
+                'countApprovedProduct'));     
     } 
+    //edit product
+    public function editProduct(Request $request, $id){
+        if( Auth::user()){
+            $product = Product::find($id);
+            //dd($product->id);
+            return view('cooperative.edit-product', compact('product')); 
+        }
+          else { return Redirect::to('/login');
+        }
+  }
+  
+      //update product
+      public function updateProduct(Request $request, $id){
+        $this->validate($request, [
+          'quantity'      => 'required|max:255',  
+          'old_price'    => 'max:255',
+          'price'        => 'required|max:255',
+          'productname'  => 'required|max:255',
+          'brand'        => 'max:255',
+          'description'  => 'max:255',
+          ]);
+          // add company and coperative percentage
+          $company_percentage = $request->price *  5 / 100;
+          $price = $request->price  + $company_percentage;
+  
+          $product = Product::find($id);
+          $product->prod_name     = $request->productname;
+          $product->quantity      = $request->quantity;
+          $product->old_price     = $request->old_price;
+          $product->seller_price  = $request->price;
+          $product->price         = $price;
+          $product->prod_brand     = $request->brand;
+          $product->description     = $request->description;
+          $product->update();
+  
+          $data = 'Edit successful for ' .$request->productname. '';
+          \LogActivity::addToLog('ProductUpdate');
+          return redirect('admin-products')->with('success',  $data);
+      }
 
-    public function approveOrder(Request $request, $order_id){
+
+      public function removeProductPage(Request $request, $id){
+        if( Auth::user()){
+          $product = Product::find($id);
+          return view('cooperative.remove-product', compact('product')); 
+       }
+        else { return Redirect::to('/login');}   
+      }
+  
+      public function removeProduct(Request $request){
+        $seller_id = Auth::user()->id;
+        $id = $request->product_id;
+        //soft delete
+        Product::where('id', $id)->where('seller_id', $seller_id)->delete(); 
+        Product::where('id', $id)->update([
+          'prod_status' =>  'deleted',
+          ]);
+        \LogActivity::addToLog('Remove product');
+        return redirect('admin-products')->with('success', 'Product Removed Successful!');
+    }
+  
+    public function approveMemberOrderPage(Request $request, $id){
+        if( Auth::user()){
+          $order = Order::find($id);
+          return view('cooperative.approve-member-order', compact('order')); 
+       }
+        else { return Redirect::to('/login');}   
+      }
+  
+
+    public function approveOrder(Request $request){
         $id = Auth::user()->id;
         $cooperative = Auth::user()->coopname;
-        //$order_id = $request->order_id;
+        $order_id = $request->order_id;
         $order = Order::find($order_id);
         $order_number = Order::where('id', $order_id)->get('order_number') ;
         
@@ -215,12 +663,14 @@ class CooperativeController extends Controller
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit'); 
+
         $plugCredit = Arr::pluck($credit, 'credit');
         $getCredit = implode('', $plugCredit);
         $paymentDays = User::where('id', $id)->get('payment_days');
         $pluckPaymentDays = Arr::pluck($paymentDays, 'payment_days');
         $payment = implode('', $pluckPaymentDays);
-
+        
+        //if admin has credit approve order
         if($getCredit > $grandtotal ){
             $input = 'approved'; 
             $approve = Order::where('id', $order_id)
@@ -239,11 +689,8 @@ class CooperativeController extends Controller
            //->distinct()
            ->pluck('order_items.seller_id')->toArray();
 
-
            $myArray = Arr::pluck($seller_id,['seller_id']);
            $ss =json_encode($myArray);
-        
-        
 
            $seller_price = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
            ->where('order_items.order_id', $order_id)
@@ -264,14 +711,14 @@ class CooperativeController extends Controller
            ->pluck('order_items.order_quantity')
            ->toArray();
     
-        //Wallet::whereIn('user_id', $seller_id)->increment('credit', $seller_price); 
+            //Wallet::whereIn('user_id', $seller_id)->increment('credit', $seller_price); 
 
-            //for every approve order decrease product quantity
-            //  $stock = \DB::table('products')->where('id', $case)->first()->quantity;
-            //  dd($stock);
-            //  if($stock > $orderItem_quantity){
-            //    \DB::table('products')->where('id', $product_id)->decrement('quantity',$orderItem_quantity);
-            //  }
+                //for every approve order decrease product quantity
+                //  $stock = \DB::table('products')->where('id', $case)->first()->quantity;
+                //  dd($stock);
+                //  if($stock > $orderItem_quantity){
+                //    \DB::table('products')->where('id', $product_id)->decrement('quantity',$orderItem_quantity);
+                //  }
           
              \LogActivity::addToLog('Admin approve order');
              $memberID = Order::where('id',  $order_id)->get('user_id');
@@ -370,18 +817,18 @@ class CooperativeController extends Controller
             ->where('order_items.order_id', $order_id)
             ->get('email'); 
 
-            foreach ($getSellerEmail as $key => $user) {
+            // foreach ($getSellerEmail as $key => $user) {
            
-                Mail::to($user->email)->send(new SalesEmail($sellerData)); 
-            }
+            //     Mail::to($user->email)->send(new SalesEmail($sellerData)); 
+            // }
 
             Mail::to($memberEmail)->send(new OrderApprovedEmail($memberData)); 
          
             Mail::to('info@lascocomart.com')->send(new OrderEmail($data));    
-            return redirect()->back()->with('success', 'Approved successful!'); 
-           }
+            return redirect('admin-member-order')->with('success', 'Approved successful!'); 
+        }
         else{
-            return redirect()->back()->with('error', 'Your credit is low kindly contact LascocoMart to get funds');   
+            return redirect('admin-member-order')->with('error', 'Your credit is low kindly contact LascocoMart to get funds');   
         }
        
     }
@@ -392,17 +839,56 @@ class CooperativeController extends Controller
             $code = Auth::user()->code;
             $owncredit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('users.id', $id)
-        ->get('credit'); 
+            ->get('credit'); 
         
             $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('users.code', $code) 
             ->where('users.email_verified_at', '!=','null')
             ->paginate( $request->get('per_page', 10));
 
-            $members = User::all()->except(Auth::id())->where('code', $code);  
-            \LogActivity::addToLog('Admin members');
-        return view('cooperative.all_members', compact('credit', 'owncredit', 'members'));
+             //users logged from the beggining of current callendar month
+            $adminActiveMember =  User::where('code', $code)
+            ->where('id', '!=', Auth::user()->id)
+            ->where('last_login', '>', new DateTime('last day of previous month'))
+            ->get(); 
 
+            //$members = User::all()->except(Auth::id())->where('code', $code); 
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+
+            $members = DB::table('users')->select(['*'])
+            ->where('code', $code)
+            ->where('id', '!=', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->where(function ($query) use ($search) {  // <<<
+            $query->where('fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('lname', 'LIKE', '%'.$search.'%')
+            ->orWhere('email', 'LIKE', '%'.$search.'%')
+            ->orWhere('phone', 'LIKE', '%'.$search.'%')
+            ->where('id', '!=', Auth::user()->id)
+            ->orderBy('created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'members'
+            )->appends(['per_page'   => $perPage]);
+
+            $pagination = $members->appends ( array ('search' => $search) );
+            if (count ( $pagination ) > 0){
+                return view ('cooperative.all_members', compact(
+                'perPage',
+                'credit', 
+                'owncredit', 
+                'members',
+                'adminActiveMember'))->withDetails($pagination );    
+            }
+            else{
+                redirect()->back()->with('status', 'No record found'); 
+            }   
+            \LogActivity::addToLog('Admin members');
+            return view('cooperative.all_members', compact(
+            'perPage',
+            'credit', 
+            'owncredit', 
+            'members',
+            'adminActiveMember'));
         }
         else { return Redirect::to('/login');}
     
@@ -422,17 +908,27 @@ class CooperativeController extends Controller
             $code = Auth::user()->code; //
             $item = Order::join('users', 'users.id', '=', 'orders.user_id')
             ->leftjoin('order_items', 'order_items.order_id', '=', 'orders.id')
-            // ->join('shipping_details', 'shipping_details.shipping_id', '=', 'orders.id')
+             ->join('shipping_details', 'shipping_details.shipping_id', '=', 'orders.id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             // ->join('vouchers', 'vouchers.user_id', '=', 'users.id')
             ->where('users.code', $code)
-            ->where('order_number', $order_number)
-            ->get(['orders.*', 'users.*', 'order_items.*', 'products.*'])->first();
+            ->where('orders.order_number', $order_number)
+            ->get(['orders.*', 
+            'users.*',
+            'order_items.*',  
+            'products.prod_name', 
+            'products.image', 
+            'products.description',
+            'shipping_details.*'])->first();
         
             $orders = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->where('orders.order_number', $order_number)
-            ->get(['orders.*',  'order_items.*',  'products.*']);              
+            ->get(['orders.*', 
+            'order_items.*',  
+            'products.prod_name', 
+            'products.image', 
+            'products.description']);              
             \LogActivity::addToLog('Admin invoice');
         return view('invoice', compact('item', 'orders'));
         }
@@ -455,18 +951,15 @@ class CooperativeController extends Controller
         {   
         $user_id = Auth::user()->id; // get the seller id
         $user_role = Auth::user()->role;
-
-        // fields that are required 
         //|dimensions:max_width=600,max_height=600
          $this->validate($request, [
          'image' => 'required|image|mimes:jpg,png,jpeg|max:300',// maximum is 300kb , 600 x 600 pixel
          'img1' => 'image|mimes:jpg,png,jpeg|max:300',
          'img2' => 'image|mimes:jpg,png,jpeg|max:300',
          'img3' => 'image|mimes:jpg,png,jpeg|max:300',
-         'img4' => 'image|mimes:jpg,png,jpeg|max:300',
          'prod_name' => 'required|string|max:100',
-         'quantity' => 'required|string|max:100',
-         'price' => 'required|string|max:100',
+         'quantity' => 'required|numeric|max:1000',
+         'price' => 'required|numeric|min:100',
          'cat_id' => 'required|string|max:100',
         ]);
     
@@ -483,69 +976,43 @@ class CooperativeController extends Controller
             $imageName =  rand(1000000000, 9999999999).'.jpeg';
              $image->move(public_path('assets/products'),$imageName);
              $image_path = "/assets/products/" . $imageName; 
-
              }
 
             else {
             $image_path = "";
              }
 
-
            $img1= $request->file('img1');
-            if(isset($img1))
-            {
+            if(isset($img1)){
             $img1Name =  rand(1000000000, 9999999999).'.jpeg';
              $img1->move(public_path('assets/products'),$img1Name);
              $img1_path = "/assets/products/" . $img1Name; 
-
              }
+            else {$img1_path = "";}
 
-            else {
-            $img1_path = "";
-             }
-
-
-              $img2= $request->file('img2');
-            if(isset($img2))
-            {
+            $img2= $request->file('img2');
+            if(isset($img2)){
             $img2Name = rand(1000000000, 9999999999).'.jpeg';
              $img2->move(public_path('assets/products'),$img2Name);
              $img2_path = "/assets/products/" . $img2Name; 
-
              }
-
-            else {
-            $img2_path = "";
-             }
-
-
+            else {$img2_path = "";}
 
             $img3= $request->file('img3');
-            if(isset($img3))
-            {
+            if(isset($img3)){
             $img3Name =  rand(1000000000, 9999999999).'.jpeg';
              $img3->move(public_path('assets/products'),$img3Name);
              $img3_path = "/assets/products/" . $img3Name; 
-
              }
-
-            else {
-            $img3_path = "";
-             }
-
+            else {$img3_path = "";}
 
             $img4= $request->file('img4');
-            if(isset($img4))
-            {
+            if(isset($img4)){
             $img4Name = rand(1000000000, 9999999999).'.jpeg';
              $img4->move(public_path('assets/products'),$img4Name);
              $img4_path = "/assets/products/" . $img4Name; 
-
              }
-
-            else {
-            $img4_path = "";
-             }
+            else {$img4_path = "";}
 
               //    $img2= $request->file('img2');
            //  if(isset($img2))
@@ -553,16 +1020,11 @@ class CooperativeController extends Controller
            //  $img2Name = time().'_'.$img2->getClientOriginalName();
            //   $img2->move(public_path('assets/products'),$img2Name);
            //   $img2_path = "/assets/products/" . $img2Name; 
-
            //   }
 
-
             // add company and coperative percentage
-
             //$cop = $request->price * 5 / 100; //cooperative percentage
-
             $company_percentage = $request->price *  5 / 100;// coopmart percentage
-        
             $price = $request->price  + $company_percentage;
 
            $product = new Product;
@@ -578,7 +1040,7 @@ class CooperativeController extends Controller
            $product->img1       = $img1_path;
            $product->img2       = $img2_path;
            $product->img3       = $img3_path;
-           $product->img4       = $img4_path;
+        //    $product->img4       = $img4_path;
            $product->seller_id  = $user_id;
            $product->seller_role  = $user_role;
            $product->prod_status = 'pending';
@@ -592,16 +1054,15 @@ class CooperativeController extends Controller
           $product_name= $product->prod_name; 
           $notification = new NewProduct($product_id, $product_name);
           Notification::send($superadmin, $notification);
-
            // send email notification to coopmart for approval
-                   $data = array(
-                    'name'      =>  'coopmart',
-                    'message'   =>   'approve'
+            $data = array(
+                'name'      =>  'coopmart',
+                'message'   =>   'approve'
                 );
 
              Mail::to('info@lascocomart.com')->send(new SendMail($data));
              \LogActivity::addToLog('Admin new product');
-            return redirect('cooperative')->with('status', 'New product added successfully');   
+            return redirect('admin-products')->with('status', 'New product added successfully');   
                
     }   
 
@@ -619,32 +1080,27 @@ class CooperativeController extends Controller
     }
 
 
-    public function coopsales_preview(Request $request)
-    {
-         if( Auth::user()->role_name  == 'cooperative'){
-               $id = Auth::user()->id; //
-
-          $sales = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
-                ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                ->where('orders.status', 'Paid')
-                ->where('products.seller_id', $id) 
-                ->orderBy('date', 'desc')  
-                ->paginate( $request->get('per_page', 5));  
-                \LogActivity::addToLog('Admin view sales');
-       return view('cooperatives.sales_preview', compact('sales'));
-
+    public function coopsales_preview(Request $request){
+        if( Auth::user()->role_name  == 'cooperative'){
+            $id = Auth::user()->id; //
+            $sales = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.status', 'Paid')
+            ->where('products.seller_id', $id) 
+            ->orderBy('date', 'desc')  
+            ->paginate( $request->get('per_page', 5));  
+            \LogActivity::addToLog('Admin view sales');
+            return view('cooperatives.sales_preview', compact('sales'));
          }
          else{
             return Redirect::to('/login');
          } 
     }
 
-    public function fmcgproductsview(Request $request)
-    {
- 
+    public function fmcgproductsview(Request $request){
         $fmcgproductsview = FcmgProduct::where('prod_status', 'approve')
-                    ->orderBy('created_at', 'desc')
-                    ->paginate($request->get('per_page', 16));
+        ->orderBy('created_at', 'desc')
+        ->paginate($request->get('per_page', 16));
         
         $seller = Arr::pluck($fmcgproductsview, 'seller_id');
         $get_seller_id = implode(" ",$seller);

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Order;
@@ -51,16 +53,17 @@ class FmcgPaymentController extends Controller
              {
                Session::flash('status', ' You are yet to complete your profile!'); 
                Session::flash('alert-class', 'alert-success'); 
-               return Redirect::to('/profile');     
+               return Redirect::to('/account-settings');     
              }
          try{
-             return Paystack::getAuthorizationUrl()->redirectNow();
+             return Paystack::getAuthorizationUrl()->redirectNow('fmcg/callback');
          }catch(\Exception $e) {
              return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
          }        
      } 
-     
-      public function handleGatewayCallback(Request $request)
+    
+    
+     public function fmcgCallback(Request $request)
      {
          $paymentDetails = Paystack::getPaymentData();
          // dd($paymentDetails);
@@ -81,7 +84,7 @@ class FmcgPaymentController extends Controller
          $order_number  = $order_number;
          $order_status  = $status;
          $pay_status = "success";   
-         $pay_type = "FMCG Pay";
+         $pay_type = "fmcg";
          $ship_address  =  $request->input('ship_address');
          $ship_city     = $request->input('ship_city');
          $ship_phone    = $request->input('ship_phone');
@@ -115,14 +118,14 @@ class FmcgPaymentController extends Controller
              //Checking to Ensure the transaction was succesful
              $totalAmount = $total - $delivery_fee;
              $order = new Order();
-             $order->user_id     = Auth::user()->id;
-             $order->total       = $totalAmount;
-             $order->delivery_fee    = $delivery_fee; 
-             $order->grandtotal       = $amount / 100;
-             $order->order_number = $order_number;
-             $order->status      = $order_status;
-             $order->pay_status = $pay_status;
-             $order->pay_type      = $pay_type;
+             $order->user_id        = Auth::user()->id;
+             $order->total          = $totalAmount;
+             $order->delivery_fee   = $delivery_fee; 
+             $order->grandtotal     = $amount / 100;
+             $order->order_number   = $order_number;
+             $order->status         = $order_status;
+             $order->pay_status     = $pay_status;
+             $order->pay_type       = $pay_type;
              $order->save();
              
              $data = [];
@@ -150,7 +153,8 @@ class FmcgPaymentController extends Controller
                  $orderItem->product_id = $item['id'];
                  $orderItem->seller_id = $item['seller_id'];
                  $orderItem->order_quantity   = $item['quantity'];
-                 $orderItem->amount     = $item['price'];
+                 $orderItem->amount          = $item['price'] * $item['quantity'];
+                 $orderItem->unit_cost       = $item['price'];
                  $orderItem->save();
                  
                  $get_seller_price = FcmgProduct::where('id', $product_id)->get('seller_price');
@@ -186,7 +190,7 @@ class FmcgPaymentController extends Controller
                       $useremail = Arr::pluck($email, 'email'); // 
                       $get_email = implode(" ",$useremail);
            
-                    // send email notification to member
+                    // send email notification 
                        $data = array(
                        'name'         => $get_name,
                        'order_number' => $order_number,  
@@ -223,16 +227,14 @@ class FmcgPaymentController extends Controller
                 $tranx->tran_amount         = $amount / 100;
                 $tranx->pay_status         =  $pay_status;
                 $tranx->save();
-
-         
              //remove item from cart
              $request->session()->forget('cart');
- 
-           
+
              \LogActivity::addToLog('FMCG Product Payment');
              return redirect()->route('cart')->with('success', 'Your Order was successfull');
          }
      }
+
 
 
 }//class

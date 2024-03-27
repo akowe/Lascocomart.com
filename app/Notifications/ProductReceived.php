@@ -63,10 +63,6 @@ class ProductReceived extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'id' => $this->product_id ,
-            'data'=>'item(s) with ' .$this->product_name. ' has been received by ' .$fname. ' ' .$lname,
-        ];
+        return '' .$this->product_name. ' has been received by ' .$fname. ' ';
     }
 }

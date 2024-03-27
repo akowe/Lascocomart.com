@@ -64,10 +64,6 @@ class NewProduct extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'id' => $this->product_id,
-            'data'=>' New product awaits approval from ' .$fname. ' ' .$lname,
-        ];
+        return ' New product from ' .$fname. ' ';
     }
 }

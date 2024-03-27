@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FundRequest;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Notifications\CooperativeFundRequest;
 use App\Notifications\MemberFundRequest;
 use App\Notifications\NewProduct;
@@ -21,6 +23,7 @@ use App\Models\Wallet;
 use App\Models\Order;
 use App\Models\Credit;
 use App\Models\Product;
+use App\Models\FcmgProduct;
 use App\Models\OrderItem;
 use App\Models\fcmgOrder;
 use App\Models\fcmgOrderItem;
@@ -75,27 +78,21 @@ class NotificationController extends Controller
        return redirect('products_list');
    }
    
-   public function orderDelivered($id){
+   public function orderDelivered($id, $product_id){
         $email = Auth::user()->email;
         $buyer_id =  User::Join('orders', 'orders.user_id', '=', 'users.id')
         ->where('orders.id', $id)
         ->get('users.id');
         //dd($buyer_id);
-        $delivered = OrderItem::where('order_id', $id)
+        $delivered = OrderItem::where('id', $id)
         ->where('seller_id', Auth::user()->id)
         ->update(['delivery_status' => 'delivered',
                 'delivery_date'=> Carbon::now()
                 ]);
 
-        $product_id = OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
-        ->Join('products', 'products.id', '=','order_items.product_id')
-        ->where('orders.id', $id)
-        ->where('products.seller_id', Auth::user()->id)
-        ->get('products.id');
-
         $getProduct = OrderItem::Join('orders', 'orders.id', '=', 'order_items.order_id')
         ->Join('products', 'products.id', '=','order_items.product_id')
-        ->where('orders.id', $id)
+        ->where('products.id', $product_id)
         ->where('products.seller_id', Auth::user()->id)
         ->get('products.prod_name');
 
@@ -117,16 +114,58 @@ class NotificationController extends Controller
 
         if($delivered){
            // Email notification to Coopmart
-            $data = array(
-            'cooperative_name'   => $cooperative_name,
-            'cooperative_code'  =>$cooperative_code,
-            'email'             => $email,  
-            'amount'            => $amount,       
-            );
+            // $data = array(
+            // 'cooperative_name'   => $cooperative_name,
+            // 'cooperative_code'  =>$cooperative_code,
+            // 'email'             => $email,  
+            // 'amount'            => $amount,       
+            // );
         // Mail::to('info@lascocomart.com')->send(new RequestFundEmail($data)); 
         }
-        return redirect()->back()->with('status', 'Delivered!');
+        return redirect()->back()->with('success', 'Delivered!');
    }
+
+
+   public function fmcgOrderDelivered($id, $product_id){
+    $email = Auth::user()->email;
+    $buyer_id =  User::Join('orders', 'orders.user_id', '=', 'users.id')
+    ->where('orders.id', $id)
+    ->get('users.id');
+    //dd($buyer_id);
+
+    $delivered = OrderItem::where('id', $id)
+    ->where('seller_id', Auth::user()->id)
+    ->update(['delivery_status' => 'delivered',
+            'delivery_date'=> Carbon::now()
+            ]);
+
+    $getProduct = FcmgProduct::Join('order_items', 'order_items.product_id', '=', 'fmcg_products.id')
+    ->where('fmcg_products.id', $product_id)
+    ->where('fmcg_products.seller_id', Auth::user()->id)
+    ->get('fmcg_products.prod_name');
+
+    foreach($getProduct as $details){
+        $product_name = $details->prod_name;
+    }
+    // $product= Arr::pluck($getProduct, 'prod_name'); // 
+    // $product_name = implode('', $product);
+
+    $superadmin = User::where('role_name', '=', 'superadmin')->get();
+    $get_superadmin_id =Arr::pluck($superadmin, 'id');
+    $superadmin_id = implode('', $get_superadmin_id);
+
+    $notification = new ProductDelivered($product_id, $product_name);
+    Notification::send($superadmin, $notification);
+
+     $notification = new ProductDelivered($product_id, $product_name);
+     Notification::send($buyer_id, $notification);
+
+    if($delivered){
+       // Email notification to Coopmart
+        
+    }
+    return redirect()->back()->with('success', 'Delivered!');
+}
 
 public function allProductDeliveredNotification(){
     Auth::user()->unreadNotifications->where('type', 'App\Notifications\ProductDelivered')->markAsRead();

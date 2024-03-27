@@ -2,76 +2,33 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <meta http-equiv=“refresh” content="{{config('session.lifetime') * 60}}">
-
-      <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/adminx.css') }}" media="screen" />
       <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
-      <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+      <link rel="icon" type="image/x-icon" href="./back/static/lascoco-mart-icon.svg">
       <title>{{ config('app.name', 'LascocoMart') }}</title>
-      <!-- Scripts -->
-      <script src="{{ asset('js/app.js') }}" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-      <!-- Fonts -->
-      <link rel="dns-prefetch" href="//fonts.gstatic.com">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-            integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-            crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+      <!-- CSS files -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
-      <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-      <!-- Styles -->
-      <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+      <link href="/back/dist/css/tabler-flags.min.css?v=echo filemtime();" rel="stylesheet" />
+      <link href="/back/dist/css/tabler-payments.min.css?v=echo filemtime();" rel="stylesheet" />
+      <link href="/back/dist/css/tabler-vendors.min.css?v=echo filemtime();" rel="stylesheet" />
+      <link href="/back/dist/css/demo.css?v=echo filemtime();" rel="stylesheet" />
+      <link href="/back/dist/css/tabler.css?v=echo filemtime();" rel="stylesheet" />
       <style>
-      button.dt-button,
-      div.dt-button,
-      a.dt-button {
-            position: relative;
-            display: inline-block;
-            box-sizing: border-box;
-            margin-right: 0.333em;
-            padding: 0.2em 1em;
-            border: 1px solid #D10024;
-            border-radius: 2px;
-            cursor: pointer;
-            font-size: 0.88em;
-            color: #000;
-            white-space: nowrap;
-            overflow: hidden;
-            background-color: rgba(209, 0, 36, 0.1);
+      @import url('https://rsms.me/inter/inter.css');
+
+      :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
 
-      div.dataTables_wrapper div.dataTables_length select {
-            width: 75px !important;
-            display: inline-block;
-      }
-
-      div.dataTables_wrapper div.dataTables_length {
-            width: 75px !important;
-            display: inline-block;
+      body {
+            font-feature-settings: "cv03", "cv04", "cv11";
       }
       </style>
-      <!--Start of Tawk.to Script-->
-      <script type="text/javascript">
-      var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-      (function() {
-            var s1 = document.createElement("script"),
-                  s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/64973fe5cc26a871b0247a7d/1h3nd36r6';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-      })();
-      </script>
-      <!--End of Tawk.to Script-->
+
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-R14072TPRF"></script>
       <script>
@@ -84,761 +41,3471 @@
 
       gtag('config', 'G-R14072TPRF');
       </script>
+
 </head>
 
 <body>
+      <script src="/back/dist/js/demo-theme.min.js"></script>
+      <div class="page">
+            <!-- Navbar -->
+            <div class="sticky-top">
+                  <header class="navbar navbar-expand-md sticky-top d-print-none" data-bs-theme="dark">
+                        <div class="container-xl">
+                              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false"
+                                    aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                              </button>
+                              <span class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                                    <a href="."><img src="{{ asset('back/static/lascoco-logo.png') }}" width="70"
+                                                height="42" alt="LascocoMart">
+                                    </a>
+                              </span>
+                              <div class="navbar-nav flex-row order-md-last">
+                                    <!-- Dark / Light Mode show on medium and large device only -->
+                                    <a href="?theme=dark" class="nav-link d-sm-block d-md-none px-0 hide-theme-dark"
+                                          title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                          <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                      d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                                          </svg>
+                                    </a>
+                                    <a href="?theme=light" class="nav-link d-sm-block d-md-none px-0 hide-theme-light"
+                                          title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                          <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                                <path
+                                                      d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                                          </svg>
+                                    </a>
+                                    <div class="nav-item d-none d-md-flex me-3">
+                                          <div class="btn-list">
+                                                @auth
+                                                @if(Auth::user()->role_name == 'cooperative')
 
-      <div id="app" class="adminx-container">
-            <!-- COOP NAV BAR-->
-            <nav class="navbar navbar-expand justify-content-between fixed-top">
-                  <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
-                              width="139" height="93" alt="Lascoco" title="Lascoco">
+                                                <a href="{{ url('fmcgs_products') }}" class="btn" rel="noreferrer">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon icon-tabler icon-tabler-brand-producthunt"
+                                                            width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5" />
+                                                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                      </svg>
 
-                  </a>
-                  <div class="d-flex flex-1 d-block d-md-none">
-                        <a href="#" class="sidebar-toggle ml-3">
-                              <i data-feather="menu"></i>
-                        </a>
-                  </div>
-                  <ul class="navbar-nav d-flex justify-content-end mr-2">
-                        <!-- Notificatoins -->
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
+                                                      FMCG Products
+                                                </a>
+                                                @endif
+                                                @endauth
 
-                        </li>
 
-                        <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
+                                                @auth
+                                                @if(Auth::user()->role_name == 'fmcg')
+                                                <a href="{{ url('fmcgs_products') }}" class="btn" rel="noreferrer">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon icon-tabler icon-tabler-brand-producthunt"
+                                                            width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5" />
+                                                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                      </svg>
 
-                        </li> -->
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Orders from members">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span
-                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewOrder')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewOrder'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
+                                                      FMCG Products
+                                                </a>
+
+
+                                                @endif
+                                                @endauth
+
+                                                <a href="{{ url('/') }}" class="btn" rel="noreferrer">
+                                                      <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon icon-tabler icon-tabler-shopping-cart"
+                                                            width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                            <path d="M17 17h-11v-14h-2" />
+                                                            <path d="M6 5l14 1l-1 7h-13" />
+                                                      </svg>
+
+                                                      LascocoMart
+                                                </a>
+
+
+                                          </div>
+                                    </div>
+
+
+                                    <div class=" d-md-flex">
+                                          <!-- Dark / Light Mode show on medium and large device only -->
+                                          <a href="?theme=dark" class="nav-link d-none d-md-block px-0 hide-theme-dark"
+                                                title="Enable dark mode" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                      stroke="currentColor" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                      <path
+                                                            d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                                                </svg>
+                                          </a>
+                                          <a href="?theme=light"
+                                                class="nav-link d-none d-md-block px-0 hide-theme-light"
+                                                title="Enable light mode" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                      stroke="currentColor" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                      <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                                      <path
+                                                            d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                                                </svg>
+                                          </a>
+                                          <!-- start notification -->
+                                          <!-- cooperative notification-->
+                                          @auth
+                                          @if(Auth::user()->role_name == 'cooperative')
+                                          <div class="nav-item dropdown d-md-flex me-4">
+                                                <a href="#" class="nav-link px-0" data-bs-toggle="dropdown"
+                                                      tabindex="-1" aria-label="Show notifications">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path
+                                                                  d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                                            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                                      </svg>
+                                                      <span
+                                                            class="badge bg-red text-white">{{ auth()->user()->unreadNotifications()->count() }}</span>
+                                                </a>
+                                                <div
+                                                      class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                                                      <div class="card">
+                                                            <div class="card-header">
+                                                                  <h3 class="card-title">Recent notifications</h3>
+                                                            </div>
+                                                            <div
+                                                                  class="list-group list-group-flush list-group-hoverable">
+                                                                  <!-- my order notification--->
+                                                                  <div class="list-group-item">
+                                                                        <div class="row align-items-center">
+                                                                              <div class="col-auto "><span
+                                                                                          class="status-dot status-dot-animated bg-yellow d-block"></span>
+                                                                              </div>
+                                                                              <div class="col text-truncate">
+                                                                                    <a href="#"
+                                                                                          class="text-body d-block">
+
+                                                                                          {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewOrder')->count()}}
+                                                                                          Order (s)
+                                                                                    </a>
+                                                                                    <div
+                                                                                          class="d-block text-secondary text-truncate mt-n1">
+
+                                                                                          <!--member order here-->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\NewOrder')
+                                                                                          as $notification)
+                                                                                          <div class="text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      Member:
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+
+                                                                                          <!-- customer order here--->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\CustomerOrder')
+                                                                                          as $notification)
+                                                                                          <div class="text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      Customer:
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+                                                                                    </div>
+                                                                              </div>
+                                                                              <div class="col-auto">
+                                                                                    @if(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\NewOrder'))
+                                                                                    <a href="{{route('read-all-order')}}"
+                                                                                          title="Clear" alt="Clear"
+                                                                                          class="small"><svg
+                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="icon icon-tabler icon-tabler-x"
+                                                                                                width="24" height="24"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke-width="1.5"
+                                                                                                stroke="currentColor"
+                                                                                                fill="none"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round">
+                                                                                                <path stroke="none"
+                                                                                                      d="M0 0h24v24H0z"
+                                                                                                      fill="none" />
+                                                                                                <path
+                                                                                                      d="M18 6l-12 12" />
+                                                                                                <path d="M6 6l12 12" />
+                                                                                          </svg>
+                                                                                    </a>
+
+                                                                                    @endif
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <!-- end new order notification--->
+
+
+                                                                  <!-- product delivery notification--->
+                                                                  <div class="list-group-item">
+                                                                        <div class="row align-items-center">
+                                                                              <div class="col-auto"><span
+                                                                                          class="status-dot status-dot-animated bg-green d-block"></span>
+                                                                              </div>
+                                                                              <div class="col text-truncate">
+                                                                                    <a href="#"
+                                                                                          class="text-body d-block">
+                                                                                          {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductDelivered')->count()}}
+                                                                                          Product (s)
+                                                                                    </a>
+                                                                                    <div
+                                                                                          class="d-block text-secondary text-truncate mt-n1">
+                                                                                          <!-- my product approval here -->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\ProductDelivered')
+                                                                                          as $notification)
+                                                                                          <div class="text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+                                                                                          <!-- product delivery here product i boguth when a seller click delivery -->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\ProductDelivered')
+                                                                                          as $notification)
+                                                                                          <div class="text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+                                                                                    </div>
+                                                                              </div>
+                                                                              <div class="col-auto">
+                                                                                    @if(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\ProductDelivered'))
+                                                                                    <a href="{{route('product-delivered')}}"
+                                                                                          title="Clear" alt="Clear"
+                                                                                          class="small"><svg
+                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="icon icon-tabler icon-tabler-x"
+                                                                                                width="24" height="24"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke-width="1.5"
+                                                                                                stroke="currentColor"
+                                                                                                fill="none"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round">
+                                                                                                <path stroke="none"
+                                                                                                      d="M0 0h24v24H0z"
+                                                                                                      fill="none" />
+                                                                                                <path
+                                                                                                      d="M18 6l-12 12" />
+                                                                                                <path d="M6 6l12 12" />
+                                                                                          </svg>
+                                                                                    </a>
+
+                                                                                    @endif
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <!-- end product delivery notification--->
+
+                                                                  <!-- loan funds  notification--->
+                                                                  <div class="list-group-item">
+                                                                        <div class="row align-items-center">
+                                                                              <div class="col-auto"><span
+                                                                                          class="status-dot status-dot-animated bg-azure d-block"></span>
+                                                                              </div>
+                                                                              <div class="col text-truncate">
+                                                                                    <a href="#"
+                                                                                          class="text-body d-block">
+                                                                                          {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
+                                                                                          Loan (s)
+                                                                                    </a>
+                                                                                    <div
+                                                                                          class="d-block text-secondary text-truncate mt-n1">
+                                                                                          <!-- loan request from members -->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\ApproveFund')
+                                                                                          as $notification)
+                                                                                          <div class=" text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+
+                                                                                          <!-- loan repayment my member -->
+                                                                                          @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                          'App\Notifications\CancelFundRequest')
+                                                                                          as $notification)
+                                                                                          <div class=" text-secondary">
+                                                                                                <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                      data-id="{{$notification->id}}"
+                                                                                                      class=" text-secondary">
+
+                                                                                                      {!!
+                                                                                                      Str::limit("$notification->data",
+                                                                                                      30, ' ...') !!}
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                          @endforeach
+                                                                                    </div>
+                                                                              </div>
+                                                                              <div class="col-auto">
+                                                                                    @if(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\ApproveFund'))
+                                                                                    <a href="{{route('read-all-approve-funds')}}"
+                                                                                          title="Clear" alt="Clear"
+                                                                                          class="small"><svg
+                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="icon icon-tabler icon-tabler-x"
+                                                                                                width="24" height="24"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke-width="1.5"
+                                                                                                stroke="currentColor"
+                                                                                                fill="none"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round">
+                                                                                                <path stroke="none"
+                                                                                                      d="M0 0h24v24H0z"
+                                                                                                      fill="none" />
+                                                                                                <path
+                                                                                                      d="M18 6l-12 12" />
+                                                                                                <path d="M6 6l12 12" />
+                                                                                          </svg>
+                                                                                    </a>
+
+                                                                                    @endif
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <!-- end loan notification--->
+                                                                  <!-- end notification group-item --->
+
+
+                                                                  <div class="list-group-item bg-white">
+                                                                        <div class="row align-items-center">
+                                                                              <div class="col-auto ">
+                                                                                    <a href=""
+                                                                                          class="small text-secondary">
+                                                                                          Show all notifications
+                                                                                    </a>
+                                                                              </div>
+                                                                              <div class="col text-truncate"
+                                                                                    style="width:300px;">
+                                                                                    <div
+                                                                                          class="d-block text-secondary text-truncate mt-n1">
+                                                                                          <div class=" text-secondary">
+                                                                                                <a href="" data-id=""
+                                                                                                      class=" text-secondary">
+
+                                                                                                </a>
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </div>
+                                                                              <div class="col-auto">
+                                                                                    <a href="" title="Clear" alt="Clear"
+                                                                                          class="text-secondary small">
+                                                                                          Cancel all
+                                                                                    </a>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <!-- show and clear all notification -->
+
+                                                            </div>
+                                                            <!-- group list -->
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
                                     @endif
+                                    @endauth
+                                    <!-- end cooperative notification -->
 
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewOrder') as $notification)
-                                    <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
+                                    <!-- Member notification start --->
+                                    @auth
+                                    @if(Auth::user()->role_name == 'member')
+                                    <div class="nav-item dropdown d-md-flex me-4">
+                                          <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
+                                                aria-label="Show notifications">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                      stroke="currentColor" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                      <path
+                                                            d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                                      <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                                </svg>
+                                                <span
+                                                      class="badge bg-red text-white">{{ auth()->user()->unreadNotifications()->count() }}</span>
+                                          </a>
+                                          <div
+                                                class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                                                <div class="card">
+                                                      <div class="card-header">
+                                                            <h3 class="card-title">Recent notifications</h3>
+                                                      </div>
+                                                      <div class="list-group list-group-flush list-group-hoverable">
+                                                            <!-- my order notification--->
+                                                            <div class="list-group-item">
+                                                                  <div class="row align-items-center">
+                                                                        <div class="col-auto "><span
+                                                                                    class="status-dot status-dot-animated bg-yellow d-block"></span>
+                                                                        </div>
+                                                                        <div class="col text-truncate">
+                                                                              <a href="#" class="text-body d-block">
 
-                              </ul>
-                        </li>
+                                                                                    {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\AdminCancelOrder')->count()}}
+                                                                                    Order (s)
+                                                                              </a>
+                                                                              <div
+                                                                                    class="d-block text-secondary text-truncate mt-n1">
+                                                                                    @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\AdminCancelOrder')
+                                                                                    as $notification)
+                                                                                    <div class="text-secondary">
+                                                                                          <a href="{{ url('read-cancel-order') }}/{{ $notification->id }}"
+                                                                                                data-id="{{$notification->id}}"
+                                                                                                class=" text-secondary">
 
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Delivery">
-                                    <i class="fa fa-truck"></i>
-                                    <span
-                                          class="badge badge-light bg-success badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductDelivered')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\ProductDelivered'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-success  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif
+                                                                                                {!!
+                                                                                                Str::limit("$notification->data",
+                                                                                                30, ' ...') !!}
 
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\ProductDelivered') as $notification)
-                                    <a href="{{ url('read') }}/{{ $notification->id }}" data-id="{{$notification->id}}"
-                                          class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
+                                                                                          </a>
+                                                                                    </div>
+                                                                                    @endforeach
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                              @if(auth()->user()->unreadNotifications->where('type',
+                                                                              'App\Notifications\AdminCancelOrder'))
+                                                                              <a href="" title="Clear" alt="Clear"
+                                                                                    class="small"><svg
+                                                                                          xmlns="http://www.w3.org/2000/svg"
+                                                                                          class="icon icon-tabler icon-tabler-x"
+                                                                                          width="24" height="24"
+                                                                                          viewBox="0 0 24 24"
+                                                                                          stroke-width="1.5"
+                                                                                          stroke="currentColor"
+                                                                                          fill="none"
+                                                                                          stroke-linecap="round"
+                                                                                          stroke-linejoin="round">
+                                                                                          <path stroke="none"
+                                                                                                d="M0 0h24v24H0z"
+                                                                                                fill="none" />
+                                                                                          <path d="M18 6l-12 12" />
+                                                                                          <path d="M6 6l12 12" />
+                                                                                    </svg>
+                                                                              </a>
 
-                              </ul>
-                        </li>
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
+                                                                              @endif
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <!-- end new order notification--->
 
-                        </li>
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Wallet">
-                                    <i class="fa fa-credit-card"></i>
-                                    <span class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
-                                    </span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    <!-- @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\ApproveFund'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                    <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif -->
 
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\ApproveFund') as $notification)
-                                    <a href="{{ url('read-approve-funds') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
+                                                            <!-- product delivery notification--->
+                                                            <div class="list-group-item">
+                                                                  <div class="row align-items-center">
+                                                                        <div class="col-auto"><span
+                                                                                    class="status-dot status-dot-animated bg-green d-block"></span>
+                                                                        </div>
+                                                                        <div class="col text-truncate">
+                                                                              <a href="#" class="text-body d-block">
+                                                                                    {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductDelivered')->count()}}
+                                                                                    Product (s)
+                                                                              </a>
+                                                                              <div
+                                                                                    class="d-block text-secondary text-truncate mt-n1">
+                                                                                    @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\ProductDelivered')
+                                                                                    as $notification)
+                                                                                    <div class="text-secondary">
+                                                                                          <a href="{{ url('read-product-delivered') }}/{{ $notification->id }}"
+                                                                                                data-id="{{$notification->id}}"
+                                                                                                class=" text-secondary">
 
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\CancelFundRequest') as $notification)
-                                    <a href="{{ url('read-cancel-funds') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
+                                                                                                {!!
+                                                                                                Str::limit("$notification->data",
+                                                                                                30, ' ...') !!}
 
-                              </ul>
-                        </li>
+                                                                                          </a>
+                                                                                    </div>
+                                                                                    @endforeach
 
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                              @if(auth()->user()->unreadNotifications->where('type',
+                                                                              'App\Notifications\ProductDelivered'))
+                                                                              <a href="" title="Clear" alt="Clear"
+                                                                                    class="small"><svg
+                                                                                          xmlns="http://www.w3.org/2000/svg"
+                                                                                          class="icon icon-tabler icon-tabler-x"
+                                                                                          width="24" height="24"
+                                                                                          viewBox="0 0 24 24"
+                                                                                          stroke-width="1.5"
+                                                                                          stroke="currentColor"
+                                                                                          fill="none"
+                                                                                          stroke-linecap="round"
+                                                                                          stroke-linejoin="round">
+                                                                                          <path stroke="none"
+                                                                                                d="M0 0h24v24H0z"
+                                                                                                fill="none" />
+                                                                                          <path d="M18 6l-12 12" />
+                                                                                          <path d="M6 6l12 12" />
+                                                                                    </svg>
+                                                                              </a>
 
-                        </li>
-                        <!-- Notifications -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
+                                                                              @endif
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <!-- end product delivery notification--->
 
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item dropdown">
-                              <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown" href="#">
-                                    {{ Auth::user()->coopname }} &nbsp;
+                                                            <!-- loan funds  notification--->
+                                                            <div class="list-group-item">
+                                                                  <div class="row align-items-center">
+                                                                        <div class="col-auto"><span
+                                                                                    class="status-dot status-dot-animated bg-azure d-block"></span>
+                                                                        </div>
+                                                                        <div class="col text-truncate">
+                                                                              <a href="#" class="text-body d-block">
+                                                                                    {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ApproveFund')->orwhere('type', 'App\Notifications\CancelFundRequest')->count()}}
+                                                                                    Loan (s)
+                                                                              </a>
+                                                                              <div
+                                                                                    class="d-block text-secondary text-truncate mt-n1">
+                                                                                    <!-- loan approval -->
+                                                                                    @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\ApproveFund')
+                                                                                    as $notification)
+                                                                                    <div class=" text-secondary">
+                                                                                          <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                data-id="{{$notification->id}}"
+                                                                                                class=" text-secondary">
 
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
-                                          Password</a>
-                                    <div class="dropdown-divider"></div>
+                                                                                                {!!
+                                                                                                Str::limit("$notification->data",
+                                                                                                30, ' ...') !!}
 
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                          {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                          @csrf
-                                    </form>
+                                                                                          </a>
+                                                                                    </div>
+                                                                                    @endforeach
+
+                                                                                    <!-- loan disbursed -->
+                                                                                    @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                                    'App\Notifications\CancelFundRequest')
+                                                                                    as $notification)
+                                                                                    <div class=" text-secondary">
+                                                                                          <a href="{{ url('read-admin-order') }}/{{ $notification->id }}"
+                                                                                                data-id="{{$notification->id}}"
+                                                                                                class=" text-secondary">
+
+                                                                                                {!!
+                                                                                                Str::limit("$notification->data",
+                                                                                                30, ' ...') !!}
+
+                                                                                          </a>
+                                                                                    </div>
+                                                                                    @endforeach
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                              @if(auth()->user()->unreadNotifications->where('type',
+                                                                              'App\Notifications\ApproveFund'))
+                                                                              <a href="{{route('read-all-approve-funds')}}"
+                                                                                    title="Clear" alt="Clear"
+                                                                                    class="small"><svg
+                                                                                          xmlns="http://www.w3.org/2000/svg"
+                                                                                          class="icon icon-tabler icon-tabler-x"
+                                                                                          width="24" height="24"
+                                                                                          viewBox="0 0 24 24"
+                                                                                          stroke-width="1.5"
+                                                                                          stroke="currentColor"
+                                                                                          fill="none"
+                                                                                          stroke-linecap="round"
+                                                                                          stroke-linejoin="round">
+                                                                                          <path stroke="none"
+                                                                                                d="M0 0h24v24H0z"
+                                                                                                fill="none" />
+                                                                                          <path d="M18 6l-12 12" />
+                                                                                          <path d="M6 6l12 12" />
+                                                                                    </svg>
+                                                                              </a>
+
+                                                                              @endif
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <!-- end loan notification--->
+                                                            <!-- end notification group-item --->
+
+
+                                                            <div class="list-group-item bg-white">
+                                                                  <div class="row align-items-center">
+                                                                        <div class="col-auto ">
+                                                                              <a href="" class="small text-secondary">
+                                                                                    Show all notifications
+                                                                              </a>
+                                                                        </div>
+                                                                        <div class="col text-truncate"
+                                                                              style="width:300px;">
+                                                                              <div
+                                                                                    class="d-block text-secondary text-truncate mt-n1">
+                                                                                    <div class=" text-secondary">
+                                                                                          <a href="" data-id=""
+                                                                                                class=" text-secondary">
+
+                                                                                          </a>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                              <a href="" title="Clear" alt="Clear"
+                                                                                    class="text-secondary small">
+                                                                                    Cancel all
+                                                                              </a>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <!-- show and clear all notification -->
+
+                                                      </div>
+                                                      <!-- group list -->
+                                                </div>
+                                          </div>
+                                    </div>
                               </div>
-                        </li>
-                        @endguest
-                  </ul>
-            </nav>
-            <!-- END COOP NAV BAR-->
+                              @endif
+                              @endauth
+                              <!--- end member notification --->
 
-
-
-            <!-- MERCHANT NAV BAR-->
-            @auth
-            @if(Auth::user()->role_name == 'merchant')
-
-            <nav class="navbar navbar-expand justify-content-between fixed-top">
-                  <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
-                              width="139" height="93" alt="Lascoco" title="Lascoco">
-
-                  </a>
-
-                  <div class="d-flex flex-1 d-block d-md-none">
-                        <a href="#" class="sidebar-toggle ml-3">
-                              <i data-feather="menu"></i>
-                        </a>
-                  </div>
-
-                  <ul class="navbar-nav d-flex justify-content-end mr-2">
-                        <!-- Notificatoins -->
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li>
-
-                        <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li> -->
-
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Delivery">
-                                    <i class="fa fa-coins"></i>
-                                    <span
-                                          class="badge badge-light bg-success badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewCardPayment')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewCardPayment'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-success  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewCardPayment') as $notification)
-                                    <a href="{{ url('read-seller-payment') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
+                              <!--- Merchant notification start --->
+                              @auth
+                              @if(Auth::user()->role_name == 'merchant')
+                              <div class="nav-item dropdown d-md-flex me-4">
+                                    <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
+                                          aria-label="Show notifications">
+                                          <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                      d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                                <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                          </svg>
+                                          <span
+                                                class="badge bg-red text-white">{{ auth()->user()->unreadNotifications()->count() }}</span>
                                     </a>
-                                    @endforeach
+                                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                                          <div class="card">
+                                                <div class="card-header">
+                                                      <h3 class="card-title">Recent notifications</h3>
+                                                </div>
+                                                <div class="list-group list-group-flush list-group-hoverable">
+                                                      <!-- my order notification--->
+                                                      <div class="list-group-item">
+                                                            <div class="row align-items-center">
+                                                                  <div class="col-auto "><span
+                                                                              class="status-dot status-dot-animated bg-yellow d-block"></span>
+                                                                  </div>
+                                                                  <div class="col text-truncate">
+                                                                        <a href="#" class="text-body d-block">
 
-                              </ul>
-                        </li>
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
+                                                                              {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewOrder')->count()}}
+                                                                              Order (s)
+                                                                        </a>
+                                                                        <div
+                                                                              class="d-block text-secondary text-truncate mt-n1">
+                                                                              @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                              'App\Notifications\NewOrder')
+                                                                              as $notification)
+                                                                              <div class="text-secondary">
+                                                                                    <a href="{{ url('read-cancel-order') }}/{{ $notification->id }}"
+                                                                                          data-id="{{$notification->id}}"
+                                                                                          class=" text-secondary">
 
-                        </li>
-                        <!-- Notifications -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
+                                                                                          {!!
+                                                                                          Str::limit("$notification->data",
+                                                                                          30, ' ...') !!}
 
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item dropdown">
-                              <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown" href="#">
-                                    {{ Auth::user()->coopname }}
+                                                                                    </a>
+                                                                              </div>
+                                                                              @endforeach
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-auto">
+                                                                        @if(auth()->user()->unreadNotifications->where('type',
+                                                                        'App\Notifications\NewOrder'))
+                                                                        <a href="" title="Clear" alt="Clear"
+                                                                              class="small"><svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-x"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M18 6l-12 12" />
+                                                                                    <path d="M6 6l12 12" />
+                                                                              </svg>
+                                                                        </a>
 
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
-                                    <div class="dropdown-divider"></div>
+                                                                        @endif
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <!-- end new order notification--->
 
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
-                                          Password</a>
-                                    <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                          {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                          @csrf
-                                    </form>
+                                                      <!-- product delivery notification--->
+                                                      <div class="list-group-item">
+                                                            <div class="row align-items-center">
+                                                                  <div class="col-auto"><span
+                                                                              class="status-dot status-dot-animated bg-green d-block"></span>
+                                                                  </div>
+                                                                  <div class="col text-truncate">
+                                                                        <a href="#" class="text-body d-block">
+                                                                              {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductApproved')->count()}}
+                                                                              Product (s)
+                                                                        </a>
+                                                                        <div
+                                                                              class="d-block text-secondary text-truncate mt-n1">
+                                                                              @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                              'App\Notifications\ProductApproved')
+                                                                              as $notification)
+                                                                              <div class="text-secondary">
+                                                                                    <a href="{{ url('read-product-delivered') }}/{{ $notification->id }}"
+                                                                                          data-id="{{$notification->id}}"
+                                                                                          class=" text-secondary">
+
+                                                                                          {!!
+                                                                                          Str::limit("$notification->data",
+                                                                                          30, ' ...') !!}
+
+                                                                                    </a>
+                                                                              </div>
+                                                                              @endforeach
+
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-auto">
+                                                                        @if(auth()->user()->unreadNotifications->where('type',
+                                                                        'App\Notifications\ProductApproved'))
+                                                                        <a href="" title="Clear" alt="Clear"
+                                                                              class="small"><svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-x"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M18 6l-12 12" />
+                                                                                    <path d="M6 6l12 12" />
+                                                                              </svg>
+                                                                        </a>
+
+                                                                        @endif
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <!-- end product delivery notification--->
+
+                                                      <!-- loan funds  notification--->
+                                                      <!-- end loan notification--->
+                                                      <!-- end notification group-item --->
+
+
+                                                      <div class="list-group-item bg-white">
+                                                            <div class="row align-items-center">
+                                                                  <div class="col-auto ">
+                                                                        <a href="" class="small text-secondary">
+                                                                              Show all notifications
+                                                                        </a>
+                                                                  </div>
+                                                                  <div class="col text-truncate" style="width:300px;">
+                                                                        <div
+                                                                              class="d-block text-secondary text-truncate mt-n1">
+                                                                              <div class=" text-secondary">
+                                                                                    <a href="" data-id=""
+                                                                                          class=" text-secondary">
+
+                                                                                    </a>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-auto">
+                                                                        <a href="" title="Clear" alt="Clear"
+                                                                              class="text-secondary small">
+                                                                              Cancel all
+                                                                        </a>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <!-- show and clear all notification -->
+
+                                                </div>
+                                                <!-- group list -->
+                                          </div>
+                                    </div>
                               </div>
-                        </li>
-                        @endguest
-                  </ul>
-            </nav>
+                        </div>
+                        @endif
+                        @endauth
+                        <!--- end merchant notification --->
+
+                        <!--- FMCG notification start --->
+                        @auth
+                        @if(Auth::user()->role_name == 'fmcg')
+                        <div class="nav-item dropdown d-md-flex me-4">
+                              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
+                                    aria-label="Show notifications">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                          stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path
+                                                d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                          <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                    </svg>
+                                    <span
+                                          class="badge bg-red text-white">{{ auth()->user()->unreadNotifications()->count() }}</span>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                                    <div class="card">
+                                          <div class="card-header">
+                                                <h3 class="card-title">Recent notifications</h3>
+                                          </div>
+                                          <div class="list-group list-group-flush list-group-hoverable">
+                                                <!-- my order notification--->
+                                                <div class="list-group-item">
+                                                      <div class="row align-items-center">
+                                                            <div class="col-auto "><span
+                                                                        class="status-dot status-dot-animated bg-yellow d-block"></span>
+                                                            </div>
+                                                            <div class="col text-truncate">
+                                                                  <a href="#" class="text-body d-block">
+
+                                                                        {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewOrder')->count()}}
+                                                                        Order (s)
+                                                                  </a>
+                                                                  <div
+                                                                        class="d-block text-secondary text-truncate mt-n1">
+                                                                        @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                        'App\Notifications\NewOrder')
+                                                                        as $notification)
+                                                                        <div class="text-secondary">
+                                                                              <a href="{{ url('read-cancel-order') }}/{{ $notification->id }}"
+                                                                                    data-id="{{$notification->id}}"
+                                                                                    class=" text-secondary">
+
+                                                                                    {!!
+                                                                                    Str::limit("$notification->data",
+                                                                                    30, ' ...') !!}
+
+                                                                              </a>
+                                                                        </div>
+                                                                        @endforeach
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                  @if(auth()->user()->unreadNotifications->where('type',
+                                                                  'App\Notifications\NewOrder'))
+                                                                  <a href="" title="Clear" alt="Clear"
+                                                                        class="small"><svg
+                                                                              xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-x"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path d="M18 6l-12 12" />
+                                                                              <path d="M6 6l12 12" />
+                                                                        </svg>
+                                                                  </a>
+
+                                                                  @endif
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <!-- end new order notification--->
+
+
+                                                <!-- product delivery notification--->
+                                                <div class="list-group-item">
+                                                      <div class="row align-items-center">
+                                                            <div class="col-auto"><span
+                                                                        class="status-dot status-dot-animated bg-green d-block"></span>
+                                                            </div>
+                                                            <div class="col text-truncate">
+                                                                  <a href="#" class="text-body d-block">
+                                                                        {{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductApproved')->count()}}
+                                                                        Product (s)
+                                                                  </a>
+                                                                  <div
+                                                                        class="d-block text-secondary text-truncate mt-n1">
+                                                                        @foreach(auth()->user()->unreadNotifications->where('type',
+                                                                        'App\Notifications\ProductApproved')
+                                                                        as $notification)
+                                                                        <div class="text-secondary">
+                                                                              <a href="{{ url('read-product-delivered') }}/{{ $notification->id }}"
+                                                                                    data-id="{{$notification->id}}"
+                                                                                    class=" text-secondary">
+
+                                                                                    {!!
+                                                                                    Str::limit("$notification->data",
+                                                                                    30, ' ...') !!}
+
+                                                                              </a>
+                                                                        </div>
+                                                                        @endforeach
+
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                  @if(auth()->user()->unreadNotifications->where('type',
+                                                                  'App\Notifications\ProductApproved'))
+                                                                  <a href="" title="Clear" alt="Clear"
+                                                                        class="small"><svg
+                                                                              xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-x"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path d="M18 6l-12 12" />
+                                                                              <path d="M6 6l12 12" />
+                                                                        </svg>
+                                                                  </a>
+
+                                                                  @endif
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <!-- end product delivery notification--->
+
+                                                <!-- loan funds  notification--->
+                                                <!-- end loan notification--->
+                                                <!-- end notification group-item --->
+
+
+                                                <div class="list-group-item bg-white">
+                                                      <div class="row align-items-center">
+                                                            <div class="col-auto ">
+                                                                  <a href="" class="small text-secondary">
+                                                                        Show all notifications
+                                                                  </a>
+                                                            </div>
+                                                            <div class="col text-truncate" style="width:300px;">
+                                                                  <div
+                                                                        class="d-block text-secondary text-truncate mt-n1">
+                                                                        <div class=" text-secondary">
+                                                                              <a href="" data-id=""
+                                                                                    class=" text-secondary">
+
+                                                                              </a>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                  <a href="" title="Clear" alt="Clear"
+                                                                        class="text-secondary small">
+                                                                        Cancel all
+                                                                  </a>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <!-- show and clear all notification -->
+
+                                          </div>
+                                          <!-- group list -->
+                                    </div>
+                              </div>
+                        </div>
+            </div>
             @endif
             @endauth
-            <!-- END MERCHANT NAV BAR-->
+            <!--- end FMCG notification --->
 
+            <!--- SuperAdmin notification start --->
+            <!--- end SuperAdmin notification --->
 
-
-            <!-- SUPERADMIN NAV BAR-->
+            <!-- cooperative profile -->
             @auth
-            @if(Auth::user()->role_name == 'superadmin')
-            <nav class="navbar navbar-expand justify-content-between fixed-top">
-                  <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
-                              width="139" height="93" alt="Lascoco" title="Lascoco">
-
-                  </a>
-                  <div class="d-flex flex-1 d-block d-md-none">
-                        <a href="#" class="sidebar-toggle ml-3">
-                              <i data-feather="menu"></i>
-                        </a>
-                  </div>
-
-                  <ul class="navbar-nav d-flex justify-content-end mr-2">
-                        <!-- Notificatoins -->
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li>
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Products">
-                                    <i class="fa fa-coins" aria-hidden="true"></i>
-                                    <span
-                                          class="badge badge-light bg-success badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewCardPayment')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewCardPayment'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-success btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewCardPayment') as $notification)
-                                    <a href="{{ url('read-company-payment') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                              </ul>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Products">
-                                    <i class="fa fa-product-hunt" aria-hidden="true"></i>
-                                    <span
-                                          class="badge badge-light bg-warning badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\NewProduct')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewProduct'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-warning  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\NewProduct') as $notification)
-                                    <a href="{{ url('read-product') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                              </ul>
-                        </li>
-                        <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li> -->
-
-                        <li class="nav-item dropdown">
-
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Delivery">
-                                    <i class="fa fa-truck"></i>
-                                    <span class="badge badge-light bg-info badge-xs">
-                                          {{auth()->user()->unreadNotifications()
-                                                      ->where('type', 'App\Notifications\ProductDelivered')
-                                                      ->orwhere('type', 'App\Notifications\ProductReceived')
-                                                ->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications
-                                    ->where('type','App\Notifications\ProductDelivered'))
-                                    <li class="d-flex  mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}" class="btn btn-info  btn-xs text-sm">Mark
-                                                All Delivered as
-                                                Read</a>
-                                    </li>
-                                    @foreach (auth()->user()->unreadNotifications
-                                    ->where('type','App\Notifications\ProductDelivered') as $notification)
-                                    <a href="{{ url('read-product-delivered') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                                    @endif
-
-                                    @if (auth()->user()->unreadNotifications
-                                    ->where('type', 'App\Notifications\ProductReceived'))
-                                    <li class="d-flex  mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}" class="btn btn-info  btn-xs text-sm">Mark
-                                                All Received as Read</a>
-                                    </li>
-                                    @foreach (auth()->user()->unreadNotifications
-                                    ->where('type','App\Notifications\ProductReceived') as $notification)
-                                    <a href="{{ url('read-product-received') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-                                    @endif
-                              </ul>
-                        </li>
-                        <!-- <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li> -->
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Fund Request">
-                                    <i class="fa fa-credit-card"></i>
-                                    <span
-                                          class="badge badge-light bg-danger badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\CooperativeFundRequest')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\CooperativeFundRequest'))
-                                    <li class="d-flex justify-content-end mx-1 my-2">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-danger  btn-xs btn-block text-sm">Mark All as
-                                                Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications->where('type',
-                                    'App\Notifications\CooperativeFundRequest') as $notification)
-                                    <!-- <a href="{{ url('superadmin-read-fund-request') }}/{{ $notification->id }}" data-id="{{$notification->id}}"
-                                          class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a> -->
-
-                                    <a href="{{route('mark-as-read')}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                              </ul>
-                        </li>
-                        <!-- Notifications -->
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
-                        </li>
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
-
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item dropdown">
-                              <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown" href="#">
-                                    {{ Auth::user()->fname }}
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
-                                    <div class="dropdown-divider"></div>
-
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
-                                          Password</a>
-                                    <div class="dropdown-divider"></div>
-
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                          {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                          @csrf
-                                    </form>
+            @if(Auth::user()->role_name == 'cooperative')
+            <div class="nav-item dropdown ">
+                  <a href="#" class="nav-link d-flex lh-1 text-reset p-0 " data-bs-toggle="dropdown"
+                        aria-label="Open user menu">
+                        <!-- logo --->
+                        @php $image = Auth::user()->profile_img;
+                        @endphp
+                        <span class="avatar avatar-sm d-none d-sm-none  d-md-block"
+                              style="background-image: url({{$image}} )"></span>
+                        <div class="d-block d-xl-block ps-2 ">
+                              @php $companyName = Auth::user()->coopname;
+                              @endphp
+                              <div class="dropdown-toggle">
+                                    {!! Str::limit("$companyName", 9, '...') !!}
                               </div>
-                        </li>
-                        @endguest
-                  </ul>
-            </nav>
-            @endif
-            @endauth
-            <!-- END SUPERADMIN NAV BAR-->
-
-            <!-- MEMBER NAV BAR-->
-            @auth
-            @if(Auth::user()->role_name == 'member')
-            <nav class="navbar navbar-expand justify-content-between fixed-top">
-                  <a class="navbar-brand mb-0 h1 d-none d-md-block text-danger" href="{{ url('/') }}">
-                        <img src="{{ asset('admin/img/lascoco-logo.png') }}" class="d-inline-block align-top mr-2"
-                              width="139" height="93" alt="Lascoco" title="Lascoco">
-
+                              <div class="mt-1 small text-secondary">Admin</div>
+                        </div>
                   </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
-                  <div class="d-flex flex-1 d-block d-md-none">
-                        <a href="#" class="sidebar-toggle ml-3">
-                              <i data-feather="menu"></i>
-                        </a>
-                  </div>
-
-                  <ul class="navbar-nav d-flex justify-content-end mr-2">
-                        <!-- Notificatoins -->
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li>
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Orders">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span
-                                          class="badge badge-light bg-info badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\AdminCancelOrder')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if(auth()->user()->unreadNotifications->where('type','App\Notifications\AdminCancelOrder'))
-                                    <li class="d-flex">
-                                          <a href="{{ url('mark-as-read')}} "
-                                                class="btn btn-info  btn-xs btn-block text-sm">Mark
-                                                All as Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications
-                                    ->where('type','App\Notifications\AdminCancelOrder') as $notification)
-                                    <a href="   {{ url('read-cancel-order') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                              </ul>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre title="Delivery">
-                                    <i class="fa fa-truck"></i>
-                                    <span
-                                          class="badge badge-light bg-success badge-xs">{{auth()->user()->unreadNotifications()->where('type', 'App\Notifications\ProductDelivered')->count()}}</span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                    @if(auth()->user()->unreadNotifications->where('type','App\Notifications\ProductDelivered'))
-                                    <li class="d-flex">
-                                          <a href="{{route('mark-as-read')}}"
-                                                class="btn btn-success  btn-xs btn-block text-sm">Mark
-                                                All as Read</a>
-                                    </li>
-                                    @endif
-
-                                    @foreach (auth()->user()->unreadNotifications
-                                    ->where('type','App\Notifications\ProductDelivered') as $notification)
-                                    <a href="{{ url('read-product-delivered') }}/{{ $notification->id }}"
-                                          data-id="{{$notification->id}}" class="text-success">
-                                          <li class="p-1 text-primary"> {{$notification->data['data']}}</li>
-                                    </a>
-                                    @endforeach
-
-                              </ul>
-                        </li>
-                        <li class="nav-item dropdown d-flex align-items-center mr-2">
-
-                        </li>
-                        <!-- Notifications -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
+                        <a href="{{ url('account-settings') }}" class="dropdown-item">Settings</a>
                         @endif
+                        @endauth
+                        <!--end cooperative profile -->
 
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                              <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item dropdown">
-                              <a class="nav-link avatar-with-name text-capitalize text-dark" id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown" href="" title="My Profile">
-                                    {{ Auth::user()->fname }}
+                        <!-- merchant profile -->
+                        @auth
+                        @if(Auth::user()->role_name == 'merchant')
+                        <div class="nav-item dropdown ">
+                              <a href="#" class="nav-link d-flex lh-1 text-reset p-0 " data-bs-toggle="dropdown"
+                                    aria-label="Open user menu">
+                                    <!-- logo --->
+                                    @php $image = Auth::user()->profile_img;
+                                    @endphp
+                                    <span class="avatar avatar-sm d-none d-sm-none  d-md-block"
+                                          style="background-image: url({{$image}} )"></span>
+                                    <div class="d-block d-xl-block ps-2 ">
+                                          @php $companyName = Auth::user()->coopname;
+                                          @endphp
+                                          <div class="dropdown-toggle">
+                                                {!! Str::limit("$companyName", 9, '...') !!}
+                                          </div>
+                                          <div class="mt-1 small text-secondary">
+                                                Vendor</div>
+                                    </div>
                               </a>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
-                                    <div class="dropdown-divider"></div>
+                              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
-                                    <a class="dropdown-item" href="{{ url('show-change-password') }}">Change
-                                          Password</a>
-                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ url('account-settings') }}" class="dropdown-item">Settings</a>
+                                    @endif
+                                    @endauth
+                                    <!--end merchant profile -->
 
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                          {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                          @csrf
-                                    </form>
-                              </div>
-                        </li>
-                        @endguest
-                  </ul>
-            </nav>
-            @endif
-            @endauth
-            <!-- END MEMBER NAV BAR-->
+                                    <!-- fmcg profile -->
+                                    @auth
+                                    @if(Auth::user()->role_name == 'fmcg')
+                                    <div class="nav-item dropdown ">
+                                          <a href="#" class="nav-link d-flex lh-1 text-reset p-0 "
+                                                data-bs-toggle="dropdown" aria-label="Open user menu">
+                                                <!-- logo --->
+                                                @php $image = Auth::user()->profile_img;
+                                                @endphp
+                                                <span class="avatar avatar-sm d-none d-sm-none  d-md-block"
+                                                      style="background-image: url({{$image}} )"></span>
+                                                <div class="d-block d-xl-block ps-2 ">
+                                                      @php $companyName = Auth::user()->coopname;
+                                                      @endphp
+                                                      <div class="dropdown-toggle">
+                                                            {!! Str::limit("$companyName", 9, '...') !!}
+                                                      </div>
+                                                      <div class="mt-1 small text-secondary">
+                                                            Fmcg</div>
+                                                </div>
+                                          </a>
+                                          <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
+                                                <a href="{{ url('account-settings') }}"
+                                                      class="dropdown-item">Settings</a>
+                                                @endif
+                                                @endauth
+                                                <!--end fmcg profile -->
+                                                <!-- member profile -->
+                                                @auth
+                                                @if(Auth::user()->role_name == 'member')
+                                                <div class="nav-item dropdown ">
+                                                      <a href="#" class="nav-link d-flex lh-1 text-reset p-0 "
+                                                            data-bs-toggle="dropdown" aria-label="Open user menu">
+                                                            <!-- logo --->
+                                                            @php $image =
+                                                            App\Models\User::where('code',
+                                                            Auth::user()->code)
+                                                            ->where('coopname',
+                                                            Auth::user()->coopname)
+                                                            ->where('role_name', 'cooperative');
 
-            <main class="py-4">
-                  @yield('content')
-            </main>
+                                                            $getLogo = $image->pluck('profile_img')->toArray();
+                                                            $cooperativeLogo = implode(" ", $getLogo);
+                                                            @endphp
 
+                                                            <span class="avatar avatar-sm d-none d-sm-none  d-md-block"
+                                                                  style="background-image: url( {{$cooperativeLogo}} )"></span>
+                                                            <div class="d-block d-xl-block ps-2 ">
+                                                                  @php $companyName =
+                                                                  Auth::user()->coopname;
+                                                                  @endphp
+                                                                  <div class="dropdown-toggle">
+                                                                        {!! Str::limit("$companyName", 9, '...') !!}
+                                                                  </div>
+                                                                  <div class="mt-1 small text-secondary">
+                                                                        Member</div>
+                                                            </div>
+                                                      </a>
+                                                      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
-            @yield('scripts')
-      </div>
-      <!--adminx-container-->
+                                                            <a href="{{ url('account-settings') }}"
+                                                                  class="dropdown-item">Settings</a>
+                                                            @endif
+                                                            @endauth
+                                                            <!--end member profile -->
+                                                            <!-- SuperAdmin profile -->
+                                                            @auth
+                                                            @if(Auth::user()->role_name == 'superadmin')
+                                                            <div class="nav-item dropdown ">
+                                                                  <a href="#"
+                                                                        class="nav-link d-flex lh-1 text-reset p-0 "
+                                                                        data-bs-toggle="dropdown"
+                                                                        aria-label="Open user menu">
+                                                                        <!-- logo --->
+                                                                        @php $image =
+                                                                        Auth::user()->profile_img;
+                                                                        @endphp
+                                                                        <span class="avatar avatar-sm d-none d-sm-none  d-md-block"
+                                                                              style="background-image: url({{$image}} )"></span>
+                                                                        <div class="d-block d-xl-block ps-2 ">
+                                                                              @php $companyName =
+                                                                              Auth::user()->coopname;
+                                                                              @endphp
+                                                                              <div class="dropdown-toggle">
+                                                                                    {!!
+                                                                                    Str::limit("$companyName", 9, '...')
+                                                                                    !!}
+                                                                              </div>
+                                                                              <div class="mt-1 small text-secondary">
+                                                                                    SuperAdmin
+                                                                              </div>
+                                                                        </div>
+                                                                  </a>
+                                                                  <div
+                                                                        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
+                                                                        <a href="{{ url('account-settings') }}"
+                                                                              class="dropdown-item">Settings</a>
+                                                                        @endif
+                                                                        @endauth
+                                                                        <!--end superadmin profile -->
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ route('logout') }}"
+                                                                              onclick="event.preventDefault();
+                                                                                                      document.getElementById('logout-form').submit();">Logout
 
-      <!-- footer-->
-      <!--script-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-      <script src="admin/js/vendor.js"></script>
-      <script src="admin/js/adminx.js"></script>
-      <script src="admin/js/custom.js"></script>
-      <!-- Footer row -->
+                                                                        </a>
 
-      <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-      <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
-
-      <script src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap4.min.js"></script>
-      <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-      <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-      <script type="text/javascript">
-      $(document).ready(function() {
-            $('#table').DataTable({
-                  responsive: true,
-
-                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                  // dom: 'Bfrtip',
-                  button: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5',
-                  ],
-
-                  aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
-                  ],
-                  iDisplayLength: 5,
-                  "order": [
-                        [0, "desc"]
-                  ],
-
-                  "language": {
-                        "lengthMenu": "_MENU_ Records per page",
-                  }
-
-
-            });
-      });
-
-      $(document).ready(function() {
-            $('#table2').DataTable({
-                  responsive: true,
-
-                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                  // dom: 'Bfrtip',
-                  button: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5',
-                  ],
-
-                  aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
-                  ],
-                  iDisplayLength: 5,
-                  "order": [
-                        [0, "desc"]
-                  ],
-
-                  "language": {
-                        "lengthMenu": "_MENU_ Records per page",
-                  }
-
-
-            });
-      });
-
-
-      $(document).ready(function() {
-            $('#table3').DataTable({
-                  responsive: true,
-
-                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                  // dom: 'Bfrtip',
-                  button: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5',
-                  ],
-
-                  aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
-                  ],
-                  iDisplayLength: 5,
-                  "order": [
-                        [0, "desc"]
-                  ],
-
-                  "language": {
-                        "lengthMenu": "_MENU_ Records per page",
-                  }
-
-
-            });
-      });
-
-
-      $(document).ready(function() {
-            $('#table4').DataTable({
-                  responsive: true,
-
-                  dom: "<'row'<'col-sm-3'l><'col-sm-5 text-center'B><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                  // dom: 'Bfrtip',
-                  button: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5',
-                  ],
-
-                  aLengthMenu: [
-                        [5, 10, 20, -1],
-                        [5, 10, 20, "All"]
-                  ],
-                  iDisplayLength: 5,
-                  "order": [
-                        [0, "desc"]
-                  ],
-
-                  "language": {
-                        "lengthMenu": "_MENU_ Records per page",
-                  }
+                                                                        <form id="logout-form"
+                                                                              action="{{ route('logout') }}"
+                                                                              method="POST" class="d-none">
+                                                                              @csrf
+                                                                        </form>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                </header>
+                                                <!--- NAVIGATION HEADER --->
+                                                <header class="navbar-expand-md">
+                                                      <div class="collapse navbar-collapse" id="navbar-menu">
+                                                            <div class="navbar">
+                                                                  <div class="container-xl">
+                                                                        <ul class="navbar-nav">
+                                                                              @auth
+                                                                              @if(Auth::user()->role_name ==
+                                                                              'cooperative')
+                                                                              <li class="nav-item">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('cooperative') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                                                      <path
+                                                                                                            d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Home
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
 
 
-            });
-      });
-      </script>
+                                                                              <li class="nav-item active dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-layout"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-building-store"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 21l18 0" />
+                                                                                                      <path
+                                                                                                            d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
+                                                                                                      <path
+                                                                                                            d="M5 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M19 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Store
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{url('admin-products')}}">
+                                                                                                            Products
+                                                                                                            List
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ route('add_new_product') }}">
+                                                                                                            Add Product
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('cooperative-sales') }}">
+                                                                                                            Sales
+                                                                                                      </a>
+
+                                                                                                </div>
+
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-help"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-users-group"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                                                      <path
+                                                                                                            d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
+                                                                                                      <path
+                                                                                                            d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                                                      <path
+                                                                                                            d="M17 10h2a2 2 0 0 1 2 2v1" />
+                                                                                                      <path
+                                                                                                            d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                                                      <path
+                                                                                                            d="M3 13v-1a2 2 0 0 1 2 -2h2" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Members
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{url('members')}}"
+                                                                                                            rel="noopener">
+                                                                                                            Members List
+                                                                                                      </a>
+                                                                                                      <div
+                                                                                                            class="dropend">
+                                                                                                            <a class="dropdown-item dropdown-toggle"
+                                                                                                                  href="#sidebar-authentication"
+                                                                                                                  data-bs-toggle="dropdown"
+                                                                                                                  data-bs-auto-close="outside"
+                                                                                                                  role="button"
+                                                                                                                  aria-expanded="false">
+                                                                                                                  Excos
+                                                                                                            </a>
+                                                                                                            <div
+                                                                                                                  class="dropdown-menu">
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Secretary
+                                                                                                                  </a>
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Accountant
+                                                                                                                  </a>
+                                                                                                            </div>
+                                                                                                      </div>
+                                                                                                </div>
+
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="">
+                                                                                                            Add Member
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                      </a>
+
+                                                                                                </div>
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-base"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Order
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('admin-order-history') }}">
+                                                                                                            My Order
+                                                                                                            History
+                                                                                                      </a>
+
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('admin-member-order') }}">
+                                                                                                            Member Order
+                                                                                                            (s)
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('view-canceled-orders') }}">
+                                                                                                            Cancel
+                                                                                                            Orders
+                                                                                                      </a>
+
+                                                                                                </div>
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-base"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Savings
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="">
+                                                                                                            Wallet
+                                                                                                      </a>
+
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="">
+                                                                                                            Withdrawal
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('view-canceled-orders') }}">
+                                                                                                            Request
+                                                                                                            Credit
+                                                                                                      </a>
+
+                                                                                                </div>
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-base"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-coins"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z" />
+                                                                                                      <path
+                                                                                                            d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4" />
+                                                                                                      <path
+                                                                                                            d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z" />
+                                                                                                      <path
+                                                                                                            d="M3 6v10c0 .888 .772 1.45 2 2" />
+                                                                                                      <path
+                                                                                                            d="M3 11c0 .888 .772 1.45 2 2" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Loan Management
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a href="{{ url('cooperative-loan') }}"
+                                                                                                            class="dropdown-item">
+                                                                                                            Overview
+                                                                                                      </a>
+
+                                                                                                      <div
+                                                                                                            class="dropend">
+                                                                                                            <a class="dropdown-item dropdown-toggle"
+                                                                                                                  href="#sidebar-authentication"
+                                                                                                                  data-bs-toggle="dropdown"
+                                                                                                                  data-bs-auto-close="outside"
+                                                                                                                  role="button"
+                                                                                                                  aria-expanded="false">
+                                                                                                                  Loan
+                                                                                                                  Stages
+                                                                                                            </a>
+                                                                                                            <div
+                                                                                                                  class="dropdown-menu">
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Requested
+                                                                                                                        Loans
+                                                                                                                  </a>
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Approved
+                                                                                                                        Loans
+                                                                                                                  </a>
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Disbursed
+                                                                                                                        Loans
+                                                                                                                  </a>
+                                                                                                                  <a href=""
+                                                                                                                        class="dropdown-item">
+                                                                                                                        Finished
+                                                                                                                        Loans
+                                                                                                                  </a>
+                                                                                                            </div>
+                                                                                                      </div>
+                                                                                                      <a href=""
+                                                                                                            class="dropdown-item">
+                                                                                                            Due Loans
+                                                                                                      </a>
+
+
+                                                                                                </div>
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a href=""
+                                                                                                            class="dropdown-item">
+                                                                                                            Add Loan                                                                                                             <span
+                                                                                                                 class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+
+                                                                                                      </a>
+                                                                                                      <a href=""
+                                                                                                            class="dropdown-item">
+                                                                                                            Repayments
+                                                                                                      </a>
+                                                                                                      <a href="{{ url('cooperative-loan-type') }}"
+                                                                                                            class="dropdown-item">
+                                                                                                            Loan Type
+                                                                                                      </a>
+                                                                                                </div>
+
+
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+
+                                                                              <li class="nav-item d-md-none d-sm-block">
+                                                                                    <a class="nav-link "
+                                                                                          href="{{ url('fmcgs_products') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-brand-producthunt"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5" />
+                                                                                                      <path
+                                                                                                            d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                FMCG Products
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+                                                                              @endif
+                                                                              @endauth
+                                                                              <!--- end cooperative Nav bar --->
+
+                                                                              <!--- start member Nav bar --->
+                                                                              @auth
+                                                                              @if(Auth::user()->role_name == 'member')
+                                                                              <li class="nav-item">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('dashboard') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                                                      <path
+                                                                                                            d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Home
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a href="{{ url('member-order') }}"
+                                                                                          class="nav-link">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Order History
+                                                                                          </span>
+                                                                                    </a>
+
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-base"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Savings
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="">
+                                                                                                            Wallet
+                                                                                                      </a>
+
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="">
+                                                                                                            Withdrawal
+                                                                                                      </a>
+
+                                                                                                </div>
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-base"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-coins"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z" />
+                                                                                                      <path
+                                                                                                            d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4" />
+                                                                                                      <path
+                                                                                                            d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z" />
+                                                                                                      <path
+                                                                                                            d="M3 6v10c0 .888 .772 1.45 2 2" />
+                                                                                                      <path
+                                                                                                            d="M3 11c0 .888 .772 1.45 2 2" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Loan Management
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+
+                                                                                                      <a href="{{ url('member-loan-history') }}"
+                                                                                                            class="dropdown-item">
+                                                                                                            Loan History
+                                                                                                      </a>
+                                                                                                      <a href=""
+                                                                                                            class="dropdown-item">
+                                                                                                            Loan
+                                                                                                            Repayment
+                                                                                                      </a>
+
+                                                                                                </div>
+                                                                                          </div>
+                                                                                    </div>
+
+                                                                              </li>
+
+                                                                              @endif
+                                                                              @endauth
+                                                                              <!--- end member Nav bar --->
+
+                                                                              <!--- start merchant Nav bar --->
+                                                                              @auth
+                                                                              @if(Auth::user()->role_name == 'merchant')
+                                                                              <li class="nav-item">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('merchant') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                                                      <path
+                                                                                                            d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Home
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+
+
+                                                                              <li class="nav-item active dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-layout"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-building-store"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 21l18 0" />
+                                                                                                      <path
+                                                                                                            d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
+                                                                                                      <path
+                                                                                                            d="M5 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M19 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Store
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{url('vendor-products')}}">
+                                                                                                            Products
+                                                                                                            List
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('vendor-new-product') }}">
+                                                                                                            Add Product
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                      </a>
+
+                                                                                                </div>
+
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('vendor-sales') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          Sales
+
+                                                                                    </a>
+                                                                              </li>
+                                                                              @endif
+                                                                              @endauth
+                                                                              <!--- end merchant Nav bar --->
+
+                                                                              <!--- start FMCG Nav bar --->
+                                                                              @auth
+                                                                              @if(Auth::user()->role_name == 'fmcg')
+                                                                              <li class="nav-item">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('fmcg') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                                                      <path
+                                                                                                            d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Home
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+
+
+                                                                              <li class="nav-item active dropdown">
+                                                                                    <a class="nav-link dropdown-toggle"
+                                                                                          href="#navbar-layout"
+                                                                                          data-bs-toggle="dropdown"
+                                                                                          data-bs-auto-close="outside"
+                                                                                          role="button"
+                                                                                          aria-expanded="false">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-building-store"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 21l18 0" />
+                                                                                                      <path
+                                                                                                            d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
+                                                                                                      <path
+                                                                                                            d="M5 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M19 21l0 -10.15" />
+                                                                                                      <path
+                                                                                                            d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                Store
+                                                                                          </span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu">
+                                                                                          <div
+                                                                                                class="dropdown-menu-columns">
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{url('fmcg-products')}}">
+                                                                                                            Products
+                                                                                                            List
+                                                                                                      </a>
+                                                                                                      <a class="dropdown-item"
+                                                                                                            href="{{ url('fmcg-new-product') }}">
+                                                                                                            Add Product
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                      </a>
+
+                                                                                                </div>
+
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </li>
+
+                                                                              <li class="nav-item dropdown">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('fmcg-sales') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-bag"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                                                      <path
+                                                                                                            d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          Sales
+
+                                                                                    </a>
+                                                                              </li>
+
+                                                                              <li class="nav-item d-md-none d-sm-block">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('fmcgs_products') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-brand-producthunt"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5" />
+                                                                                                      <path
+                                                                                                            d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                FMCG Products
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+
+
+                                                                              @endif
+                                                                              @endauth
+                                                                              <!--- end FMCG Nav bar --->
+
+                                                                              <!--- start SuperAdmin Nav bar --->
+                                                                              <!--- end SuperAdmin Nav bar --->
+
+                                                                              <li class="nav-item d-md-none d-sm-block">
+                                                                                    <a class="nav-link"
+                                                                                          href="{{ url('/') }}">
+                                                                                          <span
+                                                                                                class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon icon-tabler icon-tabler-shopping-cart"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="1.5"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                                                                      <path
+                                                                                                            d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                                                                      <path
+                                                                                                            d="M17 17h-11v-14h-2" />
+                                                                                                      <path
+                                                                                                            d="M6 5l14 1l-1 7h-13" />
+                                                                                                </svg>
+                                                                                          </span>
+                                                                                          <span class="nav-link-title">
+                                                                                                LascocoMart
+                                                                                          </span>
+                                                                                    </a>
+                                                                              </li>
+                                                                        </ul>
+
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </header>
+                                          </div>
+                                          <!-- NAVIGATION END header -->
+
+                                          <div class="page-wrapper">
+                                                @yield('content')
+                                                <footer class="footer footer-transparent d-print-none">
+                                                      <div class="container-xl">
+                                                            <div
+                                                                  class="row text-center align-items-center flex-row-reverse">
+                                                                  <div class="col-lg-auto ms-lg-auto">
+                                                                        <ul class="list-inline list-inline-dots mb-0">
+                                                                              <li class="list-inline-item"><a href=""
+                                                                                          target="_blank"
+                                                                                          class="link-secondary"
+                                                                                          rel="noopener">Privacy</a>
+                                                                              </li>
+                                                                              <li class="list-inline-item"><a href=""
+                                                                                          class="link-secondary">T &
+                                                                                          C</a>
+                                                                              </li>
+                                                                              <li class="list-inline-item"><a href=""
+                                                                                          class="link-secondary">FAQ</a>
+                                                                              </li>
+
+                                                                              <li class="list-inline-item">
+                                                                                    <a href="" target="_blank"
+                                                                                          class="link-secondary"
+                                                                                          rel="noopener">
+                                                                                          <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                                                                          <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="icon text-pink icon-filled icon-inline"
+                                                                                                width="24" height="24"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke-width="2"
+                                                                                                stroke="currentColor"
+                                                                                                fill="none"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round">
+                                                                                                <path stroke="none"
+                                                                                                      d="M0 0h24v24H0z"
+                                                                                                      fill="none" />
+                                                                                                <path
+                                                                                                      d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                                                                                          </svg>
+                                                                                          Support
+                                                                                    </a>
+                                                                              </li>
+                                                                        </ul>
+                                                                  </div>
+                                                                  <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                                                                        <ul class="list-inline list-inline-dots mb-0">
+                                                                              <li class="list-inline-item">
+                                                                                    Copyright &copy; {{ date('Y')}}
+                                                                                    <a href="."
+                                                                                          class="link-secondary">LascocoMart</a>.
+
+                                                                              </li>
+
+                                                                        </ul>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </footer>
+                                          </div>
+                                          <!--- end page-div--->
+                                    </div>
+
+
+
+
+                                    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog"
+                                          aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">New report</h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                  <label class="form-label">Name</label>
+                                                                  <input type="text" class="form-control"
+                                                                        name="example-text-input"
+                                                                        placeholder="Your report name">
+                                                            </div>
+                                                            <label class="form-label">Report type</label>
+                                                            <div class="form-selectgroup-boxes row mb-3">
+                                                                  <div class="col-lg-6">
+                                                                        <label class="form-selectgroup-item">
+                                                                              <input type="radio" name="report-type"
+                                                                                    value="1"
+                                                                                    class="form-selectgroup-input"
+                                                                                    checked>
+                                                                              <span
+                                                                                    class="form-selectgroup-label d-flex align-items-center p-3">
+                                                                                    <span class="me-3">
+                                                                                          <span
+                                                                                                class="form-selectgroup-check"></span>
+                                                                                    </span>
+                                                                                    <span
+                                                                                          class="form-selectgroup-label-content">
+                                                                                          <span
+                                                                                                class="form-selectgroup-title strong mb-1">Simple</span>
+                                                                                          <span
+                                                                                                class="d-block text-secondary">Provide
+                                                                                                only basic data
+                                                                                                needed for the
+                                                                                                report</span>
+                                                                                    </span>
+                                                                              </span>
+                                                                        </label>
+                                                                  </div>
+                                                                  <div class="col-lg-6">
+                                                                        <label class="form-selectgroup-item">
+                                                                              <input type="radio" name="report-type"
+                                                                                    value="1"
+                                                                                    class="form-selectgroup-input">
+                                                                              <span
+                                                                                    class="form-selectgroup-label d-flex align-items-center p-3">
+                                                                                    <span class="me-3">
+                                                                                          <span
+                                                                                                class="form-selectgroup-check"></span>
+                                                                                    </span>
+                                                                                    <span
+                                                                                          class="form-selectgroup-label-content">
+                                                                                          <span
+                                                                                                class="form-selectgroup-title strong mb-1">Advanced</span>
+                                                                                          <span
+                                                                                                class="d-block text-secondary">Insert
+                                                                                                charts and
+                                                                                                additional advanced
+                                                                                                analyses to be
+                                                                                                inserted in the
+                                                                                                report</span>
+                                                                                    </span>
+                                                                              </span>
+                                                                        </label>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                  <div class="col-lg-8">
+                                                                        <div class="mb-3">
+                                                                              <label class="form-label">Report
+                                                                                    url</label>
+                                                                              <div class="input-group input-group-flat">
+                                                                                    <span class="input-group-text">
+                                                                                    </span>
+                                                                                    <input type="text"
+                                                                                          class="form-control ps-0"
+                                                                                          value="report-01"
+                                                                                          autocomplete="off">
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-lg-4">
+                                                                        <div class="mb-3">
+                                                                              <label
+                                                                                    class="form-label">Visibility</label>
+                                                                              <select class="form-select">
+                                                                                    <option value="1" selected>Private
+                                                                                    </option>
+                                                                                    <option value="2">Public</option>
+                                                                                    <option value="3">Hidden</option>
+                                                                              </select>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            <div class="row">
+                                                                  <div class="col-lg-6">
+                                                                        <div class="mb-3">
+                                                                              <label class="form-label">Client
+                                                                                    name</label>
+                                                                              <input type="text" class="form-control">
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-lg-6">
+                                                                        <div class="mb-3">
+                                                                              <label class="form-label">Reporting
+                                                                                    period</label>
+                                                                              <input type="date" class="form-control">
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="col-lg-12">
+                                                                        <div>
+                                                                              <label class="form-label">Additional
+                                                                                    information</label>
+                                                                              <textarea class="form-control"
+                                                                                    rows="3"></textarea>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                            <a href="#" class="btn btn-link link-secondary"
+                                                                  data-bs-dismiss="modal">
+                                                                  Cancel
+                                                            </a>
+                                                            <a href="#" class="btn btn-primary ms-auto"
+                                                                  data-bs-dismiss="modal">
+                                                                  <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon"
+                                                                        width="24" height="24" viewBox="0 0 24 24"
+                                                                        stroke-width="2" stroke="currentColor"
+                                                                        fill="none" stroke-linecap="round"
+                                                                        stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                              fill="none" />
+                                                                        <path d="M12 5l0 14" />
+                                                                        <path d="M5 12l14 0" />
+                                                                  </svg>
+                                                                  Create new report
+                                                            </a>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+
+
+                                    <!--- request fund modal --->
+                                    <div class="modal modal-blur fade" id="modal-fund" tabindex="-1" role="dialog"
+                                          aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">Request New Fund </h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            @auth
+                                                            @if(Auth::user()->role_name == 'cooperative')
+                                                            <form method="POST"
+                                                                  action="{{ route('send-fund-request') }}">
+                                                                  @csrf
+                                                                  <div class="mb-3">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <input type="text" class="form-control"
+                                                                              name="amount"
+                                                                              placeholder="Enter the amount you are requesting">
+                                                                  </div>
+
+
+                                                                  <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-link link-secondary"
+                                                                              data-bs-dismiss="modal">
+                                                                              Cancel
+                                                                        </a>
+                                                                        <button type="submit" name="submit"
+                                                                              class="btn btn-danger ms-auto">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-send"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M10 14l11 -11" />
+                                                                                    <path
+                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                                                              </svg>
+                                                                              Send
+                                                                        </button>
+                                                                  </div>
+                                                            </form>
+                                                            @endif
+                                                            @endauth
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <!--- end fund modal --->
+
+
+                                    <!--- Add Loan Type Modal --->
+                                    <div class="modal modal-blur fade" id="modal-loantype" tabindex="-1" role="dialog"
+                                          aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">Add New Loan Type </h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            @auth
+                                                            @if(Auth::user()->role_name == 'cooperative')
+                                                            <form method="POST" action="{{ route('add-loan-type') }}">
+                                                                  @csrf
+                                                                  <div class="row ">
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label
+                                                                                          class="form-label required">Name</label>
+                                                                                    <input type="text"
+                                                                                          class="form-control"
+                                                                                          name="name"
+                                                                                          placeholder="Enter the loan name">
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label">Guarantor
+                                                                                          ?</label>
+                                                                                    <select class="form-select"
+                                                                                          name="guarantor" id="">
+                                                                                          <option value="">Choose
+                                                                                          </option>
+                                                                                          <option value="yes">Yes
+                                                                                          </option>
+                                                                                          <option value="no">No</option>
+                                                                                    </select>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <!--- row --->
+
+                                                                  <div class="row">
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label required">Rate
+                                                                                          Type</label>
+                                                                                    <select class="form-select"
+                                                                                          name="rate_type" id="">
+                                                                                          <option value="">Choose
+                                                                                          </option>
+                                                                                          <option value="flat rate">Flat
+                                                                                                Rate
+                                                                                          </option>
+                                                                                          <option
+                                                                                                value="simple interest">
+                                                                                                Simple Interest (P.R.T)
+                                                                                          </option>
+                                                                                    </select>
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label required">Rate
+                                                                                          %. <small>Example: 5 means
+                                                                                                5%</small>
+                                                                                    </label>
+                                                                                    <div class="value-button"
+                                                                                          id="decrease"
+                                                                                          onclick="decreaseValue()"
+                                                                                          value="Decrease Value">-</div>
+                                                                                    <input type="number" name="rate"
+                                                                                          id="number" value="">
+                                                                                    <div class="value-button"
+                                                                                          id="increase"
+                                                                                          onclick="increaseValue()"
+                                                                                          value="Increase Value">+</div>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <div class="row">
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label">Min-duration.
+                                                                                          <small>(in months)</small>
+                                                                                    </label>
+                                                                                    <div class="value-button"
+                                                                                          id="decrease"
+                                                                                          onclick="decreaseMin()"
+                                                                                          value="Decrease Value">-</div>
+                                                                                    <input type="number"
+                                                                                          name="minimum_duration"
+                                                                                          id="min" value="1">
+                                                                                    <div class="value-button"
+                                                                                          id="increase"
+                                                                                          onclick="increaseMin()"
+                                                                                          value="Increase Value">+</div>
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label required">Max-duration.
+                                                                                          <small>(in months)/small>
+                                                                                    </label>
+                                                                                    <div class="value-button"
+                                                                                          id="decrease"
+                                                                                          onclick="decreaseMax()"
+                                                                                          value="Decrease Value">-</div>
+                                                                                    <input type="number"
+                                                                                          name="maximum_duration"
+                                                                                          id="max" value="">
+                                                                                    <div class="value-button"
+                                                                                          id="increase"
+                                                                                          onclick="increaseMax()"
+                                                                                          value="Increase Value">+</div>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <div class="row">
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <label class="form-label">Description
+                                                                                    </label>
+                                                                                    <input type="text"
+                                                                                          name="description"
+                                                                                          class="form-control"
+                                                                                          placeholder="Briefly describe this loan">
+                                                                              </div>
+                                                                        </div>
+
+                                                                  </div>
+                                                                  <p></p>
+
+                                                                  <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-link link-secondary"
+                                                                              data-bs-dismiss="modal">
+                                                                              Cancel
+                                                                        </a>
+                                                                        <button type="submit" name="submit"
+                                                                              class="btn btn-danger ms-auto">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-send"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M10 14l11 -11" />
+                                                                                    <path
+                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                                                              </svg>
+                                                                              Save
+                                                                        </button>
+                                                                  </div>
+                                                            </form>
+                                                            @endif
+                                                            @endauth
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <!--- end fund modal --->
+                                    <!-- Libs JS -->
+                                    <script src="/back/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
+                                    <script src="/back/dist/libs/jsvectormap/dist/js/jsvectormap.min.js">
+                                    </script>
+                                    <script src="/back/dist/libs/jsvectormap/dist/maps/world.js"></script>
+                                    <script src="/back/dist/libs/jsvectormap/dist/maps/world-merc.js"></script>
+                                    <!-- Libs JS -->
+                                    <script src="/back/dist/libs/nouislider/dist/nouislider.min.js"></script>
+                                    <script src="/back/dist/libs/litepicker/dist/litepicker.js"></script>
+                                    <script src="/back/dist/libs/tom-select/dist/js/tom-select.base.min.js">
+                                    </script>
+                                    <!-- Tabler Core -->
+                                    <script src="/back/dist/js/demo-theme.min.js"></script>
+                                    <script src="/back/dist/js/tabler.min.js"></script>
+                                    <script src="/back/dist/js/demo.min.js"></script>
+
+                                    <script>
+                                    // loan type rate
+                                    function increaseValue() {
+                                          var value = parseInt(document.getElementById('number').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('number').value = value;
+                                    }
+
+                                    function decreaseValue() {
+                                          var value = parseInt(document.getElementById('number').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('number').value = value;
+                                    }
+                                    </script>
+
+                                    <script>
+                                    // loan type minimum duration
+                                    function increaseMin() {
+                                          var value = parseInt(document.getElementById('min').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('min').value = value;
+                                    }
+
+                                    function decreaseMin() {
+                                          var value = parseInt(document.getElementById('min').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('min').value = value;
+                                    }
+                                    </script>
+
+                                    <script>
+                                    // loan type maximum duration
+                                    function increaseMax() {
+                                          var value = parseInt(document.getElementById('max').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('max').value = value;
+                                    }
+
+                                    function decreaseMax() {
+                                          var value = parseInt(document.getElementById('max').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('max').value = value;
+                                    }
+                                    </script>
+
+                                    <script>
+                                    // loan processing fee
+                                    function increaseFee() {
+                                          var value = parseInt(document.getElementById('fee').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('fee').value = value;
+                                    }
+
+                                    function decreaseFee() {
+                                          var value = parseInt(document.getElementById('fee').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('fee').value = value;
+                                    }
+                                    </script>
+
+                                    <script>
+                                    // loan repayment duration
+                                    function increaseLoanTenure() {
+                                          var value = parseInt(document.getElementById('loanTenure').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('loanTenure').value = value;
+                                    }
+
+                                    function decreaseLoanTenure() {
+                                          var value = parseInt(document.getElementById('loanTenure').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('loanTenure').value = value;
+                                    }
+                                    </script>
+
+
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById('chart-mentions'), {
+                                                      chart: {
+                                                            type: "bar",
+                                                            fontFamily: 'inherit',
+                                                            height: 240,
+                                                            parentHeightOffset: 0,
+                                                            toolbar: {
+                                                                  show: false,
+                                                            },
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            stacked: true,
+                                                      },
+                                                      plotOptions: {
+                                                            bar: {
+                                                                  columnWidth: '50%',
+                                                            }
+                                                      },
+                                                      dataLabels: {
+                                                            enabled: false,
+                                                      },
+                                                      fill: {
+                                                            opacity: 1,
+                                                      },
+                                                      series: [{
+                                                            name: "Web",
+                                                            data: [1, 0, 0, 0,
+                                                                  0, 1,
+                                                                  1, 0,
+                                                                  0, 0,
+                                                                  2, 12,
+                                                                  5,
+                                                                  8, 22,
+                                                                  6, 8,
+                                                                  6, 4,
+                                                                  1, 8,
+                                                                  24,
+                                                                  29,
+                                                                  51,
+                                                                  40,
+                                                                  47,
+                                                                  23,
+                                                                  26,
+                                                                  50,
+                                                                  26,
+                                                                  41,
+                                                                  22,
+                                                                  46,
+                                                                  47,
+                                                                  81,
+                                                                  46, 6
+                                                            ]
+                                                      }, {
+                                                            name: "Social",
+                                                            data: [2, 5, 4, 3,
+                                                                  3, 1,
+                                                                  4, 7,
+                                                                  5, 1,
+                                                                  2, 5,
+                                                                  3, 2,
+                                                                  6, 7,
+                                                                  7, 1,
+                                                                  5, 5,
+                                                                  2, 12,
+                                                                  4, 6,
+                                                                  18,
+                                                                  3, 5,
+                                                                  2, 13,
+                                                                  15,
+                                                                  20,
+                                                                  47,
+                                                                  18,
+                                                                  15,
+                                                                  11,
+                                                                  10, 0
+                                                            ]
+                                                      }, {
+                                                            name: "Other",
+                                                            data: [2, 9, 1, 7,
+                                                                  8, 3,
+                                                                  6, 5,
+                                                                  5, 4,
+                                                                  6, 4,
+                                                                  1, 9,
+                                                                  3, 6,
+                                                                  7, 5,
+                                                                  2, 8,
+                                                                  4, 9,
+                                                                  1, 2,
+                                                                  6, 7,
+                                                                  5, 1,
+                                                                  8, 3,
+                                                                  2, 3,
+                                                                  4, 9,
+                                                                  7, 1,
+                                                                  6
+                                                            ]
+                                                      }],
+                                                      tooltip: {
+                                                            theme: 'dark'
+                                                      },
+                                                      grid: {
+                                                            padding: {
+                                                                  top: -20,
+                                                                  right: 0,
+                                                                  left: -4,
+                                                                  bottom: -4
+                                                            },
+                                                            strokeDashArray: 4,
+                                                            xaxis: {
+                                                                  lines: {
+                                                                        show: true
+                                                                  }
+                                                            },
+                                                      },
+                                                      xaxis: {
+                                                            labels: {
+                                                                  padding: 0,
+                                                            },
+                                                            tooltip: {
+                                                                  enabled: false
+                                                            },
+                                                            axisBorder: {
+                                                                  show: false,
+                                                            },
+                                                            type: 'datetime',
+                                                      },
+                                                      yaxis: {
+                                                            labels: {
+                                                                  padding: 4
+                                                            },
+                                                      },
+                                                      labels: [
+                                                            '2020-06-20',
+                                                            '2020-06-21',
+                                                            '2020-06-22',
+                                                            '2020-06-23',
+                                                            '2020-06-24',
+                                                            '2020-06-25',
+                                                            '2020-06-26',
+                                                            '2020-06-27',
+                                                            '2020-06-28',
+                                                            '2020-06-29',
+                                                            '2020-06-30',
+                                                            '2020-07-01',
+                                                            '2020-07-02',
+                                                            '2020-07-03',
+                                                            '2020-07-04',
+                                                            '2020-07-05',
+                                                            '2020-07-06',
+                                                            '2020-07-07',
+                                                            '2020-07-08',
+                                                            '2020-07-09',
+                                                            '2020-07-10',
+                                                            '2020-07-11',
+                                                            '2020-07-12',
+                                                            '2020-07-13',
+                                                            '2020-07-14',
+                                                            '2020-07-15',
+                                                            '2020-07-16',
+                                                            '2020-07-17',
+                                                            '2020-07-18',
+                                                            '2020-07-19',
+                                                            '2020-07-20',
+                                                            '2020-07-21',
+                                                            '2020-07-22',
+                                                            '2020-07-23',
+                                                            '2020-07-24',
+                                                            '2020-07-25',
+                                                            '2020-07-26'
+                                                      ],
+                                                      colors: [tabler.getColor("primary"),
+                                                            tabler.getColor(
+                                                                  "primary",
+                                                                  0.8), tabler
+                                                            .getColor("green", 0.8)
+                                                      ],
+                                                      legend: {
+                                                            show: false,
+                                                      },
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById('sparkline-activity'), {
+                                                      chart: {
+                                                            type: "radialBar",
+                                                            fontFamily: 'inherit',
+                                                            height: 40,
+                                                            width: 40,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      plotOptions: {
+                                                            radialBar: {
+                                                                  hollow: {
+                                                                        margin: 0,
+                                                                        size: '75%'
+                                                                  },
+                                                                  track: {
+                                                                        margin: 0
+                                                                  },
+                                                                  dataLabels: {
+                                                                        show: false
+                                                                  }
+                                                            }
+                                                      },
+                                                      colors: [tabler.getColor("blue")],
+                                                      series: [35],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'chart-development-activity'), {
+                                                      chart: {
+                                                            type: "area",
+                                                            fontFamily: 'inherit',
+                                                            height: 192,
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                      },
+                                                      dataLabels: {
+                                                            enabled: false,
+                                                      },
+                                                      fill: {
+                                                            opacity: .16,
+                                                            type: 'solid'
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                            curve: "smooth",
+                                                      },
+                                                      series: [{
+                                                            name: "Purchases",
+                                                            data: [3, 5, 4, 6,
+                                                                  7, 5,
+                                                                  6, 8,
+                                                                  24, 7,
+                                                                  12, 5,
+                                                                  6,
+                                                                  3, 8,
+                                                                  4, 14,
+                                                                  30,
+                                                                  17,
+                                                                  19,
+                                                                  15,
+                                                                  14,
+                                                                  25,
+                                                                  32,
+                                                                  40,
+                                                                  55,
+                                                                  60,
+                                                                  48,
+                                                                  52, 70
+                                                            ]
+                                                      }],
+                                                      tooltip: {
+                                                            theme: 'dark'
+                                                      },
+                                                      grid: {
+                                                            strokeDashArray: 4,
+                                                      },
+                                                      xaxis: {
+                                                            labels: {
+                                                                  padding: 0,
+                                                            },
+                                                            tooltip: {
+                                                                  enabled: false
+                                                            },
+                                                            axisBorder: {
+                                                                  show: false,
+                                                            },
+                                                            type: 'datetime',
+                                                      },
+                                                      yaxis: {
+                                                            labels: {
+                                                                  padding: 4
+                                                            },
+                                                      },
+                                                      labels: [
+                                                            '2020-06-20',
+                                                            '2020-06-21',
+                                                            '2020-06-22',
+                                                            '2020-06-23',
+                                                            '2020-06-24',
+                                                            '2020-06-25',
+                                                            '2020-06-26',
+                                                            '2020-06-27',
+                                                            '2020-06-28',
+                                                            '2020-06-29',
+                                                            '2020-06-30',
+                                                            '2020-07-01',
+                                                            '2020-07-02',
+                                                            '2020-07-03',
+                                                            '2020-07-04',
+                                                            '2020-07-05',
+                                                            '2020-07-06',
+                                                            '2020-07-07',
+                                                            '2020-07-08',
+                                                            '2020-07-09',
+                                                            '2020-07-10',
+                                                            '2020-07-11',
+                                                            '2020-07-12',
+                                                            '2020-07-13',
+                                                            '2020-07-14',
+                                                            '2020-07-15',
+                                                            '2020-07-16',
+                                                            '2020-07-17',
+                                                            '2020-07-18',
+                                                            '2020-07-19'
+                                                      ],
+                                                      colors: [tabler.getColor(
+                                                            "primary")],
+                                                      legend: {
+                                                            show: false,
+                                                      },
+                                                      point: {
+                                                            show: false
+                                                      },
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-1'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [17, 24, 20,
+                                                                  10, 5,
+                                                                  1, 4,
+                                                                  18, 13
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-2'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [13, 11, 19,
+                                                                  22,
+                                                                  12, 7,
+                                                                  14, 3,
+                                                                  21
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-3'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [10, 13, 10,
+                                                                  4, 17,
+                                                                  3, 23,
+                                                                  22, 19
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-4'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [6, 15, 13,
+                                                                  13, 5,
+                                                                  7, 17,
+                                                                  20, 19
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-5'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [2, 11, 15,
+                                                                  14,
+                                                                  21,
+                                                                  20, 8,
+                                                                  23,
+                                                                  18, 14
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.ApexCharts && (new ApexCharts(document
+                                                .getElementById(
+                                                      'sparkline-bounce-rate-6'), {
+                                                      chart: {
+                                                            type: "line",
+                                                            fontFamily: 'inherit',
+                                                            height: 24,
+                                                            animations: {
+                                                                  enabled: false
+                                                            },
+                                                            sparkline: {
+                                                                  enabled: true
+                                                            },
+                                                      },
+                                                      tooltip: {
+                                                            enabled: false,
+                                                      },
+                                                      stroke: {
+                                                            width: 2,
+                                                            lineCap: "round",
+                                                      },
+                                                      series: [{
+                                                            color: tabler
+                                                                  .getColor(
+                                                                        "primary"
+                                                                  ),
+                                                            data: [22, 12, 7,
+                                                                  14, 3,
+                                                                  21, 8,
+                                                                  23,
+                                                                  18, 14
+                                                            ]
+                                                      }],
+                                                })).render();
+                                    });
+                                    // @formatter:on
+                                    </script>
+
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.Litepicker && (new Litepicker({
+                                                element: document.getElementById(
+                                                      'datepicker-default'),
+                                                buttonText: {
+                                                      previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                                                      nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                                                },
+                                          }));
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.Litepicker && (new Litepicker({
+                                                element: document.getElementById(
+                                                      'datepicker-icon'),
+                                                buttonText: {
+                                                      previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                                                      nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                                                },
+                                          }));
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.Litepicker && (new Litepicker({
+                                                element: document.getElementById(
+                                                      'datepicker-icon-prepend'),
+                                                buttonText: {
+                                                      previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                                                      nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                                                },
+                                          }));
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          window.Litepicker && (new Litepicker({
+                                                element: document.getElementById(
+                                                      'datepicker-inline'),
+                                                buttonText: {
+                                                      previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                                                      nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                                                },
+                                                inlineMode: true,
+                                          }));
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    function copyToClipboard(text) {
+                                          navigator.clipboard.writeText(text)
+                                                .then(() => {
+                                                      console.log(`Copied text to clipboard: ${text}`);
+                                                      alert(`${text} . ID has been copied. `);
+                                                })
+                                                .catch((error) => {
+                                                      console.error(`Could not copy text: ${error}`);
+                                                });
+                                    }
+                                    </script>
+
 </body>
 
 </html>

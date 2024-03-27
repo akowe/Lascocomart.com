@@ -64,10 +64,6 @@ class MemberFundRequest extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'id' => $this->fund_id,
-            'data'=>' You have fund request of '. number_format($this->amount, 2).  ' from ' .$fname. ' ' .$lname,
-        ];
+        return ' You have fund request of '. number_format($this->amount, 2).  ' from ' .$fname. ' ' .$lname;
     }
 }

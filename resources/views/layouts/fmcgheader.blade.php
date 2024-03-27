@@ -10,31 +10,24 @@
 
       <title>LascocoMart</title>
       <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-
       <!-- dataTable css -->
       <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
       <!-- Fonts -->
       <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
       <!-- Google font -->
       <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
       <!-- Bootstrap -->
       <!-- <link type="text/css" rel="stylesheet" href="css/bootstrap4.min.css" /> -->
       <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
       <!-- Slick -->
       <link type="text/css" rel="stylesheet" href="css/slick.css" />
       <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
-
       <!-- nouislider -->
       <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
-
       <!-- Font Awesome Icon -->
       <link rel="stylesheet" href="css/font-awesome.min.css">
       <!-- Custom stlylesheet -->
       <link type="text/css" rel="stylesheet" href="css/style.css?v=echo filemtime();" />
-
 
       <style>
       /**Added CSS***/
@@ -70,6 +63,30 @@
 
       .changecoopmartmenu .bar3coopmartmenu {
             transform: translate(0, -11px) rotate(45deg);
+      }
+
+      #top-fmcg-header {
+            background-color: rgb(31, 46, 65);
+      }
+
+      #fmcg-header {
+            background-color: rgb(31, 46, 65);
+            padding-top: 15px;
+            padding-bottom: 15px;
+      }
+
+      #fmcg-footer {
+            background-color: rgb(31, 46, 65);
+            color: #B9BABC;
+      }
+
+      #bottom-fmcg-footer{
+            background-color: rgb(31, 46, 65);
+      }
+      #fmcg-navigation {
+            background: #FFF;
+            border-bottom: 2px solid #E4E7ED;
+            border-top: 3px solid #D10024;
       }
       </style>
 
@@ -107,7 +124,7 @@
       <!-- HEADER -->
       <header>
             <!-- TOP HEADER -->
-            <div id="top-header" class="hidden-xs hidden-sm">
+            <div id="top-fmcg-header" class="hidden-xs hidden-sm">
                   <div class="container">
                         <ul class="header-links pull-left">
 
@@ -117,7 +134,7 @@
 
                         </ul>
                         <ul class="header-links pull-right">
-                           
+
                               <li>
                                     <!--show member name-->
                                     @if (Route::has('login'))
@@ -214,7 +231,7 @@
             <!-- /TOP HEADER -->
 
             <!-- MAIN HEADER -->
-            <div id="header" class="">
+            <div id="fmcg-header" class="">
                   <!-- container -->
                   <div class="container">
                         <!-- row -->
@@ -237,7 +254,7 @@
 
                                           <form action="{{ route('fmcg_category') }}" method="GET"
                                                 enctype="multipart/form-data">
-                                                       <input class="input search" type="text" name="search" id="search"
+                                                <input class="input search" type="text" name="search" id="search"
                                                       placeholder="Search for FMCG or products" autocomplete="off"
                                                       style="width:76%;" />
                                                 <button class="search-btn" type="submit">
@@ -259,12 +276,12 @@
                                                       style="cursor: pointer;">
                                                       <i class="fa fa-shopping-cart"></i>
                                                       <span>Cart</span>
-                                                      <div class="qty">{{ count((array) session('cart')) }}</div>
+                                                      <div class="qty">{{ count((array) session('fmcgcart')) }}</div>
                                                 </a>
                                                 @php $total = 0 @endphp
                                                 @php $items = 0 @endphp
                                                 @php $item = 1 @endphp
-                                                @foreach((array) session('cart') as $id => $details)
+                                                @foreach((array) session('fmcgcart') as $id => $details)
                                                 @php $total += $details['price'] * $details['quantity']
                                                 @endphp
 
@@ -272,10 +289,10 @@
                                                 @endphp
                                                 @endforeach
                                                 <div class="cart-dropdown">
-                                                      @if(session('cart'))
+                                                      @if(session('fmcgcart'))
                                                       <div class="cart-list">
 
-                                                            @foreach(session('cart') as $id => $details)
+                                                            @foreach(session('fmcgcart') as $id => $details)
                                                             <div class="product-widget">
 
                                                                   <div class="product-img">
@@ -320,7 +337,7 @@
                                           <!-- WishList -->
                                           @if (Route::has('login'))
                                           @auth
-                                        
+
                                           @endauth
                                           @endif
                                           <div class="hidden-lg hidden-md">
@@ -443,12 +460,12 @@
       <!-- /HEADER -->
 
       <!-- NAVIGATION -->
-      <nav id="navigation" class="">
+      <nav id="fmcg-navigation" class="">
             <!-- container -->
             <div class="container">
                   <!-- responsive-nav -->
                   <div id="responsive-nav">
-                        <!-- NAV -->
+                        <!-- NAV --> 
                         <ul class="main-nav nav navbar-nav" style="font-size:14px;">
                               <li class="active"><a href="{{ url('fmcgs_products')}}">FMCG</a></li>
                               @foreach (\App\Models\Categories::select('cat_name')->limit(8)->get() as
@@ -477,7 +494,7 @@
 
       <!-- /NAVIGATION -->
       @yield('content')
-      @extends('layouts.footer')
+      @extends('layouts.fmcgfooter')
       @yield('scripts')
 
 

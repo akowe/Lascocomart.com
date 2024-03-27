@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\CoopController;
+use App\Http\Controllers\Auth\SellerController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FmcgProductController;
 use App\Http\Controllers\CategoriesController;
@@ -11,21 +16,28 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController; 
 use App\Http\Controllers\CardPaymentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FundRequestController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Loan\LoanController;
+use App\Http\Controllers\Loan\CooperativeLoan;
+use App\Http\Controllers\Loan\MemberLoan;
 use App\Http\Controllers\OrderItem;
 use App\Models\Product;
 use App\Models\FcmgProduct;
+
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\MembersController;
+use App\Http\Controllers\FmcgController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\RatingController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Controllers\Auth\CoopController;
-use App\Http\Controllers\Auth\SellerController;
-use App\Http\Controllers\Auth\LoginController;
- 
+use App\Http\Controllers\Auth\NewAdminUserController;
+use App\Http\Controllers\BankTransferController;
+use App\Http\Controllers\FmcgPaymentController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,10 +91,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect('/')->with('success','Verification successful');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-//users activity log
-Route::get('add-to-log', [App\Http\Controllers\HomeController::class, 'myTestAddToLog']);
-Route::get('logActivity', [App\Http\Controllers\HomeController::class,'logActivity']);
-
 Route::group(['middleware' => ['auth']], function() {
     Route::post('logout', [App\Http\Controllers\Auth\LogoutController::class,'logout'])->name('logout');
     Route::get('show-change-password',[App\Http\Controllers\HomeController::class, 'showChangePassword'])->name('show-change-password');
@@ -90,197 +98,285 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('add-review/{product_id}/userreview', [ReviewController::class, 'add']); 
     Route::post('add-review', [ReviewController::class, 'create']);
 });
-Route::get('show-set-password',[App\Http\Controllers\SuperAdminController::class, 'showSetPassword'])->name('show-set-password');
-Route::post('set-password',[App\Http\Controllers\SuperAdminController::class, 'setPassword'])->name('set-password');
-Route::get('/reload-captcha', [App\Http\Controllers\Auth\RegisterController::class, 'reloadCaptcha']);
-//register users
-Route::get('cooperative-register', [App\Http\Controllers\Auth\CoopController::class, 'registerCooperative'])->name('cooperative-register');
-Route::get('member-register', [App\Http\Controllers\Auth\CoopController::class, 'registerMember'])->name('member-register');
-Route::post('create-member', [App\Http\Controllers\Auth\CoopController::class, 'createMember'])->name('create-member');
-Route::get('seller-register', [App\Http\Controllers\Auth\SellerController::class, 'registerSeller'])->name('seller-register');
+//users activity log
+Route::controller(HomeController::class)->group(function () {
+    Route::get('add-to-log',  'myTestAddToLog');
+    Route::get('logActivity', 'logActivity');
+    //profile
+    Route::get('account-settings', 'settings')->name('account-settings');
+    Route::post('/update-profile',  'updateProfile')->name('update-profile');
+    Route::post('/update-profile-image',  'updateProfileImage')->name('update-profile-image');
 
-//Users authentication on login pages for all admins
-Route::get('superadmin', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('superadmin');
-Route::get('cooperative', [App\Http\Controllers\CooperativeController::class, 'index'])->name('cooperative');
-Route::get('merchant', [App\Http\Controllers\MerchantController::class, 'index'])->name('merchant');
-Route::get('dashboard', [App\Http\Controllers\MembersController::class, 'index'])->name('dashboard');
-Route::get('fmcg', [App\Http\Controllers\FmcgController::class, 'index'])->name('fmcg');
-//product
-Route::get('/', [App\Http\Controllers\ProductController::class, 'index']);  
-Route::get('/vendor-product/{vendor}', [App\Http\Controllers\ProductController::class, 'vendorProduct'])->name('vendor-product');
-Route::get('cart', [App\Http\Controllers\ProductController::class, 'cart'])->name('cart');
-Route::get('add-to-cart/{id}', [App\Http\Controllers\ProductController::class, 'addToCart'])->name('add.to.cart');
-Route::get('add-to-wish/{id}', [App\Http\Controllers\ProductController::class, 'addWishList'])->name('add.to.wish');
-Route::get('wishlist', [App\Http\Controllers\ProductController::class, 'wishlist'])->name('wishlist');
-Route::post('remove-from-wish', [App\Http\Controllers\ProductController::class, 'removeWishlist'])->name('remove.from.wish');
-Route::post('update-cart', [App\Http\Controllers\ProductController::class, 'update'])->name('update.cart');
-Route::post('remove-from-cart', [App\Http\Controllers\ProductController::class, 'remove'])->name('remove.from.cart');
-Route::get('/category/', [App\Http\Controllers\CategoriesController::class,'category'])->name('category');
-Route::match(['get', 'post'],'checkout', [App\Http\Controllers\ProductController::class, 'checkout']); 
-Route::get('confirm_order',[App\Http\Controllers\OrderController::class, 'confirm_order'])->name('confirm_order');
-Route::post('order', [App\Http\Controllers\OrderController::class, 'order'])->name('order'); 
-//cancel an order.
-Route::get('cancel-order/{id}', [App\Http\Controllers\MembersController::class, 'cancelOrder'])->name('cancel-order');
-// from  product preview page 
-Route::get('add-cart/{id}', [ProductController::class, 'addToCartPreview'])->name('add.cart');
-Route::get('preview/{prod_name}', [App\Http\Controllers\ProductController::class, 'preview'])->name('preview');
-// view cooperative members
-Route::get('members', [App\Http\Controllers\CooperativeController::class, 'members'])->name('members');
-Route::get('delete-member/{id}', [App\Http\Controllers\CooperativeController::class, 'deleteMember'])->name('delete-member');
-// add credit for members
-Route::post('/credit_limit', [App\Http\Controllers\VoucherController::class, 'credit_limit'])->name('credit_limit');
-Route::post('limit', [App\Http\Controllers\VoucherController::class, 'limit'])->name('limit');
-//cooperative admin see's invoice of his/her members only
-Route::get('invoice/{order_number}', [App\Http\Controllers\CooperativeController::class, 'invoice'])->name('invoice');
-//members see's their own invoice 
-Route::get('member_invoice/{order_number}', [App\Http\Controllers\MembersController::class, 'member_invoice'])->name('member_invoice');
-//Seller admin see's invoice of  paid order
-Route::get('order_invoice/{order_number}', [App\Http\Controllers\MerchantController::class, 'invoice'])->name('order_invoice');
-//Super admin  see's all invoice 
-Route::get('sales_invoice/{order_number}', [App\Http\Controllers\SuperAdminController::class, 'sales_invoice'])->name('sales_invoice');
-Route::get('order/{order_number}', [App\Http\Controllers\SuperAdminController::class, 'order_details'])->name('order_details');
-Route::get('sales-details', [App\Http\Controllers\SuperAdminController::class, 'salesDetails'])->name('sales-details');
-// Super mark an order as paid
-Route::post('/mark_paid', [App\Http\Controllers\SuperAdminController::class, 'mark_paid'])->name('mark_paid');
-Route::get('products_list', [App\Http\Controllers\SuperAdminController::class, 'products_list'])->name('products_list');
-Route::get('edit-vendor-product/{id}', [App\Http\Controllers\SuperAdminController::class, 'editVendorProduct'])->name('edit-vendor-product');
+   Route::post('/cooperative-update-profile',  'cooperativeUpdateProfile')->name('cooperative-update-profile');
+    Route::post('/update-bank-details',  'UpdateBankAccount')->name('update-bank-details');
+    Route::post('/fmcg-update-profile',  'fmcgUpdateProfile')->name('fmcg-update-profile');
+    Route::post('/member-update-profile',  'memberUpdateProfile')->name('member-update-profile');
+    Route::post('/seller-update-profile', 'sellerUpdateProfile')->name('seller-update-profile');
+    Route::post('/update_profile_image',  'updateProfileImage')->name('update_profile_image');
+    Route::post('/update_certificate',  'updateCertificate')->name('update_certificate');
+    Route::get('verify-account-number', 'verify-account-number');
+});
+ //Superadmin
+Route::controller(SuperAdminController::class)->group(function () {
+    Route::get('superadmin',  'index')->name('superadmin');
+    Route::get('show-set-password',  'showSetPassword')->name('show-set-password');
+    Route::post('set-password','setPassword')->name('set-password');
+    Route::get('sales_invoice/{order_number}', 'sales_invoice')->name('sales_invoice');
+    Route::get('order/{order_number}', 'order_details')->name('order_details');
+    Route::get('sales-details',  'salesDetails')->name('sales-details');
+    Route::post('/mark_paid',  'mark_paid')->name('mark_paid');
+    Route::get('products_list', 'products_list')->name('products_list');
+    Route::get('edit-vendor-product/{id}', 'editVendorProduct')->name('edit-vendor-product');
+    Route::get('removed_product',  'removed_product')->name('removed_product');
+    Route::get('users_list', 'users_list')->name('users_list');
+    Route::put('user_update/{id}', 'user_update')->name('user_update');
+    Route::get('user_edit/{id}', 'user_edit')->name('user_edit');
+    Route::get('transactions',  'transactions')->name('transactions');
+    Route::post('/approved',  'approved')->name('approved');
+    Route::post('allocate_fund',  'allocateFund')->name('allocate_fund');
+    Route::get('order-history',  'orderHistory')->name('order-history');
+    Route::get('funds-allocated', 'fundsAllocated')->name('funds-allocated');
+    Route::put('about_update/{id}', 'about_update')->name('about_update');
+    Route::get('about_edit/{id}',  'about_edit')->name('about_edit');
+    Route::get('about_us',  'about')->name('about_us');
+    //privacy page 
+    Route::get('privacy', 'privacy')->name('privacy');
+    Route::get('privacy_edit/{id}',  'privacy_edit')->name('privacy_edit');
+    Route::put('privacy_update/{id}',  'privacy_update')->name('privacy_update');
+    Route::get('refund',  'refund')->name('refund');
+    Route::get('refund_edit/{id}',  'refund_edit')->name('refund_edit');
+    Route::put('refund_update/{id}',  'refund_update')->name('refund_update');
+    Route::get('tandc', 'tandc')->name('tandc');
+    Route::get('tandc_edit/{id}', 'tandc_edit')->name('tandc_edit');
+    Route::put('tandc_update/{id}', 'tandc_update')->name('tandc_update');
+    Route::get('add-new-admin',  'addNewAdmin')->name('add-new-admin');
+    Route::get('delete-user/{id}', 'deleteUser')->name('delete-user');
+    Route::get('edit-fund-request/{id}',  'editFundRequest')->name('edit-fund-request');
+    Route::post('/cancel-fund',  'cancelFundRequest')->name('cancel-fund');
+    Route::get('/reset-user-password/{id}',  'resetUserPassword')->name('reset-user-password');
+     
 
-Route::get('removed_product', [App\Http\Controllers\SuperAdminController::class, 'removed_product'])->name('removed_product');
-Route::get('users_list', [App\Http\Controllers\SuperAdminController::class, 'users_list'])->name('users_list');
-Route::put('user_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'user_update'])->name('user_update');
-Route::get('user_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'user_edit'])->name('user_edit');
-Route::get('transactions', [App\Http\Controllers\SuperAdminController::class, 'transactions'])->name('transactions');
-// Super mark an order as paid 
-Route::post('/approved', [App\Http\Controllers\SuperAdminController::class, 'approved'])->name('approved');
-Route::post('allocate_fund', [App\Http\Controllers\SuperAdminController::class, 'allocateFund'])->name('allocate_fund');
-Route::get('order-history', [App\Http\Controllers\SuperAdminController::class, 'orderHistory'])->name('order-history');
-Route::get('funds-allocated', [App\Http\Controllers\SuperAdminController::class, 'fundsAllocated'])->name('funds-allocated');
-// paystack integration
-// Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
-// // paystack callback url
-// Route::get('/payment/callback',  [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
-Route::post('/pay', [App\Http\Controllers\CardPaymentController::class, 'redirectToGateway'])->name('pay');
-// paystack callback url
-Route::get('/payment/callback',  [App\Http\Controllers\CardPaymentController::class, 'handleGatewayCallback']);
-// paystack integration
-Route::post('/fmcgpay', [App\Http\Controllers\FmcgPaymentController::class, 'redirectToGateway'])->name('fmcgpay');
-//merchant upload product
-Route::get('product', [App\Http\Controllers\MerchantController::class, 'product'])->name('product');
-Route::post('upload-image', [App\Http\Controllers\MerchantController::class, 'store']);
-Route::get('all-products', [App\Http\Controllers\MerchantController::class, 'allProducts'])->name('all-products');
-Route::put('update-product/{id}', [App\Http\Controllers\MerchantController::class, 'updateProduct'])->name('update-product');
-Route::get('edit-product/{id}', [App\Http\Controllers\MerchantController::class, 'editProduct'])->name('edit-product');
-//soft delete.
-Route::get('remove-product/{id}', [App\Http\Controllers\MerchantController::class, 'removeProduct'])->name('remove-product');
-Route::get('sales_preview', [App\Http\Controllers\MerchantController::class, 'sales_preview'])->name('sales_preview');
-//Fcmg  product
-Route::get('fmcg-add-to-cart/{id}', [App\Http\Controllers\FmcgProductController::class, 'fmcgAddToCart'])->name('add.product.to.cart');
-Route::get('fmcgCart', [App\Http\Controllers\FmcgProductController::class, 'cart'])->name('fmcgcart');
-Route::get('add-to-wish/{id}', [App\Http\Controllers\ProductController::class, 'addWishList'])->name('add.to.wish');
-Route::get('wishlist', [App\Http\Controllers\ProductController::class, 'wishlist'])->name('wishlist');
-Route::post('remove-from-wish', [App\Http\Controllers\ProductController::class, 'removeWishlist'])->name('remove.from.wish');
-Route::match(['get', 'post'],'fmcgcheckout', [App\Http\Controllers\FmcgProductController::class, 'checkout']); 
-Route::get('/fmcg_category/', [App\Http\Controllers\FmcgProductController::class,'fmcgCategory'])->name('fmcg_category');
-Route::get('fmcgs_products', [App\Http\Controllers\FmcgProductController::class, 'fmcgsProducts'])->name('fmcgs_products');
-Route::get('fmcg_add_product', [App\Http\Controllers\FmcgController::class, 'addProduct'])->name('fmcg_add_product');
-Route::post('fmcgstore', [App\Http\Controllers\FmcgController::class, 'fmcgstore']);
-Route::get('fmcgall_products', [App\Http\Controllers\FmcgController::class, 'allProducts'])->name('fmcgall_products');
-Route::get('fmcgmembers', [App\Http\Controllers\FmcgController::class, 'fmcgmembers'])->name('fmcgmembers');
-//soft delete.
-Route::post('/fmcgremove_product', [App\Http\Controllers\FmcgController::class, 'fmcgremove_product'])->name('fmcgremove_product');
-Route::get('fmcgsales_preview', [App\Http\Controllers\FmcgController::class, 'fmcgsales_preview'])->name('fmcgsales_preview');
-//Cooperative upload product
-Route::get('add_new_product', [App\Http\Controllers\CooperativeController::class, 'addProduct'])->name('add_new_product');
-Route::get('credit', [App\Http\Controllers\CooperativeController::class, 'members'])->name('credit');
-Route::post('coopupload-image', [App\Http\Controllers\CooperativeController::class, 'coopstore']);
-Route::get('coopall_products', [App\Http\Controllers\CooperativeController::class, 'coopall_products'])->name('coopall_products');
-//soft delete.
-Route::get('coopremove_product/{id}', [App\Http\Controllers\CooperativeController::class, 'coopremove_product'])->name('coopremove_product');
-Route::get('coopsales_preview', [App\Http\Controllers\CooperativeController::class, 'coopsales_preview'])->name('coopsales_preview');
-Route::get('about', [App\Http\Controllers\ProductController::class, 'about_us'])->name('about');
-Route::put('about_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'about_update'])->name('about_update');
-Route::get('about_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'about_edit'])->name('about_edit');
-Route::get('about_us', [App\Http\Controllers\SuperAdminController::class, 'about'])->name('about_us');
-//privacy page 
-Route::get('privacy', [App\Http\Controllers\SuperAdminController::class, 'privacy'])->name('privacy');
-Route::get('privacy_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'privacy_edit'])->name('privacy_edit');
-Route::put('privacy_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'privacy_update'])->name('privacy_update');
-Route::get('privacy_policy', [App\Http\Controllers\ProductController::class, 'privacy_policy'])->name('privacy_policy');
-//refund page
-Route::get('refund', [App\Http\Controllers\SuperAdminController::class, 'refund'])->name('refund');
-Route::get('refund_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'refund_edit'])->name('refund_edit');
-Route::put('refund_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'refund_update'])->name('refund_update');
-Route::get('return_policy', [App\Http\Controllers\ProductController::class, 'return_policy'])->name('return_policy');
-//terms and condition page
-Route::get('tandc', [App\Http\Controllers\SuperAdminController::class, 'tandc'])->name('tandc');
-Route::get('tandc_edit/{id}', [App\Http\Controllers\SuperAdminController::class, 'tandc_edit'])->name('tandc_edit');
-Route::put('tandc_update/{id}', [App\Http\Controllers\SuperAdminController::class, 'tandc_update'])->name('tandc_update');
-Route::get('terms', [App\Http\Controllers\ProductController::class, 'terms'])->name('terms');
-Route::get('add-new-admin', [App\Http\Controllers\SuperAdminController::class, 'addNewAdmin'])->name('add-new-admin');
-Route::post('/add_admin', [App\Http\Controllers\Auth\NewAdminUserController::class, 'newAdminUser'])->name('add_admin');
-Route::get('delete-user/{id}', [App\Http\Controllers\SuperAdminController::class, 'deleteUser'])->name('delete-user');
-//update profile
-Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
-Route::post('/update_profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
-Route::post('/seller-update-profile', [App\Http\Controllers\HomeController::class, 'sellerUpdateProfile'])->name('seller-update-profile');
-Route::post('/cooperative-update-profile', [App\Http\Controllers\HomeController::class, 'cooperativeUpdateProfile'])->name('cooperative-update-profile');
-Route::post('/fmcg-update-profile', [App\Http\Controllers\HomeController::class, 'fmcgUpdateProfile'])->name('fmcg-update-profile');
-Route::post('/member-update-profile', [App\Http\Controllers\HomeController::class, 'memberUpdateProfile'])->name('member-update-profile');
-Route::post('/update_profile_image', [App\Http\Controllers\HomeController::class, 'updateProfileImage'])->name('update_profile_image');
-Route::post('/update_certificate', [App\Http\Controllers\HomeController::class, 'updateCertificate'])->name('update_certificate');
-Route::post('newsletter', [App\Http\Controllers\NewsletterController::class, 'store']);
-Route::get('subscribers', [App\Http\Controllers\NewsletterController::class, 'subscribers'])->name('subscribers');
-Route::post('coop_insert', [App\Http\Controllers\Auth\CoopController::class, 'coop_insert'])->name('coop_insert');
-Route::post('fmcgs_insert', [App\Http\Controllers\Auth\FmcgsController::class, 'fmcgs_insert'])->name('fmcgs_insert');
-Route::post('seller_insert', [App\Http\Controllers\Auth\SellerController::class, 'seller_insert'])->name('seller_insert');
-//Route::get('payout', [App\Http\Controllers\MerchantController::class, 'payout'])->name('payout');
-//Route::get('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load_wallet'])->name('addcredit');
-Route::post('/addcredit',  [App\Http\Controllers\VoucherController::class, 'load_wallet'])->name('addcredit');
-//Route::get('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
-Route::post('/payout',  [App\Http\Controllers\VoucherController::class, 'withdraw'])->name('payout');
-Route::get('request-fund', [App\Http\Controllers\FundRequestController::class, 'requestFund'])->name('request-fund');    
-//in app notification 
-Route::post('send-fund-request', [App\Http\Controllers\FundRequestController::class,'sendFundRequest'])->name('send-fund-request');
-Route::get('/show-fundrequest',  [App\Http\Controllers\FundRequestController::class,'showFundrequest'])->name('show-fundrequest');
-Route::get('/mark-as-read', [App\Http\Controllers\NotificationController::class,'markAllNotificationAsRead'])->name('mark-as-read');
-Route::get('/read/{id}', [App\Http\Controllers\NotificationController::class,'readNotification'])->name('read');
+});
+//Cooperatives
+Route::controller(CooperativeController::class)->group(function () {
+    Route::get('cooperative',  'index')->name('cooperative');
+    //cooperative admin see's invoice of his/her members only
+    Route::get('invoice/{order_number}',  'invoice')->name('invoice');
+    Route::get('members', 'members')->name('members');
+    Route::get('delete-member/{id}', 'deleteMember')->name('delete-member');
+    Route::get('add_new_product', 'addProduct')->name('add_new_product');
+    Route::get('credit',  'members')->name('credit');
+   // Route::post('coopupload-image',  'coopstore');
+   // Route::get('coopall_products',  'coopall_products')->name('coopall_products');
+    //soft delete.
+    Route::get('coopremove_product/{id}',  'coopremove_product')->name('coopremove_product');
+    //Route::get('coopsales_preview',  'coopsales_preview')->name('coopsales_preview');
+    Route::get('cooperative-sales',  'cooperativeSales')->name('cooperative-sales');
+    Route::get('admin-member-order',  'cooperativeMemberOrder')->name('admin-member-order');
+    Route::get('admin-customer-order',  'cooperativeCustomerOrder')->name('admin-customer-order');
+    Route::get('admin-order-history',  'adminOrderHistory')->name('admin-order-history');
+    Route::get('/admin-products/',  'adminProducts')->name('admin-products');
+    Route::get('cancel-new-order/{id}',  'cancelMemberNewOrder')->name('cancel-new-order');
+    Route::post('/order-cancel',  'cancelOrder')->name('order-cancel');
+    Route::get('view-canceled-orders', 'viewCanceledOrders')->name('view-canceled-orders');
+    Route::put('admin-update-product/{id}', 'updateProduct')->name('admin-update-product');
+    Route::get('admin-edit-product/{id}', 'editProduct')->name('admin-edit-product');
+    Route::get('admin-remove-product/{id}',  'removeProductPage')->name('admin-remove-product');
+    Route::post('remove-admin-product',  'removeProduct')->name('remove-admin-product');
+    Route::get('approve-order/{id}',  'approveMemberOrderPage')->name('approve-order');
+    Route::post('admin-approve-order',  'approveOrder')->name('admin-approve-order');
+});
+//Members
+Route::controller(MembersController::class)->group(function () {
+    Route::get('dashboard',  'index')->name('dashboard');
+    Route::get('cancel-order/{id}', 'cancelOrderPage')->name('cancel-order');
+    Route::post('cancel', 'cancelOrder')->name('cancel');
+    Route::get('member-order',  'memberOrderHistory')->name('member-order');
+    Route::get('member_invoice/{order_number}',  'member_invoice')->name('member_invoice');
+});
+//Merchants
+Route::controller(MerchantController::class)->group(function () {
+    Route::get('merchant', 'index')->name('merchant');
+    Route::get('vendor-new-product', 'newProduct')->name('vendor-new-product');
+    Route::post('add-product',  'addProductToStore');
+    Route::get('vendor-products', 'vendorProducts')->name('vendor-products');
+    Route::put('update-product/{id}', 'updateProduct')->name('update-product');
+    Route::get('edit-product/{id}', 'editProduct')->name('edit-product');
+    //soft delete.
+    Route::get('remove-product/{id}',  'removeProductPage')->name('remove-product');
+    Route::post('remove',  'removeProduct')->name('remove');
+    Route::get('vendor-sales',  'vendorSales')->name('vendor-sales');
+    //Seller see's invoice of  paid order
+    Route::get('vendor-sales-invoice/{order_number}',  'invoice')->name('vendor-sales-invoice');
+    //Route::get('payout', [App\Http\Controllers\MerchantController::class, 'payout'])->name('payout');
+});
+//FMCG
+Route::controller(FmcgController::class)->group(function () {
+    Route::get('fmcg',  'index')->name('fmcg');
+    Route::get('fmcg-new-product',  'fcmgNewProductPage')->name('fmcg-new-product');
+    Route::post('fmcg-add-product',  'fcmgAddProductToStore');
+    Route::get('fmcg-products', 'fmcgProducts')->name('fmcg-products');
+    Route::get('fmcg-members',  'fmcgMembers')->name('fmcg-members');
+    Route::put('fmcg-update-product/{id}', 'updateProduct')->name('fmcg-update-product');
+    Route::get('fmcg-edit-product/{id}', 'editProduct')->name('fmcg-edit-product');
+    //soft delete.
+    Route::get('fmcg-remove-product/{id}',  'removeProductPage')->name('fmcg-remove-product');
+    Route::post('remove-fmcg-product',  'removeProduct')->name('remove-fmcg-product');
+    Route::get('fmcg-sales',  'fmcgSales')->name('fmcg-sales');
+    Route::get('fmcg-sales-invoice/{order_number}',  'invoice')->name('fmcg-sales-invoice');
+    
+});
+//FMCG Products Landing Page
+Route::controller(FmcgProductController::class)->group(function () {
+    Route::get('fmcg-add-to-cart/{id}',  'fmcgAddToCart')->name('add.product.to.cart');
+    Route::get('fmcgcart',  'fmcgcart')->name('fmcgcart');
+    Route::post('update-fmgcart',  'updatefmcg')->name('update.fmcgcart');
+    Route::post('remove-from-fmcgcart',  'removefmcg')->name('remove.from.fmcgcart');
+    Route::match(['get', 'post'],'fmcgcheckout',  'fmcgcheckout'); 
+    Route::get('/fmcg_category/', 'fmcgCategory')->name('fmcg_category');
+    Route::get('fmcgs_products', 'fmcgsProducts')->name('fmcgs_products');
+});
 
-// notification
-Route::get('superadmin-read-fund-request/{id}', [App\Http\Controllers\NotificationController::class, 'fundRequestNotification'])->name('superadmin-read-fund-request');
-Route::post('member_request_fund_wallet', [App\Http\Controllers\FundRequestController::class, 'memberFundWallet'])->name('member_request_fund_wallet'); 
-Route::get('/new-product', [App\Http\Controllers\NotificationController::class,'allNewProductNotification'])->name('new-product');
-Route::get('/read-product/{id}', [App\Http\Controllers\NotificationController::class,'readAProductNotification'])->name('read-product');
-Route::post('order-delivery/{id}', [App\Http\Controllers\NotificationController::class, 'orderDelivered'])->name('order-delivery');
-Route::get('/product-delivered', [App\Http\Controllers\NotificationController::class,'allProductDeliveredNotification'])->name('product-delivered');
-Route::get('/read-product-delivered/{id}', [App\Http\Controllers\NotificationController::class,'readAProductDeliveredNotification'])->name('read-product-delivered');
-Route::post('order-received/{id}', [App\Http\Controllers\NotificationController::class, 'orderReceived'])->name('order-received');
-Route::get('/product-received', [App\Http\Controllers\NotificationController::class,'allProductReceivedNotification'])->name('product-received');
-Route::get('/read-product-received/{id}', [App\Http\Controllers\NotificationController::class,'readAProductReceivedNotification'])->name('read-product-received');
-Route::get('/read-all-payment', [App\Http\Controllers\NotificationController::class,'allNewCardPaymentNotification'])->name('read-all-payment');
-Route::get('/read-seller-payment/{id}', [App\Http\Controllers\NotificationController::class,'readACardPaymentNotification'])->name('read-seller-payment');
-Route::get('/read-company-payment/{id}', [App\Http\Controllers\NotificationController::class,' '])->name('read-company-payment');
-Route::get('/read-all-order', [App\Http\Controllers\NotificationController::class,'allNewOrderNotification'])->name('read-all-order');
-Route::get('/read-admin-order/{id}', [App\Http\Controllers\NotificationController::class,'readAnOrderNotification'])->name('read-admin-order');
-Route::get('/read-company-order/{id}', [App\Http\Controllers\NotificationController::class,'readAnOrderSuperadmin'])->name('read-company-order');
-Route::get('/read-all-cancel-order', [App\Http\Controllers\NotificationController::class,'AdminCancelOrderNotification'])->name('read-all-cancel-order');
-Route::get('/read-cancel-order/{id}', [App\Http\Controllers\NotificationController::class,'readAdminCancelOrderNotification'])->name('read-cancel-order');
-Route::get('/read-all-approve-funds', [App\Http\Controllers\NotificationController::class,'ApproveFundNotification'])->name('read-all-approve-funds');
-Route::get('/read-approve-funds/{id}', [App\Http\Controllers\NotificationController::class,'readApproveFundNotification'])->name('read-approve-funds');
-Route::get('/read-cancel-funds/{id}', [App\Http\Controllers\NotificationController::class,'readCancelFundNotification'])->name('read-cancel-funds');
+//General Product landing page
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/', 'index'); 
+    Route::get('/vendor-product/{vendor}',  'vendorProduct')->name('vendor-product');
+    Route::get('cart',  'cart')->name('cart');
+    Route::get('add-to-cart/{id}',  'addToCart')->name('add.to.cart');
+    Route::get('add-to-wish/{id}',  'addWishList')->name('add.to.wish');
+    Route::get('wishlist',  'wishlist')->name('wishlist');
+    Route::post('remove-from-wish', 'removeWishlist')->name('remove.from.wish');
+    Route::post('update-cart',  'update')->name('update.cart');
+    Route::post('remove-from-cart',  'remove')->name('remove.from.cart');
+    Route::match(['get', 'post'],'checkout', 'checkout'); 
+    // product preview page 
+    Route::get('add-cart/{id}',  'addToCartPreview')->name('add.cart');
+    Route::get('preview/{prod_name}', 'preview')->name('preview');
+    Route::get('add-to-wish/{id}', 'addWishList')->name('add.to.wish');
+    Route::get('wishlist',  'wishlist')->name('wishlist');
+    Route::post('remove-from-wish',  'removeWishlist')->name('remove.from.wish');
+    Route::get('about', 'about_us')->name('about');
+    Route::get('privacy_policy', 'privacy_policy')->name('privacy_policy');
+    Route::get('return_policy', 'return_policy')->name('return_policy');
+    Route::get('terms',  'terms')->name('terms');
+});
 
-//Bank transfer
-Route::get('bank-payment', [App\Http\Controllers\BankTransferController::class,'bankPayment'])->name('bank-payment');
-Route::post('bank-transfer', [App\Http\Controllers\BankTransferController::class,'bankTransfer'])->name('bank-transfer');
-Route::get('payment-bank-tranfer/{reference}/{order_id}/{order_amount}', [App\Http\Controllers\BankTransferController::class,'banTransferPayment']);
-Route::get('admin-order-history', [App\Http\Controllers\CooperativeController::class, 'adminOrderHistory'])->name('admin-order-history');
-Route::get('admin-products', [App\Http\Controllers\CooperativeController::class, 'adminProducts'])->name('admin-products');
-Route::get('order-update/{id}', [CooperativeController::class, 'approveOrder'])->name('order-update');
-Route::get('cancel-new-order/{id}', [CooperativeController::class, 'cancelMemberNewOrder'])->name('cancel-new-order');
-Route::post('/order-cancel', [CooperativeController::class, 'cancelOrder'])->name('order-cancel');
-Route::get('view-canceled-orders', [App\Http\Controllers\CooperativeController::class, 'viewCanceledOrders'])->name('view-canceled-orders');
-Route::get('autocomplete', [CategoriesController::class,'autocomplete'])->name('autocomplete');
+Route::controller(VoucherController::class)->group(function () {
+    // add credit for members
+    Route::post('/credit_limit', 'credit_limit')->name('credit_limit');
+    Route::post('limit', 'limit')->name('limit');
+    //Route::get('/addcredit',  'load_wallet')->name('addcredit');
+    Route::post('/addcredit',  'load_wallet')->name('addcredit');
+    //Route::get('/payout',  'withdraw')->name('payout');
+    Route::post('/payout',  'withdraw')->name('payout');
+});
+//member signup
+Route::controller(RegisterController::class)->group(function () {
+    Route::get('/reload-captcha',  'reloadCaptcha');
+
+});
+//cooperative signup
+Route::controller(CoopController::class)->group(function () {
+    Route::get('cooperative-register',  'registerCooperative')->name('cooperative-register');
+    Route::get('member-register',  'registerMember')->name('member-register');
+    Route::post('create-member',  'createMember')->name('create-member');
+    Route::post('coop_insert', 'coop_insert')->name('coop_insert');
+});
+//Merchant signup
+Route::controller(SellerController::class)->group(function () {
+    Route::get('seller-register', 'registerSeller')->name('seller-register');
+    Route::post('seller_insert',  'seller_insert')->name('seller_insert');
+
+});
+//search product by category
+Route::controller(CategoriesController::class)->group(function () {
+    Route::get('/category/', 'category')->name('category');
+    Route::get('autocomplete', 'autocomplete')->name('autocomplete');
+});
+
+Route::controller(OrderController::class)->group(function () {
+    Route::get('confirm_order','confirm_order')->name('confirm_order');
+    Route::post('order', 'order')->name('order');  
+});
+Route::controller(NewsletterController::class)->group(function () {
+    Route::post('newsletter', 'store');
+    Route::get('subscribers', 'subscribers')->name('subscribers');
+});
+//superadmin add new admins users
+Route::controller(NewAdminUserController::class)->group(function () {
+    Route::post('/add_admin', 'newAdminUser')->name('add_admin');
+});
+
+Route::controller(FundRequestController::class)->group(function () {
+    Route::get('request-fund',  'requestFund')->name('request-fund');  
+    Route::post('send-fund-request', 'sendFundRequest')->name('send-fund-request');
+    Route::get('/show-fundrequest',  'showFundrequest')->name('show-fundrequest');
+    Route::post('member_request_fund_wallet', 'memberFundWallet')->name('member_request_fund_wallet'); 
+});
+//Cooperative payment for member approved order
+Route::controller(BankTransferController::class)->group(function () {
+    Route::get('bank-payment', 'bankPayment')->name('bank-payment');
+    Route::post('bank-transfer', 'bankTransfer')->name('bank-transfer');
+    Route::get('payment-bank-tranfer/{reference}/{order_id}/{order_amount}', 'bankTransferPayment'); 
+});
+// Paystack payment gateway
+Route::controller(CardPaymentController::class)->group(function () {
+    Route::post('/pay',  'redirectToGateway')->name('pay');
+    Route::get('/payment/callback',   'handleGatewayCallback');  
+});
+// Payment from FMCG product page
+Route::controller(FmcgPaymentController::class)->group(function () {
+    Route::post('/fmcgpay',  'redirectToGateway')->name('fmcgpay');
+    Route::get('/fmcg/callback',   'fmcgCallback')->name('fmcg/callback'); 
+    Route::get('fmcg-payment/{reference}/{order_amount}', 'fmcgPayment'); 
+});
+// notification 
+Route::controller(NotificationController::class)->group(function () {
+    Route::get('/mark-as-read', 'markAllNotificationAsRead')->name('mark-as-read');
+    Route::get('/read/{id}', 'readNotification')->name('read'); 
+    Route::get('superadmin-read-fund-request/{id}',  'fundRequestNotification')->name('superadmin-read-fund-request');
+    Route::get('/new-product','allNewProductNotification')->name('new-product');
+    Route::get('/read-product/{id}','readAProductNotification')->name('read-product');
+    Route::post('order-delivery/{id}/{product_id}', 'orderDelivered')->name('order-delivery');
+    Route::post('fmcg-order-delivery/{id}/{product_id}', 'fmcgOrderDelivered')->name('fmcg-order-delivery');
+    Route::get('/product-delivered','allProductDeliveredNotification')->name('product-delivered');
+    Route::get('/read-product-delivered/{id}','readAProductDeliveredNotification')->name('read-product-delivered');
+    Route::post('order-received/{id}', 'orderReceived')->name('order-received');
+    Route::get('/product-received','allProductReceivedNotification')->name('product-received');
+    Route::get('/read-product-received/{id}','readAProductReceivedNotification')->name('read-product-received');
+    Route::get('/read-all-payment','allNewCardPaymentNotification')->name('read-all-payment');
+    Route::get('/read-seller-payment/{id}','readACardPaymentNotification')->name('read-seller-payment');
+    Route::get('/read-company-payment/{id}',' ')->name('read-company-payment');
+    Route::get('/read-all-order','allNewOrderNotification')->name('read-all-order');
+    Route::get('/read-admin-order/{id}','readAnOrderNotification')->name('read-admin-order');
+    Route::get('/read-company-order/{id}','readAnOrderSuperadmin')->name('read-company-order');
+    Route::get('/read-all-cancel-order','AdminCancelOrderNotification')->name('read-all-cancel-order');
+    Route::get('/read-cancel-order/{id}','readAdminCancelOrderNotification')->name('read-cancel-order');
+    Route::get('/read-all-approve-funds','ApproveFundNotification')->name('read-all-approve-funds');
+    Route::get('/read-approve-funds/{id}','readApproveFundNotification')->name('read-approve-funds');
+    Route::get('/read-cancel-funds/{id}','readCancelFundNotification')->name('read-cancel-funds');
+});
+
+Route::controller(LoanController::class)->group(function () {
+    Route::get('loan', 'loan');
+    Route::post('add-loan', 'addLoan')->name('add-loan');
+});
+//Cooperative Loan
+Route::controller(CooperativeLoan::class)->group(function () {
+    Route::post('loan-settings', 'updateLoanSetting')->name('loan-settings');
+    Route::get('cooperative-loan', 'cooperativeLoan')->name('cooperative-loan');
+    Route::get('cooperative-loan-type', 'loanType')->name('cooperative-loan-type');
+    Route::post('add-loan-type', 'addLoanType')->name('add-loan-type');
+    Route::get('cooperative-approve-loan/{id}', 'cooperativeApproveLoan');
+    Route::post('approve-loan', 'approveLoan');
+    Route::get('cooperative-loan-payout/{id}', 'cooperativeLoanPayOut');
  
-Route::get('edit-fund-request/{id}', [SuperAdminController::class, 'editFundRequest'])->name('edit-fund-request');
-Route::post('/cancel-fund', [SuperAdminController::class, 'cancelFundRequest'])->name('cancel-fund');
-Route::get('/reset-user-password/{id}', [SuperAdminController::class, 'resetUserPassword'])->name('reset-user-password');
- 
+});
+
+//Member Loan
+Route::controller(MemberLoan::class)->group(function () {
+    Route::get('member-request-loan', 'requestLoan')->name('member-request-loan');
+    Route::get('member-loan-history', 'loanHistory');
+    Route::get('calculate-interest/{id}/{amount}/{duration}', 'calculateInterest')->name('calculate-interest');
+});
+

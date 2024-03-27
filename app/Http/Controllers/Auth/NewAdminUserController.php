@@ -90,9 +90,9 @@ class NewAdminUserController extends Controller
           Mail::to($email)->send(new NewUserEmail($data));  
         }
   
-          Session::flash('status', ' New user created successfully. <br> login details has been sent to user email address. <br> User to check his/her inbox or spam/junk'); 
+          Session::flash('success', ' New user created successfully. <br> login details has been sent to user email address. <br> User to check his/her inbox or spam/junk'); 
           Session::flash('alert-class', 'alert-success'); 
-          return redirect()->back()->with('status', ' New user created successfully. <br> login details has been sent to user email address. <br> User to check his/her inbox or spam/junk');         
+          return redirect()->back()->with('success', ' New user created successfully. <br> login details has been sent to user email address. <br> User to check his/her inbox or spam/junk');         
       }
     }
   

@@ -1,15 +1,7 @@
 @extends('layouts.header')
-
-
 @section('content')
 <!-- SECTION -->
 <span class="text-center">
-      @if (session('status'))
-      <div class="alert alert-success" role="alert">
-            {!! session('status') !!}
-      </div>
-      @endif
-
       @if (session('error'))
       <div class="alert alert-danger" role="alert">
             {!! session('error') !!}
@@ -45,7 +37,6 @@
             <div class="col-md-5 ">
                   <img src="/images/lascoco-banner.jpg" alt="" style="width:100%;">
             </div>
-
 
             <div class="col-md-7">
                   <div id="myCarousel" class="carousel slide" data-ride="carousel">

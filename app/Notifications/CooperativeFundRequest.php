@@ -63,11 +63,7 @@ class CooperativeFundRequest extends Notification
     public function toArray($notifiable)
     {
         $user = Auth::user()->coopname;
-        return [
-            //
-            'id' => $this->fund_id,
-            'data'=>' You have fund request of '. number_format($this->amount, 2).  ' from ' .$user,
-        ];
+        return ' Fund request of '. number_format($this->amount, 2).  ' from ' .$user;
     }
  
 }

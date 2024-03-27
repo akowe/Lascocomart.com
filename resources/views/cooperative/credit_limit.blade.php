@@ -1,8 +1,4 @@
 @extends('layouts.home')
-
-@extends('layouts.sidebar')
-
-
 @section('content')
 <form id="paymentForm" method="POST" action="/pay">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />

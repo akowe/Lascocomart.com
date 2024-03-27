@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
+use App\Models\ChooseBank;
 use App\Models\LogActivity as LogActivityModel;
 
 use Auth;
@@ -92,76 +97,191 @@ class HomeController extends Controller
         \LogActivity::addToLog('Change password'); 
         return redirect()->back()->with("success","Password successfully changed!");
     } 
-    public function profile(Request $request){
+    
+    //profile seetings view page for all user
+    public function settings(Request $request){
         if(Auth::user()){
-            $id = Auth::user()->id; //
+            $id = Auth::user()->id; 
+            $code = Auth::user()->code; 
+            $companyName = Auth::user()->coopname;
             $users = User::all()->where('id', $id);
+
+            $selectBankName = ChooseBank::all();
+            $appServiceCharge = DB::table('settings')
+            ->select('loan_service_charge')
+            ->pluck('loan_service_charge')->first();
+
+            $cooperativeProessFee = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('processing_fee')->first();
+
+            $cooperativeMaxLoan = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('max_loan')->first();
+
+            $cooperativeApprovalLevel = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('approval_level')->first();
+
+            $cooperativeLoanRepayment = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('start_repayment')->first();
+            
             \LogActivity::addToLog('Profile');
-            return view('profile', compact('users'));
+            return view('profile', compact('users', 
+            'companyName', 'selectBankName', 'appServiceCharge', 'cooperativeProessFee',
+            'cooperativeMaxLoan', 'cooperativeApprovalLevel', 'cooperativeLoanRepayment'
+            ));
         }
         else{
             return Redirect::to('/login');
         } 
     } 
 
-    public function update_profile(Request $request){
-       if(Auth::user()){
-            $user_id = Auth::user()->id; //
-            $this->validate($request, [
-            'fname'         => 'max:255',  
-            'address'       => 'required|string|max:255',
-            'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-           
-        
-            ]);
-            if(null !== $_POST['submit']){
-                //update table
+
+    public function updateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [ 
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'company_name'  => 'required|string|max:255', ]);
+
+             if($request->hasFile('image')) {
+                $image= $request->file('image');
+                $imageName =  rand(1000000000, 9999999999).'.jpeg';
+                $image->move(public_path('images/logo'),$imageName);
+                $image_path = "/images/logo/" . $imageName; 
+                // Process the new image.
                 User::where('id', $user_id)
-                        ->update([
-                        'fname' =>  $request->fname,
-                        'address' => $request->address,
-                        'phone' => $request->phone,
-                    ]);
+                ->update([
+                    'address'       => $request->address,
+                    'phone'         => $request->phone,
+                    'coopname'      =>  $request->company_name, 
+                    'profile_img'   => $image_path,   
+                    'sms'          => $request->sms,       
+                ]);
+              }
+            //update table
+             User::where('id', $user_id)->update([
+             'fname'     =>  $request->fname,
+             'address'   => $request->address,
+             'phone'     => $request->phone,
+             'coopname'    =>  $request->company_name,
+             'sms'          => $request->sms,  
+             ]);
 
-                Session::flash('status', ' Profile Update Successful!'); 
-                Session::flash('alert-class', 'alert-success'); 
-            }
-            \LogActivity::addToLog('Update');
-            return redirect()->back()->with('status', 'Profile Update Successful!');
-        } 
-       else{
-        return Redirect::to('/login');
-       }
-    } 
+             $sms =  SMS::where('user_id', $user_id)->get('user_id')->first();
+             if (empty($sms)){  
+                $sms =  new SMS;
+                $sms->user_id = Auth::user()->id;
+                $sms->save(); 
+             }
 
-    public function sellerUpdateProfile(Request $request){
+             \LogActivity::addToLog('Update');
+             return redirect()->back()->with('success', 'Profile saved successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+     public function verifyAccountNumber(Request $request){
         if(Auth::user()){
              $user_id = Auth::user()->id; //
              $this->validate($request, [
-             'fname'         => 'max:255',  
-             'address'       => 'required|string|max:255',
-             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-             'bank'          => 'required|string|max:255',
-             'account_name'  => 'required|string|max:255', 
-         
+             'bankName'       => 'required|string|max:255',
+             'accountNumber'  => 'required|string|max:255', 
+             'accountName'  => 'required|string|max:255', 
              ]);
+
+             $backName =$request->bankName;
+             $bankCode = ChooseBank::select('code')
+             ->where('name', $backName)->pluck('code')->first();//remove bracket
+            
+             $account_number = $request->accountNumber;
+            
+            }
+        }
+
+    // for all user
+    public function UpdateBankAccount(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [
+             'bankName'       => 'required|string|max:255',
+             'accountNumber'  => 'required|string|max:255', 
+             'accountName'  => 'required|string|max:255', 
+             ]);
+             
+             $bankCode = $request->bankName;
+             $bankName = ChooseBank::select('name')
+             ->where('code', $bankCode)->pluck('name')->first();//remove bracket
+
              if(null !== $_POST['submit']){
                  //update table
                  User::where('id', $user_id)
                          ->update([
-                         'fname' =>  $request->fname,
-                         'address' => $request->address,
-                         'phone' => $request->phone,
-                         'bank' =>$request->bank,
-                         'account_name' =>$request->account_name,
-                         'account_number' =>$request->account_number,
+                         'bank' =>$bankName,
+                         'account_name' =>$request->accountName,
+                         'account_number' =>$request->accountNumber,
                      ]);
- 
-                 Session::flash('status', ' Profile Update Successful!'); 
+                     
+                 Session::flash('success', ' Bank details saved successful!'); 
                  Session::flash('alert-class', 'alert-success'); 
              }
              \LogActivity::addToLog('Update');
-             return redirect('/merchant')->with('status', 'Profile Update Successful!');
+             return redirect()->back()->with('success', 'Bank details saved successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+
+    public function sellerUpdateProfile(Request $request){
+        if(Auth::user()){
+             $user_id = Auth::user()->id; //
+             $this->validate($request, [ 
+             'address'       => 'required|string|max:255',
+             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'image'         => 'image|mimes:jpg,png,jpeg|max:300',// maximum is 300kb , 600 x 600 pixel
+             ]);
+
+             if($request->hasFile('image')) {
+                $image= $request->file('image');
+                $imageName =  rand(1000000000, 9999999999).'.jpeg';
+                $image->move(public_path('images/logo'),$imageName);
+                $image_path = "/images/logo/" . $imageName; 
+                // Process the new image.
+                User::where('id', $user_id)
+                ->update([
+                    'address'       => $request->address,
+                    'phone'         => $request->phone,
+                    'profile_img'   => $image_path,  
+                    'sms'          => $request->sms,        
+                ]);
+              }
+            //update table
+            User::where('id', $user_id)->update([
+            'address'       => $request->address,
+            'phone'         => $request->phone,
+            'sms'          => $request->sms,  
+            ]);
+
+            $sms =  SMS::where('user_id', $user_id)->get('user_id')->first();
+             if (empty($sms)){  
+                $sms =  new SMS;
+                $sms->user_id = Auth::user()->id;
+                $sms->save(); 
+             }
+ 
+             \LogActivity::addToLog('Update');
+             return redirect()->back()->with('success', 'Profile saved successful!');
          } 
         else{
          return Redirect::to('/login');
@@ -171,70 +291,56 @@ class HomeController extends Controller
      public function cooperativeUpdateProfile(Request $request){
         if(Auth::user()){
              $user_id = Auth::user()->id; //
-             $this->validate($request, [
-             'fname'         => 'max:255',  
-             'address'       => 'required|string|max:255',
-             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-             'bank'          => 'required|string|max:255',
-             'account_name'  => 'required|string|max:255', 
-         
+             $this->validate($request, [  
+             'address'              => 'required|string|max:255',
+             'phone'                => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+             'rcnumber'             => 'string|max:255',
+             'cooperative_type'     => 'required|string|max:255', 
+             'image'                => 'image|mimes:jpg,png,jpeg|max:300',// maximum is 300kb , 600 x 600 pixel
              ]);
-             if(null !== $_POST['submit']){
-                 //update table
-                 User::where('id', $user_id)
-                         ->update([
-                         'fname' =>  $request->fname,
-                         'address' => $request->address,
-                         'phone' => $request->phone,
-                         'bank' =>$request->bank,
-                         'account_name' =>$request->account_name,
-                         'account_number' =>$request->account_number,
-                     ]);
- 
-                 Session::flash('status', ' Profile Update Successful!'); 
-                 Session::flash('alert-class', 'alert-success'); 
-             }
+        
+              if($request->hasFile('image')) {
+                $image= $request->file('image');
+                $imageName =  rand(1000000000, 9999999999).'.jpeg';
+                $image->move(public_path('images/logo'),$imageName);
+                $image_path = "/images/logo/" . $imageName; 
+                // Process the new image.
+                User::where('id', $user_id)
+                ->update([
+                'address'      => $request->address,
+                'phone'        => $request->phone,
+                'rcnumber'     => $request->rcnumber,
+                'cooptype'     => $request->cooperative_type,
+                'profile_img'  => $image_path,   
+                'sms'          => $request->sms,       
+                ]);
+
+              }
+                //update table
+                User::where('id', $user_id)
+                ->update([
+                'address'      => $request->address,
+                'phone'        => $request->phone,
+                'rcnumber'     => $request->rcnumber,
+                'cooptype'     => $request->cooperative_type, 
+                'sms'          => $request->sms,      
+                ]);
+                
+                $sms =  SMS::where('user_id', $user_id)->get('user_id')->first();
+                if (empty($sms)){  
+                    $sms =  new SMS;
+                    $sms->user_id = Auth::user()->id;
+                    $sms->save(); 
+                }
+              
              \LogActivity::addToLog('Update');
-             return redirect('cooperative')->with('status', 'Profile Update Successful!');
+             return redirect()->back()->with('success', 'Profile saved successful!');
          } 
         else{
          return Redirect::to('/login');
         }
      } 
 
-     public function fmcgUpdateProfile(Request $request){
-        if(Auth::user()){
-             $user_id = Auth::user()->id; //
-             $this->validate($request, [
-             'fname'         => 'max:255',  
-             'address'       => 'required|string|max:255',
-             'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-             'bank'          => 'required|string|max:255',
-             'account_name'  => 'required|string|max:255', 
-         
-             ]);
-             if(null !== $_POST['submit']){
-                 //update table
-                 User::where('id', $user_id)
-                         ->update([
-                         'fname' =>  $request->fname,
-                         'address' => $request->address,
-                         'phone' => $request->phone,
-                         'bank' =>$request->bank,
-                         'account_name' =>$request->account_name,
-                         'account_number' =>$request->account_number,
-                     ]);
- 
-                 Session::flash('status', ' Profile Update Successful!'); 
-                 Session::flash('alert-class', 'alert-success'); 
-             }
-             \LogActivity::addToLog('Update');
-             return redirect('fmcg')->with('status', 'Profile Update Successful!');
-         } 
-        else{
-         return Redirect::to('/login');
-        }
-     } 
 
      public function memberUpdateProfile(Request $request){
         if(Auth::user()){
@@ -243,23 +349,71 @@ class HomeController extends Controller
              'fname'         => 'max:255',  
              'address'       => 'required|string|max:255',
              'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
-            
-         
              ]);
              if(null !== $_POST['submit']){
                  //update table
                  User::where('id', $user_id)
                          ->update([
-                         'fname' =>  $request->fname,
-                         'address' => $request->address,
-                         'phone' => $request->phone,
+                         'address'  => $request->address,
+                         'phone'    => $request->phone,
+                         'sms'      => $request->sms,
                      ]);
- 
-                 Session::flash('status', ' Profile Update Successful!'); 
-                 Session::flash('alert-class', 'alert-success'); 
+             }
+             
+             $sms =  SMS::where('user_id', $user_id)->get('user_id')->first();
+             if (empty($sms)){  
+                 $sms =  new SMS;
+                 $sms->user_id = Auth::user()->id;
+                 $sms->save(); 
              }
              \LogActivity::addToLog('Update');
-             return redirect('checkout')->with('status', 'Profile Update Successful!');
+             return redirect()->back()->with('success', 'Profile saved successful!');
+         } 
+        else{
+         return Redirect::to('/login');
+        }
+     } 
+
+   
+     public function fmcgUpdateProfile(Request $request){
+        if(Auth::user()){
+            $user_id = Auth::user()->id; //
+            $this->validate($request, [ 
+            'address'       => 'required|string|max:255',
+            'phone'         => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+            'image'         => 'image|mimes:jpg,png,jpeg|max:300',// maximum is 300kb , 600 x 600 pixel
+            ]);
+
+            if($request->hasFile('image')) {
+                $image= $request->file('image');
+                $imageName =  rand(1000000000, 9999999999).'.jpeg';
+                $image->move(public_path('images/logo'),$imageName);
+                $image_path = "/images/logo/" . $imageName; 
+                // Process the new image.
+                User::where('id', $user_id)
+                ->update([
+                    'address'       => $request->address,
+                    'phone'         => $request->phone,
+                    'sms'          => $request->sms,
+                    'profile_img'   => $image_path,        
+                ]);
+              }
+           //update table
+           User::where('id', $user_id)->update([
+                'address'       => $request->address,
+                'phone'         => $request->phone,
+                'sms'          => $request->sms,
+           ]);
+
+           $sms =  SMS::where('user_id', $user_id)->get('user_id')->first();
+                if (empty($sms)){  
+                    $sms =  new SMS;
+                    $sms->user_id = Auth::user()->id;
+                    $sms->save(); 
+                }
+ 
+             \LogActivity::addToLog('Update');
+             return redirect()->back()->with('success', 'Profile saved successful!');
          } 
         else{
          return Redirect::to('/login');
@@ -267,45 +421,6 @@ class HomeController extends Controller
      } 
 
 
-
-    public function updateProfileImage(Request $request){
-        if(Auth::user()){
-            $user_id = Auth::user()->id; //
-            $this->validate($request, [
-                'image' => 'required|image|mimes:jpg,jpeg,png|max:300',
-            
-            ]);
-            if(null !== $_POST['submit']){
-            $image= $request->file('image');
-            if(isset($image))
-            {
-            $imageName =  rand(1000000000, 9999999999).'.jpeg';
-                $image->move(public_path('assets/usersProfileImages'),$imageName);
-                $profile_image_path = "/assets/usersProfileImages/" . $imageName; 
-
-                }
-
-            else {
-            $profile_image_path = "";
-                }
-            //update table
-            
-            User::where('id', $user_id)
-                    ->update([
-                    'profile_img'   =>$profile_image_path
-                ]);
-
-            Session::flash('profile', ' Profile Update Successful!'); 
-            Session::flash('alert-class', 'alert-success'); 
-        }
-        \LogActivity::addToLog('Update');
-        return redirect()->back()->with('status', 'Profile Update Successful!');
-        }
-        else{
-            return Redirect::to('/login');  
-        }
-           
-   } 
 
    public function updateCertificate(Request $request){
         if(Auth::user()){
@@ -336,11 +451,11 @@ class HomeController extends Controller
                         'cooperative_cert'   =>$profile_image_path
                     ]);
 
-                    Session::flash('profile', ' Upload Successful!'); 
+                    Session::flash('success', ' Upload Successful!'); 
                     Session::flash('alert-class', 'alert-success'); 
                 }
             \LogActivity::addToLog('Update');
-            return redirect()->back()->with('status', ' Upload Successful!');
+            return redirect()->back()->with('success', ' Upload Successful!');
         } 
         else{
             return Redirect::to('/login');  

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Notifications\CooperativeFundRequest;
 use App\Models\FundRequest;
 use App\Models\User;
+use App\Models\SMS;
+use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 

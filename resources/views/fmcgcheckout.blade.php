@@ -19,7 +19,11 @@
 
                               <div class="section-title">
                                     <h3 class="title">Shipping Details</h3>
-                              </div>
+                                    </div>
+                                    @php $companyName = Auth::user()->coopname; 
+                              @endphp 
+                              <h4 class="text-danger"><b>{!! Str::limit("$companyName", 21, '...') !!}</b></h4>
+                              
                               @foreach($voucher as $user)
                               <div class="form-group">
                                     <input class="input" type="hidden" name="first-name" value="{{ $user->fname }}"
@@ -105,9 +109,9 @@
 
 
                               @php $total = 0 @endphp
-                              @php $delivery = 2000 @endphp
-                              @if(session('cart'))
-                              @foreach(session('cart') as $prod => $details)
+                              @php $delivery = 3000 @endphp
+                              @if(session('fmcgcart'))
+                              @foreach(session('fmcgcart') as $prod => $details)
                               @php $total += $details['price'] * $details['quantity'] @endphp
 
 
@@ -126,15 +130,7 @@
                               @php $totalAmount = 0 @endphp
                               @php $totalAmount += $total + $delivery @endphp
 
-                              <form action="{{ url('order')}}" method="post" enctype=”multipart/form-data”>
-                                    @csrf
-                                    <!--show button alert-->
-                                    <!-- show balance-->
-                              </form>
-                              <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8"
-                                    class="form-horizontal" role="form">
-                                    @csrf
-
+                     
                                     <!--submit each item in cart-->
                                     <div class="order-col">
                                           <div><strong>Delivery fee:</strong></div>
@@ -182,7 +178,10 @@
                                           <!--- end value of shipping details-->
 
                                     </div>
-
+  
+                                    <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8"
+                                    class="form-horizontal" role="form">
+                                    @csrf
                                     <input type="hidden" name="amount" value="{{ $totalAmount*100  }}">
                                     <input type="hidden" name="email" value="{{Auth::user()->email}}">
                                     <input type="hidden" name="ship_address" placeholder="Delivery Address"
@@ -192,12 +191,11 @@
                                           id="get_ship_phone">
                                     <input type="hidden" name="currency" value="NGN">
                                     <input type="hidden" name="metadata" value="{{ json_encode($array = ['user_id' => Auth::user()->id, 
-                                                'delivery' => '2000',]) }}">
+                                                'transaction_type' => 'fmcg', 'delivery' => '3000']) }}">
                                     <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
 
                                     <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
-                                          <strong>Pay Now</strong> <i class="fa fa-shopping-cart fa-lg"></i>
-                                    </button>
+                                         Pay Now <i class="fa fa-money fa-lg"></i> </button>
                               </form>
                         </div>
                         <!--col-summary-->
@@ -215,22 +213,64 @@
 </div>
 <!-- /SECTION -->
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script language="javascript">
-$('#ship_address, #ship_city, #ship_phone, #note').on('input', function() {
-      var ship_address = $('#ship_address').val();
-      var ship_city = $('#ship_city').val();
-      var ship_phone = $('#ship_phone').val();
-      var note = $('#note').val();
+<script>
+var paymentForm = document.getElementById('paymentForm');
+paymentForm.addEventListener('submit', payWithPaystack, false);
 
-      $('#get_ship_address').val(ship_address);
-      $('#get_ship_city').val(ship_city);
-      $('#get_ship_phone').val(ship_phone);
-      $('#get_note').val(note);
-});
+function payWithPaystack() {
+      var handler = PaystackPop.setup({
+            // pk_live_483aa57c04940d7f7565b235ab06f9621a15ef25
+            //pk_test_6ce6e9d31412d8fd2574af630c65d0e9aa78c5c7
+            key: 'pk_test_6ce6e9d31412d8fd2574af630c65d0e9aa78c5c7',
+            email: document.getElementById("email").value,
+            amount: document.getElementById("amount").value *
+                  100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+            currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+
+            reference: '' + Math.floor((Math.random() * 1000000000) +
+                  1
+            ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            metadata: {
+                  custom_fields: [{
+                        order_id: document.getElementById("user_id").value
+                  }]
+            },
+
+
+            callback: function(response) {
+                  var email = document.getElementById("email").value;
+                  var amount = document.getElementById("amount").value;
+
+                  var paystack_reference = response.reference;
+                  var reference = paystack_reference;
+ 
+                  // var success ='ref='+paystack_reference + '&email=' + email + '&amount=' +
+                  // amount + '&order_id=' + order_id;
+
+                  var ref = paystack_reference;
+                  var order_amount = +amount;
+
+                  // let message = 'Payment complete! Reference number: ' + response.reference;
+                  // alert(order_id);
+
+                  var url = "{{ URL('fmcg-payment/') }}" + "/" + reference + "/" +order_amount;
+                  location.href = url;
+
+                  //or
+
+                  // window.location = "<?php echo url('fmcg-payment');?>/success=" +
+                  //       paystack_reference + '&email=' + email + '&amount=' + amount +
+                  //       '&order_id=' + order_id;
+
+            },
+
+
+            onClose: function() {
+                  alert('Transaction was not completed, window closed.');
+            }
+      });
+      handler.openIframe();
+}
 </script>
-
-
-
 
 @endsection

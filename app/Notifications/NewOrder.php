@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
 use App\Models\User;
 use Auth;
 
@@ -62,9 +63,6 @@ class NewOrder extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'data'=>'New Order from ' .$fname.  ' ' .$lname. ' with order number ' .$this->order_number
-        ];
+        return 'New Order from ' .$fname.  ' ' ;
     }
 }

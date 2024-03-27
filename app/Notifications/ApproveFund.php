@@ -64,10 +64,6 @@ class ApproveFund extends Notification
     public function toArray($notifiable)
     {
         $user = Auth::user();
-        return [
-            //
-            'id' => $this->fund_id,
-            'data'=>' Your fund request of '. number_format($this->amount, 2). ' has been approved your new credit balance is ₦'.number_format($this->credit, 2),
-        ];
+        return ' Fund request of '. number_format($this->amount, 2). ' has been approved.';
     }
 }

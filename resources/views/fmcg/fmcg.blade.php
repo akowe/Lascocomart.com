@@ -1,277 +1,386 @@
-@extends('layouts.app')
-
-@extends('layouts.sidebar')
-
-
+@extends('layouts.home')
 @section('content')
-<!-- adminx-content-aside -->
-<div class="adminx-content">
-      <!-- <div class="adminx-aside">
-
-        </div> -->
-
-      <div class="adminx-main-content">
-            <div class="container-fluid">
-                  <!-- BreadCrumb -->
-                  <nav aria-label="breadcrumb" role="navigation">
-                        <ol class="breadcrumb adminx-page-breadcrumb">
-                              <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                              <li class="breadcrumb-item active" aria-current="page">FMCG</li>
-                        </ol>
-                  </nav>
-
-                  <div class="pb-3">
-                        <h1>Dashboard</h1>
-
-                        <h5 class="navbar bg-dark text-white" style="padding-left: 10px;">
-                              Your LascocoMart User ID is: &nbsp; {{Auth::user()->code}}.
-                        </h5>
-                        Share it with your members; it's used in pairing a member to your FMCG.
-
-                        <div class="card-body text-center">
-
-                              @if (session('profile'))
-                              <div class="alert alert-danger" role="alert">
-                                    <a href="{{url('profile') }}" class="cursor"> {!! session('profile') !!}</a>
-                              </div>
-                              @endif
-
-                              @if (session('status'))
-                              <div class="alert alert-success" role="alert">
-                                    {{ session('status') }}
-                              </div>
-                              @endif
+<!-- Page header -->
+<div class="page-header d-print-none">
+      <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                  <div class="col">
+                        <!-- Page pre-title -->
+                        <div class="page-pretitle">
+                              Dashboard
                         </div>
-
-                        <div class="row">
-
-                              <div class="col-md-6 col-lg-3 d-flex">
-                                    <div class="card mb-grid w-100">
-                                          <div class="card-body d-flex flex-column">
-                                                <div class="d-flex justify-content-between mb-3">
-                                                      <h5 class="card-title mb-0 small">
-                                                            Total Approved Products
-                                                      </h5>
-
-                                                      <div class="card-title-sub">
-                                                            {{ $count_product->count() }}
-                                                      </div>
-                                                </div>
-
-                                                <div class="progress mt-auto">
-                                                      <div class="progress-bar" role="progressbar" style="width: 75%;"
-                                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                                      </div>
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-                              <div class="col-md-6 col-lg-3 d-flex">
-                                    <div class="card mb-grid w-100">
-                                          <div class="card-body d-flex flex-column">
-                                                <div class="d-flex justify-content-between mb-3">
-                                                      <h5 class="card-title mb-0 small">
-                                                            Total Orders
-                                                      </h5>
-
-                                                      <div class="card-title-sub">
-                                                            {{ $count_orders->count() }}
-                                                      </div>
-                                                </div>
-
-                                                <div class="progress mt-auto">
-                                                      <div class="progress-bar" role="progressbar" style="width: 60%;"
-                                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                                      </div>
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-
-                              <div class="col-md-6 col-lg-6 d-flex">
-                                    <div class="card border-0 bg-primary text-white text-center mb-grid w-100">
-                                          <div class="d-flex flex-row align-items-center h-100">
-                                                <div
-                                                      class="card-icon d-flex align-items-center h-100 justify-content-center">
-                                                      <i class="fa fa-coins"></i>
-                                                </div>
-                                                <div class="card-body">
-                                                      <div class="card-info-title">Sales</div>
-                                                      <h3 class="card-title mb-0">
-                                                            ₦{{ number_format($sales->sum('tran_amount')) }}
-
-                                                      </h3>
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-                              <!-- 
-                              <div class="col-md-6 col-lg-3 d-flex">
-                                <div class="card border-0 bg-dark text-white text-center mb-grid w-100">
-                                  <div class="d-flex flex-row align-items-center h-100">
-                                    <div class="card-icon d-flex align-items-center h-100 justify-content-center">
-                                      <i data-feather="users"></i>
-                                    </div>
-                                    <a class="card-body text-white" href="{{url('members') }}">
-                                      <div class="card-info-title">Members</div>
-                                      <h3 class="card-title mb-0">
-                                      {{ $members->count() }}
-                                      </h3>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div> -->
-
-                        </div>
-
+                        <h2 class="page-title">
+                              <span class=" d-none  d-md-block">Overview</span>
+                        </h2>
                   </div>
-            <div class="container-fluid">
-                  @if(Session::has('payment')== true)
-                  <!--show alert-->
-                  <p class="alert {{ Session::get('alert-class', 'alert-info') }} text-center">
-                        {{ Session::get('payment') }}</p>
-                  @endif
+                  <!-- Page title actions -->
+                  <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                              <span class="d-block ">
+                                    <a href="#" class="btn d-none ">
 
-                  @if(Session::has('payment')== false)
-                  <!--show alert-->
-                  <p style="display: none;">{{ Session::get('payment') }}</p>
-                  @endif
-
-
-                  <div class="row">
-                        <div class="col-lg-8">
-                              <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                          <div class="card-header-title">Products</div>
-
-                                          <nav class="card-header-actions">
-                                                <a class="card-header-action" data-toggle="collapse" href="#card1"
-                                                      aria-expanded="false" aria-controls="card1">
-                                                      <i data-feather="minus-circle"></i>
-                                                </a>
-
-                                                <div class="dropdown">
-                                                      <a class="card-header-action" href="#" role="button"
-                                                            id="card1Settings" data-toggle="dropdown"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                            <i data-feather="settings"></i>
-                                                      </a>
-
-                                                      <div class="dropdown-menu dropdown-menu-right"
-                                                            aria-labelledby="card1Settings">
-
-                                                            <a class="dropdown-item" href="#">Another action</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                      </div>
-                                                </div>
-
-                                                <a href="#" class="card-header-action">
-                                                      <i data-feather="x-circle"></i>
-                                                </a>
-                                          </nav>
-                                    </div>
-                                    <div class="card-body collapse show tabel-resposive" id="card">
-                                          <h4 class="card-title">All products</h4>
-                                          <p class="card-text text-danger">Note that LascocoMart percentage would be
-                                                added to the price of each product on our landing page.</p>
-
-                                          <table class="table-striped table">
-                                                <thead>
-                                                      <tr class="small">
-                                                            <th>Date</th>
-                                                            <th>Product</th>
-                                                            <th>Qty.</th>
-                                                            <th>Old Price</th>
-                                                            <th>New Price</th>
-                                                            <th>Status</th>
-
-                                                            <th>Remove Product</th>
-
-                                                      </tr>
-                                                </thead>
-                                                <tbody>
-                                                      @foreach($fmcgproduct as $product)
-
-
-                                                      <tr class="small">
-                                                            <td> {{ date('d/m/y', strtotime($product->created_at))}}
-                                                            </td>
-                                                            <td>{{$product->prod_name }}</td>
-                                                            <td>{{$product->quantity }}</td>
-                                                            <td>{{number_format($product->old_price )}}</td>
-                                                            <td>{{number_format($product->seller_price)}}</td>
-                                                            <td>
-                                                                  @if($product->prod_status == 'approve')
-
-                                                                  <span class="text-success">
-                                                                        <i class="fa fa-check"></i></span>
-
-                                                                  @else
-                                                                  @endif
-                                                                  {{$product->prod_status }}
-                                                            </td>
-                                                            <!-- <td class="text-danger">
-                              <a href="" data-toggle="modal" data-target="#pModal" class="btn btn-outline-danger btn-sm"> 
-                                Remove
+                                    </a>
+                              </span>
+                              <a href="{{ url('fmcg-new-product') }}" class="btn btn-danger d-none d-sm-inline-block">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                          stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path d="M12 5l0 14" />
+                                          <path d="M5 12l14 0" />
+                                    </svg>
+                                    Add New Product
                               </a>
-                                </td> -->
-                                                            <td>
-                                                                  @if($product->prod_status == 'pending')
-                                                                  <form action="/fcmgremove_product" method="post"
-                                                                        name="submit">
-                                                                        @csrf
-
-
-                                                                        <input type="hidden" name="id"
-                                                                              value="{{$product->id }}">
-
-                                                                        <input type="hidden" name="prod_status"
-                                                                              value="remove">
-
-
-                                                                        <button type="submit" name="submit"
-                                                                              class="btn btn-outline-danger btn-sm"><i
-                                                                                    class="fa fa-trash-o"></i>
-                                                                              Remove</button>
-
-
-                                                                  </form>
-                                                                  @endif
-                                                            </td>
-
-
-
-                                                      </tr>
-                                                      @endforeach
-
-                                                </tbody>
-                                          </table>
-                                          <div class="store-filter clearfix">
-                                                {{$fmcgproduct->links()}}
-                                          </div>
-                                    </div>
-                              </div>
-                        </div><!-- col-12-->
-                        <div class="col-lg-4">
-                              <div class="card">
-                                    <div class="card-header">
-                                          New Products
-                                    </div>
-                                    <div class="card-body">
-                                          <h4 class="card-title"></h4>
-                                          <p class="card-text">Note that all uploaded products would be review and
-                                                approve by LascocoMart before it becomes visible. This is within
-                                                48hours.</p>
-                                          <a href="{{ route('fmcg_add_product') }}" class="btn btn-danger">Add Products</a>
-
-
-                                    </div>
-                              </div>
+                              <a href="{{ url('fmcg-new-product') }}" class="btn btn-danger d-sm-none btn-icon"
+                                    aria-label="product">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                          stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path d="M12 5l0 14" />
+                                          <path d="M5 12l14 0" />
+                                    </svg>
+                              </a>
                         </div>
-
                   </div>
             </div>
       </div>
 </div>
+
+<!-- Page body -->
+<div class="page-body">
+      <div class="container-xl">
+            <div class="row row-deck row-cards">
+                  <div class="col-12">
+                        <div class="row row-cards">
+                              <div class="col-sm-4 col-lg-4">
+                                    <div class="card card-sm">
+                                          <div class="card-body">
+                                                <div class="row align-items-center">
+                                                      <div class="col-auto">
+
+                                                            <span class="bg-success text-white avatar">
+                                                                  <a href="{{ url('fmcg-sales')}}"
+                                                                        class="text-white ">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-currency-naira"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M7 18v-10.948a1.05 1.05 0 0 1 1.968 -.51l6.064 10.916a1.05 1.05 0 0 0 1.968 -.51v-10.948" />
+                                                                              <path d="M5 10h14" />
+                                                                              <path d="M5 14h14" />
+                                                                        </svg>
+                                                                  </a>
+
+                                                            </span>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div class="font-weight-medium">
+                                                                  <a href="{{ url('fmcg-sales')}}"
+                                                                        class="text-secondary ">
+                                                                        {{ number_format($countPaidOrders->sum('seller_price')) }}
+                                                                        Sales
+                                                                  </a>
+                                                            </div>
+                                                            <div class="text-secondary">
+                                                                  {{ $countSoldProducts->count() }} products
+                                                            </div>
+                                                      </div>
+                                                      <div class="col-auto">
+                                                            <div class="dropdown">
+                                                                  <a class="text-secondary" href="#"
+                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-dots-vertical"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                        </svg>
+                                                                  </a>
+                                                                  <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a class="dropdown-item active"
+                                                                              href="{{ url('fmcg-sales') }}">Last 7
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('fmcg-sales') }}">Last 30
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('fmcg-sales') }}">Last 3
+                                                                              months</a>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+
+
+                              <div class="col-sm-4 col-lg-4">
+                                    <div class="card card-sm">
+                                          <div class="card-body">
+                                                <div class="row align-items-center">
+                                                      <div class="col-auto">
+                                                            <span class="bg-primary text-white avatar">
+                                                                  <a href="{{ url('fmcg-sales') }}"
+                                                                        class="text-white" cursor>
+                                                                        <!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon" width="24" height="24"
+                                                                              viewBox="0 0 24 24" stroke-width="2"
+                                                                              stroke="currentColor" fill="none"
+                                                                              stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                                              <path
+                                                                                    d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                                              <path d="M17 17h-11v-14h-2" />
+                                                                              <path d="M6 5l14 1l-1 7h-13" />
+                                                                        </svg>
+                                                                  </a>
+                                                            </span>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div class="font-weight-medium">
+                                                                  <a href="{{ url('fmcg-sales') }}"
+                                                                        class="text-secondary">
+
+                                                                        {{ $countPaidOrders->count() }} Customer
+                                                                        Order(s)</a>
+                                                            </div>
+
+                                                            <div class="text-secondary">
+                                                            {{  $countShippedItem->count() }} shipped
+                                                            </div>
+                                                      </div>
+                                                      <div class="col-auto">
+                                                            <div class="dropdown">
+                                                                  <a class="text-secondary" href="#"
+                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-dots-vertical"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                        </svg>
+                                                                  </a>
+                                                                  <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a class="dropdown-item active"
+                                                                              href="{{ url('fmcg-sales') }}">Last
+                                                                              7
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('fmcg-sales') }}">Last
+                                                                              30
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('fmcg-sales') }}">Last
+                                                                              3
+                                                                              months</a>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+
+                              <div class="col-sm-4 col-lg-4">
+                                    <div class="card card-sm">
+                                          <div class="card-body">
+                                                <div class="row align-items-center">
+                                                      <div class="col-auto">
+                                                            <span class="bg-yellow text-white avatar">
+                                                                  <a href="{{ url('fmcg-products') }}"
+                                                                        class="text-white">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-brand-producthunt"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5" />
+                                                                              <path
+                                                                                    d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                                        </svg></a>
+
+                                                            </span>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div class="font-weight-medium">
+                                                                  <a href="{{url('fmcg-products')}}"
+                                                                        class="text-secondary">
+                                                                        {{ $countProduct->count() }} Products</a>
+                                                            </div>
+                                                            <div class="text-secondary">
+                                                                  {{ $countApprovedProduct->count() }} approved
+                                                            </div>
+                                                      </div>
+                                                      <div class="col-auto">
+                                                            <div class="dropdown">
+                                                                  <a class="text-secondary" href="#"
+                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                              class="icon icon-tabler icon-tabler-dots-vertical"
+                                                                              width="24" height="24" viewBox="0 0 24 24"
+                                                                              stroke-width="1.5" stroke="currentColor"
+                                                                              fill="none" stroke-linecap="round"
+                                                                              stroke-linejoin="round">
+                                                                              <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                              <path
+                                                                                    d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              <path
+                                                                                    d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                        </svg>
+                                                                  </a>
+                                                                  <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a class="dropdown-item active"
+                                                                              href="{{ url('vendor-products') }}">Last 7
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('vendor-products') }}">Last
+                                                                              30
+                                                                              days</a>
+                                                                        <a class="dropdown-item"
+                                                                              href="{{ url('vendor-products') }}">Last 3
+                                                                              months</a>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+
+
+                        </div>
+                        <!---- row-cards --->
+                  </div>
+                  <!---col-12 --->
+                  <!-- Alert start --->
+                  <div class="container-xl">
+                        <div class="row ">
+                              <div class="col-12">
+                                    <p></p>
+                                   
+                                    @if(session('profile'))
+                                    <div class="alert  alert-yellow alert-dismissible" role="alert">
+                                          <div class="d-flex">
+                                                <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path
+                                                                  d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                                            <path d="M12 9v4" />
+                                                            <path d="M12 17h.01" />
+                                                      </svg>
+
+
+                                                </div>
+                                                <div><a href="{{url('account-settins') }}" class="cursor"> {!!
+                                                            session('profile') !!}</a></div>
+                                          </div>
+                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                    </div>
+                                    @endif
+
+                                    @if(session('success'))
+                                    <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                                          <div class="d-flex">
+                                                <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M5 12l5 5l10 -10" />
+                                                      </svg>
+
+                                                </div>
+                                                <div>{!! session('success') !!}</div>
+                                          </div>
+                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                    </div>
+                                    @endif
+
+                                    @if(session('error'))
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                          <div class="d-flex">
+                                                <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                            <path d="M12 8v4" />
+                                                            <path d="M12 16h.01" />
+                                                      </svg>
+
+
+                                                </div>
+                                                <div>{!! session('error') !!}</div>
+                                          </div>
+                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                    </div>
+                                    @endif
+                              </div>
+                        </div>
+                  </div>
+                  <!-- Alert stop --->
+
+             
+
+
+            </div>
+            <!--row --->
+      </div>
+      <!---container --->
 </div>
+
+
 @endsection

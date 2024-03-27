@@ -61,9 +61,6 @@ class NewCardPayment extends Notification
         $fname = Auth::user()->fname;
         $lname = Auth::user()->lname;
         
-        return [
-            //
-            'data'=>'New payment for order number ' .$this->order_number. ' from ' .$fname. ' ' .$lname
-        ];
+        return 'Payment for order ' .$this->order_number. ' from ' .$fname. ' ';
     }
 }

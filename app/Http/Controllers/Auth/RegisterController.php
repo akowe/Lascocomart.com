@@ -112,7 +112,7 @@ class RegisterController extends Controller
     
                 $wallet = new Wallet();
                 $wallet->user_id = $user->id;
-                $wallet->credit = '0';
+                $wallet->balance = '0';
                 $wallet->save();
            }
            

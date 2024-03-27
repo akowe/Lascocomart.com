@@ -194,7 +194,7 @@ class FmcgProductController extends Controller
          }
     }
    
-    public function cart(){
+    public function fmcgcart(){
         if(Auth::user()){
             $id = Auth::user()->id;
             $wishlist = Wishlist::where('user_id', $id)->get('product_id');
@@ -212,7 +212,7 @@ class FmcgProductController extends Controller
    
     public function fmcgAddToCart($id){
         $product = FcmgProduct::findOrFail($id);
-        $cart = session()->get('cart', []);
+        $cart = session()->get('fmcgcart', []);
   
         if(isset($cart[$id])) {
             $cart[$id]['quantity']++;
@@ -226,12 +226,12 @@ class FmcgProductController extends Controller
                 "seller_id" => $product->seller_id,
             ];
         }
-        session()->put('cart', $cart);
+        session()->put('fmcgcart', $cart);
         \LogActivity::addToLog('New fmcgCart');
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
-    public function checkout(Request $request){
+    public function fmcgcheckout(Request $request){
         if( Auth::user()){
            $firstTimeLoggedIn = Auth::user()->last_login;
            if (empty($firstTimeLoggedIn)) {
@@ -252,7 +252,7 @@ class FmcgProductController extends Controller
              $user->save();
            }
            $id = Auth::user()->id;// get user id for the login member
-           $cart = session()->get('cart');
+           $cart = session()->get('fmcgcart');
            $cart[$request->id]["quantity"] = $request->quantity;
            $cart[$request->id]["price"] = $request->price;
            $cart[$request->id]["seller_id"] = $request->seller_id;
@@ -270,7 +270,7 @@ class FmcgProductController extends Controller
            $saveItem = implode(',', $getWish);
            $wish = FcmgProduct::join('wishlist', 'wishlist.product_id', '=', 'fmcg_products.id')
            ->get('fmcg_products.*');
-           \LogActivity::addToLog('fmcgCheckout');
+           //\LogActivity::addToLog('fmcgCheckout');
            return view('fmcgcheckout', compact('voucher', 'wishlist', 'wish'));
        }
        else { return Redirect::to('/login');}
@@ -278,24 +278,24 @@ class FmcgProductController extends Controller
    }
   
 
-    public function update(Request $request){ 
+    public function updatefmcg(Request $request){ 
         if($request->id && $request->quantity){
-            $cart = session()->get('cart');
+            $cart = session()->get('fmcgcart');
             $cart[$request->id]["quantity"] = $request->quantity;
-            session()->put('cart', $cart);
+            session()->put('fmcgcart', $cart);
             session()->flash('success', 'Cart updated successfully');
         }
         \LogActivity::addToLog('Update fmcgCart');
         return redirect()->back()->with('success', 'Cart Updated Successfully !');
     }
   
-    public function remove(Request $request)
+    public function removefmcg(Request $request)
     {
         if($request->id) {
-            $cart = session()->get('cart');
+            $cart = session()->get('fmcgcart');
             if(isset($cart[$request->id])) {
                 unset($cart[$request->id]);
-                session()->put('cart', $cart);
+                session()->put('fmcgcart', $cart);
                 session()->flash('success', 'Product removed successfully');
                
             }
@@ -308,7 +308,7 @@ class FmcgProductController extends Controller
   public function addToCartPreview($id)
     {
         $product = Product::findOrFail($id);
-        $cart = session()->get('cart', []);
+        $cart = session()->get('fmcgcart', []);
   
         if(isset($cart[$id])) {
             $cart[$id]['quantity']++;
@@ -321,9 +321,9 @@ class FmcgProductController extends Controller
                 "id" => $product->id
             ];
         }
-        session()->put('cart', $cart);
+        session()->put('fmcgcart', $cart);
         \LogActivity::addToLog('View cart');
-        return redirect()->route('cart')->with('success', 'Product added to cart successfully!');
+        return redirect()->route('fmcgcart')->with('success', 'Product added to cart successfully!');
     }
 
 

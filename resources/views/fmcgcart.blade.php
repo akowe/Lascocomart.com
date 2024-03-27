@@ -170,8 +170,8 @@
                               </thead>
                               <tbody>
                                     @php $total = 0 @endphp
-                                    @if(session('cart'))
-                                    @foreach(session('cart') as $id => $details)
+                                    @if(session('fmcgcart'))
+                                    @foreach(session('fmcgcart') as $id => $details)
                                     @php $total += $details['price'] * $details['quantity'] @endphp
                                     <tr data-id="{{ $id }}">
                                           <td data-th="Product">
@@ -189,7 +189,7 @@
                                           <td data-th="Price">₦{{number_format($details['price'])  }}</td>
 
                                           <td data-th="Quantity">
-                                                <form action="{{ route('update.cart') }}" method="POST" class="search-wrapper">
+                                                <form action="{{ route('update.fmcgcart') }}" method="POST" class="search-wrapper">
                                                       @csrf
                                                       <input type="hidden" value="{{ $id }}" name="id">
                                                       <input type="number" name="quantity"
@@ -212,7 +212,7 @@
                                                 ₦{{number_format($details['price'] * $details['quantity'] )  }}</td>
 
                                           <td data-th="Remove">
-                                                <form action="{{ route('remove.from.cart') }}" method="POST" class="remove-wrapper">
+                                                <form action="{{ route('remove.from.fmcgcart') }}" method="POST" class="remove-wrapper">
                                                       @csrf
                                                       <input type="hidden" value="{{ $id }}" name="id">
                                                       <button class="btn btn-sm text-danger"><i
