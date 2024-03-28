@@ -168,8 +168,8 @@
 
 
                                                       <th>Name</th>
-                                                      <th>Rate</th>
-                                                      <th>Type</th>
+                                                      <th>Rate Type</th>
+                                                      <th>Percentage (%)</th>
                                                       <th>Guarantor</th>
                                                       <th>Min-Duration</th>
                                                       <th>Max-Duration</th>

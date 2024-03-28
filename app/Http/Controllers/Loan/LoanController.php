@@ -17,6 +17,7 @@ use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\LoanRepayment;
 use App\Models\LoanSetting;
+use App\Models\DueLoans;
 use App\Models\Settings;
 use App\Models\ChooseBank;
 use App\Models\Order;

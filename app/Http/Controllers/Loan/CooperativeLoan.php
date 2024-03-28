@@ -19,6 +19,7 @@ use App\Models\LoanRepayment;
 use App\Models\LoanSetting;
 use App\Models\Settings;
 use App\Models\ChooseBank;
+use App\Models\DueLoans;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Credit;
@@ -28,6 +29,7 @@ use App\Models\Categories;
 use App\Models\Product;
 
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Auth;
 use Validator;
 use Session;
@@ -74,11 +76,12 @@ class CooperativeLoan extends Controller
            // $interest = json_encode($getInterest); 
             $interest = $getInterest; 
 
-            $chartLoanPaid = LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
-            ->select('loan_repayment.amount_paid')
-            ->where('loan.cooperative_code', $code)
+            $chartLoanPaid = LoanRepayment::join('due_loans', 'due_loans.loan_id', '=', 'loan_repayment.loan_id')
+            ->select('due_loans.monthly_due')
+            ->where('due_loans.payment_status', 'paid')
+            ->where('due_loans.cooperative_code', $code)
             ->get();
-            $getPaidLoan =Arr::pluck($chartLoanPaid, 'amount_paid');
+            $getPaidLoan =Arr::pluck($chartLoanPaid, 'monthly_due');
             $paidLoan  = $getPaidLoan; 
 
             $chartLoanBalance = Loan::select('loan_balance')
@@ -115,8 +118,6 @@ class CooperativeLoan extends Controller
                    ->orWhere('loan.total', 'LIKE', '%'.$search.'%')
                    ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
                      ->orWhere('loan.loan_status', 'LIKE', '%'.$search.'%')
-                       ->orWhere('loan.start_date', 'LIKE', '%'.$search.'%')
-                         ->orWhere('loan.end_date', 'LIKE', '%'.$search.'%')
                     ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
                    ->orderBy('loan.created_at', 'desc');
             })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
@@ -212,7 +213,6 @@ class CooperativeLoan extends Controller
             } 
         }
         else{ return Redirect::to('/login');}
-
     }
 
      public function addLoanType(Request $request){
@@ -246,7 +246,6 @@ class CooperativeLoan extends Controller
             else{
                 return redirect('cooperative-loan-type')->with('status', 'Opps! something went wrong');
             }
-
         }
         else{ return Redirect::to('/login');}
      }
@@ -354,24 +353,135 @@ class CooperativeLoan extends Controller
             ->where('id', $loan_id)
             ->where('cooperative_code', $code)
             ->select('*')->pluck('duration')->first();
+            $repaymentStartDate = '';
+            $repaymentEndDate =  '';
+            $payOutDate =  '';
 
             return view('loan.cooperative.loan-payout', compact('checkApprovalLevel', 
-            'loanPrincipal', 'loanBeneficiary', 'loanDuration', 'loanRepaymentStart'));
+            'loanPrincipal', 'loanBeneficiary', 'loanDuration', 'loanRepaymentStart',
+            'repaymentStartDate', 'repaymentEndDate', 'loan_id', 'payOutDate'));
         }
         else{ return Redirect::to('/login');} 
      }
 
-     public function calLoanRepayment(Request $request, $loan_id){
+     public function calLoanRepayment(Request $request, $loan_id, $date){
         if(Auth::user()){
             $code = Auth::user()->code;
+            $id = Auth::user()->id;
+
             $loanRepaymentStart = DB::table('loan_settings')
             ->where('cooperative_code', $code)
             ->select('*')
             ->pluck('start_repayment')->first();
+
+            $checkApprovalLevel = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('approval_level')->first();
+
+            $loanApproval = DB::table('loan')
+            ->where('id', $loan_id)
+            ->select('*')
+            ->pluck('loan_approval_level')->first();
+            if( $checkApprovalLevel >  $loanApproval){
+                $RemainApproval = $checkApprovalLevel - $loanApproval;
+                Session::flash('approval', ' This loan has ' .$loanApproval. ' approval, remiain '.$RemainApproval . ' more'); 
+            }
+            elseif ($checkApprovalLevel = $loanApproval) {
+                # code...
+                Session::flash('approval', ' Loan approval completed!'); 
+            }
+            $loanPrincipal = DB::table('loan')
+            ->where('id', $loan_id)
+            ->where('cooperative_code', $code)
+            ->select('*')->pluck('principal')->first();
+
+            $loanBeneficiary = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+            ->where('loan.id', $loan_id)
+            ->where('loan.cooperative_code', $code)
+            ->select('loan.*', 'users.fname')->pluck('fname')->first();
+
+            $loanDuration = DB::table('loan')
+            ->where('id', $loan_id)
+            ->where('cooperative_code', $code)
+            ->select('*')->pluck('duration')->first();
+            
+            $cooperativeRepaymentStart = DB::table('loan_settings')
+            ->where('cooperative_code', $code)
+            ->select('*')
+            ->pluck('start_repayment')->first();
+
             //Carbon::now()->addDays(5);
-            $repaymentPeriod = $loanRepaymentStart * 30;//30 days
-            $payOutDate = $request->payOutDate;
-            $repaymentStartDate = Carbon::now($payOutDate)->addDays($repaymentPeriod);
+            $loanStartRepaymentDay = $cooperativeRepaymentStart * 30;//30 days
+            $loanEndPeriod =  $loanDuration * 30; 
+            $payOutDate = $date;
+            
+            $getRepaymentStartDate = Carbon::createFromFormat('Y-m-d', $payOutDate)->addDays($loanStartRepaymentDay);
+            $repaymentStartDate =  $getRepaymentStartDate->format('Y-m-d');
+
+            $getRepaymentEndDate =  Carbon::createFromFormat('Y-m-d', $payOutDate)->addDays( $loanEndPeriod);
+            $repaymentEndDate =  $getRepaymentEndDate->format('Y-m-d');
+            return view('loan.cooperative.loan-payout', compact('checkApprovalLevel', 
+            'loanPrincipal', 'loanBeneficiary', 'loanDuration', 'loanRepaymentStart',
+            'repaymentStartDate', 'repaymentEndDate', 'loan_id', 'payOutDate'));
+        }
+        else{ return Redirect::to('/login');} 
+     }
+
+     public function storeLoanRepayment(Request $request){
+        if(Auth::user()){
+            $code =  Auth::user()->code;
+            $loanID = $request->loan;
+            $startDate = $request->startDate;
+            $endDate = $request->endDate;
+
+            $memberID = DB::table('loan')
+            ->where('id', $loanID)
+            ->where('cooperative_code', $code)
+            ->select('*')->pluck('member_id')->first();
+
+            $memberMonthlyDueAmount = DB::table('loan_repayment')
+            ->where('loan_id', $loanID)
+            ->where('member_id', $memberID)
+            ->select('*')->pluck('monthly_due')->first();
+
+            $updateLoan = DB::table('loan')
+            ->where('id', $loanID)
+            ->where('cooperative_code', $code)
+            ->update([
+                'start_date' => $startDate,
+                'end_date'   => $endDate,
+            ]); 
+         
+            $startPeriod = Carbon::parse($startDate);
+            $endPeriod   = Carbon::parse($endDate);
+            $period = CarbonPeriod::create($startPeriod, '30 days', $endPeriod);
+            $loanDueDates  = [];
+                 
+            foreach ($period as $date) {
+                $loanDueDates[] = $date->format('Y-m-d');
+            }
+            $monthlyDueDates = json_encode($loanDueDates);
+            foreach($loanDueDates as $dueDate){
+                $dueLoan = new DueLoans;
+                $dueLoan->loan_id           =  $loanID;
+                $dueLoan->member_id         =  $memberID;
+                $dueLoan->cooperative_code  =  $code;
+                $dueLoan->monthly_due       =  $memberMonthlyDueAmount;
+                $dueLoan->due_date          =  $dueDate;
+                $dueLoan->payment_status    =  'pending';
+                $dueLoan->save();
+            }
+
+            if($dueLoan){
+              $updateLoanStatus =  DB::table('loan')
+                ->where('id', $loanID)
+                ->where('cooperative_code', $code)
+                ->update([
+                'loan_status' => 'payout',
+                ]); 
+            }
+            return redirect('cooperative-loan')->with('success', 'PayOut successful!');
 
         }
         else{ return Redirect::to('/login');} 

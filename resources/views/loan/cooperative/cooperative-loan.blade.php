@@ -356,7 +356,7 @@
                                    
                                                       <th>Name</th>
                                                       <th>Loan</th>
-                                                      <th>Duration</th>
+                                                      <th>Duration (in month) </th>
                                                       <th>Principal</th>
                                                       <th>Interest</th>
                                                       <th>Status</th>
@@ -371,7 +371,7 @@
                                                                   type="checkbox" aria-label="Select"></td>
                                                       <td>{{$data->fname}}</td>
                                                       <td>{{$data->name}}</td>
-                                                      <td>{{$data->duration}} month (s)</td>
+                                                      <td>{{$data->duration}} </td>
                                                       <td>{{number_format($data->principal)}}</td>
                                                       <td>{{number_format($data->interest)}}</td>
                                                       <td class="">
@@ -382,7 +382,7 @@
                                                             @elseif($data->loan_status =='approved')
                                                             <span
                                                                   class="badge bg-azure-lt text-capitalize">{{$data->loan_status}}</span>
-                                                            @elseif($data->loan_status =='disbursed')
+                                                            @elseif($data->loan_status =='payout')
                                                             <span
                                                                   class="badge bg-success-lt text-capitalize">{{$data->loan_status}}</span>
                                                             @else
@@ -401,11 +401,14 @@
                                                                               View
                                                                         </a>
                                                                         @if($data->loan_status =='approved' && $data->approval_agent == auth()->user()->id)
+                                                                        @elseif($data->loan_status =='payout')
                                                                         @else 
                                                                         <a class="dropdown-item text-capitalize" href="cooperative-approve-loan/{{$data->id}}">Approve</a>
                                                                         @endif 
+                                                                        @if($data->loan_status =='payout')
+                                                                        @else 
                                                                         <a class="dropdown-item text-capitalize" href="cooperative-loan-payout/{{$data->id}}">PayOut</a>
-                                                                        
+                                                                        @endif 
 
                                                                   </div>
                                                             </span>

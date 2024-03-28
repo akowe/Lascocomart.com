@@ -370,6 +370,8 @@ Route::controller(CooperativeLoan::class)->group(function () {
     Route::get('cooperative-approve-loan/{id}', 'cooperativeApproveLoan');
     Route::post('approve-loan', 'approveLoan');
     Route::get('cooperative-loan-payout/{id}', 'cooperativeLoanPayOut');
+    Route::get('calulate-loan-repayment/{id}/{date}', 'calLoanRepayment');
+    Route::post('cooperative-loan-repayment', 'storeLoanRepayment')->name('cooperative-loan-repayment');
  
 });
 
