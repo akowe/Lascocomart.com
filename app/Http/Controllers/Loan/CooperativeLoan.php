@@ -562,4 +562,118 @@ class CooperativeLoan extends Controller
         }
         else{ return Redirect::to('/login');} 
     }
+    public function requestedLoan(Request $request){
+        if(Auth::user()->role_name == 'cooperative'){
+            $id = Auth::user()->id;
+            $code = Auth::user()->code;
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+
+            $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+            ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+             ->select(['loan.*', 'loan_type.name', 'users.fname'])
+             ->where('loan.cooperative_code', $code)
+             ->where('loan.loan_status', 'request')
+             ->orderBy('loan.created_at', 'desc')
+             ->where(function ($query) use ($search) {  // <<<
+             $query->where('users.fname', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.principal', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.interest', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.total', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
+                      ->orWhere('loan.loan_status', 'LIKE', '%'.$search.'%')
+                     ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
+                    ->orderBy('loan.created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
+            )->appends(['per_page'   => $perPage]);
+        
+            $pagination = $loan->appends ( array ('search' => $search) );
+                if (count ( $pagination ) > 0){
+                    return view ('loan.cooperative.requested-loans' ,  compact(
+                    'perPage', 'loan'))->withDetails( $pagination );     
+                } 
+                else{redirect()->back()->with('loanRequest-status', 'No record order found'); }   
+            \LogActivity::addToLog('Admin loanRequest'); 
+
+            return view('loan.cooperative.requested-loans', compact('perPage', 'loan'));
+        }
+        else{ return Redirect::to('/login');} 
+    }
+
+    public function approvedLoan(Request $request){
+        if(Auth::user()->role_name == 'cooperative'){
+            $id = Auth::user()->id;
+            $code = Auth::user()->code;
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+
+            $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+            ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+             ->select(['loan.*', 'loan_type.name', 'users.fname'])
+             ->where('loan.cooperative_code', $code)
+             ->where('loan.loan_status', 'approved')
+             ->orderBy('loan.created_at', 'desc')
+             ->where(function ($query) use ($search) {  // <<<
+             $query->where('users.fname', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.principal', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.interest', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.total', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
+                      ->orWhere('loan.loan_status', 'LIKE', '%'.$search.'%')
+                     ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
+                    ->orderBy('loan.created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
+            )->appends(['per_page'   => $perPage]);
+        
+            $pagination = $loan->appends ( array ('search' => $search) );
+                if (count ( $pagination ) > 0){
+                    return view ('loan.cooperative.approved-loans' ,  compact(
+                    'perPage', 'loan'))->withDetails( $pagination );     
+                } 
+                else{redirect()->back()->with('approvedLoan-status', 'No record order found'); }   
+            \LogActivity::addToLog('Admin loanApproved'); 
+
+            return view('loan.cooperative.approved-loans', compact('perPage', 'loan'));
+        }
+        else{ return Redirect::to('/login');} 
+    }
+
+    public function payOutLoan(Request $request){
+        if(Auth::user()->role_name == 'cooperative'){
+            $id = Auth::user()->id;
+            $code = Auth::user()->code;
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+
+            $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+            ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+             ->select(['loan.*', 'loan_type.name', 'users.fname'])
+             ->where('loan.cooperative_code', $code)
+             ->where('loan.loan_status', 'payout')
+             ->orderBy('loan.created_at', 'desc')
+             ->where(function ($query) use ($search) {  // <<<
+             $query->where('users.fname', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.principal', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.interest', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.total', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
+                      ->orWhere('loan.loan_status', 'LIKE', '%'.$search.'%')
+                     ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
+                    ->orderBy('loan.created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
+            )->appends(['per_page'   => $perPage]);
+        
+            $pagination = $loan->appends ( array ('search' => $search) );
+                if (count ( $pagination ) > 0){
+                    return view ('loan.cooperative.payout-loans' ,  compact(
+                    'perPage', 'loan'))->withDetails( $pagination );     
+                } 
+                else{redirect()->back()->with('payOutLoan-status', 'No record order found'); }   
+            \LogActivity::addToLog('Admin loanPayOut'); 
+
+            return view('loan.cooperative.payout-loans', compact('perPage', 'loan'));
+        }
+        else{ return Redirect::to('/login');} 
+    }
+    
 }//class

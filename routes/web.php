@@ -376,6 +376,9 @@ Route::controller(CooperativeLoan::class)->group(function () {
     Route::post('cooperative-loan-repayment', 'storeLoanRepayment')->name('cooperative-loan-repayment');
     Route::get('cooperative-create-loan', 'createMemberLoan');
     Route::get('calculate-member-interest/{id}/{amount}/{duration}/{members}', 'calculateInterest')->name('calculate-member-interest');
+    Route::get('requested-loans', 'requestedLoan');
+    Route::get('approved-loans', 'approvedLoan');
+    Route::get('payout-loans', 'payOutLoan');
 
 });
 

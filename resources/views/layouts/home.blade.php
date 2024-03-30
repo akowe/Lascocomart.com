@@ -1672,17 +1672,17 @@
                                                                                                             </a>
                                                                                                             <div
                                                                                                                   class="dropdown-menu">
-                                                                                                                  <a href=""
+                                                                                                                  <a href="{{ url('requested-loans') }}"
                                                                                                                         class="dropdown-item">
                                                                                                                         Requested
                                                                                                                         Loans
                                                                                                                   </a>
-                                                                                                                  <a href=""
+                                                                                                                  <a href="{{ url('approved-loans') }}"
                                                                                                                         class="dropdown-item">
                                                                                                                         Approved
                                                                                                                         Loans
                                                                                                                   </a>
-                                                                                                                  <a href=""
+                                                                                                                  <a href="{{ url('payout-loans') }}"
                                                                                                                         class="dropdown-item">
                                                                                                                         PayOut
                                                                                                                         Loans
