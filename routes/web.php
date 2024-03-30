@@ -360,6 +360,8 @@ Route::controller(NotificationController::class)->group(function () {
 Route::controller(LoanController::class)->group(function () {
     Route::get('loan', 'loan');
     Route::post('add-loan', 'addLoan')->name('add-loan');
+    Route::post('cooperative-add-loan', 'cooperativeAddLoan')->name('cooperative-add-loan');
+    
 });
 //Cooperative Loan
 Route::controller(CooperativeLoan::class)->group(function () {
@@ -372,7 +374,9 @@ Route::controller(CooperativeLoan::class)->group(function () {
     Route::get('cooperative-loan-payout/{id}', 'cooperativeLoanPayOut');
     Route::get('calulate-loan-repayment/{id}/{date}', 'calLoanRepayment');
     Route::post('cooperative-loan-repayment', 'storeLoanRepayment')->name('cooperative-loan-repayment');
- 
+    Route::get('cooperative-create-loan', 'createMemberLoan');
+    Route::get('calculate-member-interest/{id}/{amount}/{duration}/{members}', 'calculateInterest')->name('calculate-member-interest');
+
 });
 
 //Member Loan

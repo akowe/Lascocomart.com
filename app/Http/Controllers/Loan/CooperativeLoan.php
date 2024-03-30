@@ -165,7 +165,7 @@ class CooperativeLoan extends Controller
                     return view ('loan.cooperative.loan-type' ,  compact(
                     'perPage', 'loantypes'))->withDetails( $pagination );     
                 } 
-                else{redirect()->back()->with('status', 'No record order found'); }   
+                else{redirect()->back()->with('loanType-status', 'No record order found'); }   
             \LogActivity::addToLog('Admin loanType'); 
             return view('loan.cooperative.loan-type', compact(
                 'perPage', 'loantypes'));
@@ -486,4 +486,80 @@ class CooperativeLoan extends Controller
         }
         else{ return Redirect::to('/login');} 
      }
+
+     public function createMemberLoan(Request $request){
+        if(Auth::user()->role_name == 'cooperative'){
+            $code = Auth::user()->code;
+            $memberName = User::all()->where('code', $code)->except(Auth::id()); 
+            $chooseLoanType = LoanType::select('*')
+            ->where('cooperative_code', $code)->get();
+
+            $members='';
+            $memberID = '';
+            $principal = '';
+            $annualInterest = '';
+            $totalDue = '';
+            $rateType = '';
+            $duration ='';
+            $maxTenure = '';
+            $percentage = '';
+            $loanType = '';
+            $loanTypeID = '';
+            return view('loan.cooperative.create-loan', compact('members', 'memberName', 'memberID', 'chooseLoanType', 'loanType',
+            'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
+            'rateType','duration', 'loanTypeID'));
+
+        }
+        else{ return Redirect::to('/login');} 
+
+     }
+
+     public function calculateInterest(Request $request, $id, $amount, $duration, $memberID){
+        if(Auth::user()){
+            $code = Auth::user()->code;
+            $memberName = User::all()->where('code', $code)->except(Auth::id()); 
+
+            $userID= preg_split("/[,]/",$memberID);
+            $getmMembers = User::whereIn('id', $userID)->get('*')->pluck('fname');
+            $members = substr($getmMembers, 1, -1);
+
+            $chooseLoanType = LoanType::select('*')
+            ->where('cooperative_code', $code)->get();
+            $loanTypeID = $id;
+
+            $getLoanTypeName = LoanType::select('name')
+            ->where('id', $id)
+            ->where('cooperative_code', $code)->get();
+            $loanTypeName =Arr::pluck($getLoanTypeName, 'name');
+            $loanType = implode(" ",$loanTypeName); 
+
+            $getRateType = LoanType::select('rate_type')
+            ->where('id', $id)
+            ->where('cooperative_code', $code)->get();
+            $loanRateType =Arr::pluck($getRateType, 'rate_type');
+            $rateType = implode(" ",$loanRateType); 
+         
+            $getPercentage = LoanType::select('percentage_rate')
+            ->where('id', $id)
+            ->where('cooperative_code', $code)->get();
+            $loanPercentage =Arr::pluck($getPercentage, 'percentage_rate');
+            $percentageRate = implode(" ",$loanPercentage); 
+        
+            $getTenure = LoanType::select('max_duration')
+            ->where('id', $id)
+            ->where('cooperative_code', $code)->get();
+            $loanTenure =Arr::pluck($getTenure, 'max_duration');
+            $maxTenure = implode(" ",$loanTenure); 
+
+            $principal = (int)$amount;
+            $percentage = $principal / 100 * $percentageRate ;
+            $annualInterest = $percentage * $maxTenure; //for flat rate interest type
+            $totalDue = $principal +   $annualInterest;//for flat rate interest type
+            
+            return view('loan.cooperative.create-loan', compact('memberName', 'members', 'memberID', 'chooseLoanType', 'loanType',
+            'principal', 'maxTenure',  'percentage', 'annualInterest', 'totalDue',
+            'rateType', 'duration', 'loanTypeID'));
+        }
+        else{ return Redirect::to('/login');} 
+    }
 }//class

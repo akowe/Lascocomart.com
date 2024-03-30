@@ -149,9 +149,14 @@
                                           <a href="#tabs-bank" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Bank
                                                 Details</a>
+                                          <a href="#tabs-product-settings" data-bs-toggle="tab"
+                                                class="list-group-item list-group-item-action d-flex align-items-center">Product
+                                                </a> 
                                           <a href="#tabs-loan-settings" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Loan
-                                                Settings</a>
+                                                </a> 
+                                          <a href="#tabs-savings-settings" data-bs-toggle="tab"
+                                                class="list-group-item list-group-item-action d-flex align-items-center">Savings</a> 
 
                                           @else
                                           <a href="#tabs-home-5" data-bs-toggle="tab"

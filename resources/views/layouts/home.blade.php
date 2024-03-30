@@ -12,6 +12,7 @@
       <title>{{ config('app.name', 'LascocoMart') }}</title>
       <!-- CSS files -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!-- <link href="back/dist/css/tabler.min.css" rel="stylesheet"/> -->
       <link href="/back/dist/css/tabler-flags.min.css?v=echo filemtime();" rel="stylesheet" />
       <link href="/back/dist/css/tabler-payments.min.css?v=echo filemtime();" rel="stylesheet" />
       <link href="/back/dist/css/tabler-vendors.min.css?v=echo filemtime();" rel="stylesheet" />
@@ -1683,7 +1684,7 @@
                                                                                                                   </a>
                                                                                                                   <a href=""
                                                                                                                         class="dropdown-item">
-                                                                                                                        Disbursed
+                                                                                                                        PayOut
                                                                                                                         Loans
                                                                                                                   </a>
                                                                                                                   <a href=""
@@ -1702,10 +1703,11 @@
                                                                                                 </div>
                                                                                                 <div
                                                                                                       class="dropdown-menu-column">
-                                                                                                      <a href=""
+                                                                                                      <a href="{{ url('cooperative-create-loan') }}"
                                                                                                             class="dropdown-item">
-                                                                                                            Add Loan                                                                                                             <span
-                                                                                                                 class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                            Add Loan
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
 
                                                                                                       </a>
                                                                                                       <a href=""
@@ -2499,13 +2501,13 @@
                                     </div>
 
 
-                                    <!--- request fund modal --->
+                                    <!--- request Credit modal --->
                                     <div class="modal modal-blur fade" id="modal-fund" tabindex="-1" role="dialog"
                                           aria-hidden="true">
                                           <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                       <div class="modal-header">
-                                                            <h5 class="modal-title">Request New Fund </h5>
+                                                            <h5 class="modal-title">Request New Credit </h5>
                                                             <button type="button" class="btn-close"
                                                                   data-bs-dismiss="modal" aria-label="Close"></button>
                                                       </div>
@@ -2558,193 +2560,17 @@
                                     </div>
                                     <!--- end fund modal --->
 
-
-                                    <!--- Add Loan Type Modal --->
-                                    <div class="modal modal-blur fade" id="modal-loantype" tabindex="-1" role="dialog"
-                                          aria-hidden="true">
-                                          <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                      <div class="modal-header">
-                                                            <h5 class="modal-title">Add New Loan Type </h5>
-                                                            <button type="button" class="btn-close"
-                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                            @auth
-                                                            @if(Auth::user()->role_name == 'cooperative')
-                                                            <form method="POST" action="{{ route('add-loan-type') }}">
-                                                                  @csrf
-                                                                  <div class="row ">
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label
-                                                                                          class="form-label required">Name</label>
-                                                                                    <input type="text"
-                                                                                          class="form-control"
-                                                                                          name="name"
-                                                                                          placeholder="Enter the loan name">
-                                                                              </div>
-                                                                        </div>
-
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label">Guarantor
-                                                                                          ?</label>
-                                                                                    <select class="form-select"
-                                                                                          name="guarantor" id="">
-                                                                                          <option value="">Choose
-                                                                                          </option>
-                                                                                          <option value="yes">Yes
-                                                                                          </option>
-                                                                                          <option value="no">No</option>
-                                                                                    </select>
-                                                                              </div>
-                                                                        </div>
-                                                                  </div>
-                                                                  <!--- row --->
-
-                                                                  <div class="row">
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label required">Rate
-                                                                                          Type</label>
-                                                                                    <select class="form-select"
-                                                                                          name="rate_type" id="">
-                                                                                          <option value="">Choose
-                                                                                          </option>
-                                                                                          <option value="flat rate">Flat
-                                                                                                Rate
-                                                                                          </option>
-                                                                                          <option
-                                                                                                value="simple interest">
-                                                                                                Simple Interest (P.R.T)
-                                                                                          </option>
-                                                                                    </select>
-                                                                              </div>
-                                                                        </div>
-
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label required">Rate
-                                                                                          %. <small>Example: 5 means
-                                                                                                5%</small>
-                                                                                    </label>
-                                                                                    <div class="value-button"
-                                                                                          id="decrease"
-                                                                                          onclick="decreaseValue()"
-                                                                                          value="Decrease Value">-</div>
-                                                                                    <input type="number" name="rate"
-                                                                                          id="number" value="">
-                                                                                    <div class="value-button"
-                                                                                          id="increase"
-                                                                                          onclick="increaseValue()"
-                                                                                          value="Increase Value">+</div>
-                                                                              </div>
-                                                                        </div>
-                                                                  </div>
-
-                                                                  <div class="row">
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label">Min-duration.
-                                                                                          <small>(in months)</small>
-                                                                                    </label>
-                                                                                    <div class="value-button"
-                                                                                          id="decrease"
-                                                                                          onclick="decreaseMin()"
-                                                                                          value="Decrease Value">-</div>
-                                                                                    <input type="number"
-                                                                                          name="minimum_duration"
-                                                                                          id="min" value="1">
-                                                                                    <div class="value-button"
-                                                                                          id="increase"
-                                                                                          onclick="increaseMin()"
-                                                                                          value="Increase Value">+</div>
-                                                                              </div>
-                                                                        </div>
-
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label required">Max-duration.
-                                                                                          <small>(in months)/small>
-                                                                                    </label>
-                                                                                    <div class="value-button"
-                                                                                          id="decrease"
-                                                                                          onclick="decreaseMax()"
-                                                                                          value="Decrease Value">-</div>
-                                                                                    <input type="number"
-                                                                                          name="maximum_duration"
-                                                                                          id="max" value="">
-                                                                                    <div class="value-button"
-                                                                                          id="increase"
-                                                                                          onclick="increaseMax()"
-                                                                                          value="Increase Value">+</div>
-                                                                              </div>
-                                                                        </div>
-                                                                  </div>
-
-                                                                  <div class="row">
-                                                                        <div class="col-md">
-                                                                              <div class="mb-3">
-                                                                                    <label class="form-label">Description
-                                                                                    </label>
-                                                                                    <input type="text"
-                                                                                          name="description"
-                                                                                          class="form-control"
-                                                                                          placeholder="Briefly describe this loan">
-                                                                              </div>
-                                                                        </div>
-
-                                                                  </div>
-                                                                  <p></p>
-
-                                                                  <div class="modal-footer">
-                                                                        <a href="#" class="btn btn-link link-secondary"
-                                                                              data-bs-dismiss="modal">
-                                                                              Cancel
-                                                                        </a>
-                                                                        <button type="submit" name="submit"
-                                                                              class="btn btn-danger ms-auto">
-                                                                              <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                    class="icon icon-tabler icon-tabler-send"
-                                                                                    width="24" height="24"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    stroke-width="1.5"
-                                                                                    stroke="currentColor" fill="none"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round">
-                                                                                    <path stroke="none"
-                                                                                          d="M0 0h24v24H0z"
-                                                                                          fill="none" />
-                                                                                    <path d="M10 14l11 -11" />
-                                                                                    <path
-                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
-                                                                              </svg>
-                                                                              Save
-                                                                        </button>
-                                                                  </div>
-                                                            </form>
-                                                            @endif
-                                                            @endauth
-                                                      </div>
-
-                                                </div>
-                                          </div>
-                                    </div>
-                                    <!--- end fund modal --->
                                     <!-- Libs JS -->
                                     <script src="/back/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
                                     <script src="/back/dist/libs/jsvectormap/dist/js/jsvectormap.min.js">
                                     </script>
-                                    <script src="/back/dist/libs/jsvectormap/dist/maps/world.js"></script>
-                                    <script src="/back/dist/libs/jsvectormap/dist/maps/world-merc.js"></script>
                                     <!-- Libs JS -->
                                     <script src="/back/dist/libs/nouislider/dist/nouislider.min.js"></script>
                                     <script src="/back/dist/libs/litepicker/dist/litepicker.js"></script>
-                                    <script src="/back/dist/libs/tom-select/dist/js/tom-select.base.min.js">
+                                    <script src="/back/dist/libs/tom-select/dist/js/tom-select.base.min.js" defer>
+
                                     </script>
                                     <!-- Tabler Core -->
-                                    <script src="/back/dist/js/demo-theme.min.js"></script>
                                     <script src="/back/dist/js/tabler.min.js"></script>
                                     <script src="/back/dist/js/demo.min.js"></script>
 
@@ -3493,19 +3319,45 @@
                                     });
                                     // @formatter:on
                                     </script>
-                                    <script>
-                                    function copyToClipboard(text) {
-                                          navigator.clipboard.writeText(text)
-                                                .then(() => {
-                                                      console.log(`Copied text to clipboard: ${text}`);
-                                                      alert(`${text} . ID has been copied. `);
-                                                })
-                                                .catch((error) => {
-                                                      console.error(`Could not copy text: ${error}`);
-                                                });
-                                    }
-                                    </script>
+
+<script>
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('members'), {
+    		copyClassesToDropdown: false,
+    		dropdownParent: 'body',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+    // @formatter:on
+  </script>
+ <script>
+      function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                  console.log(`Copied text to clipboard: ${text}`);
+                  alert(`${text} . ID has been copied. `);
+            })
+            .catch((error) => {
+                  console.error(`Could not copy text: ${error}`);
+            });
+      }
+</script>
 
 </body>
-
 </html>

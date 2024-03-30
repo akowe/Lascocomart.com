@@ -94,7 +94,7 @@
                               </div>
                         </div>
                   </div>
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-5 col-lg-5">
                         <div class="card">
                               <div class="card-body">
                                     <div class="card-header">
@@ -144,9 +144,9 @@
                                           </div>
                                           <!---card-row--->
 
+                                          <p></p>
                                           <div class="row g-3">
                                                 <div class="col-md">
-                                                      <p></p>
                                                       <div class="form-label required">Choose Loan Type </div>
                                                       <select class="form-select" name="ratetype" id="ratetype">
                                                             <option value="{{$loanTypeID}}">{{$loanType}}</option>
@@ -186,8 +186,7 @@
                                                 </div>
 
                                                 <div class="col-md">
-                                                      <p></p>
-                                                      <div class="form-label required">Payment Duration (in months)
+                                                      <div class="form-label required">Duration (months)
                                                       </div>
                                                       <div class="value-button" id="decrease"
                                                             onclick="decreaseLoanTenure()" value="decrease Value">-
@@ -225,13 +224,13 @@
                         </div>
                   </div>
 
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-7 col-lg-7">
                         <div class="card">
                               <div class="navbar">
-                                    <h3 class="navbar-brand" style="margin-left:20px;"> Loan Type:&nbsp;
+                                    <h3 class="navbar-brand" style="margin-left:20px; font-size:15px"> Loan Type:&nbsp;
                                           <span class="text-danger">{{ $loanType }}</span>
                                     </h3>
-                                    <h3 class="navbar-brand">Duration:&nbsp; <span class="text-danger"> {{ $duration }}
+                                    <h3 class="navbar-brand" style=" font-size:15px">Duration:&nbsp; <span class="text-danger"> {{ $duration }}
                                                 month (s)</span>&nbsp; &nbsp; </h3>
                               </div>
 
@@ -378,7 +377,7 @@
                                                       </button>
                                                 </div>
                                                 @else
-                                                <label class="form-check">
+                                                <!-- <label class="form-check">
                                                       <input class="form-check-input" type="checkbox"
                                                             name="service_fee">
                                                       <span class="form-check-label">
@@ -386,33 +385,9 @@
                                                             this
                                                             loan.
                                                       </span>
-                                                </label>
-                                                @error('service_fee')
-                                                <div class="alert alert-danger alert-dismissible" role="alert">
-                                                      <div class="d-flex">
-                                                            <div>
-                                                                  <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
-                                                                  <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon alert-icon" width="24" height="24"
-                                                                        viewBox="0 0 24 24" stroke-width="2"
-                                                                        stroke="currentColor" fill="none"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                              fill="none" />
-                                                                        <path
-                                                                              d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                                                        <path d="M12 8v4" />
-                                                                        <path d="M12 16h.01" />
-                                                                  </svg>
-                                                            </div>
-                                                            <div>
-                                                                  {{ $message }}
-                                                            </div>
-                                                      </div>
-                                                      <a class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="close"></a>
-                                                </div>
-                                                @enderror
+                                                </label> -->
+                                             
+                                              
                                                 <p></p>
 
                                                 <div class="btn-list justify-content-end">

@@ -59,7 +59,7 @@
                         <div class="row ">
                               <div class="col-12">
                                     <p></p>
-                                    @if(session('status'))
+                                    @if(session('loanType-status'))
                                     <div class="alert alert-danger alert-dismissible" role="alert">
                                           <div class="d-flex">
                                                 <div>
@@ -75,7 +75,7 @@
                                                       </svg>
 
                                                 </div>
-                                                <div> {{ session('status') }}</div>
+                                                <div> {{ session('loanType-status') }}</div>
                                           </div>
                                           <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                                     </div>
