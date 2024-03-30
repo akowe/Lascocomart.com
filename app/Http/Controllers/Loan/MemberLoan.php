@@ -116,7 +116,34 @@ class MemberLoan extends Controller
 
     public function loanHistory(Request  $request){
         if(Auth::user()->role_name == 'member'){
-            return view('loan.member.loan-history');
+            $id = Auth::user()->id;
+            $perPage = $request->perPage ?? 10;
+            $search = $request->input('search');
+            $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+           ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+            ->select(['loan.*', 'loan_type.name', 'users.fname'])
+            ->where('loan.member_id', $id)
+            ->orderBy('loan.created_at', 'desc')
+            ->where(function ($query) use ($search) {  // <<<
+            $query->where('users.fname', 'LIKE', '%'.$search.'%')
+                   ->orWhere('loan.principal', 'LIKE', '%'.$search.'%')
+                   ->orWhere('loan.interest', 'LIKE', '%'.$search.'%')
+                   ->orWhere('loan.total', 'LIKE', '%'.$search.'%')
+                   ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
+                     ->orWhere('loan.loan_status', 'LIKE', '%'.$search.'%')
+                    ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
+                   ->orderBy('loan.created_at', 'desc');
+            })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
+            )->appends(['per_page'   => $perPage]);
+        
+            $pagination = $loan->appends ( array ('search' => $search) );
+                if (count ( $pagination ) > 0){
+                    return view ('loan.member.loan-history', compact(
+                    'perPage', 'loan'))->withDetails( $pagination );     
+                } 
+                else{redirect()->back()->with('loan-status', 'No record order found'); }   
+            \LogActivity::addToLog('Member loanDashboard'); 
+            return view ('loan.member.loan-history', compact('perPage', 'loan'));
         }
         else{
             return Redirect::to('/login');

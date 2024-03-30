@@ -209,7 +209,7 @@
                                                                         data-bs-toggle="dropdown">Actions</button>
                                                                   <div class="dropdown-menu dropdown-menu-end">
                                                                         <a class="dropdown-item"
-                                                                              href="admin-loan-type/{{$loantype->id}}">
+                                                                              href="admin-edit-loan-type/{{$loantype->id}}">
                                                                               Edit
                                                                         </a>
 

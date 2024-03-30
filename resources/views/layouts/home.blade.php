@@ -1923,7 +1923,7 @@
                                                                                                 class="dropdown-menu-columns">
                                                                                                 <div
                                                                                                       class="dropdown-menu-column">
-
+                                                                                                     
                                                                                                       <a href="{{ url('member-loan-history') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Loan History
@@ -1935,6 +1935,16 @@
                                                                                                       </a>
 
                                                                                                 </div>
+                                                                                                <div
+                                                                                                      class="dropdown-menu-column">
+                                                                                                      <a href="{{ url('member-request-loan') }}"
+                                                                                                            class="dropdown-item">
+                                                                                                           Request Loan
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+
+                                                                                                      </a>
+                                                                                    </div>
                                                                                           </div>
                                                                                     </div>
 
@@ -3320,44 +3330,68 @@
                                     // @formatter:on
                                     </script>
 
-<script>
-    // @formatter:off
-    document.addEventListener("DOMContentLoaded", function () {
-    	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('members'), {
-    		copyClassesToDropdown: false,
-    		dropdownParent: 'body',
-    		controlInput: '<input>',
-    		render:{
-    			item: function(data,escape) {
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    			option: function(data,escape){
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    		},
-    	}));
-    });
-    // @formatter:on
-  </script>
- <script>
-      function copyToClipboard(text) {
-            navigator.clipboard.writeText(text)
-            .then(() => {
-                  console.log(`Copied text to clipboard: ${text}`);
-                  alert(`${text} . ID has been copied. `);
-            })
-            .catch((error) => {
-                  console.error(`Could not copy text: ${error}`);
-            });
-      }
-</script>
+                                    <script>
+                                    // @formatter:off
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                          var el;
+                                          window.TomSelect && (new TomSelect(el = document.getElementById(
+                                                'members'), {
+                                                copyClassesToDropdown: false,
+                                                dropdownParent: 'body',
+                                                controlInput: '<input>',
+                                                render: {
+                                                      item: function(data, escape) {
+                                                            if (data
+                                                                  .customProperties
+                                                                  ) {
+                                                                  return '<div><span class="dropdown-item-indicator">' +
+                                                                        data
+                                                                        .customProperties +
+                                                                        '</span>' +
+                                                                        escape(data
+                                                                              .text
+                                                                              ) +
+                                                                        '</div>';
+                                                            }
+                                                            return '<div>' + escape(
+                                                                        data.text) +
+                                                                  '</div>';
+                                                      },
+                                                      option: function(data, escape) {
+                                                            if (data
+                                                                  .customProperties
+                                                                  ) {
+                                                                  return '<div><span class="dropdown-item-indicator">' +
+                                                                        data
+                                                                        .customProperties +
+                                                                        '</span>' +
+                                                                        escape(data
+                                                                              .text
+                                                                              ) +
+                                                                        '</div>';
+                                                            }
+                                                            return '<div>' + escape(
+                                                                        data.text) +
+                                                                  '</div>';
+                                                      },
+                                                },
+                                          }));
+                                    });
+                                    // @formatter:on
+                                    </script>
+                                    <script>
+                                    function copyToClipboard(text) {
+                                          navigator.clipboard.writeText(text)
+                                                .then(() => {
+                                                      console.log(`Copied text to clipboard: ${text}`);
+                                                      alert(`${text} . ID has been copied. `);
+                                                })
+                                                .catch((error) => {
+                                                      console.error(`Could not copy text: ${error}`);
+                                                });
+                                    }
+                                    </script>
 
 </body>
+
 </html>

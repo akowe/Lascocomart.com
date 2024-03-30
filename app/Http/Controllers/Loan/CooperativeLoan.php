@@ -145,11 +145,14 @@ class CooperativeLoan extends Controller
     public function loanType(Request $request){
         if(Auth::user()->role_name == 'cooperative'){
             $id = Auth::user()->id;
+            $code = Auth::user()->code;
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');
 
             $loantypes = DB::table('loan_type')->select(['loan_type.*'])
             ->where('admin_id', $id)
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
             ->orderBy('loan_type.created_at', 'desc')
             ->where(function ($query) use ($search) {  // <<<
             $query->where('loan_type.name', 'LIKE', '%'.$search.'%')
@@ -675,5 +678,64 @@ class CooperativeLoan extends Controller
         }
         else{ return Redirect::to('/login');} 
     }
+
+        public function editLoanType(Request $request, $id){
+            if(Auth::user()->role_name == 'cooperative'){
+                $loantype = LoanType::find($id);
+                return view('loan.cooperative.edit-loantype', compact('loantype')); 
+            }
+              else { return Redirect::to('/login');
+            }
+      }
+      
+          public function updateLoanType(Request $request, $id){
+            if(Auth::user()->role_name == 'cooperative'){
+                $this->validate($request, [
+                'rate_type'           => 'required|max:255',  
+                'percentage_rate'     => 'required|max:255',  
+                'mininum_duration'    => 'required|max:255',
+                'maximum_duration'    => 'required|max:255',
+                'guarantor'           => 'max:255',
+                'description'         => 'required|max:255',
+                'loantype'            => 'max:255',
+                ]);
+            
+              $loantype = LoanType::find($id);
+              $loantype->rate_type          = $request->rate_type;
+              $loantype->percentage_rate    = $request->percentage_rate;
+              $loantype->min_duration       = $request->mininum_duration;
+              $loantype->max_duration       = $request->maximum_duration;
+              $loantype->guarantor          = $request->guarantor;
+              $loantype->description        = $request->description;
+              $loantype->update();
+      
+              $data = 'Edit successful for ' .$request->loantype. '';
+              \LogActivity::addToLog('loanType Update');
+              return redirect('cooperative-loan-type')->with('success',  $data);
+            }
+            else { return Redirect::to('/login');}  
+            }
+    
+    
+          public function removeLoanTypePage(Request $request, $id){
+            if(Auth::user()->role_name == 'cooperative'){
+              $loantype = LoanType::find($id);
+              return view('loan.cooperative.remove-loantype', compact('loantype')); 
+           }
+            else { return Redirect::to('/login');}   
+          }
+      
+          public function removeAdminLoanType(Request $request){
+            if(Auth::user()->role_name == 'cooperative'){
+                $admin_id = Auth::user()->id;
+                $id = $request->id;
+                //soft delete
+                LoanType::where('id', $id)->where('admin_id', $admin_id)->delete(); 
+            
+                \LogActivity::addToLog('Remove loanType');
+                return redirect('cooperative-loan-type')->with('success', 'LoanType Removed Successful!');
+            }
+            else { return Redirect::to('/login');}  
+        }
     
 }//class
