@@ -52,13 +52,13 @@ class CooperativeLoan extends Controller
             $code = Auth::user()->code; 
             $id = Auth::user()->id; //
             $totalLoan = DB::table('loan')
-            ->where('loan_status', 'disbursed')
+            ->where('loan_status', 'payout')
             ->where('cooperative_code', $code); 
 
             $totalLoanRemaining ='';
             $countMemberLoan = Loan::join('users', 'users.id', '=', 'loan.member_id')
             ->where('users.code', $code) 
-            ->where('loan.loan_status', 'disbursed')
+            ->where('loan.loan_status', 'payout')
             ->get('loan.*');  
 
             $chartLoanInterestDate = Loan::select('updated_at')
@@ -98,12 +98,13 @@ class CooperativeLoan extends Controller
             $loanMonthly  = $getLoanMonthly; 
 
             $totalMonthlyDueLoan =  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
-            ->select('monthly_due') 
-            ->where('loan.loan_status', 'disbursed')
-            ->whereYear('loan.updated_at', Carbon::now()->year)
-            ->whereMonth('loan.updated_at', Carbon::now()->startOfMonth())
-            ->where('loan.cooperative_code', $code); 
-
+           ->select('loan_repayment.monthly_due')
+            ->where('loan.loan_status', 'payout')
+            ->where('loan_repayment.repayment_status', null)
+            ->where('loan.cooperative_code', $code)
+             ->whereMonth('loan_repayment.next_due_date', Carbon::now()->month)
+            ->whereYear('loan_repayment.updated_at', Carbon::now()->year);
+        
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');
             $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
@@ -483,6 +484,13 @@ class CooperativeLoan extends Controller
                 ->update([
                 'loan_status' => 'payout',
                 ]); 
+
+                $updateLoanRepayment = DB::table('loan_repayment')
+                ->where('loan_id', $loanID)
+                ->where('cooperative_code', $code)
+                ->update([
+                    'next_due_date' => $startDate,
+                ]);
             }
             return redirect('cooperative-loan')->with('success', 'PayOut successful!');
 

@@ -160,4 +160,98 @@ class LoanController extends Controller
             return Redirect::to('/login');
         }
     }
+
+    public function cooperativeloanInvoice(Request $request, $loan_id )
+    {
+        if( Auth::user()->role_name  == 'cooperative'){
+            $code = Auth::user()->code; //
+            $item = Loan::join('users', 'users.id', '=', 'loan.member_id')
+            ->leftjoin('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+             ->leftjoin('loan_type', 'loan_type.id', '=', 'loan_repayment.loan_type_id')
+            ->leftjoin('due_loans', 'due_loans.loan_id', '=', 'loan.id')
+            ->where('loan.cooperative_code', $code)
+            ->where('loan.id', $loan_id)
+            ->get(['loan.*', 
+            'users.fname',
+            'users.address',
+            'users.phone',
+            'users.email',
+            'loan_repayment.monthly_principal',  
+            'loan_repayment.monthly_interest',   
+            'loan_repayment.next_due_date',  
+            'loan_type.name',  
+            'loan_type.percentage_rate',  
+            'loan_type.rate_type',  
+            'due_loans.monthly_due',  
+            'due_loans.due_date'])->first();
+        
+            $loan =  Loan::join('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+             ->leftjoin('loan_type', 'loan_type.id', '=', 'loan_repayment.loan_type_id')
+            ->leftjoin('due_loans', 'due_loans.loan_id', '=', 'loan.id')
+            ->where('loan.cooperative_code', $code)
+            ->where('loan.id', $loan_id)
+            ->orderBy('due_loans.due_date')
+            ->get(['loan.*', 
+            'loan_repayment.monthly_principal',  
+            'loan_repayment.monthly_interest',   
+            'loan_repayment.next_due_date',  
+            'loan_type.name',  
+            'loan_type.percentage_rate',  
+            'loan_type.rate_type',  
+            'due_loans.monthly_due',  
+            'due_loans.due_date']);  
+
+            \LogActivity::addToLog('Laon invoice');
+        return view('loan.loan-invoice', compact('item', 'loan'));
+        }
+
+    else { return Redirect::to('/login');}             
+    }
+
+    public function memberloanInvoice(Request $request, $loan_id )
+    {
+        if( Auth::user()->role_name  == 'member'){
+            $id = Auth::user()->id; //
+            $item = Loan::join('users', 'users.id', '=', 'loan.member_id')
+            ->leftjoin('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+             ->leftjoin('loan_type', 'loan_type.id', '=', 'loan_repayment.loan_type_id')
+            ->leftjoin('due_loans', 'due_loans.loan_id', '=', 'loan.id')
+            ->where('loan.member_id', $id)
+            ->where('loan.id', $loan_id)
+            ->get(['loan.*', 
+            'users.fname',
+            'users.address',
+            'users.phone',
+            'users.email',
+            'loan_repayment.monthly_principal',  
+            'loan_repayment.monthly_interest',   
+            'loan_repayment.next_due_date',  
+            'loan_type.name',  
+            'loan_type.percentage_rate',  
+            'loan_type.rate_type',  
+            'due_loans.monthly_due',  
+            'due_loans.due_date'])->first();
+        
+            $loan =  Loan::join('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+             ->leftjoin('loan_type', 'loan_type.id', '=', 'loan_repayment.loan_type_id')
+            ->leftjoin('due_loans', 'due_loans.loan_id', '=', 'loan.id')
+            ->where('loan.member_id', $id)
+            ->where('loan.id', $loan_id)
+            ->orderBy('due_loans.due_date')
+            ->get(['loan.*', 
+            'loan_repayment.monthly_principal',  
+            'loan_repayment.monthly_interest',   
+            'loan_repayment.next_due_date',  
+            'loan_type.name',  
+            'loan_type.percentage_rate',  
+            'loan_type.rate_type',  
+            'due_loans.monthly_due',  
+            'due_loans.due_date']);  
+
+            \LogActivity::addToLog('Laon invoice');
+        return view('loan.loan-invoice', compact('item', 'loan'));
+        }
+
+    else { return Redirect::to('/login');}             
+    }
 }//class

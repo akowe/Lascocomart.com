@@ -200,7 +200,7 @@
                         <div class="card">
                               <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                          <div class="subheader">Monthly Due</div>
+                                          <div class="subheader">CurrentMonthly Due</div>
                                           <div class="ms-auto lh-1">
                                                 <div class="dropdown">
                                                       <a class="dropdown-toggle text-secondary" href="#"
@@ -385,7 +385,7 @@
                                                                         data-bs-toggle="dropdown">Actions</button>
                                                                   <div class="dropdown-menu dropdown-menu-end">
                                                                         <a class="dropdown-item text-capitalize"
-                                                                              href="admin-reciept/{{$data->id}}">
+                                                                              href="admin-loan-statement/{{$data->id}}">
                                                                               View
                                                                         </a>
                                                                         @if($data->loan_status =='approved' && $data->approval_agent == auth()->user()->id)

@@ -195,8 +195,8 @@
                                                                         data-bs-boundary="viewport"
                                                                         data-bs-toggle="dropdown">Actions</button>
                                                                   <div class="dropdown-menu dropdown-menu-end">
-                                                                        <a class="dropdown-item text-capitalize"
-                                                                              href="admin-reciept/{{$data->id}}">
+                                                                  <a class="dropdown-item text-capitalize"
+                                                                              href="admin-loan-statement/{{$data->id}}">
                                                                               View
                                                                         </a>
                                                                         @if($data->loan_status =='approved' && $data->approval_agent == auth()->user()->id)

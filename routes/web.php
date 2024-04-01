@@ -166,11 +166,8 @@ Route::controller(CooperativeController::class)->group(function () {
     Route::get('delete-member/{id}', 'deleteMember')->name('delete-member');
     Route::get('add_new_product', 'addProduct')->name('add_new_product');
     Route::get('credit',  'members')->name('credit');
-   // Route::post('coopupload-image',  'coopstore');
-   // Route::get('coopall_products',  'coopall_products')->name('coopall_products');
-    //soft delete.
+     //soft delete.
     Route::get('coopremove_product/{id}',  'coopremove_product')->name('coopremove_product');
-    //Route::get('coopsales_preview',  'coopsales_preview')->name('coopsales_preview');
     Route::get('cooperative-sales',  'cooperativeSales')->name('cooperative-sales');
     Route::get('admin-member-order',  'cooperativeMemberOrder')->name('admin-member-order');
     Route::get('admin-customer-order',  'cooperativeCustomerOrder')->name('admin-customer-order');
@@ -306,9 +303,10 @@ Route::controller(NewsletterController::class)->group(function () {
 Route::controller(NewAdminUserController::class)->group(function () {
     Route::post('/add_admin', 'newAdminUser')->name('add_admin');
 });
-
+//Credit Request
 Route::controller(FundRequestController::class)->group(function () {
-    Route::get('request-fund',  'requestFund')->name('request-fund');  
+
+    Route::get('request-fund',  'requestFund');  
     Route::post('send-fund-request', 'sendFundRequest')->name('send-fund-request');
     Route::get('/show-fundrequest',  'showFundrequest')->name('show-fundrequest');
     Route::post('member_request_fund_wallet', 'memberFundWallet')->name('member_request_fund_wallet'); 
@@ -361,7 +359,9 @@ Route::controller(LoanController::class)->group(function () {
     Route::get('loan', 'loan');
     Route::post('add-loan', 'addLoan')->name('add-loan');
     Route::post('cooperative-add-loan', 'cooperativeAddLoan')->name('cooperative-add-loan');
-    
+    Route::get('admin-loan-statement/{id}', 'cooperativeloanInvoice')->name('admin-loan-statement');
+    Route::get('loan-statement/{id}', 'memberloanInvoice')->name('loan-statement');
+
 });
 //Cooperative Loan
 Route::controller(CooperativeLoan::class)->group(function () {

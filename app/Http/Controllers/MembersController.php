@@ -15,6 +15,13 @@ use App\Models\ShippingDetail;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
 use App\Mail\MemberWelcomeEmail;
+use App\Models\Loan;
+use App\Models\LoanType;
+use App\Models\LoanRepayment;
+use App\Models\LoanSetting;
+use App\Models\DueLoans;
+use App\Models\Settings;
+use App\Models\ChooseBank;
 
 use Auth;
 use Validator;
@@ -90,6 +97,21 @@ class MembersController extends Controller
         ->where('wallet_history.user_id', $id)
         ->orderBy('wallet_history.created_at', 'desc');
 
+        $loan = DB::table('loan')->join('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+         ->select(['loan.*',  'loan_repayment.monthly_due', 'loan_repayment.next_due_date'])
+         ->where('loan_repayment.repayment_status', null)
+         ->where('loan.member_id', $id);
+
+         $loanPeriod = Loan::join('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+         ->where('loan_repayment.repayment_status', null)
+          ->where('loan.member_id', $id)
+          ->get('loan.duration')->pluck('duration')->first();
+
+         $dueDtae = Loan::join('loan_repayment', 'loan_repayment.loan_id', '=', 'loan.id')
+        ->where('loan_repayment.repayment_status', null)
+         ->where('loan.member_id', $id)
+         ->get('loan_repayment.next_due_date')->pluck('next_due_date')->first();
+
         $perPage = $request->perPage ?? 10;
         $search = $request->input('search');
         
@@ -118,7 +140,9 @@ class MembersController extends Controller
                   'orders',
                   'approvedOrders',
                   'getCooperativeLogo',
-                  'wallets'))->withDetails ( $pagination );     
+                  'wallets', 
+                  'loan',
+                  'dueDtae','loanPeriod'))->withDetails ( $pagination );     
           } 
           else{
               redirect()->back()->with('status', 'No record found'); 
@@ -132,8 +156,9 @@ class MembersController extends Controller
         'orders',
         'approvedOrders',
         'getCooperativeLogo'),
-        'wallets');
-      } 
+        'wallets', 'loan',
+      'dueDtae','loanPeriod');
+      }  
       else { return Redirect::to('/login');}
     }
 

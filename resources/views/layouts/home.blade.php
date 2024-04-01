@@ -1599,8 +1599,10 @@
                                                                                                             href="">
                                                                                                             Withdrawal
                                                                                                       </a>
-                                                                                                      <a class="dropdown-item"
-                                                                                                            href="{{ url('view-canceled-orders') }}">
+                                                                                                      <a href="#"
+                                                                                                            class="dropdown-item"
+                                                                                                            data-bs-toggle="modal"
+                                                                                                            data-bs-target="#modal-credit">
                                                                                                             Request
                                                                                                             Credit
                                                                                                       </a>
@@ -1923,7 +1925,7 @@
                                                                                                 class="dropdown-menu-columns">
                                                                                                 <div
                                                                                                       class="dropdown-menu-column">
-                                                                                                     
+
                                                                                                       <a href="{{ url('member-loan-history') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Loan History
@@ -1939,12 +1941,12 @@
                                                                                                       class="dropdown-menu-column">
                                                                                                       <a href="{{ url('member-request-loan') }}"
                                                                                                             class="dropdown-item">
-                                                                                                           Request Loan
+                                                                                                            Request Loan
                                                                                                             <span
                                                                                                                   class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
 
                                                                                                       </a>
-                                                                                    </div>
+                                                                                                </div>
                                                                                           </div>
                                                                                     </div>
 
@@ -2512,7 +2514,7 @@
 
 
                                     <!--- request Credit modal --->
-                                    <div class="modal modal-blur fade" id="modal-fund" tabindex="-1" role="dialog"
+                                    <div class="modal modal-blur fade" id="modal-credit" tabindex="-1" role="dialog"
                                           aria-hidden="true">
                                           <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
@@ -3343,14 +3345,14 @@
                                                       item: function(data, escape) {
                                                             if (data
                                                                   .customProperties
-                                                                  ) {
+                                                            ) {
                                                                   return '<div><span class="dropdown-item-indicator">' +
                                                                         data
                                                                         .customProperties +
                                                                         '</span>' +
                                                                         escape(data
                                                                               .text
-                                                                              ) +
+                                                                        ) +
                                                                         '</div>';
                                                             }
                                                             return '<div>' + escape(
@@ -3360,14 +3362,14 @@
                                                       option: function(data, escape) {
                                                             if (data
                                                                   .customProperties
-                                                                  ) {
+                                                            ) {
                                                                   return '<div><span class="dropdown-item-indicator">' +
                                                                         data
                                                                         .customProperties +
                                                                         '</span>' +
                                                                         escape(data
                                                                               .text
-                                                                              ) +
+                                                                        ) +
                                                                         '</div>';
                                                             }
                                                             return '<div>' + escape(

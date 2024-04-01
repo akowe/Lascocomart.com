@@ -27,7 +27,7 @@
                                     </a>
 
                               </span>
-                              <a href="{{ url('cooperative-loan') }}" class="btn btn-danger d-none d-sm-inline-block">
+                              <a href="{{ url('admin-loan-statement',$loan_id)}}" class="btn btn-ghost-danger active d-none d-sm-inline-block">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye"
                                           width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5"
@@ -41,7 +41,7 @@
                                     View Loan Details
 
                               </a>
-                              <a href="{{ url('cooperative-loan') }}" class="btn btn-danger d-sm-none btn-icon"
+                              <a href="{{ route('admin-loan-statement',$loan_id)}}" class="btn btn-ghost-danger active d-sm-none btn-icon"
                                     data-bs-toggle="modal" data-bs-target="#modal-fund" aria-label="Create new report">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye"
                                           width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5"
