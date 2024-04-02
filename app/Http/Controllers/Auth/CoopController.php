@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Role;
+use App\Models\CooperativeMemberRole;
 use App\Models\LogActivity ;
 use App\Hpd\Captcha\helper;
 use App\Hpd\Captcha\CaptchaServiceProvider;
@@ -128,7 +129,7 @@ class CoopController extends Controller
 
     public function createMember(Request $request)
     {
-        $coop = User::where('code',  $request->code)->first();  
+        $code = User::where('code',  $request->code)->first();  
         $coopname = $coop->coopname;
            $role = '4';
            $role_name = 'member';
@@ -149,6 +150,13 @@ class CoopController extends Controller
           $user->password     = Hash::make($request['password']);
           $user->save();
            if($user){
+            $memberRole = new CooperativeMemberRole;
+            $memberRole->member_id          = $user->id;
+            $memberRole->cooperative_code   = $code;
+            $memberRole->member_role        = $role;
+            $memberRole->member_role_name  =  $role_name;
+            $memberRole->save();
+
               $voucherDigit = rand(1000000000,9999999999);
                 $voucher = new Voucher();
                 $voucher->user_id = $user->id;
@@ -200,8 +208,8 @@ class CoopController extends Controller
         }
          $password = str_shuffle($randomString);
           $user = new User();
-          $user->role         = $role;
-          $user->role_name    = $request->role;
+          $user->role         = '4';
+          $user->role_name    = 'member';
           $user->fname        = $request->fullname;
           $user->code         = $code;
           $user->coopname     = $cooperativeName;
@@ -211,6 +219,14 @@ class CoopController extends Controller
           $user->password_reset_at = Carbon::now();
           $user->save();
           if($user){
+
+          $memberRole = new CooperativeMemberRole;
+          $memberRole->member_id          = $user->id;
+          $memberRole->cooperative_code   = $code;
+          $memberRole->member_role        = $role;
+          $memberRole->member_role_name  = $request->role;
+          $memberRole->save();
+
           $rand = rand(1000000000,9999999999);
           $voucher = new Voucher();
           $voucher->user_id = $user->id;

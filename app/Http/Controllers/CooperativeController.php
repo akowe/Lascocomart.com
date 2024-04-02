@@ -85,9 +85,13 @@ class CooperativeController extends Controller
         ->where('users.id', $id)
         ->get('credit');
     
-        $members = User::all()->except(Auth::id())
-        ->where('code', $code)
-        ->where('deleted_at',  NULL);  
+        $members = DB::table('users')->join('cooperative_role', 'cooperative_role.cooperative_code', 'users.code')
+        ->select(['users.*', 'cooperative_role.member_role_name', 'cooperative_role.member_id'])
+            ->where('users.code', $code)
+            ->where('users.deleted_at',  NULL)
+            ->where('users.id', '!=', Auth::user()->id)
+            ->orderBy('users.created_at', 'desc');
+
          //sum all member order that is approve for payment
          $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
          ->where('orders.status', 'approved') 
@@ -861,18 +865,18 @@ class CooperativeController extends Controller
             $perPage = $request->perPage ?? 12;
             $search = $request->input('search');
 
-            $members = DB::table('users')->select(['*'])
-            ->where('code', $code)
-            ->where('deleted_at',  NULL)
-            ->where('id', '!=', Auth::user()->id)
-            ->orderBy('created_at', 'desc')
+            $members = DB::table('users')->join('cooperative_role', 'cooperative_role.cooperative_code', 'users.code')
+            ->select(['users.*', 'cooperative_role.member_role_name', 'cooperative_role.member_id'])
+            ->where('users.code', $code)
+            ->where('users.deleted_at',  NULL)
+            ->where('users.id', '!=', Auth::user()->id)
+            ->orderBy('users.created_at', 'desc')
             ->where(function ($query) use ($search) {  // <<<
-            $query->where('fname', 'LIKE', '%'.$search.'%')
-            ->orWhere('lname', 'LIKE', '%'.$search.'%')
-            ->orWhere('email', 'LIKE', '%'.$search.'%')
-            ->orWhere('phone', 'LIKE', '%'.$search.'%')
-            ->where('id', '!=', Auth::user()->id)
-            ->orderBy('created_at', 'desc');
+            $query->where('users.fname', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.lname', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.email', 'LIKE', '%'.$search.'%')
+            ->orWhere('users.phone', 'LIKE', '%'.$search.'%')
+            ->orderBy('users.created_at', 'desc');
             })->paginate($perPage, $columns = ['*'], $pageName = 'members'
             )->appends(['per_page'   => $perPage]);
 
