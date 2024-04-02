@@ -10,26 +10,26 @@
                               Members
                         </div>
                         <h2 class="page-title">
-                        <span class=" d-none  d-md-block">Cooperative&nbsp;</span>ID: {{Auth::user()->code}}&nbsp;
+                              <span class=" d-none  d-md-block">Cooperative&nbsp;</span>ID: {{Auth::user()->code}}&nbsp;
 
-                        <a href="" alt="Copy" title="Copy" class="text-danger"
-                              onclick="copyToClipboard('{{Auth::user()->code}}')"><svg
-                                    xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy  "
-                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path
-                                          d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
-                                    <path
-                                          d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
-                              </svg></a>
+                              <a href="" alt="Copy" title="Copy" class="text-danger"
+                                    onclick="copyToClipboard('{{Auth::user()->code}}')"><svg
+                                          xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy  "
+                                          width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5"
+                                          stroke="currentColor" fill="none" stroke-linecap="round"
+                                          stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path
+                                                d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                                          <path
+                                                d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                                    </svg></a>
                         </h2>
                   </div>
                   <!-- Page title actions -->
                   <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
-
-                              <a href="{{ route('add_new_product') }}" class="btn btn-danger d-none d-sm-inline-block">
+                              <a href="" data-bs-toggle="modal" data-bs-target="#modal-adminAddMember" class="btn btn-danger d-none d-sm-inline-block">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                           viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -40,7 +40,7 @@
                                     </svg>
                                     Add New Member
                               </a>
-                              <a href="{{ route('add_new_product') }}" class="btn btn-danger d-sm-none btn-icon">
+                              <a href="" data-bs-toggle="modal" data-bs-target="#modal-adminAddMember" class="btn btn-danger d-sm-none btn-icon">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                           viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -173,7 +173,29 @@
                                           <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                                     </div>
                                     @endif
-                                 
+
+                                    @if (session('member-status'))
+                                    <div class="alert  alert-danger alert-dismissible" role="alert">
+                                          <div class="d-flex">
+                                                <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M5 12l5 5l10 -10" />
+                                                      </svg>
+
+                                                </div>
+                                                <div>{{ session('member-status') }}</div>
+                                          </div>
+                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                    </div>
+                                    @else
+                                    @endif
+
+
 
                                     @if(Session::has('credit')== true)
                                     <div class="alert alert-important alert-purple alert-dismissible" role="alert">
@@ -220,12 +242,16 @@
                         </div>
                   </div>
                   <!-- Alert stop --->
-                  <div class="col-12">
-                        <div class="card">
-                              <div class="card-header">
-                                    <h3 class="card-title">All Members</h3>
-                              </div>
-                              <div class="card-body border-bottom py-3">
+                  <!-- Page header -->
+                  <div class="page-header d-print-none">
+                        <div class="container-xl">
+                              <div class="row g-2 align-items-center">
+                                    <div class="col">
+                                          <h2 class="page-title">
+                                                Members
+                                          </h2>
+                                    </div>
+                                    <p></p>
                                     <div class="d-flex">
                                           <div class="text-secondary">
                                                 Show
@@ -234,11 +260,14 @@
                                                             name="perPage">
                                                             <option value="5" @if($perPage==5) selected @endif>5
                                                             </option>
-                                                            <option value="10" @if($perPage==10) selected @endif>10
+                                                            <option value="12" @if($perPage==12) selected @endif>
+                                                                  12
                                                             </option>
-                                                            <option value="25" @if($perPage==25) selected @endif>25
+                                                            <option value="25" @if($perPage==25) selected @endif>
+                                                                  25
                                                             </option>
-                                                            <option value="50" @if($perPage==50) selected @endif>50
+                                                            <option value="50" @if($perPage==50) selected @endif>
+                                                                  50
                                                             </option>
                                                       </select>
                                                 </div>
@@ -253,196 +282,244 @@
                                                             <div class="input-group mb-2">
                                                                   <input type="text" class="form-control"
                                                                         placeholder="Search for…" name="search">
-                                                                  <button type ="submit" class="btn" type="button">Go!</button>
+                                                                  <button type="submit" class="btn"
+                                                                        type="button">Go!</button>
                                                             </div>
 
                                                       </form>
                                                 </div>
                                           </div>
-                                    </div>
-                              </div>
 
-                              <div class="table-responsive" id="card">
-                                    <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
-                                          <thead>
-                                                <tr>
-                                                      <th class="w-1"><input class="form-check-input m-0 align-middle"
-                                                                  type="checkbox" aria-label="all member"></th>
-                                                      <th class="w-1">
+                                    </div>
+
+
+                              </div>
+                              <div class="row row-cards">
+                                    <p></p>
+
+                                    @foreach($members as $details)
+                                    @php
+                                    $words = explode(" ", $details->fname, 2 );
+                                    $initials = null;
+                                    foreach ($words as $w) {
+                                    $initials .= $w[0];
+                                    }
+                                    @endphp
+                                    <div class="col-md-6 col-lg-3">
+                                          <div class="card">
+                                                <div class="card-body p-4 text-center">
+                                                      <div class="d-flex align-items-center">
+                                                            <div class="ms-auto lh-1">
+                                                                  <div class="dropdown">
+                                                                        <a class="text-secondary" href="#"
+                                                                              data-bs-toggle="dropdown"
+                                                                              aria-haspopup="true"
+                                                                              aria-expanded="false">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-dots-vertical"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path
+                                                                                          d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                                    <path
+                                                                                          d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                                    <path
+                                                                                          d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                              </svg>
+                                                                        </a>
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                              @csrf
+                                                                              <a href="delete-member/{{$details->id}}"
+                                                                                    onclick="return confirm('Do you want to remove? {{$details->fname}}')"
+                                                                                    class="dropdown-item"> Remove
+                                                                              </a>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      @if($details->profile_img)
+                                                      <span class="avatar avatar-xl mb-3 rounded"
+                                                            style="background-image: url({{$details->profile_img}} )"></span>
+                                                      @else
+                                                      <span class="avatar avatar-xl mb-3 rounded">{{$initials}}</span>
+                                                      @endif
+                                                      <h3 class="m-0 mb-1 text-capitalize"><a href="#">{{ $details->fname }}</a></h3>
+                                                      <p></p>
+                                                      @if($details->phone == '')
+                                                      <div class="text-secondary">&nbsp;</div>
+                                                      @else
+                                                      <div class="text-secondary">{{ $details->phone }}</div>
+                                                      @endif
+
+                                                      <div class="text-secondary">{{ $details->email }}</div>
+                                                      <div class="mt-3">
+                                                            @if($details->role_name == 'member')
+                                                            <span
+                                                                  class="badge bg-teal-lt text-capitalize">{{ $details->role_name }}</span>
+                                                            @elseif($details->role_name == 'vice president')
+                                                            <span
+                                                                  class="badge bg-purple-lt text-capitalize">{{ $details->role_name }}</span>
+                                                            @elseif($details->role_name == 'general secretary')
+                                                            <span
+                                                                  class="badge bg-blue-lt text-capitalize">{{ $details->role_name }}</span>
+                                                            
+                                                            @elseif($details->role_name == 'treasurer')
+                                                            <span
+                                                                  class="badge bg-lime-lt text-capitalize">{{ $details->role_name }}</span>
+                                                             @elseif($details->role_name == 'financial secretary')
+                                                            <span
+                                                                  class="badge bg-cyan-lt text-capitalize">{{ $details->role_name }}</span>
+                                                      @else
+                                                      <span
+                                                                  class="badge bg-red-lt text-capitalize">{{ $details->role_name }}</span>
+                                                      @endif 
+
+                                                      </div>
+
+
+                                                </div>
+
+                                                <div class="d-flex">
+                                                      <a href="mailto:{{ $details->email }}" class="card-btn">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                  class="icon icon-tabler icon-tabler-number" width="24"
-                                                                  height="24" viewBox="0 0 24 24" stroke-width="1.5"
+                                                                  class="icon me-2 text-muted" width="24" height="24"
+                                                                  viewBox="0 0 24 24" stroke-width="2"
                                                                   stroke="currentColor" fill="none"
                                                                   stroke-linecap="round" stroke-linejoin="round">
                                                                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                  <path d="M4 17v-10l7 10v-10" />
-                                                                  <path d="M15 17h5" />
                                                                   <path
-                                                                        d="M17.5 10m-2.5 0a2.5 3 0 1 0 5 0a2.5 3 0 1 0 -5 0" />
+                                                                        d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                                                                  <path d="M3 7l9 6l9 -6" />
                                                             </svg>
-                                                      </th>
-
-
-                                                      <th>Name</th>
-                                                      <th>Email</th>
-                                                      <th>Phone</th>
-                                                      <th>Status</th>
-                                                      <th></th>
-                                                </tr>
-                                          </thead>
-                                          <tbody>
-                                                @foreach($members as $details)
-                                                <tr>
-                                                      <td><input class="form-check-input m-0 align-middle"
-                                                                  type="checkbox" aria-label="Select">
-                                                      </td>
-                                                      <td><span class="text-secondary">{{$loop->iteration}}</span></td>
-                                                      <td>{{ $details->fname }}</td>
-                                                      <td>{{ $details->email }}</td>
-                                                      <td>{{ $details->phone }}</td>
-                                                      <td class="">
-                                                            @if(!empty($details->email_verified_at ))
-                                                            <span class="badge bg-green-lt">verified</span>
-
-                                                            @else
-                                                            <span class="badge bg-yellow-lt">not verified</span>
-
-                                                            @endif
-
-                                                      </td>
-                                                      <td class="text-end">
-                                                            <span class="dropdown">
-                                                                  <button
-                                                                        class="btn dropdown-toggle align-text-top text-red"
-                                                                        data-bs-boundary="viewport"
-                                                                        data-bs-toggle="dropdown">Actions</button>
-                                                                  <div class="dropdown-menu dropdown-menu-end">
-                                                                        @csrf
-                                                                        <a href="delete-member/{{$details->id}}"
-                                                                              onclick="return confirm('Do you want to remove? {{$details->fname}}')"
-                                                                              class="dropdown-item"> Remove
-                                                                        </a>
-
-                                                                  </div>
-                                                            </span>
-                                                      </td>
-
-
-                                                </tr>
-                                                @endforeach
-
-                                          </tbody>
-
-                                    </table>
+                                                            Email
+                                                      </a>
+                                                      <a href="tel:{{ $details->phone }}" class="card-btn">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/phone -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                  class="icon me-2 text-muted" width="24" height="24"
+                                                                  viewBox="0 0 24 24" stroke-width="2"
+                                                                  stroke="currentColor" fill="none"
+                                                                  stroke-linecap="round" stroke-linejoin="round">
+                                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                  <path
+                                                                        d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                                                            </svg>
+                                                            Call
+                                                      </a>
+                                                </div>
+                                          </div>
+                                          <!---card--->
+                                    </div>
+                                    <!--col-6--->
+                                    @endforeach
                               </div>
-                              <div class="card-footer d-flex align-items-center">
-                                    <p class="m-0 text-secondary">
+                              <p></p>
+                        <div class="card-footer d-flex align-items-center">
+                              <p class="m-0 text-secondary">
 
-                                          Showing {{ ($members->currentPage() - 1) * $members->perPage() + 1; }} to
-                                          {{ min($members->currentPage()* $members->perPage(), $members->total()) }}
-                                          of
-                                          {{$members->total()}} entries
-                                    </p>
+                                    Showing {{ ($members->currentPage() - 1) * $members->perPage() + 1; }} to
+                                    {{ min($members->currentPage()* $members->perPage(), $members->total()) }}
+                                    of
+                                    {{$members->total()}} entries
+                              </p>
 
-                                    <ul class="pagination m-0 ms-auto">
-                                          @if(isset($members))
-                                          @if($members->currentPage() > 1)
-                                          <li class="page-item ">
-                                                <a class="page-link text-danger"
-                                                      href="{{ $members->previousPageUrl() }}" tabindex="-1"
-                                                      aria-disabled="true">
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                                            stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M15 6l-6 6l6 6" />
-                                                      </svg>
-                                                      prev
-                                                </a>
-                                          </li>
-                                          @endif
+                              <ul class="pagination m-0 ms-auto">
+                                    @if(isset($members))
+                                    @if($members->currentPage() > 1)
+                                    <li class="page-item ">
+                                          <a class="page-link text-danger" href="{{ $members->previousPageUrl() }}"
+                                                tabindex="-1" aria-disabled="true">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                      stroke="currentColor" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                      <path d="M15 6l-6 6l6 6" />
+                                                </svg>
+                                                prev
+                                          </a>
+                                    </li>
+                                    @endif
+                                    <li class="page-item"> {{ $members->appends(compact('perPage'))->links()  }}
+                                    </li>
+                                    @if($members->hasMorePages())
+                                    <li class="page-item">
+                                          <a class="page-link text-danger" href="{{ $members->nextPageUrl() }}">
+                                                next
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                      stroke="currentColor" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                      <path d="M9 6l6 6l-6 6" />
+                                                </svg>
+                                          </a>
+                                    </li>
+                                    @endif
+                                    @endif
+                              </ul>
+                        </div>
+                        </div>
+                  </div>
+            
+            </div>
+            <!---page body --->
 
 
-                                          <li class="page-item"> {{ $members->appends(compact('perPage'))->links()  }}
-                                          </li>
-                                          @if($members->hasMorePages())
-                                          <li class="page-item">
-                                                <a class="page-link text-danger" href="{{ $members->nextPageUrl() }}">
-                                                      next
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                                            stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M9 6l6 6l-6 6" />
-                                                      </svg>
-                                                </a>
-                                          </li>
-                                          @endif
-                                          @endif
-                                    </ul>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+            <script>
+            document.getElementById('pagination').onchange = function() {
+                  window.location = "{!! $members->url(1) !!}&perPage=" + this.value;
+            };
+            </script>
+            <script>
+            function removeMember() {
+                  var name = document.getElementById('user_id').value;
+                  var answer = window.confirm("Are you sure you want to remove this member?" + name);
+
+                  if (answer) {
+                        var id = document.getElementById('user_id').value;
+                        var showRoute = "{{ route('delete-member', ':id') }}";
+                        url = showRoute.replace(':id', id);
+
+                        window.location = url;
+
+                  } else {
+                        // window.location.reload();
+                  }
+            }
+            </script>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                              <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to remove this
+                                          member?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                    </button>
+                              </div>
+                              <div class="modal-body">
+                                    <p>If you delete this member, he/she will be removed.</p>
+                              </div>
+                              <div class="modal-footer">
+
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                               </div>
                         </div>
-                        <!--- card-->
-
-                  </div>
-                  <!---- col-12 --->
-
-
-            </div>
-            <!--row --->
-      </div>
-      <!---container --->
-</div>
-<!---page body --->
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-<script>
-document.getElementById('pagination').onchange = function() {
-      window.location = "{!! $members->url(1) !!}&perPage=" + this.value;
-};
-</script>
-<script>
-function removeMember() {
-      var name = document.getElementById('user_id').value;
-      var answer = window.confirm("Are you sure you want to remove this member?" + name);
-
-      if (answer) {
-            var id = document.getElementById('user_id').value;
-            var showRoute = "{{ route('delete-member', ':id') }}";
-            url = showRoute.replace(':id', id);
-
-            window.location = url;
-
-      } else {
-            // window.location.reload();
-      }
-}
-</script>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                  <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to remove this member?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                        </button>
-                  </div>
-                  <div class="modal-body">
-                        <p>If you delete this member, he/she will be removed.</p>
-                  </div>
-                  <div class="modal-footer">
-
-
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
             </div>
-      </div>
-</div>
 
-@endsection
+            @endsection

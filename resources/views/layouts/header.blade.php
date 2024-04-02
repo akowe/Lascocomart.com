@@ -121,98 +121,112 @@
                               <li>
                                     <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
                               </li>
-                              <li> <a href="{{ url('cooperative-loan') }}">
-
-                                          Loan Management
-                                    </a></li>
+                            
                               <li>
                                     <!--show member name-->
-                                    @if (Route::has('login'))
+                               @if (Route::has('login'))
                                     @auth
-                              <li class="nav-item dropdown">
-
-                                    <a href="" class="dropbtn"> My Account</a>
-                                    @if(Auth::user()->role_name == 'cooperative')
-                                    <div class="dropdown-content">
-                                          <a href="{{ route('cooperative') }}">Dashboard</a>
-                                          <a href="{{ url('fmcgs_products') }}">FMCG</a>
-                                          <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                          </a>
-                                          <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                          </form>
-                                    </div>
+                                    @if(Auth::user()->role_name == 'cooperative') 
+                                    <li>
+                                          <a href="{{ url('cooperative-loan') }}"> Loan Management</a>
+                                    </li>
                                     @endif
 
-
-                                    @if(Auth::user()->role_name == 'merchant')
-                                    <div class="dropdown-content">
-                                          <a href="{{ route('merchant') }}">Dashboard</a>
-                                          <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                          </a>
-                                          <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                          </form>
-
-                                    </div>
+                                    @if(Auth::user()->role_name == 'member') 
+                                    <li>
+                                          <a href="{{ url('member-loan-history') }}"> Loan Management</a>
+                                    </li>
                                     @endif
+                                    
+                                    <li class="nav-item dropdown">
+
+                                          <a href="" class="dropbtn"> My Account</a>
+                                          @if(Auth::user()->role_name == 'cooperative')
+                                          <div class="dropdown-content">
+                                                <a href="{{ route('cooperative') }}">Dashboard</a>
+                                                <a href="{{ url('fmcgs_products') }}">FMCG</a>
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();">
+                                                      {{ __('Logout') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                      class="d-none">
+                                                      @csrf
+                                                </form>
+                                          </div>
+                                          @endif
 
 
-                                    @if(Auth::user()->role_name == 'member')
-                                    <div class="dropdown-content">
-                                          <a href="{{ route('dashboard') }}">Dashboard</a>
-                                          <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                          </a>
-                                          <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                          </form>
-                                    </div>
-                                    @endif
+                                          @if(Auth::user()->role_name == 'merchant')
+                                          <div class="dropdown-content">
+                                                <a href="{{ route('merchant') }}">Dashboard</a>
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();">
+                                                      {{ __('Logout') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                      class="d-none">
+                                                      @csrf
+                                                </form>
 
-                                    @if(Auth::user()->role_name == 'superadmin')
-                                    <div class="dropdown-content">
-                                          <a href="{{ route('superadmin') }}">Dashboard</a>
-                                          <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                          </a>
-                                          <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                          </form>
-                                    </div>
-                                    @endif
-                                    @if(Auth::user()->role_name == 'fmcg')
-                                    <div class="dropdown-content">
-                                          <a href="{{ route('fmcg') }}">Dashboard</a>
+                                          </div>
+                                          @endif
 
-                                          <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                          </a>
-                                          <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                          </form>
-                                    </div>
-                                    @endif
-                                    @else
-                                    >
-                                    <a href="{{ route('login') }}"
-                                          class="text-sm text-gray-700 dark:text-gray-500 underline">Login /
-                                          Register</a>
-                              </li>
-                              @endauth
+
+                                          @if(Auth::user()->role_name == 'member')
+                                          <div class="dropdown-content">
+                                                <a href="{{ route('dashboard') }}">Dashboard</a>
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();">
+                                                      {{ __('Logout') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                      class="d-none">
+                                                      @csrf
+                                                </form>
+                                          </div>
+                                          @endif
+
+                                          @if(Auth::user()->role_name == 'superadmin')
+                                          <div class="dropdown-content">
+                                                <a href="{{ route('superadmin') }}">Dashboard</a>
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();">
+                                                      {{ __('Logout') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                      class="d-none">
+                                                      @csrf
+                                                </form>
+                                          </div>
+                                          @endif
+                                          @if(Auth::user()->role_name == 'fmcg')
+                                          <div class="dropdown-content">
+                                                <a href="{{ route('fmcg') }}">Dashboard</a>
+
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();">
+                                                      {{ __('Logout') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                      class="d-none">
+                                                      @csrf
+                                                </form>
+                                          </div>
+                                          
+                                    </li>
+                                      @endif
+                                       @else
+                                     
+                                     <li class="nav-item dropdown">
+                                              <a href="{{ route('login') }}"
+                                                class="text-sm text-gray-700 dark:text-gray-500 underline">Login /
+                                                Register</a>
+                                    </li>
+                                    @endauth
+                                     
                               @endif
+                              
                               <!-- end show member name-->
 
 

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Haruncpi\LaravelUserActivity\Traits\Loggable;
+use Illuminate\Support\Str;
 
 
 
@@ -67,6 +68,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     return $this->hasMany(Product::class,'user_id','id');
 
-    }  
+    } 
+    public function initials(){
+        $words = explode(" ", $this->fname, 2 );
+        $initials = null;
+        foreach ($words as $w) {
+            $initials .= $w[0];
+        }
+        return strtoupper($initials);
+     } 
 }
 

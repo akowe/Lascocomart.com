@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -14,12 +15,17 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use App\Models\Voucher;
 use App\Models\Wallet;
-use Session;
+use App\Models\Role;
 use App\Models\LogActivity ;
 use App\Hpd\Captcha\helper;
 use App\Hpd\Captcha\CaptchaServiceProvider;
 use App\Hpd\Captcha\CaptchaController;
 use App\Hpd\Captcha\Captcha;
+use App\Mail\NewUserEmail;
+use Session;
+use Auth;
+use Mail; 
+use Carbon\Carbon;
 
 
 
@@ -46,8 +52,6 @@ class CoopController extends Controller
     }
    
     public function registerCooperative(Request $request){
-    
-    
         return view('auth.cooperative-register');
     }
 
@@ -77,7 +81,6 @@ class CoopController extends Controller
             $image->move(public_path('assets/cooperativeCert'),$imageName);
             $image_path = "/assets/cooperativeCert/".$imageName; 
            //new User;
-
         $user = new User();
         $user->role         = $role;
         $user->role_name    = $role_name;
@@ -113,12 +116,10 @@ class CoopController extends Controller
                 $log->agent =$request->header('user-agent');
                 $log->user_id = $user->id;
                 $log->save();
-       
          }
             Session::flash('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
             Session::flash('alert-class', 'alert-success'); 
-          return redirect('/')->with('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
-        
+          return redirect('/')->with('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');     
     }
 
     public function registerMember(Request $request){
@@ -168,15 +169,73 @@ class CoopController extends Controller
                 $log->agent =$request->header('user-agent');
                 $log->user_id = $user->id;
                 $log->save();
-       
            }
-           
             Session::flash('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk'); 
             Session::flash('alert-class', 'alert-success'); 
-         // return $user;
-
-          return redirect('/')->with('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');   
-        
-        
+          return redirect('/')->with('success', ' You have successfully registered!. <br> Verification link has been sent to your email address. <br> Check your inbox or spam/junk');        
     }
-}
+
+    public function adminAddNewMember(Request $request){
+      if(Auth::user()->role_name  == 'cooperative'){
+        $code = Auth::user()->code;
+        $cooperativeName = Auth::user()->coopname;
+        $request->validate([
+            'email'     =>'required|max:255|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'fullname'  => 'required|max:255', 
+            'phone'     => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
+            'role'      => 'required|string',
+        ]);
+  
+         $role =DB::table('role')
+         ->where('role_name', $request->role)
+         ->select('*')
+         ->pluck('role')->first();
+
+         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+         $randomString = '';
+        $num = 8;
+        for ($a = 0; $a < $num; $a++) {
+           $index = rand(0, strlen($characters) - 1);
+           $randomString .= $characters[$index];
+        }
+         $password = str_shuffle($randomString);
+          $user = new User();
+          $user->role         = $role;
+          $user->role_name    = $request->role;
+          $user->fname        = $request->fullname;
+          $user->code         = $code;
+          $user->coopname     = $cooperativeName;
+          $user->phone        = $request->phone;
+          $user->email        = $request->email;
+          $user->password     = Hash::make($password);
+          $user->password_reset_at = Carbon::now();
+          $user->save();
+          if($user){
+          $rand = rand(1000000000,9999999999);
+          $voucher = new Voucher();
+          $voucher->user_id = $user->id;
+          $voucher->voucher = $rand;
+          $voucher->credit = '0';
+          $voucher->save();
+            
+          $wallet = new Wallet();
+          $wallet->user_id = $user->id;
+          $wallet->balance = '0';
+          $wallet->save();
+          $email= $request->email;
+         // $url = 'http://localhost:8000/show-set-password/'.$email;
+          //send emailto new user
+          $data = 
+          array(
+            'password'   => $password ,   
+            'email'     => $email,
+        );
+          Mail::to($email)->send(new NewUserEmail($data));  
+        }
+  
+          Session::flash('success', ' New member created successfully. Login details has been sent to user email address. <br> User to check his/her inbox or spam/junk'); 
+          Session::flash('alert-class', 'alert-success'); 
+          return redirect()->back()->with('success', ' New member created successfully.  Login details has been sent to user email address. <br> User to check his/her inbox or spam/junk');         
+      }
+    }
+}//class

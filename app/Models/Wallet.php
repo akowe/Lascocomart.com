@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Wallet extends Model
 {
     use HasFactory;
-    protected $fillable = 'wallet';
-    public function initiator() {
-        return $this->belongsTo(User::class, 'sender_id');
-    }
+    protected $table = 'wallet';
+    // public function initiator() {
+    //     return $this->belongsTo(User::class, 'sender_id');
+    // }
 
-    public function receiver() {
-        return $this->belongsTo(User::class, 'receiver_id');
-    }
+    // public function receiver() {
+    //     return $this->belongsTo(User::class, 'receiver_id');
+    // }
 }

@@ -278,6 +278,7 @@ Route::controller(CoopController::class)->group(function () {
     Route::get('member-register',  'registerMember')->name('member-register');
     Route::post('create-member',  'createMember')->name('create-member');
     Route::post('coop_insert', 'coop_insert')->name('coop_insert');
+    Route::post('add-member', 'adminAddNewMember')->name('add-member');
 });
 //Merchant signup
 Route::controller(SellerController::class)->group(function () {

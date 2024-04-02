@@ -77,7 +77,7 @@ class NewAdminUserController extends Controller
             
           $wallet = new Wallet();
           $wallet->user_id = $user->id;
-          $wallet->credit = '0';
+          $wallet->balance = '0';
           $wallet->save();
           $email= $request->email;
          // $url = 'http://localhost:8000/show-set-password/'.$email;

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Role;
 use App\Models\SMS;
 use App\Models\Profile;
 use App\Models\Voucher;
@@ -83,7 +85,9 @@ class CooperativeController extends Controller
         ->where('users.id', $id)
         ->get('credit');
     
-        $members = User::all()->except(Auth::id())->where('code', $code);  
+        $members = User::all()->except(Auth::id())
+        ->where('code', $code)
+        ->where('deleted_at',  NULL);  
          //sum all member order that is approve for payment
          $sumApproveOrder = User::join('orders', 'orders.user_id', '=', 'users.id')
          ->where('orders.status', 'approved') 
@@ -837,6 +841,7 @@ class CooperativeController extends Controller
         if( Auth::user()->role_name  == 'cooperative'){
             $id = Auth::user()->id;
             $code = Auth::user()->code;
+            $selectRole = Role::all();
             $owncredit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('users.id', $id)
             ->get('credit'); 
@@ -853,11 +858,12 @@ class CooperativeController extends Controller
             ->get(); 
 
             //$members = User::all()->except(Auth::id())->where('code', $code); 
-            $perPage = $request->perPage ?? 10;
+            $perPage = $request->perPage ?? 12;
             $search = $request->input('search');
 
             $members = DB::table('users')->select(['*'])
             ->where('code', $code)
+            ->where('deleted_at',  NULL)
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('created_at', 'desc')
             ->where(function ($query) use ($search) {  // <<<
@@ -877,10 +883,10 @@ class CooperativeController extends Controller
                 'credit', 
                 'owncredit', 
                 'members',
-                'adminActiveMember'))->withDetails($pagination );    
+                'adminActiveMember','selectRole'))->withDetails($pagination );    
             }
             else{
-                redirect()->back()->with('status', 'No record found'); 
+                redirect()->back()->with('member-status', 'No record found'); 
             }   
             \LogActivity::addToLog('Admin members');
             return view('cooperative.all_members', compact(
@@ -888,7 +894,7 @@ class CooperativeController extends Controller
             'credit', 
             'owncredit', 
             'members',
-            'adminActiveMember'));
+            'adminActiveMember','selectRole'));
         }
         else { return Redirect::to('/login');}
     

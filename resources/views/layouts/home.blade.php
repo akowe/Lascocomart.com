@@ -1447,49 +1447,26 @@
                                                                                           </span>
                                                                                     </a>
                                                                                     <div class="dropdown-menu">
-                                                                                          <div
-                                                                                                class="dropdown-menu-columns">
-                                                                                                <div
-                                                                                                      class="dropdown-menu-column">
+                                                                                          <div class="dropdown-menu-columns">
+                                                                                                <div class="dropdown-menu-column">
+                                                                                                <a class="dropdown-item"
+                                                                                                            href="" data-bs-toggle="modal" data-bs-target="#modal-adminAddMember">
+                                                                                                            Add Member
+                                                                                                            <span
+                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                                                      </a>
                                                                                                       <a class="dropdown-item"
                                                                                                             href="{{url('members')}}"
                                                                                                             rel="noopener">
                                                                                                             Members List
                                                                                                       </a>
-                                                                                                      <div
-                                                                                                            class="dropend">
-                                                                                                            <a class="dropdown-item dropdown-toggle"
-                                                                                                                  href="#sidebar-authentication"
-                                                                                                                  data-bs-toggle="dropdown"
-                                                                                                                  data-bs-auto-close="outside"
-                                                                                                                  role="button"
-                                                                                                                  aria-expanded="false">
-                                                                                                                  Excos
+                                                                                                            <a class="dropdown-item">
+                                                                                                                  Excos Members
                                                                                                             </a>
-                                                                                                            <div
-                                                                                                                  class="dropdown-menu">
-                                                                                                                  <a href=""
-                                                                                                                        class="dropdown-item">
-                                                                                                                        Secretary
-                                                                                                                  </a>
-                                                                                                                  <a href=""
-                                                                                                                        class="dropdown-item">
-                                                                                                                        Accountant
-                                                                                                                  </a>
-                                                                                                            </div>
-                                                                                                      </div>
+                                                                                                           
+                                                                                                          
                                                                                                 </div>
 
-                                                                                                <div
-                                                                                                      class="dropdown-menu-column">
-                                                                                                      <a class="dropdown-item"
-                                                                                                            href="">
-                                                                                                            Add Member
-                                                                                                            <span
-                                                                                                                  class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                                                                                      </a>
-
-                                                                                                </div>
                                                                                           </div>
                                                                                     </div>
                                                                               </li>
@@ -1599,13 +1576,13 @@
                                                                                                             href="">
                                                                                                             Withdrawal
                                                                                                       </a>
-                                                                                                      <a href="#"
+                                                                                                      <!-- <a href="#"
                                                                                                             class="dropdown-item"
                                                                                                             data-bs-toggle="modal"
                                                                                                             data-bs-target="#modal-credit">
                                                                                                             Request
                                                                                                             Credit
-                                                                                                      </a>
+                                                                                                      </a> -->
 
                                                                                                 </div>
                                                                                           </div>
@@ -2570,7 +2547,258 @@
                                                 </div>
                                           </div>
                                     </div>
-                                    <!--- end fund modal --->
+                                    <!--- end credit modal --->
+
+
+                                    <!-- admin add member--->
+
+                                    <div class="modal modal-blur fade" id="modal-adminAddMember" tabindex="-1"
+                                          role="dialog" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">Add New Member </h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            @auth
+                                                            @if(Auth::user()->role_name == 'cooperative')
+                                                            <form method="POST"
+                                                                  action="{{ route('add-member') }}">
+                                                                  @csrf
+                                                                  <div class="row g-3">
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Full Name
+                                                                              </div>
+                                                                              <input type="text" class="form-control"
+                                                                                    name="fullname" value="">
+                                                                              @error('fullname')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Email
+                                                                              </div>
+                                                                              <input type="text" class="form-control"
+                                                                                    name="email" value="">
+                                                                              @error('email')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+                                                                  </div>
+                                                                  <p></p>
+                                                                  <div class="row g-3">
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Mobile
+                                                                              </div>
+                                                                              <input type="text" name="phone" class="form-control" data-mask="0000-0000-0000" data-mask-visible="true" placeholder="0000-0000-0000" autocomplete="off" maxlength="13">
+                                                                              @error('phone')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Role
+                                                                              </div>
+                                                                              <select name="role" id="" class="form-control text-capitalize">
+                                                                                    <option value="">Choose</option>
+                                                                                    @foreach(App\Models\Role::whereNotIn('id', array(1, 2, 3, 5))->get() as
+                                                                                    $role)
+                                                                                    <option value="{{$role->role_name}}">{{$role->role_name}}</option>
+
+                                                                                    @endforeach
+                                                                              </select>
+
+                                                                              @error('role')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <!-- <h3 class="card-title mt-4">EXCO (s)</h3>
+                                                      <p class="card-subtitle">Is  this  person an exco member?
+                                                      </p>
+                                                      <div>
+                                                            <label class="form-check form-switch form-switch-lg">
+                                                                  <input class="form-check-input" type="checkbox"
+                                                                        name="exco">
+                                                                  <span class="form-check-label form-check-label-on">EXCO
+                                                                        yes</span>
+                                                                  <span class="form-check-label form-check-label-off">
+                                                                        no</span>
+                                                            </label>
+                                                      </div> -->
+
+
+                                                                  <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-link link-secondary"
+                                                                              data-bs-dismiss="modal">
+                                                                              Cancel
+                                                                        </a>
+                                                                        <button type="submit" name="submit"
+                                                                              class="btn btn-danger ms-auto">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-send"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M10 14l11 -11" />
+                                                                                    <path
+                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                                                              </svg>
+                                                                              Send
+                                                                        </button>
+                                                                  </div>
+                                                            </form>
+                                                            @endif
+                                                            @endauth
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+
+                                    <!----end add member --->
 
                                     <!-- Libs JS -->
                                     <script src="/back/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
