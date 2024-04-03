@@ -360,29 +360,17 @@
 
                                                       <div class="text-secondary">{{ $details->email }}</div>
                                                       <div class="mt-3">
-                                                      @if($details->member_id ==  $details->id)
-                                                            @if($details->member_role_name == 'vice president')
-                                                            <span
-                                                                  class="badge bg-purple-lt text-capitalize">{{ $details->member_role_name }}</span>
-                                                            @elseif($details->member_role_name == 'general secretary')
-                                                            <span
-                                                                  class="badge bg-blue-lt text-capitalize">{{ $details->member_role_name }}</span>
-                                                            
-                                                            @elseif($details->member_role_name == 'treasurer')
-                                                            <span
-                                                                  class="badge bg-lime-lt text-capitalize">{{ $details->member_role_name }}</span>
-                                                             @elseif($details->member_role_name == 'financial secretary')
-                                                            <span
-                                                                  class="badge bg-cyan-lt text-capitalize">{{ $details->member_role_name }}</span>
-                                                            @else
-                                                            @endif 
+                                                      @if( $details->member_role_name == 'vice president')
+                                                      <span class="badge bg-cyan-lt text-capitalize">{{ $details->member_role_name }}</span>
+                                                      @elseif( $details->member_role_name == 'general secretary')
+                                                      <span class="badge bg-azure-lt text-capitalize">{{ $details->member_role_name }}</span>
+                                                      @elseif( $details->member_role_name == 'financial secretary')
+                                                      <span class="badge bg-indigo-lt text-capitalize">{{ $details->member_role_name }}</span>
+                                                      @elseif( $details->member_role_name == 'treasurer')
+                                                      <span class="badge bg-green-lt text-capitalize">{{ $details->member_role_name }}</span>
                                                       @else
-                                                            <span
-                                                                  class="badge bg-teal-lt text-capitalize">{{ $details->role_name }}</span>
-                                                      @endif 
-                                        
-
-
+                                                      <span class="badge bg-pink-lt text-capitalize">{{ $details->member_role_name }}</span>
+                                                     @endif 
                                                       </div>
 
 

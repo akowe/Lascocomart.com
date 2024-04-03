@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\CooperativeMemberRole;
 use App\Models\SMS;
 use App\Models\Profile;
 use App\Models\Voucher;
@@ -80,13 +81,40 @@ class CooperativeController extends Controller
             Session::flash('alert-class', 'alert-success'); 
             return Redirect::to('/account-settings');     
           }
-   
+        //Get admin existing member   
+        $getAdminMeberID = User::where('code', $code)->where('users.id', '!=', Auth::user()->id)->get('id');
+        foreach($getAdminMeberID as $coopMID){  
+            $getAdminMeberRoleName = User::whereIn('id', $coopMID)->get();
+            $getRoleName = Arr::pluck($getAdminMeberRoleName, 'role_name');
+            $roleName = implode(" ",$getRoleName);
+
+            $getAdminMeberRole = User::whereIn('id', $coopMID)->get();
+            $getRole = Arr::pluck($getAdminMeberRole, 'role');
+            $role = implode(" ",$getRole);  
+            
+            $getMemberIDs = User::whereIn('id', $coopMID)->get();
+            $getIDs = Arr::pluck($getMemberIDs, 'id');
+            $memberIDs = implode(" ",$getIDs);     
+        
+            if (CooperativeMemberRole::where('member_id', $memberIDs)->exists()) {
+                // The record exists
+            } else {
+                  $item =  CooperativeMemberRole::firstOrNew([
+                    'cooperative_code' => $code,
+                    'member_id' => $memberIDs,
+                    'member_role' => $role, 
+                    'member_role_name' => $roleName,
+                ]);   
+            $item->save();
+            }
+        }
+       
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit');
     
-        $members = DB::table('users')->join('cooperative_role', 'cooperative_role.cooperative_code', 'users.code')
-        ->select(['users.*', 'cooperative_role.member_role_name', 'cooperative_role.member_id'])
+        $members = DB::table('users')
+        ->select(['users.*'])
             ->where('users.code', $code)
             ->where('users.deleted_at',  NULL)
             ->where('users.id', '!=', Auth::user()->id)
@@ -849,24 +877,21 @@ class CooperativeController extends Controller
             $owncredit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('users.id', $id)
             ->get('credit'); 
-        
             $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
             ->where('users.code', $code) 
             ->where('users.email_verified_at', '!=','null')
             ->paginate( $request->get('per_page', 10));
-
              //users logged from the beggining of current callendar month
             $adminActiveMember =  User::where('code', $code)
             ->where('id', '!=', Auth::user()->id)
             ->where('last_login', '>', new DateTime('last day of previous month'))
-            ->get(); 
-
+            ->get();
             //$members = User::all()->except(Auth::id())->where('code', $code); 
             $perPage = $request->perPage ?? 12;
             $search = $request->input('search');
 
-            $members = DB::table('users')->join('cooperative_role', 'cooperative_role.cooperative_code', 'users.code')
-            ->select(['users.*', 'cooperative_role.member_role_name', 'cooperative_role.member_id'])
+             $members = DB::table('users')->join('cooperative_role', 'cooperative_role.member_id', 'users.id')
+            ->select(['users.*', 'cooperative_role.member_role_name'])
             ->where('users.code', $code)
             ->where('users.deleted_at',  NULL)
             ->where('users.id', '!=', Auth::user()->id)
