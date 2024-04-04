@@ -103,10 +103,10 @@ class CoopController extends Controller
               $voucher->credit = '0';
               $voucher->save();
   
-              $wallet = new Wallet();
-              $wallet->user_id = $user->id;
-              $wallet->balance = '0';
-              $wallet->save();
+              // $wallet = new Wallet();
+              // $wallet->user_id = $user->id;
+              // $wallet->balance = '0';
+              // $wallet->save();
             
               //LOG NEW REGISTER COOPERATIVE
                 $log = new LogActivity();
@@ -129,8 +129,8 @@ class CoopController extends Controller
 
     public function createMember(Request $request)
     {
-        $code = User::where('code',  $request->code)->first();  
-        $coopname = $coop->coopname;
+        $coperative = User::where('code',  $request->code)->first();  
+        $coopname = $coperative->coopname;
            $role = '4';
            $role_name = 'member';
 
@@ -152,7 +152,7 @@ class CoopController extends Controller
            if($user){
             $memberRole = new CooperativeMemberRole;
             $memberRole->member_id          = $user->id;
-            $memberRole->cooperative_code   = $code;
+            $memberRole->cooperative_code   = $request->code;
             $memberRole->member_role        = $role;
             $memberRole->member_role_name  =  $role_name;
             $memberRole->save();
@@ -164,10 +164,10 @@ class CoopController extends Controller
                 $voucher->credit = '0';
                 $voucher->save();
 
-                $wallet = new Wallet();
-                $wallet->user_id = $user->id;
-                $wallet->balance = '0';
-                $wallet->save();
+                // $wallet = new Wallet();
+                // $wallet->user_id = $user->id;
+                // $wallet->balance = '0';
+                // $wallet->save();
                 //LOG NEW REGISTER MEMBER
                 $log = new LogActivity();
                 $log->subject = 'Signup';
@@ -234,11 +234,11 @@ class CoopController extends Controller
           $voucher->credit = '0';
           $voucher->save();
             
-          $wallet = new Wallet();
-          $wallet->user_id = $user->id;
-          $wallet->balance = '0';
-          $wallet->save();
-          $email= $request->email;
+          // $wallet = new Wallet();
+          // $wallet->user_id = $user->id;
+          // $wallet->balance = '0';
+          // $wallet->save();
+          // $email= $request->email;
          // $url = 'http://localhost:8000/show-set-password/'.$email;
           //send emailto new user
           $data = 

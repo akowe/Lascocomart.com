@@ -81,10 +81,10 @@ class SellerController extends Controller
                   $voucher->credit = '0';
                   $voucher->save();
       
-                  $wallet = new Wallet();
-                  $wallet->user_id = $user->id;
-                  $wallet->balance = '0';
-                  $wallet->save();
+                  // $wallet = new Wallet();
+                  // $wallet->user_id = $user->id;
+                  // $wallet->balance = '0';
+                  // $wallet->save();
 
                 //LOG NEW REGISTER SELLER
                 $log = new LogActivity();
