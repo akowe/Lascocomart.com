@@ -223,14 +223,14 @@ class CooperativeLoan extends Controller
         if(Auth::user()->role_name == 'cooperative'){
             $user_id = Auth::user()->id; 
             $cooperativeCode = Auth::user()->code;
-            $this->validate($request, [ 
+            $this->validate($request, [  
             'name'              => 'required|string|max:255',
             'rate'              => 'required|string|max:255',
             'rate_type'         => 'required|string|max:255',
-            'guarantor'         => 'string|max:255',
+            // 'guarantor'         => 'max:255',
             'minimum_duration'  => 'string|max:255',
             'maximum_duration'  => 'required|string|max:255',
-            'description'       => 'string|max:255',
+            'description'       => 'max:255',
              ]);
 
             $addLoan  = new LoanType;
@@ -239,7 +239,7 @@ class CooperativeLoan extends Controller
             $addLoan->name              = $request->name;
             $addLoan->percentage_rate   = $request->rate;
             $addLoan->rate_type         = $request->rate_type;
-            $addLoan->guarantor         = $request->guarantor;
+            // $addLoan->guarantor         = $request->guarantor;
             $addLoan->min_duration      = $request->minimum_duration;
             $addLoan->max_duration      = $request->maximum_duration;
             $addLoan->description       = $request->description;

@@ -54,8 +54,8 @@
 <div class="page-body">
       <div class="container-xl">
             <div class="row row-deck row-cards">
-                    <!-- Alert start --->
-                    <div class="container-xl">
+                  <!-- Alert start --->
+                  <div class="container-xl">
                         <div class="row ">
                               <div class="col-12">
                                     <p></p>
@@ -85,8 +85,8 @@
                                     <div class="alert alert-important  alert-success alert-dismissible" role="alert">
                                           <div class="d-flex">
                                                 <div>
-                                                     <!-- Download SVG icon from http://tabler-icons.io/i/check -->
-                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
                                                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                                             stroke="currentColor" fill="none" stroke-linecap="round"
                                                             stroke-linejoin="round">
@@ -186,15 +186,16 @@
                                                       </td>
 
                                                       <td>
-                                                      <h4 class="strong text-capitalize">
-                                                      {{$loantype->name}}
+                                                            <h4 class="strong text-capitalize">
+                                                                  {{$loantype->name}}
                                                             </h4>
                                                             <div class="text-secondary">
-                                                            @if(!empty($loantype->description))
-                                                      <span class="text-lowwercase">{{$loantype->description}}</span>
-                                                            @else 
-                                                            @endif
-                                                            </div>   
+                                                                  @if(!empty($loantype->description))
+                                                                  <span
+                                                                        class="text-lowwercase">{{$loantype->description}}</span>
+                                                                  @else
+                                                                  @endif
+                                                            </div>
                                                       </td>
                                                       <td class="text-capitalize">{{$loantype->rate_type}}</td>
                                                       <td>{{$loantype->percentage_rate}}</td>
@@ -287,4 +288,302 @@
             </div><!-- row -->
       </div>
 </div>
+
+
+
+                                    <!---Add loan type --->
+                                    <div class="modal modal-blur fade" id="modal-loantype" tabindex="-1" role="dialog"
+                                          aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">New Loan Type</h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                            @auth
+                                                            @if(Auth::user()->role_name == 'cooperative')
+                                                            <form method="POST" action="{{ route('add-loan-type') }}">
+                                                                  @csrf
+                                                                  <div class="row g-3">
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Name
+                                                                              </div>
+                                                                              <input type="text" class="form-control"
+                                                                                    name="name" value="">
+                                                                              @error('name')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+
+                                                                        <!-- <div class="col-md">
+                                                                              <div class="form-label ">Gurator ? (optional)</div>
+                                                                              <select name="guarantor"class="form-control">
+                                                                                    <option value="">Choose</option>
+                                                                                    <option value="yes">Yes</option>
+                                                                                    <option value="no">No</option>
+                                                                              </select>
+                                                                        </div> -->
+
+                                                                  </div>
+                                                                  <p></p>
+                                                                  <div class="row g-3">
+
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Rate type
+                                                                              </div>
+                                                                              <select name="rate_type" id=""
+                                                                                    class="form-control">
+                                                                                    <option value="">Choose</option>
+                                                                                    <option value="flat rate">Flat /
+                                                                                          Fixed Rate</option>
+                                                                                    <option value="simple interest">
+                                                                                          Simple Interest Rate</option>
+                                                                              </select>
+                                                                              @error('rate_type')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                        </div>
+
+                                                                        <div class="col-md">
+                                                                              <div class="mb-3">
+                                                                                    <div class="form-label required">
+                                                                                          Interest
+                                                                                          %
+                                                                                    </div>
+
+                                                                                    <div class="value-button"
+                                                                                          id="decrease"
+                                                                                          onclick="decreaseRate()"
+                                                                                          value="decrease Value">-</div>
+                                                                                    <input type="text" name="rate"
+                                                                                          value="0" id="rate">
+                                                                                    <div class="value-button"
+                                                                                          id="increase"
+                                                                                          onclick="increaseRate()"
+                                                                                          value="Increase Value">+</div>
+
+                                                                                    @error('rate')
+                                                                                    <div class="alert alert-danger alert-dismissible"
+                                                                                          role="alert">
+                                                                                          <div class="d-flex">
+                                                                                                <div>
+                                                                                                      <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                      <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                            class="icon alert-icon"
+                                                                                                            width="24"
+                                                                                                            height="24"
+                                                                                                            viewBox="0 0 24 24"
+                                                                                                            stroke-width="2"
+                                                                                                            stroke="currentColor"
+                                                                                                            fill="none"
+                                                                                                            stroke-linecap="round"
+                                                                                                            stroke-linejoin="round">
+                                                                                                            <path stroke="none"
+                                                                                                                  d="M0 0h24v24H0z"
+                                                                                                                  fill="none" />
+                                                                                                            <path
+                                                                                                                  d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                            <path
+                                                                                                                  d="M12 8v4" />
+                                                                                                            <path
+                                                                                                                  d="M12 16h.01" />
+                                                                                                      </svg>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                      {{ $message }}
+                                                                                                </div>
+                                                                                          </div>
+                                                                                          <a class="btn-close"
+                                                                                                data-bs-dismiss="alert"
+                                                                                                aria-label="close"></a>
+                                                                                    </div>
+                                                                                    @enderror
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <p></p>
+                                                                  <div class="row g-3">
+                                                                        <div class="col-md">
+                                                                              <div class="form-label">Minimum Loan
+                                                                                    Duration (in months)</div>
+                                                                              <div class="value-button" id="decrease"
+                                                                                    onclick="decreaseMin()"
+                                                                                    value="decrease Value">-</div>
+                                                                              <input type="number"
+                                                                                    name="minimum_duration" value="1"
+                                                                                    id="min">
+
+                                                                              <div class="value-button" id="increase"
+                                                                                    onclick="increaseMin()"
+                                                                                    value="Increase Value">+</div>
+                                                                        </div>
+
+
+                                                                        <div class="col-md">
+                                                                              <div class="form-label required">Maximum
+                                                                                    Loan Duration (in months)</div>
+                                                                              <div class="value-button" id="decrease"
+                                                                                    onclick="decreaseMax()"
+                                                                                    value="decrease Value">-</div>
+                                                                              <input type="number"
+                                                                                    name="maximum_duration" value="1"
+                                                                                    id="max">
+                                                                              @error('maximum_duration')
+                                                                              <div class="alert alert-danger alert-dismissible"
+                                                                                    role="alert">
+                                                                                    <div class="d-flex">
+                                                                                          <div>
+                                                                                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                      class="icon alert-icon"
+                                                                                                      width="24"
+                                                                                                      height="24"
+                                                                                                      viewBox="0 0 24 24"
+                                                                                                      stroke-width="2"
+                                                                                                      stroke="currentColor"
+                                                                                                      fill="none"
+                                                                                                      stroke-linecap="round"
+                                                                                                      stroke-linejoin="round">
+                                                                                                      <path stroke="none"
+                                                                                                            d="M0 0h24v24H0z"
+                                                                                                            fill="none" />
+                                                                                                      <path
+                                                                                                            d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                      <path
+                                                                                                            d="M12 8v4" />
+                                                                                                      <path
+                                                                                                            d="M12 16h.01" />
+                                                                                                </svg>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                {{ $message }}
+                                                                                          </div>
+                                                                                    </div>
+                                                                                    <a class="btn-close"
+                                                                                          data-bs-dismiss="alert"
+                                                                                          aria-label="close"></a>
+                                                                              </div>
+                                                                              @enderror
+                                                                              <div class="value-button" id="increase"
+                                                                                    onclick="increaseMax()"
+                                                                                    value="Increase Value">+</div>
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <p></p>
+                                                                  <div class="row g-3">
+                                                                        <div class="col-md">
+                                                                        <div class="form-label ">Description
+                                                                                    (optional)</div>
+                                                                              <input type="text" class="form-control"
+                                                                                    name="description"
+                                                                                    placeholder="write a brief about this type of loan">
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-link link-secondary"
+                                                                              data-bs-dismiss="modal">
+                                                                              Cancel
+                                                                        </a>
+                                                                        <button type="submit" name="submit"
+                                                                              class="btn btn-danger ms-auto">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-send"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M10 14l11 -11" />
+                                                                                    <path
+                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                                                              </svg>
+                                                                              Send
+                                                                        </button>
+                                                                  </div>
+                                                            </form>
+                                                            @endif
+                                                            @endauth
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <!--- loan typet modal --->
+
+
 @endsection
