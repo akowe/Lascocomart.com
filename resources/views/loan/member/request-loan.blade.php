@@ -213,7 +213,7 @@
                                                       <span id="urlError"></span>
                                                       <button type="button" name="submit"
                                                             class="btn btn-ghost-danger active ms-auto"
-                                                            onclick="cal_interest()">
+                                                            onclick="cal_interest()" style="display:block;" id="preview">
 
                                                             Preview
                                                       </button>
@@ -417,7 +417,8 @@
             if (amount == null || amount == "" || amount == 0) {
                   document.getElementById('amountError').style.color = 'red';
                   document.getElementById('amountError').innerHTML = 'amount can not be empty';
-
+              
+                  
             } else {
                   document.getElementById('amountError').innerHTML = '';
             }
@@ -425,6 +426,7 @@
             if (id == null || id == "" || id == 0) {
                   document.getElementById('loanError').style.color = 'red';
                   document.getElementById('loanError').innerHTML = 'choose  a loan type';
+                  return false;
 
             } else {
                   document.getElementById('loanError').innerHTML = '';
@@ -436,6 +438,7 @@
                   return false;
 
             } else {
+                  document.getElementById('preview').style.display = 'block';
                   document.getElementById('monthError').innerHTML = ' ';
                   var url = "{{ URL('calculate-interest/') }}" + "/" + id + "/" + amount + "/" + duration;
                   location.href = url;
