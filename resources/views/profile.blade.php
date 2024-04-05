@@ -32,7 +32,7 @@
                                           <path d="M12 17h.01" />
                                     </svg>
                               </div>
-                              <div><a href="{{url('profile') }}" class="cursor"> {!!
+                              <div><a href="{{url('account-settings') }}" class="cursor"> {!!
                                           session('profile') !!}</a></div>
                         </div>
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
