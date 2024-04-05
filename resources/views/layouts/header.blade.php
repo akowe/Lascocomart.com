@@ -379,10 +379,7 @@
                                                 <a href="{{ route('seller-register') }}"> Sell on LascocoMart</a>
                                           </div>
 
-                                          <div class="hidden-lg hidden-md"> 
-                                                <a href="{{ url('cooperative-loan') }}">
-                                                Loan Management</a> 
-                                          </div>
+                                      
 
                                           <!--show member name-->
 
