@@ -21,7 +21,7 @@
                                     <span class="input-group-text">
                                         Wallet
                                           </span>
-                                          <input type="password" value="₦ " class="btn" style="width:140px;">
+                                          <input type="password" value="₦ " class="btn" style="width:140px; color:#00;" disabled>
                                           <span class="input-group-text">
                                                 <a href="" class="text-secondary">
                                                       <i class="fa fa-eye-slash"></i>
