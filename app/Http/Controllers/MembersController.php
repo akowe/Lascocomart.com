@@ -155,9 +155,9 @@ class MembersController extends Controller
         'countOrders', 
         'orders',
         'approvedOrders',
-        'getCooperativeLogo'),
+        'getCooperativeLogo',
         'wallets', 'loan',
-      'dueDtae','loanPeriod');
+      'dueDtae','loanPeriod'));
       }  
       else { return Redirect::to('/login');}
     }
