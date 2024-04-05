@@ -1900,28 +1900,25 @@
                                                                                     <div class="dropdown-menu">
                                                                                           <div
                                                                                                 class="dropdown-menu-columns">
-                                                                                                <div
-                                                                                                      class="dropdown-menu-column">
-
-                                                                                                      <a href="{{ url('member-loan-history') }}"
-                                                                                                            class="dropdown-item">
-                                                                                                            Loan History
-                                                                                                      </a>
-                                                                                                      <a href=""
-                                                                                                            class="dropdown-item">
-                                                                                                            Loan
-                                                                                                            Repayment
-                                                                                                      </a>
-
-                                                                                                </div>
-                                                                                                <div
-                                                                                                      class="dropdown-menu-column">
-                                                                                                      <a href="{{ url('member-request-loan') }}"
+                                                                                                <div class="dropdown-menu-column">
+                                                                                                <a href="{{ url('member-request-loan') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Request Loan
                                                                                                             <span
                                                                                                                   class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
 
+                                                                                                      </a>
+
+                                                                                                      <a href="{{ url('member-loan-history') }}"class="dropdown-item">
+                                                                                                            Loan History
+                                                                                                      </a>
+                                                                                                   
+
+                                                                                                </div>
+                                                                                                <div class="dropdown-menu-column">
+                                                                                                <a href="#" class="dropdown-item">
+                                                                                                            Loan
+                                                                                                            Repayment
                                                                                                       </a>
                                                                                                 </div>
                                                                                           </div>

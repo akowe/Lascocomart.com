@@ -700,6 +700,7 @@
                                     if (id == null || id == "" || id == 0) {
                                           document.getElementById('loanError').style.color = 'red';
                                           document.getElementById('loanError').innerHTML = 'choose  a loan type';
+                                          return false;
 
                                     } else {
                                           document.getElementById('loanError').innerHTML = '';
