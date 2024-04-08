@@ -308,10 +308,10 @@
                                                                   @csrf
                                                                   <div class="row g-3">
                                                                         <div class="col-md">
-                                                                              <div class="form-label required">Name
+                                                                              <div class="form-label required">Name (example: Travel loan, Academic loan, Car laon, Rent, Business Loan)
                                                                               </div>
                                                                               <input type="text" class="form-control"
-                                                                                    name="name" value="">
+                                                                                    name="name" value="" placeholder="Travel, Laptop, Car, Rent ">
                                                                               @error('name')
                                                                               <div class="alert alert-danger alert-dismissible"
                                                                                     role="alert">
@@ -546,7 +546,7 @@
                                                                                     (optional)</div>
                                                                               <input type="text" class="form-control"
                                                                                     name="description"
-                                                                                    placeholder="write a brief about this type of loan">
+                                                                                    placeholder="Write a brief about this type of loan">
                                                                         </div>
                                                                   </div>
 
@@ -572,7 +572,7 @@
                                                                                     <path
                                                                                           d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
                                                                               </svg>
-                                                                              Send
+                                                                              Save
                                                                         </button>
                                                                   </div>
                                                             </form>
