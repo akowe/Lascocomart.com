@@ -62,12 +62,25 @@ class LoanController extends Controller
                 'service_fee'     => 'string|max:255',
             ]);
             $checkExistingLoan = DB::table('loan')->select('loan_balance')
-            ->where('loan_balance', '!=', null)
             ->where('loan_balance', '!=', '0')
+            ->where('loan_status', '=', 'payout')
             ->where('member_id', $id)
             ->get()->first();
+         
+
+            $checkLoanrequest = DB::table('loan')->select('principal')
+            ->where('loan_status', '=', 'request')
+           ->orwhere('loan_status', '=', 'approved')
+            ->where('member_id', $id)
+            ->get()->first();
+
             if($checkExistingLoan){
             return redirect('member-request-loan')->with('loanExist', 'You have unfinished loan');
+            }
+            elseif($checkLoanrequest) {
+                # code...
+                return redirect('member-request-loan')->with('loanExist',  'You have a pending loan request.  Contact admin');
+                
             }
             else{ 
                 $loan = new Loan;
@@ -117,13 +130,24 @@ class LoanController extends Controller
             $checkExistingLoan = Loan::whereIn('member_id', $memberID)
            ->where('loan_balance', '!=', null)
             ->where('loan_balance', '!=', '0')
+            ->where('loan_status', '=', 'payout')
             ->get('*')->pluck('loan_balance');
             $getmMembers = User::join('loan', 'loan.member_id', '=', 'users.id')
             ->whereIn('loan.member_id', $memberID)->get('*')->pluck('fname');
             $members = substr($getmMembers, 1, -1);
 
+            $checkLoanrequest = Loan::whereIn('member_id', $memberID)
+             ->where('loan_status', '=', 'request')
+             ->where('loan_status', '=', 'approved')
+             ->get('*')->pluck('principal');
+
             if(!$checkExistingLoan->isEmpty()){
             return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has unfinished loan');
+            }
+            elseif (!$checkLoanrequest->isEmpty()) {
+                # code...
+                return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has a pending loan request');
+                
             }
             else{ 
                 $loan = new Loan;

@@ -641,14 +641,14 @@
                                                                         </div>
                                                                         @else
                                                                         <!-- <label class="form-check">
-                                                                  <input class="form-check-input" type="checkbox"
-                                                                        name="service_fee">
-                                                                  <span class="form-check-label">
-                                                                        I accept to pay LascocoMart one time service fee of 200 for
-                                                                        this
-                                                                        loan.
-                                                                  </span>
-                                                            </label> -->
+                                                                              <input class="form-check-input" type="checkbox"
+                                                                                    name="service_fee">
+                                                                              <span class="form-check-label">
+                                                                                    I accept to pay LascocoMart one time service fee of 200 for
+                                                                                    this
+                                                                                    loan.
+                                                                              </span>
+                                                                        </label> -->
 
                                                                         <p></p>
 
