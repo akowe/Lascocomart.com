@@ -85,11 +85,55 @@
                         </div>
                   </div>
                   <!-- Alert stop --->
+                  <div class="container-xl">
+                        <div class="card card-lg ">
+                              <div class="card-body">
+                                    <div class="row">
+                                          <div class="loan-datagrid">
+                                                <div class="datagrid-item">
+                                                      <div class="datagrid-title">Existing Loan</div>
+                                                      <div class="ms-auto lh-1" id="principal">
+                                                            <strong>₦{{number_format($loanPrincipal) }}</strong>
+                                                      </div>
+                                                </div>
+                                                <div class="datagrid-item">
+                                                      <div class="datagrid-title">Interest</div>
+                                                      <div class="ms-auto lh-1" id="interest">
+                                                            ₦{{number_format($loanInterest) }}
+                                                      </div>
+                                                </div>
+
+                                                <div class="datagrid-item">
+                                                      <div class="datagrid-title">Next Due Date</div>
+                                                      <div class="ms-auto lh-1" id="interest">
+                                                            {{ $nextDueDate }}
+                                                      </div>
+                                                </div>
+                                                <div class="datagrid-item">
+                                                      <div class="datagrid-title">Amount Due</div>
+                                                  
+                                                      <div class="ms-auto lh-1" id="interest">
+                                                            ₦{{number_format($monthlyDueLoan->sum('monthly_due')) }}
+                                                       <p></p>
+                                                      </div>
+                                                      @if($monthlyDueLoan)
+                                                      <a href="" class="btn">Pay Now</a>
+                                                      @else
+                                                      @endif 
+                                                     
+                                                </div>
+
+                                              
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
 
                   <div class="col-12">
                         <div class="card">
                               <div class="card-header">
-                                    <h3 class="card-title">Loan History </h3>
+                                    <h3 class="card-title">Monthly repayment </h3>
                               </div>
                               <div class="card-body border-bottom py-3">
                                     <div class="d-flex">
@@ -140,6 +184,7 @@
                                                       <th>Duration (in month) </th>
                                                       <th>Principal</th>
                                                       <th>Interest</th>
+                                                      <th>Monthly Due</th>
                                                       <th>Status</th>
                                                       
                                                       <th></th>
@@ -153,8 +198,9 @@
                                                       <td>{{$data->fname}}</td>
                                                       <td>{{$data->name}}</td>
                                                       <td>{{$data->duration}} </td>
-                                                      <td>{{number_format($data->principal)}}</td>
-                                                      <td>{{number_format($data->interest)}}</td>
+                                                      <td>{{number_format($data->monthly_principal)}}</td>
+                                                      <td>{{number_format($data->monthly_interest)}}</td>
+                                                      <td>{{number_format($data->monthly_due)}}</td>
                                                       <td class="">
                                                             @if($data->loan_status =='request')
                                                             <span

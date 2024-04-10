@@ -117,11 +117,41 @@ class MemberLoan extends Controller
     public function loanHistory(Request  $request){
         if(Auth::user()->role_name == 'member'){
             $id = Auth::user()->id;
+            $loanPrincipal = DB::table('loan')
+            ->where('loan_status', 'payout')
+            ->where('member_id', $id)
+            ->pluck('principal')->first();
+
+            $loanInterest = DB::table('loan')
+            ->where('loan_status', 'payout')
+            ->where('member_id', $id)
+            ->pluck('interest')->first();
+
+            $monthlyDueLoan =  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
+            ->select('loan_repayment.monthly_due')
+             ->where('loan.loan_status', 'payout')
+             ->where('loan_repayment.repayment_status', null)
+             ->where('loan.member_id', $id);
+            
+             $nextDueDate =  DB::table('due_loans')->join('loan', 'loan.id', '=', 'due_loans.loan_id')
+             ->where('due_loans.payment_status', 'pending')
+             ->where('loan.member_id', $id)
+             ->pluck('due_date')->first();
+             
+            //  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
+            //  ->select('loan_repayment.next_due_date')
+            //   ->where('loan.loan_status', 'payout')
+            //   ->where('loan_repayment.repayment_status', null)
+            //   ->where('loan.member_id', $id)
+            //   ->pluck('next_due_date')->first();
+
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');
             $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
            ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
-            ->select(['loan.*', 'loan_type.name', 'users.fname'])
+           ->join('loan_repayment', 'loan_repayment.loan_id', 'loan.id')
+            ->select(['loan.*', 'loan_type.name', 'users.fname', 'loan_repayment.*'])
+            ->where('loan.loan_status', 'payout')
             ->where('loan.member_id', $id)
             ->orderBy('loan.created_at', 'desc')
             ->where(function ($query) use ($search) {  // <<<
@@ -139,11 +169,13 @@ class MemberLoan extends Controller
             $pagination = $loan->appends ( array ('search' => $search) );
                 if (count ( $pagination ) > 0){
                     return view ('loan.member.loan-history', compact(
-                    'perPage', 'loan'))->withDetails( $pagination );     
+                    'perPage', 'loan', 'monthlyDueLoan', 'nextDueDate',
+                    'loanPrincipal', 'loanInterest'))->withDetails( $pagination );     
                 } 
                 else{redirect()->back()->with('loan-status', 'No record order found'); }   
             \LogActivity::addToLog('Member loanDashboard'); 
-            return view ('loan.member.loan-history', compact('perPage', 'loan'));
+            return view ('loan.member.loan-history', compact('perPage', 
+            'loan', 'monthlyDueLoan', 'nextDueDate', 'loanPrincipal', 'loanInterest'));
         }
         else{
             return Redirect::to('/login');
