@@ -152,17 +152,17 @@
                         <div class="loan-datagrid">
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Loan</div>
-                                    <div class="ms-auto lh-1" id="principal"> <strong>₦{{number_format($item->principal) }}</strong>
+                                    <div class="ms-auto lh-1" id="principal"> <strong>₦{{round($item->principal, 2) }}</strong>
                                     </div>
                               </div>
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Interest</div>
-                                    <div class="ms-auto lh-1" id="interest">₦{{number_format($item->interest) }}
+                                    <div class="ms-auto lh-1" id="interest">₦{{round($item->interest, 2) }}
                                     </div>
                               </div>
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Total</div>
-                                    <div class="ms-auto lh-1" id="interest">₦{{number_format($item->total) }}
+                                    <div class="ms-auto lh-1" id="interest">₦{{round($item->total, 2) }}
                                     </div>
                               </div>
                               <div class="datagrid-item">
@@ -203,13 +203,13 @@
                               <td class="text-left">{{$loop->iteration }}</td>
                               <td class="text-left">{{$data->due_date }}</td>
                                     <td>
-                                          <span class="strong">{{number_format($data->monthly_principal)}}
+                                          <span class="strong">{{round($data->monthly_principal, 2)}}
                                           </span>
                                     </td>
                                     <td class="text-left">
-                                          {{number_format($data->monthly_interest)}}
+                                          {{round($data->monthly_interest, 2)}}
                                     </td>
-                                    <td class="text-left"> {{ number_format($data->monthly_due) }}</td>
+                                    <td class="text-left"> {{ round($data->monthly_due, 2) }}</td>
                                    
                               </tr>
 
@@ -228,7 +228,7 @@
                               <tr>
                                     <td colspan="4" class="font-weight-bold text-uppercase text-end">Total Due</td>
                                     <td class="font-weight-bold text-left">
-                                          ₦{{number_format($item->total)  }}
+                                          ₦{{round($item->total, 2)  }}
                                     </td>
                               </tr>
 
