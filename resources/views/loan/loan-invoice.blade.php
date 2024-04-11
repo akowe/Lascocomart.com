@@ -190,17 +190,29 @@
                               <thead>
                                     <tr>
                                     <th class="text-left" style="width: 1%">S/N</th>
+                                    <th class="text-left" style="width: 1%">Payment</th>
                                     <th class="text-left" style="width: 1%">Due Date</th>      
-                                    <th class="text-left" style="width: 1%">Monthly Principal ₦</th>
-                                          <th class="text-left" style="width: 1%">Monthly Interest ₦</th>
-                                          <th class="text-left" style="width: 1%">Monthly Due ₦</th>
-                                        
+                                    <th class="text-left" style="width: 1%">Principal ₦</th>
+                                    <th class="text-left" style="width: 1%">Interest ₦</th>
+                                    <th class="text-left" style="width: 1%">Monthly Due ₦</th>
+                                     @auth
+                                    @if(Auth::user()->role_name == 'member')
+                                    <th class="text-end"  style="width: 1%"></th>
+                                    @endif 
+                                    @endauth
                                     </tr>
                               </thead>
 
                               @foreach($loan as $id => $data)
                               <tr>
                               <td class="text-left">{{$loop->iteration }}</td>
+                              <td>
+                                    @if($data->payment_status == 'paid')
+                                    <span  class="badge bg-success-lt text-capitalize">{{$data->payment_status}}</span>
+                                    @else
+                                    <span   class="badge bg-yellow-lt text-capitalize">{{$data->payment_status}}</span>
+                                    @endif 
+                                    </td>
                               <td class="text-left">{{$data->due_date }}</td>
                                     <td>
                                           <span class="strong">{{round($data->monthly_principal, 2)}}
@@ -210,23 +222,29 @@
                                           {{round($data->monthly_interest, 2)}}
                                     </td>
                                     <td class="text-left"> {{ round($data->monthly_due, 2) }}</td>
+                                    @auth
+                                    @if(Auth::user()->role_name == 'member')
+                                    <td class="text-end"> <a href="" class="btn btn-sm btn-outline-danger">Pay Now</a></td>
+                                    @endif 
+                                    @endauth
+                                  
                                    
                               </tr>
 
                               @endforeach
 
                               <tr>
-                                    <td colspan="4" class="strong text-left"></td>
+                                    <td colspan="5" class="strong text-left"></td>
                                     <td class="text-left"> </td>
                               </tr>
 
                               <tr>
-                                    <td colspan="4" class="strong text-left"></td>
+                                    <td colspan="5" class="strong text-left"></td>
                                     <td class="text-left"></td>
                               </tr>
 
                               <tr>
-                                    <td colspan="4" class="font-weight-bold text-uppercase text-end">Total Due</td>
+                                    <td colspan="5" class="font-weight-bold text-uppercase text-end">Total Due</td>
                                     <td class="font-weight-bold text-left">
                                           ₦{{number_format($item->total, 2)  }}
                                     </td>

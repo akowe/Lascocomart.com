@@ -224,7 +224,8 @@ class LoanController extends Controller
             'loan_type.percentage_rate',  
             'loan_type.rate_type',  
             'due_loans.monthly_due',  
-            'due_loans.due_date']);  
+            'due_loans.due_date',
+            'due_loans.payment_status']);  
 
             \LogActivity::addToLog('Laon invoice');
         return view('loan.loan-invoice', compact('item', 'loan'));
@@ -271,7 +272,8 @@ class LoanController extends Controller
             'loan_type.percentage_rate',  
             'loan_type.rate_type',  
             'due_loans.monthly_due',  
-            'due_loans.due_date']);  
+            'due_loans.due_date',
+            'due_loans.payment_status']);  
 
             \LogActivity::addToLog('Laon invoice');
         return view('loan.loan-invoice', compact('item', 'loan'));
