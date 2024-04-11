@@ -57,7 +57,7 @@
       <div class="container-xl">
             <div class="row row-deck row-cards">
           
-                  <div class="col-sm-6 col-lg-3">
+                  <div class="col-sm-8 col-lg-4">
                         <div class="card">
                               <div class="card-body">
                                     <div class="d-flex align-items-center">
