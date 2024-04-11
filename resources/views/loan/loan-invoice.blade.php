@@ -152,17 +152,17 @@
                         <div class="loan-datagrid">
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Loan</div>
-                                    <div class="ms-auto lh-1" id="principal"> <strong>₦{{round($item->principal, 2) }}</strong>
+                                    <div class="ms-auto lh-1" id="principal"> <strong>₦{{number_format($item->principal) }}</strong>
                                     </div>
                               </div>
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Interest</div>
-                                    <div class="ms-auto lh-1" id="interest">₦{{round($item->interest, 2) }}
+                                    <div class="ms-auto lh-1" id="interest">₦{{number_format($item->interest) }}
                                     </div>
                               </div>
                               <div class="datagrid-item">
                                     <div class="datagrid-title">Total</div>
-                                    <div class="ms-auto lh-1" id="interest">₦{{round($item->total, 2) }}
+                                    <div class="ms-auto lh-1" id="interest">₦{{number_format($item->total) }}
                                     </div>
                               </div>
                               <div class="datagrid-item">
@@ -228,7 +228,7 @@
                               <tr>
                                     <td colspan="4" class="font-weight-bold text-uppercase text-end">Total Due</td>
                                     <td class="font-weight-bold text-left">
-                                          ₦{{round($item->total, 2)  }}
+                                          ₦{{number_format($item->total, 2)  }}
                                     </td>
                               </tr>
 
