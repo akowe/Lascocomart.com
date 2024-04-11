@@ -136,7 +136,7 @@
                                           </div>
                                     </div>
                                     <div class="d-flex align-items-baseline">
-                                          <div class="h1 mb-0 me-2">₦{{ round($totalLoan->sum('interest'), 2) }}
+                                          <div class="h1 mb-0 me-2">₦{{ number_format($totalLoan->sum('interest')) }}
                                           </div>
                                           <div class="me-auto">
                                                 <span class="text-green d-inline-flex align-items-center lh-1">
@@ -177,7 +177,7 @@
                                     </div>
                                     <div class="d-flex align-items-baseline">
                                           <div class="h1 mb-3 me-2">
-                                                ₦{{ round($totalLoan->sum('loan_balance'), 2) }}</div>
+                                                ₦{{ number_format($totalLoan->sum('loan_balance')) }}</div>
                                           <div class="me-auto">
                                                 <span class="text-yellow d-inline-flex align-items-center lh-1">
 
