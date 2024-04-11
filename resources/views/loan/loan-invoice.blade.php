@@ -197,7 +197,7 @@
                                     <th class="text-left" style="width: 1%">Monthly Due ₦</th>
                                      @auth
                                     @if(Auth::user()->role_name == 'member')
-                                    <th class="text-end"  style="width: 1%"></th>
+                                    <th class=""  style="width: 1%"></th>
                                     @endif 
                                     @endauth
                                     </tr>
@@ -224,7 +224,10 @@
                                     <td class="text-left"> {{ round($data->monthly_due, 2) }}</td>
                                     @auth
                                     @if(Auth::user()->role_name == 'member')
-                                    <td class="text-end"> <a href="" class="btn btn-sm btn-outline-danger">Pay Now</a></td>
+                                    @if($data->payment_status == 'paid')
+                                    @else
+                                    <td class=""> <a href="" class="btn btn-sm btn-outline-danger">Pay Now</a></td>
+                                    @endif 
                                     @endif 
                                     @endauth
                                   
