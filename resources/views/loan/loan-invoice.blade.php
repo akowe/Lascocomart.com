@@ -136,7 +136,7 @@
                                     <h4>Status:</h4>
 
                                     <h4 class="text-uppercase text-primary">
-                                          @if($item->loan_status == 'paid')
+                                          @if($item->loan_status == 'payout')
                                           <span class="text-green"> {{$item->loan_status}}</span>
                                           @elseif($item->loan_status == 'cancel')
                                           <span class="text-danger"> {{$item->loan_status}}</span>
