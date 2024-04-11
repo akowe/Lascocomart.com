@@ -200,7 +200,7 @@
                         <div class="card">
                               <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                          <div class="subheader">CurrentMonthly Due</div>
+                                          <div class="subheader">Current Monthly Due</div>
                                           <div class="ms-auto lh-1">
                                                 <div class="dropdown">
                                                       <a class="dropdown-toggle text-secondary" href="#"

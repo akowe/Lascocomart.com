@@ -1679,7 +1679,7 @@
                                                                                                                   </a>
                                                                                                             </div>
                                                                                                       </div>
-                                                                                                      <a href=""
+                                                                                                      <a href="{{ url('cooperative-due-loan') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Due Loans
                                                                                                       </a>
@@ -1695,13 +1695,14 @@
                                                                                                                   class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
 
                                                                                                       </a>
-                                                                                                      <a href=""
-                                                                                                            class="dropdown-item">
-                                                                                                            Repayments
-                                                                                                      </a>
+                                                                                                     
                                                                                                       <a href="{{ url('cooperative-loan-type') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Loan Type
+                                                                                                      </a>
+                                                                                                      <a href=""
+                                                                                                            class="dropdown-item">
+                                                                                                            Repayments
                                                                                                       </a>
                                                                                                 </div>
 

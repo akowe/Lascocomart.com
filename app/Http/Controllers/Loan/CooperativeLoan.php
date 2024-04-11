@@ -93,6 +93,7 @@ class CooperativeLoan extends Controller
 
             $chartMonthlyDue = LoanRepayment::select('*')
             ->where('cooperative_code', $code)
+            ->where('repayment_status', null)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->get();
             $getLoanMonthly =Arr::pluck($chartMonthlyDue, 'monthly_due');
@@ -745,5 +746,55 @@ class CooperativeLoan extends Controller
             }
             else { return Redirect::to('/login');}  
         }
+
+        public function adminDueLoans(Request $request){
+            if(Auth::user()->role_name == 'cooperative'){
+                $admin_id = Auth::user()->id;
+                $code = Auth::user()->code;
+               $totalMonthlyDueLoan =  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
+               ->select('loan_repayment.monthly_due')
+                ->where('loan.loan_status', 'payout')
+                ->where('loan.cooperative_code', $code)
+                 ->whereMonth('loan_repayment.next_due_date', Carbon::now()->month)
+                ->whereYear('loan_repayment.updated_at', Carbon::now()->year);
+            
+                $perPage = $request->perPage ?? 10;
+                $search = $request->input('search');
+                $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
+                ->join('due_loans', 'due_loans.loan_id', '=', 'loan.id')
+                ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+                ->select([ 'loan.*', 
+                'due_loans.monthly_due',
+                'due_loans.due_date', 
+                'loan_type.name', 
+                'users.fname'])
+               ->where('due_loans.payment_status', 'pending')
+                ->where('due_loans.cooperative_code', $code)
+                ->orderBy('loan.created_at', 'desc')
+                ->where(function ($query) use ($search) {  // <<<
+                $query->where('users.fname', 'LIKE', '%'.$search.'%')
+                       ->orWhere('due_loans.monthly_due', 'LIKE', '%'.$search.'%')
+                       ->orWhere('due_loans.due_date', 'LIKE', '%'.$search.'%')
+                       ->orWhere('loan.duration', 'LIKE', '%'.$search.'%')
+                        ->orWhere('loan_type.name', 'LIKE', '%'.$search.'%')
+                       ->orderBy('loan.created_at', 'desc');
+                })->paginate($perPage, $columns = ['*'], $pageName = 'loan'
+                )->appends(['per_page'   => $perPage]);
+            
+                $pagination = $loan->appends ( array ('search' => $search) );
+                    if (count ( $pagination ) > 0){
+                        return view ('loan.cooperative.due-loans' ,  compact(
+                        'perPage', 'loan', 'totalMonthlyDueLoan'))->withDetails( $pagination );     
+                    } 
+                    else{
+                        redirect()->back()->with('due-status', 'No record order found'); 
+                    }   
+            
+                \LogActivity::addToLog('Admin DueLoans');
+                return view('loan.cooperative.due-loans', compact('perPage', 'loan', 'totalMonthlyDueLoan'));
+            }
+            else { return Redirect::to('/login');}  
+        }
+        
     
 }//class

@@ -384,6 +384,7 @@ Route::controller(CooperativeLoan::class)->group(function () {
     Route::put('admin-update-loan-type/{id}', 'updateLoanType')->name('admin-update-loan-type');
     Route::get('admin-remove-loan-type/{id}',  'removeLoanTypePage')->name('admin-remove-loan-type');
     Route::post('remove-admin-loan-type',  'removeAdminLoanType')->name('remove-loan-type');
+    Route::get('cooperative-due-loan', 'adminDueLoans');
 });
 
 //Member Loan
