@@ -20,6 +20,7 @@ use App\Models\LoanSetting;
 use App\Models\Settings;
 use App\Models\ChooseBank;
 use App\Models\DueLoans;
+use App\Models\LoanPaymentTransaction;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Credit;

@@ -18,6 +18,7 @@ use App\Models\LoanType;
 use App\Models\LoanRepayment;
 use App\Models\LoanSetting;
 use App\Models\DueLoans;
+use App\Models\LoanPaymentTransaction;
 use App\Models\Settings;
 use App\Models\ChooseBank;
 use App\Models\Order;
@@ -131,12 +132,6 @@ class MemberLoan extends Controller
             ->where('payment_status', 'pending')
             ->where('member_id', $id)
             ->get();
-          
-            // loan_id,
-            // DB::table('loan_repayment')->select('monthly_due')
-            //  ->where('next_due_date', '!=', null)
-            //  ->where('member_id', $id)
-            // ->pluck('monthly_due')->first();
             
              $nextDueDate =  DB::table('due_loans')->join('loan', 'loan.id', '=', 'due_loans.loan_id')
              ->where('due_loans.payment_status', 'pending')
