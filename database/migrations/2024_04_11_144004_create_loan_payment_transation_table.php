@@ -18,7 +18,7 @@ class CreateLoanPaymentTransationTable extends Migration
             $table->timestamps();
             $table->string('cooperative_code');
             $table->string('member_id');
-            $table->string('loan_id');
+            $table->string('due_loan_id');
             $table->string('amount');
             $table->string('reference');
             $table->string('authorization_code');

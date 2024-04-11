@@ -111,20 +111,16 @@
                                                 </div>
                                                 <div class="datagrid-item">
                                                       <div class="datagrid-title">Amount Due</div>
-                                                  
+                                                      @foreach($monthlyDueLoan as $due)
                                                       <div class="ms-auto lh-1" id="interest">
-                                                           @foreach($monthlyDueLoan as $due)
+                                                        
                                                              @if($loop->first)
                                                              ₦{{round($due->monthly_due, 2)}}
+                                                             <p></p>
+                                                             <a href="" class="btn">Pay Now</a>
                                                              @endif 
-                                                           @endforeach
-                                                       <p></p>
                                                       </div>
-                                                      @if($monthlyDueLoan)
-                                                      <a href="" class="btn">Pay Now</a>
-                                                      @else
-                                                      @endif 
-                                                     
+                                                      @endforeach
                                                 </div>
 
                                               
