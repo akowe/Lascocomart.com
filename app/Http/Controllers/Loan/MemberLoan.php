@@ -127,23 +127,21 @@ class MemberLoan extends Controller
             ->where('member_id', $id)
             ->pluck('interest')->first();
 
-            $monthlyDueLoan =  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
-            ->select('loan_repayment.monthly_due')
-             ->where('loan.loan_status', 'payout')
-             ->where('loan_repayment.repayment_status', null)
-             ->where('loan.member_id', $id);
+            $monthlyDueLoan =  DB::table('due_loans')
+            ->where('payment_status', 'pending')
+            ->where('member_id', $id)
+            ->get();
+          
+            // loan_id,
+            // DB::table('loan_repayment')->select('monthly_due')
+            //  ->where('next_due_date', '!=', null)
+            //  ->where('member_id', $id)
+            // ->pluck('monthly_due')->first();
             
              $nextDueDate =  DB::table('due_loans')->join('loan', 'loan.id', '=', 'due_loans.loan_id')
              ->where('due_loans.payment_status', 'pending')
              ->where('loan.member_id', $id)
              ->pluck('due_date')->first();
-             
-            //  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
-            //  ->select('loan_repayment.next_due_date')
-            //   ->where('loan.loan_status', 'payout')
-            //   ->where('loan_repayment.repayment_status', null)
-            //   ->where('loan.member_id', $id)
-            //   ->pluck('next_due_date')->first();
 
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');

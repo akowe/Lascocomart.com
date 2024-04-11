@@ -58,10 +58,8 @@ class CardPaymentController extends Controller
      public function handleGatewayCallback(Request $request)
     {
         $paymentDetails = Paystack::getPaymentData();
-        // dd($paymentDetails);
         //Getting authenticated user 
         $member= Auth::user()->id;
-        
          //get cart items
          $cart = session()->get('cart', []);
         // Available alpha caracters
@@ -74,7 +72,6 @@ class CardPaymentController extends Controller
         // shuffle the result
         $order_number = str_shuffle($pin);
         $status = "paid";
-
          //get others form input
         $order_number  = $order_number;
         $order_status  = $status;
@@ -83,8 +80,7 @@ class CardPaymentController extends Controller
         $ship_city     = $request->input('ship_city');
         $ship_phone    = $request->input('ship_phone');
         $note          = $request->input('note');
-        //$amount = "0";
-     
+        //$amount = "0"; 
         $payment = json_decode(json_encode($paymentDetails),true);
        //get individual payment data from to store in DB
         $status = $paymentDetails['data']['status'];// get the status of the payment
@@ -111,10 +107,8 @@ class CardPaymentController extends Controller
 
          $type = Arr::pluck($metaData, 'transaction_type'); 
          $transactionType = implode(" ",$type);
-        
-
+        //Checking to Ensure the transaction was succesful
         if($status == "success"){ 
-            //Checking to Ensure the transaction was succesful
             $totalAmount = $total - $delivery_fee;
             $order = new Order();
             $order->user_id         = Auth::user()->id;
@@ -184,15 +178,13 @@ class CardPaymentController extends Controller
                     ->get('id');
                       $sellerEmail =  User::where('id', $seller_id)
                     ->get('email');
-                    // dd($seller);
-                    // die;
                     $notification = new NewCardPayment($order_number);
                     Notification::send($seller, $notification); 
         
-                    Wallet::where('user_id', $seller_id)
-                            ->increment(
-                            'credit',$selling_price
-                        );
+                    // Wallet::where('user_id', $seller_id)
+                    //         ->increment(
+                    //         'credit',$selling_price
+                    //     );
                
                     //for every new order decrease product quantity
                     $stock = \DB::table('products')->where('id', $product_id)->first()->quantity;
@@ -221,7 +213,6 @@ class CardPaymentController extends Controller
                           Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
                     }              
             }
-
 
             if($transactionType == "fmcg"){
                 $data = [];
@@ -265,10 +256,10 @@ class CardPaymentController extends Controller
                     $notification = new NewCardPayment($order_number);
                     Notification::send($seller, $notification); 
         
-                    Wallet::where('user_id', $seller_id)
-                            ->increment(
-                            'credit',$selling_price
-                        );
+                    // Wallet::where('user_id', $seller_id)
+                    //         ->increment(
+                    //         'credit',$selling_price
+                    //     );
                
                     //for every new order decrease product quantity
                     $stock = \DB::table('fmcg_products')->where('id', $product_id)->first()->quantity;
@@ -295,8 +286,7 @@ class CardPaymentController extends Controller
                           Mail::to($get_email)->send(new ConfirmOrderEmail($data)); 
                             Mail::to($sellerEmail)->send(new SalesEmail($data));
                           Mail::to('info@lascocomart.com')->send(new OrderEmail($data));  
-                    }
-                           
+                    }              
             }
                 //in-app payment notification
                 $superadmin = User::where('role_name', '=', 'superadmin')->get();
@@ -306,29 +296,8 @@ class CardPaymentController extends Controller
                 $notification = new NewCardPayment($order_number);
                 Notification::send($superadmin, $notification);
         
- 
-            //    if($orderItem){
-                //update wallet table with new credit balance for seller
-            
-
-                //  $newOrders = \DB::table('order_items')->get();
-                
-                // foreach ($newOrders as $order){
-                //  $stock = \DB::table('products')->where('id', $order->product_id)->first()->quantity;
-                
-                //      if($stock > $order->order_quantity){
-                //          \DB::table('products')->where('id', $order->product_id)->decrement('quantity',$order->order_quantity);
-                //         }
-                // }
-
-            // $prod_name  = \DB::table('products')->where('id', $order->product_id)->get('prod_name');   
-                
-            // } 
-        
             //remove item from cart
             $request->session()->forget('cart');
-
-          
             \LogActivity::addToLog('Card Payment');
             return redirect()->route('cart')->with('success', 'Your Order was successfull');
         }

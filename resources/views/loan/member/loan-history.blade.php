@@ -113,7 +113,11 @@
                                                       <div class="datagrid-title">Amount Due</div>
                                                   
                                                       <div class="ms-auto lh-1" id="interest">
-                                                            ₦{{number_format($monthlyDueLoan->sum('monthly_due')) }}
+                                                           @foreach($monthlyDueLoan as $due)
+                                                             @if($loop->first)
+                                                             ₦{{round($due->monthly_due, 2)}}
+                                                             @endif 
+                                                           @endforeach
                                                        <p></p>
                                                       </div>
                                                       @if($monthlyDueLoan)
@@ -198,9 +202,9 @@
                                                       <td>{{$data->fname}}</td>
                                                       <td>{{$data->name}}</td>
                                                       <td>{{$data->duration}} </td>
-                                                      <td>{{number_format($data->monthly_principal)}}</td>
-                                                      <td>{{number_format($data->monthly_interest)}}</td>
-                                                      <td>{{number_format($data->monthly_due)}}</td>
+                                                      <td>{{round($data->monthly_principal, 2)}}</td>
+                                                      <td>{{round($data->monthly_interest, 2)}}</td>
+                                                      <td>{{round($data->monthly_due, 2)}}</td>
                                                       <td class="">
                                                             @if($data->loan_status =='request')
                                                             <span

@@ -100,7 +100,6 @@ class CooperativeLoan extends Controller
             $totalMonthlyDueLoan =  LoanRepayment::join('loan', 'loan.id', '=', 'loan_repayment.loan_id')
            ->select('loan_repayment.monthly_due')
             ->where('loan.loan_status', 'payout')
-            ->where('loan_repayment.repayment_status', null)
             ->where('loan.cooperative_code', $code)
              ->whereMonth('loan_repayment.next_due_date', Carbon::now()->month)
             ->whereYear('loan_repayment.updated_at', Carbon::now()->year);
