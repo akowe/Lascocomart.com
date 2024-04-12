@@ -158,7 +158,52 @@ class CooperativeLoan extends Controller
             ->where('cooperative_code', $code)
             ->where('deleted_at', '=', null)
             ->pluck('name')->first();
-           // dd(   $productLoantypes);
+
+            $productLoanInterest = DB::table('loan_type')
+            ->select(['loan_type.percentage_rate'])
+            ->where('admin_id', $id)
+            ->where('name', 'product')
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
+            ->pluck('percentage_rate')->first();
+
+            $productLoanMinimumDuration = DB::table('loan_type')
+            ->select(['loan_type.min_duration'])
+            ->where('admin_id', $id)
+            ->where('name', 'product')
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
+            ->pluck('min_duration')->first();
+
+            $productLoanMaximumDuration = DB::table('loan_type')
+            ->select(['loan_type.max_duration'])
+            ->where('admin_id', $id)
+            ->where('name', 'product')
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
+            ->pluck('max_duration')->first();
+
+            $productLoanID = DB::table('loan_type')
+            ->select(['loan_type.id'])
+            ->where('admin_id', $id)
+            ->where('name', 'product')
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
+            ->pluck('id')->first();
+           // dd($productLoanID);
+
+           if(empty($productLoantypes)){
+            $addLoan  = new LoanType;
+            $addLoan->admin_id          = $id;
+            $addLoan->cooperative_code  = $code;
+            $addLoan->name              = 'product';
+            $addLoan->percentage_rate   = '0';
+            $addLoan->rate_type         = 'flat rate';
+            $addLoan->min_duration      ='1';
+            $addLoan->max_duration      = '1';
+            $addLoan->save();
+
+           }
 
 
             $loantypes = DB::table('loan_type')->select(['loan_type.*'])
@@ -178,12 +223,16 @@ class CooperativeLoan extends Controller
             $pagination = $loantypes->appends ( array ('search' => $search) );
                 if (count ( $pagination ) > 0){
                     return view ('loan.cooperative.loan-type' ,  compact(
-                    'perPage', 'loantypes', 'productLoantypes'))->withDetails( $pagination );     
+                    'perPage', 'loantypes', 'productLoantypes', 
+                    'productLoanInterest', 'productLoanMinimumDuration', 
+                    'productLoanMaximumDuration', 'productLoanID'))->withDetails( $pagination );     
                 } 
                 else{redirect()->back()->with('loanType-status', 'No record order found'); }   
             \LogActivity::addToLog('Admin loanType'); 
             return view('loan.cooperative.loan-type', compact(
-                'perPage', 'loantypes', 'productLoantypes'));
+                'perPage', 'loantypes', 'productLoantypes', 
+                'productLoanInterest', 'productLoanMinimumDuration', 
+                'productLoanMaximumDuration', 'productLoanID'));
         }
         else{
             return Redirect::to('/login');
