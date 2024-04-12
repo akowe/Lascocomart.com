@@ -11,6 +11,15 @@ use App\Models\FcmgProduct;
 use App\Models\Categories;
 use App\Models\Voucher;
 use App\Models\Wallet;
+use App\Models\WalletHistory;
+use App\Models\Loan;
+use App\Models\LoanType;
+use App\Models\LoanRepayment;
+use App\Models\LoanSetting;
+use App\Models\DueLoans;
+use App\Models\LoanPaymentTransaction;
+use App\Models\Settings;
+use App\Models\ChooseBank;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\fcmgOrder;
@@ -54,7 +63,7 @@ class OrderController extends Controller
             . $characters[rand(0, strlen($characters) - 1)];
         // shuffle pin
         $order_number = str_shuffle($pin);
-        $order_status  = 'awaits approval'; 
+        $order_status  = 'product loan'; 
         $pay_status  = 'pending';
         $ship_address  = $_POST['ship_address'];
         $ship_city     = $_POST['ship_city'];
@@ -63,23 +72,23 @@ class OrderController extends Controller
 
        if(isset($_POST) && count($_POST) > 0) {
          $totalAmount = 0;
-        foreach ($cart as $item) {
-            $totalAmount += $item['price'] * $item['quantity'];
-        } 
-         $grandtotal =  $totalAmount + $request->delivery;
-        $order = new Order();
-        $order->user_id     = Auth::user()->id;
-        $order->total       = $totalAmount;
-        $order->delivery_fee = $request->delivery;
-        $order->grandtotal  = $grandtotal;
-        $order->order_number = $order_number;
-        $order->status       = $order_status;
-        $order->pay_status   = $pay_status ;
-        $order->save(); 
+          foreach ($cart as $item) {
+              $totalAmount += $item['price'] * $item['quantity'];
+          } 
+          $grandtotal =  $totalAmount + $request->delivery;
+          $order = new Order();
+          $order->user_id     = Auth::user()->id;
+          $order->total       = $totalAmount;
+          $order->delivery_fee = $request->delivery;
+          $order->grandtotal  = $grandtotal;
+          $order->order_number = $order_number;
+          $order->status       = $order_status;
+          $order->pay_status   = $pay_status ;
+          $order->save(); 
 
-         $data = [];
+          $data = [];
 
-        foreach ($cart as $item) {
+          foreach ($cart as $item) {
             $data['items'] = [
                 [
                     'prod_name' => $item['prod_name'],
@@ -123,7 +132,152 @@ class OrderController extends Controller
             $shipDetails->save();
        
         $request->session()->forget('cart');
-          $superadmin = User::where('role_name', '=', 'superadmin')->get();
+          // $superadmin = User::where('role_name', '=', 'superadmin')->get();
+          // $get_superadmin_id =Arr::pluck($superadmin, 'id');
+          // $superadmin_id = implode('', $get_superadmin_id);
+
+          // $notification = new NewOrder($order_number);
+          // Notification::send($superadmin, $notification);
+          
+          // $name =  \DB::table('users')->where('id', $order->user_id)->get('fname') ; 
+          // $username = Arr::pluck($name, 'fname'); // 
+          // $get_name = implode(" ",$username);
+
+          // $getCode =  \DB::table('users')->where('id', $order->user_id)->get('code') ; 
+          // $userCoopcode = Arr::pluck($getCode, 'code'); // 
+          // $code = implode(" ",$userCoopcode);
+
+          // $coopEmail = \DB::table('users')->where('code', $code)->where('role', '2')->get('email') ; 
+          // $getEmail= Arr::pluck($coopEmail, 'email'); // 
+          // $adminEmail = implode(" ",$getEmail);
+
+          // $coopName = \DB::table('users')->where('code', $code)->where('role', '2')->get('coopname') ; 
+          // $getCoop= Arr::pluck($coopName, 'coopname'); // 
+          // $cooperative = implode(" ",$getCoop);
+
+          // $coopId = User::where('code', $code)->where('role', '=', '2')->get() ; 
+          // $getId= Arr::pluck($coopId, 'id'); // 
+          // $adminId = implode('', $getId);
+          
+          // $notification = new NewOrder($order_number);
+          // Notification::send($coopId, $notification);
+          //  //send emails
+          //   $data = array(
+          //   'cooperative'   => $cooperative,
+          //   'order_number' => $order_number,  
+          //   'amount'       => $grandtotal, // delivery inclusive
+          //   'name'       => $get_name,       
+          //       );
+
+          //    Mail::to($adminEmail)->send(new AwaitsApprovalEmail($data)); 
+          //    Mail::to('info@lascocomart.com')->send(new OrderEmail($data));              
+             \LogActivity::addToLog('New Order');
+      return redirect('request-product-loan/'.$order->id)->with('order', 'You are requesting a product loan. How long do you want to pay back');
+      
+    }//isset  
+
+}
+
+
+public function requestProductLoan(Request $request, $orderId){
+    $member= Auth::user()->id;
+    $code= Auth::user()->code;
+    $chooseLoanType = LoanType::select('name')
+    ->where('cooperative_code', $code)
+    ->where('name', 'product')->pluck('name')->first();
+
+    $loanType = LoanType::select('id')
+    ->where('cooperative_code', $code)
+    ->where('name', 'product')->pluck('id')->first();
+
+    $getOrderTotal = DB::table('orders')->select('grandtotal')
+    ->where('id', $orderId)
+    ->pluck('grandtotal')->first();
+
+           $principal = '';
+           $annualInterest = '';
+           $totalDue = '';
+           $rateType = '';
+           $duration ='';
+           $maxTenure = '';
+           $percentage = '';
+           $loanTypeName= '';
+           $getOrderID = '';
+
+          return view('loan.member.product-loan', compact('chooseLoanType', 
+          'loanType', 'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
+          'rateType','duration',  'getOrderTotal', 'getOrderID'));  
+}
+
+
+public function calculateProductLoanInterest(Request $request, $id, $amount, $duration){
+  if(Auth::user()){
+      $code = Auth::user()->code;
+      $chooseLoanType = LoanType::select('*')
+      ->where('cooperative_code', $code)->get();
+      $loanTypeID = $id;
+      $loanType ='';
+
+      $getOrderID = DB::table('orders')->select('id')
+      ->where('grandtotal', $amount)
+      ->pluck('id')->first();
+
+      $getOrderTotal = DB::table('orders')->select('grandtotal')
+      ->where('grandtotal', $amount)
+      ->pluck('grandtotal')->first();
+
+      $getLoanTypeName = LoanType::select('name')
+      ->where('id', $id)
+      ->where('cooperative_code', $code)->get();
+      $loanTypeName =Arr::pluck($getLoanTypeName, 'name');
+      $loanType = implode(" ",$loanTypeName); 
+
+      $loanTypeName = LoanType::select('name')
+      ->where('id', $id)
+      ->where('cooperative_code', $code)->pluck('name')->first();
+
+      $getRateType = LoanType::select('rate_type')
+      ->where('id', $id)
+      ->where('cooperative_code', $code)->get();
+      $loanRateType =Arr::pluck($getRateType, 'rate_type');
+      $rateType = implode(" ",$loanRateType); 
+   
+      $getPercentage = LoanType::select('percentage_rate')
+      ->where('id', $id)
+      ->where('cooperative_code', $code)->get();
+      $loanPercentage =Arr::pluck($getPercentage, 'percentage_rate');
+      $percentageRate = implode(" ",$loanPercentage); 
+  
+      $getTenure = LoanType::select('max_duration')
+      ->where('id', $id)
+      ->where('cooperative_code', $code)->get();
+      $loanTenure =Arr::pluck($getTenure, 'max_duration');
+      $maxTenure = implode(" ",$loanTenure); 
+
+      $principal = (int)$amount;
+      $percentage = $principal / 100 * $percentageRate ;
+      $annualInterest = $percentage * $maxTenure; //for flat rate interest type
+      $totalDue = $principal +   $annualInterest;//for flat rate interest type
+      
+      return view('loan.member.product-loan', compact('chooseLoanType', 'loanType',
+      'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest',
+      'totalDue', 'rateType', 'duration', 'loanTypeID', 'getOrderTotal', 'getOrderID'));
+  }
+  else{ return Redirect::to('/login');} 
+}
+
+public function sendMemberOrderToAdmin(Request $request, $id){
+  if(Auth::user()->role_name == 'member'){
+    $code = Auth::user()->code;
+    $order = Order::find($id);
+    $order->status            = 'awaits approval';
+    $order->cooperative_code  = $code;
+    $order->loan_type_id      = $request->loanTypeID;
+    $order->duration          = $request->duration;
+    $order->update();
+
+    if($order){
+        $superadmin = User::where('role_name', '=', 'superadmin')->get();
           $get_superadmin_id =Arr::pluck($superadmin, 'id');
           $superadmin_id = implode('', $get_superadmin_id);
 
@@ -161,17 +315,13 @@ class OrderController extends Controller
                 );
 
              Mail::to($adminEmail)->send(new AwaitsApprovalEmail($data)); 
-             Mail::to('info@lascocomart.com')->send(new OrderEmail($data));              
-             \LogActivity::addToLog('New Order');
-    return redirect()->route('cart')->with('success', 'Your Order was successfull');
-      
-  }//isset  
-
-}
-
- public function invoice(Request $request )
-    {
-
+             Mail::to('info@lascocomart.com')->send(new OrderEmail($data)); 
     }
+
+    \LogActivity::addToLog('Member Request Order Approval');
+    return redirect('member-order')->with('success',  'Order sent for approval');
+  }
+  else { return Redirect::to('/login');}  
+  }
 
 }//class
