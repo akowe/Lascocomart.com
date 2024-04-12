@@ -129,7 +129,7 @@
                                     <div class="col-md-12">
                                           <div class="form-group">
                                                 <p></p>
-                                                <div class="form-label required">Description</div>
+                                                <div class="form-label">Description</div>
                                                 <input type="text" value="{{$loantype->description}}" name="description"
                                                       class="form-control">
                                           </div>

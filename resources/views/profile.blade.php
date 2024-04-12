@@ -149,9 +149,7 @@
                                           <a href="#tabs-bank" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Bank
                                                 Details</a>
-                                          <a href="#tabs-product-settings" data-bs-toggle="tab"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Product
-                                                </a> 
+                                       
                                           <a href="#tabs-loan-settings" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Loan
                                                 </a> 
@@ -768,9 +766,8 @@
                                           </div>
                                           <!----bank tab end ---->
 
-
-                                          <!----Loan settings tab start ---->
-                                          <div class="tab-pane" id="tabs-loan-settings">
+                                                 <!----Loan settings tab start ---->
+                                                 <div class="tab-pane" id="tabs-loan-settings">
                                                 <h4> </h4>
                                                 <form method="post" action="loan-settings" name="submit"
                                                       enctype="multipart/form-data">

@@ -151,6 +151,16 @@ class CooperativeLoan extends Controller
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');
 
+            $productLoantypes = DB::table('loan_type')
+            ->select(['loan_type.name'])
+            ->where('admin_id', $id)
+            ->where('name', 'product')
+            ->where('cooperative_code', $code)
+            ->where('deleted_at', '=', null)
+            ->pluck('name')->first();
+           // dd(   $productLoantypes);
+
+
             $loantypes = DB::table('loan_type')->select(['loan_type.*'])
             ->where('admin_id', $id)
             ->where('cooperative_code', $code)
@@ -168,12 +178,12 @@ class CooperativeLoan extends Controller
             $pagination = $loantypes->appends ( array ('search' => $search) );
                 if (count ( $pagination ) > 0){
                     return view ('loan.cooperative.loan-type' ,  compact(
-                    'perPage', 'loantypes'))->withDetails( $pagination );     
+                    'perPage', 'loantypes', 'productLoantypes'))->withDetails( $pagination );     
                 } 
                 else{redirect()->back()->with('loanType-status', 'No record order found'); }   
             \LogActivity::addToLog('Admin loanType'); 
             return view('loan.cooperative.loan-type', compact(
-                'perPage', 'loantypes'));
+                'perPage', 'loantypes', 'productLoantypes'));
         }
         else{
             return Redirect::to('/login');
@@ -705,7 +715,7 @@ class CooperativeLoan extends Controller
                 'mininum_duration'    => 'required|max:255',
                 'maximum_duration'    => 'required|max:255',
                 'guarantor'           => 'max:255',
-                'description'         => 'required|max:255',
+                'description'         => 'max:255',
                 'loantype'            => 'max:255',
                 ]);
             
