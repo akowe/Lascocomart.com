@@ -699,19 +699,39 @@ class CooperativeController extends Controller
         $credit = Voucher::join('users', 'users.id', '=', 'vouchers.user_id')
         ->where('users.id', $id)
         ->get('credit'); 
-
         $plugCredit = Arr::pluck($credit, 'credit');
         $getCredit = implode('', $plugCredit);
+
         $paymentDays = User::where('id', $id)->get('payment_days');
         $pluckPaymentDays = Arr::pluck($paymentDays, 'payment_days');
         $payment = implode('', $pluckPaymentDays);
         
         //if admin has credit approve order
         if($getCredit > $grandtotal ){
-            $input = 'approved'; 
+            //check if member has loan before approving order
+            $memberID = Order::where('id',  $order_id)->get('user_id');
+            $checkExistingLoan = Loan::whereIn('member_id', $memberID)
+            ->where('loan_balance', '!=', null)
+             ->where('loan_balance', '!=', '0')
+             ->where('loan_status', '=', 'payout')
+             ->get('*')->pluck('loan_balance');
+             $getmMembers = User::join('loan', 'loan.member_id', '=', 'users.id')
+             ->whereIn('loan.member_id', $memberID)->get('*')->pluck('fname');
+             $members = substr($getmMembers, 1, -1);
+ 
+             $checkLoanrequest = Loan::whereIn('member_id', $memberID)
+              ->where('loan_status', '=', 'request')
+              ->where('loan_status', '=', 'approved')
+              ->get('*')->pluck('principal');
+ 
+             if(!$checkExistingLoan->isEmpty()){
+             return redirect('cooperative-loan')->with('loanExist',  ''.$members.' has unfinished loan');
+             }
+
+            $status = 'approved'; 
             $approve = Order::where('id', $order_id)
             ->update([
-            'status' => $input,
+            'status' => $status,
             'admin_settlement_msg' => 'payment is ' .$payment
             ]);
             \DB::table('vouchers')->where('user_id', Auth::user()->id)->decrement('credit',$grandtotal);

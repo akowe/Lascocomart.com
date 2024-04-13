@@ -101,7 +101,7 @@ public function bankTransferPayment(Request $request, $reference, $order_id, $or
         }
         $notification = new NewCardPayment($order_number);
         Notification::send($seller, $notification); 
-        Wallet::where('user_id', $seller_id)->increment('credit',$sellerPrice);
+       // Wallet::where('user_id', $seller_id)->increment('credit',$sellerPrice);
     }
     $superadmin = User::where('role_name', '=', 'superadmin')->get();
     $get_superadmin_id =Arr::pluck($superadmin, 'id');
