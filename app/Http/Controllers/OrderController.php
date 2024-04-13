@@ -189,6 +189,17 @@ public function requestProductLoan(Request $request, $orderId){
     $loanType = LoanType::select('id')
     ->where('cooperative_code', $code)
     ->where('name', 'product')->pluck('id')->first();
+    
+    $loanTypeName = LoanType::select('name')
+      ->where('cooperative_code', $code)
+      ->where('name', 'product')->pluck('name')->first();
+
+    $productLoanInterest = DB::table('loan_type')
+    ->select('percentage_rate')
+    ->where('name', 'product')
+    ->where('cooperative_code', $code)
+    ->where('deleted_at', '=', null)
+    ->pluck('percentage_rate')->first();
 
     $getOrderTotal = DB::table('orders')->select('grandtotal')
     ->where('id', $orderId)
@@ -201,12 +212,11 @@ public function requestProductLoan(Request $request, $orderId){
            $duration ='';
            $maxTenure = '';
            $percentage = '';
-           $loanTypeName= '';
            $getOrderID = '';
 
           return view('loan.member.product-loan', compact('chooseLoanType', 
           'loanType', 'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
-          'rateType','duration',  'getOrderTotal', 'getOrderID'));  
+          'rateType','duration',  'getOrderTotal', 'getOrderID', 'productLoanInterest'));  
 }
 
 
@@ -216,7 +226,7 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       $chooseLoanType = LoanType::select('*')
       ->where('cooperative_code', $code)->get();
       $loanTypeID = $id;
-      $loanType ='';
+    
 
       $getOrderID = DB::table('orders')->select('id')
       ->where('grandtotal', $amount)
@@ -229,12 +239,14 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       $getLoanTypeName = LoanType::select('name')
       ->where('id', $id)
       ->where('cooperative_code', $code)->get();
-      $loanTypeName =Arr::pluck($getLoanTypeName, 'name');
-      $loanType = implode(" ",$loanTypeName); 
-
+      $findloanTypeName =Arr::pluck($getLoanTypeName, 'name');
+      $loanTypeName = implode(" ",$findloanTypeName); 
+   
+  
       $loanTypeName = LoanType::select('name')
       ->where('id', $id)
-      ->where('cooperative_code', $code)->pluck('name')->first();
+      ->where('cooperative_code', $code)
+      ->where('name', 'product')->pluck('name')->first();
 
       $getRateType = LoanType::select('rate_type')
       ->where('id', $id)
@@ -247,6 +259,14 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       ->where('cooperative_code', $code)->get();
       $loanPercentage =Arr::pluck($getPercentage, 'percentage_rate');
       $percentageRate = implode(" ",$loanPercentage); 
+
+      $productLoanInterest = DB::table('loan_type')
+      ->select('percentage_rate')
+      ->where('name', 'product')
+      ->where('cooperative_code', $code)
+      ->where('deleted_at', '=', null)
+      ->pluck('percentage_rate')->first();
+      
   
       $getTenure = LoanType::select('max_duration')
       ->where('id', $id)
@@ -261,7 +281,7 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       
       return view('loan.member.product-loan', compact('chooseLoanType', 'loanType',
       'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest',
-      'totalDue', 'rateType', 'duration', 'loanTypeID', 'getOrderTotal', 'getOrderID'));
+      'totalDue', 'rateType', 'duration', 'loanTypeID', 'getOrderTotal', 'getOrderID', 'productLoanInterest'));
   }
   else{ return Redirect::to('/login');} 
 }

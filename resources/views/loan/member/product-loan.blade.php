@@ -163,6 +163,9 @@
                                           <!---card-row--->
 
                                           <p></p>
+                                          @if($productLoanInterest == '0')
+                                          <span class="text-danger">Contact your admin to set product interest</span>
+                                          @else 
                                           <div class="row g-3">
                                                 <div class="col-md">
                                                       <div class="form-label">Loan Type </div>
@@ -222,9 +225,9 @@
                                                       </div>
                                                 </div>
 
-
                                           </div>
                                           <!---card-row--->
+                                          @endif 
                                           <p></p>
                                           <!-- send button here -->
                                           <div class="card-footer bg-transparent mt-auto">
@@ -248,7 +251,7 @@
                         <div class="card">
                               <div class="navbar">
                                     <h3 class="navbar-brand" style="margin-left:20px; font-size:15px"> Loan Type:&nbsp;
-                                          <span class="text-danger">{{ $loanType }}</span>
+                                          <span class="text-danger text-capitalize">{{ $loanTypeName }}</span>
                                     </h3>
                                     <h3 class="navbar-brand" style=" font-size:15px">Duration:&nbsp; <span class="text-danger"> {{ $duration }}
                                                 month (s)</span>&nbsp; &nbsp; </h3>

@@ -126,10 +126,8 @@
                                                       </svg>
 
                                                 </div>
-                                                <div> When a member order for products, send to admin for approval and
-                                                      payment, it becomes a <strong>"Product Loan"</strong>. <span
-                                                            class="text-dark">Edit
-                                                            product loan type below</span></div>
+                                                <div> When member (s) order for products, and Admin make's payment on their behalf, it becomes a <strong>"Product Loan"</strong>. <strong
+                                                            class="text-dark">Add your interest on product loan below. </strong></div>
                                           </div>
                                           <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                                     </div>
