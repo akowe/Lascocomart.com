@@ -297,7 +297,7 @@ Route::controller(OrderController::class)->group(function () {
     Route::post('order', 'order')->name('order');  
     Route::get('request-product-loan/{id}', 'requestProductLoan')->name('request-product-loan');
     Route::get('calculate-product-interest/{id}/{amount}/{duration}', 'calculateProductLoanInterest')->name('calculate-product-interest');
-    Route::put('send-to-admin/{id}', 'sendMemberOrderToAdmin')->name('send-to-admin');
+    Route::get('send-to-admin/{id}', 'sendMemberOrderToAdmin')->name('send-to-admin');
 });
 Route::controller(NewsletterController::class)->group(function () {
     Route::post('newsletter', 'store');

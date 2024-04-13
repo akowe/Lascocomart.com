@@ -186,7 +186,7 @@ public function requestProductLoan(Request $request, $orderId){
     ->where('cooperative_code', $code)
     ->where('name', 'product')->pluck('name')->first();
 
-    $loanType = LoanType::select('id')
+    $loanTypeID = LoanType::select('id')
     ->where('cooperative_code', $code)
     ->where('name', 'product')->pluck('id')->first();
     
@@ -214,8 +214,8 @@ public function requestProductLoan(Request $request, $orderId){
            $percentage = '';
            $getOrderID = '';
 
-          return view('loan.member.product-loan', compact('chooseLoanType', 
-          'loanType', 'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
+          return view('loan.member.product-loan', compact('chooseLoanType', 'loanTypeID',
+        'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
           'rateType','duration',  'getOrderTotal', 'getOrderID', 'productLoanInterest'));  
 }
 
@@ -226,7 +226,6 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       $chooseLoanType = LoanType::select('*')
       ->where('cooperative_code', $code)->get();
       $loanTypeID = $id;
-    
 
       $getOrderID = DB::table('orders')->select('id')
       ->where('grandtotal', $amount)
@@ -241,7 +240,6 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       ->where('cooperative_code', $code)->get();
       $findloanTypeName =Arr::pluck($getLoanTypeName, 'name');
       $loanTypeName = implode(" ",$findloanTypeName); 
-   
   
       $loanTypeName = LoanType::select('name')
       ->where('id', $id)
@@ -279,7 +277,7 @@ public function calculateProductLoanInterest(Request $request, $id, $amount, $du
       $annualInterest = $percentage * $maxTenure; //for flat rate interest type
       $totalDue = $principal +   $annualInterest;//for flat rate interest type
       
-      return view('loan.member.product-loan', compact('chooseLoanType', 'loanType',
+      return view('loan.member.product-loan', compact('chooseLoanType',
       'loanTypeName', 'principal', 'maxTenure', 'percentage', 'annualInterest',
       'totalDue', 'rateType', 'duration', 'loanTypeID', 'getOrderTotal', 'getOrderID', 'productLoanInterest'));
   }
@@ -301,6 +299,8 @@ public function sendMemberOrderToAdmin(Request $request, $id){
           $get_superadmin_id =Arr::pluck($superadmin, 'id');
           $superadmin_id = implode('', $get_superadmin_id);
 
+          $order_number = $order->order_number;
+          $grandtotal = $order->grandtotal;
           $notification = new NewOrder($order_number);
           Notification::send($superadmin, $notification);
           

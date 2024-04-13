@@ -176,7 +176,7 @@
                                                       <input type="text" name="ratetype"  class="form-control"
                                                        value="{{$chooseLoanType}}" disabled>
                                                        @endif 
-                                                <input type="hidden" id="ratetype" value="{{$loanType}}">
+                                                <input type="hidden" id="ratetype" value="{{$loanTypeID}}">
                                                    
                                                       <span id="loanError"></span>
                                                       @error('loantype')
@@ -372,7 +372,7 @@
                                           <p></p>
                                     </div>
                                     @if($principal)
-                                    <form action="{{ url('send-to-admin')}}/{{$getOrderID }}" method="put">
+                                    <form action="{{ route('send-to-admin',$getOrderID)}}" method="get">
                                           @csrf
                                           <input type="hidden" name="id" value="{{$getOrderID}}">
                                           <input type="hidden" name="loanTypeID" value="{{$loanTypeID}}">

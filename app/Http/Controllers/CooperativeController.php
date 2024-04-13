@@ -16,6 +16,12 @@ use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Loan;
+use App\Models\LoanType;
+use App\Models\LoanRepayment;
+use App\Models\LoanSetting;
+use App\Models\DueLoans;
+use App\Models\LoanPaymentTransaction;
 use App\Models\Credit;
 use App\Models\ShippingDetail;
 use App\Models\Transaction;
@@ -357,7 +363,9 @@ class CooperativeController extends Controller
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
          ->where('users.code', $code)
          ->where('orders.user_id', '!=', Auth::user()->id)
-         ->where('orders.status', '!=', 'cancel')
+          ->where('orders.status', '!=', 'cancel')
+        // ->where('orders.status', '=', 'awaits approval')
+         ->where('orders.cooperative_code', '=', $code)
          ->orderBy('orders.date', 'desc')
          ->where(function ($query) use ($search) {  // <<<
         $query->where('users.fname', 'LIKE', '%'.$search.'%')
