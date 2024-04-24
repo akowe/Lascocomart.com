@@ -52,6 +52,11 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return view('index');
 });
+Route::group(['middleware' => ['ipcheck']], function () {
+    // your routes here
+    Route::webhooks('paystack/webhook');
+});
+
  //Clear route cache
  Route::get('/route-clear', function() {
     \Artisan::call('route:clear');

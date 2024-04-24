@@ -3028,13 +3028,15 @@ function check_account_number() {
             document.getElementById('check_account').innerHTML = ' ';
             document.getElementById('show-progress').style.display = '';
 
-
+ 
             // Make the fetch request with the variables
+            //Test secret key: sk_test_b665e0b51fe5f6df4ea0f29a56d8d84b74eca251
+            //live secret key : sk_live_883a3c48aa5da65d6793526046220d82ea0f1c16
             const fetchPromise =
                   fetch("https://api.paystack.co/bank/resolve?account_number=" + accountNumber + "&bank_code=" +
                         bankCode, {
                               headers: {
-                                    Authorization: 'Bearer sk_test_b665e0b51fe5f6df4ea0f29a56d8d84b74eca251'
+                                    Authorization: 'Bearer sk_live_883a3c48aa5da65d6793526046220d82ea0f1c16'
                               }
                         });
             // Timeout after 120 seconds//  2 min

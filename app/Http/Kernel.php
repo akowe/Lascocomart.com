@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'members' => \App\Http\Middleware\Members::class,
         'slashes' => \App\Http\Middleware\trailingSlashes::class,
         'fmcg' => \App\Http\Middleware\Fmcg::class,   
+        'ipcheck' => \App\Http\Middleware\WhiteListIpMiddleware::class,
     ];
 }
