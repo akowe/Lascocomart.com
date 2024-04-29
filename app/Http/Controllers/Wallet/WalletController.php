@@ -102,7 +102,7 @@ class WalletController extends Controller
       
             $json_url = "http://api.ebulksms.com:8080/sendsms.json";
             $username = 'lascocomart@gmail.com';
-            $apikey = '';
+            $apikey = 'd34fc300d4f1466b291f54cf895d87ef51a42a46';
             $sendername = 'LascocoMart';
             $messagetext = 'Kindly enter this '.$generateOtp.' code to verify your BVN';
             $gsm = array();
