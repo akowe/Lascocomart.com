@@ -18,9 +18,6 @@ use App\Http\Controllers\CardPaymentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FundRequestController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\Loan\LoanController;
-use App\Http\Controllers\Loan\CooperativeLoan;
-use App\Http\Controllers\Loan\MemberLoan;
 use App\Http\Controllers\OrderItem;
 use App\Models\Product;
 use App\Models\FcmgProduct;
@@ -36,6 +33,12 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Auth\NewAdminUserController;
 use App\Http\Controllers\BankTransferController;
 use App\Http\Controllers\FmcgPaymentController;
+use App\Http\Controllers\Loan\LoanController;
+use App\Http\Controllers\Loan\CooperativeLoan;
+use App\Http\Controllers\Loan\MemberLoan;
+use App\Http\Controllers\Wallet\WalletController;
+use App\Http\Controllers\Wallet\AdminWalletController;
+use App\Http\Controllers\Wallet\MemberWalletController;
 
 
 /*
@@ -399,8 +402,25 @@ Route::controller(CooperativeLoan::class)->group(function () {
 Route::controller(MemberLoan::class)->group(function () {
     Route::get('member-request-loan', 'requestLoan')->name('member-request-loan');
     Route::get('member-loan-history', 'loanHistory');
-    Route::get('calculate-interest/{id}/{amount}/{duration}', 'calculateInterest')->name('calculate-interest');
+    Route::get('calculate-interest/{id}/{amount}/{duration}', 'calculateInterest')->name('calculate-interest');  
+});
+//Wallet
+Route::controller(WalletController::class)->group(function (){
+    Route::get('wallet', 'userWallet');
+    Route::get('create-wallet', 'createWallet');
+    Route::post('store-wallet', 'storeWallet')->name('store-wallet');
+    Route::get('bvn-verify-consent/{bvn}', 'bvnConsent');
+    Route::post('verify-otp', 'createWalletAccount')->name('verify-otp');
 
-    
+});
+
+//Admin Wallet
+Route::controller(AdminWalletController::class)->group(function () {
+    Route::get('admin-wallet', 'adminWallet');
+
+});
+//Member Wallet
+Route::controller(MemberWalletController::class)->group(function (){
+
 });
 

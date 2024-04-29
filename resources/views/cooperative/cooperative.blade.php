@@ -799,22 +799,7 @@ function myFunction() {
 }
 </script>
 
-<script>
-$(document).ready(function() {
-      $("#show_hide_wallet a").on('click', function(event) {
-            event.preventDefault();
-            if ($('#show_hide_wallet input').attr("type") == "text") {
-                  $('#show_hide_wallet input').attr('type', 'password');
-                  $('#show_hide_wallet i').addClass("fa-eye-slash");
-                  $('#show_hide_wallet i').removeClass("fa-eye");
-            } else if ($('#show_hide_wallet input').attr("type") == "password") {
-                  $('#show_hide_wallet input').attr('type', 'text');
-                  $('#show_hide_wallet i').removeClass("fa-eye-slash");
-                  $('#show_hide_wallet i').addClass("fa-eye");
-            }
-      });
-});
-</script>
+
 
 
 @endsection

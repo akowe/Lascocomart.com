@@ -1574,7 +1574,7 @@
                                                                                                 <div
                                                                                                       class="dropdown-menu-column">
                                                                                                       <a class="dropdown-item"
-                                                                                                            href="">
+                                                                                                            href="{{ url('wallet') }}">
                                                                                                             Wallet
                                                                                                       </a>
 
@@ -1851,7 +1851,7 @@
                                                                                                 <div
                                                                                                       class="dropdown-menu-column">
                                                                                                       <a class="dropdown-item"
-                                                                                                            href="">
+                                                                                                            href="{{ url('wallet') }}">
                                                                                                             Wallet
                                                                                                       </a>
 
@@ -2676,7 +2676,22 @@
                                     <!-- Tabler Core -->
                                     <script src="/back/dist/js/tabler.min.js"></script>
                                     <script src="/back/dist/js/demo.min.js"></script>
-
+                                    <script>
+                                    $(document).ready(function() {
+                                          $("#show_hide_wallet a").on('click', function(event) {
+                                                event.preventDefault();
+                                                if ($('#show_hide_wallet input').attr("type") == "text") {
+                                                      $('#show_hide_wallet input').attr('type', 'password');
+                                                      $('#show_hide_wallet i').addClass("fa-eye-slash");
+                                                      $('#show_hide_wallet i').removeClass("fa-eye");
+                                                } else if ($('#show_hide_wallet input').attr("type") == "password") {
+                                                      $('#show_hide_wallet input').attr('type', 'text');
+                                                      $('#show_hide_wallet i').removeClass("fa-eye-slash");
+                                                      $('#show_hide_wallet i').addClass("fa-eye");
+                                                }
+                                          });
+                                    });
+                                    </script>
                                     <script>
                                     // loan type rate
                                     function increaseValue() {
@@ -3397,6 +3412,7 @@
                                           window.Litepicker && (new Litepicker({
                                                 element: document.getElementById(
                                                       'datepicker-icon'),
+                                                      
                                                 buttonText: {
                                                       previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
