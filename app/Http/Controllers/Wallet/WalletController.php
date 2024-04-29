@@ -102,7 +102,7 @@ class WalletController extends Controller
       
             $json_url = "http://api.ebulksms.com:8080/sendsms.json";
             $username = 'lascocomart@gmail.com';
-            $apikey = 'd34fc300d4f1466b291f54cf895d87ef51a42a46';
+            $apikey = '';
             $sendername = 'LascocoMart';
             $messagetext = 'Kindly enter this '.$generateOtp.' code to verify your BVN';
             $gsm = array();
@@ -231,7 +231,9 @@ class WalletController extends Controller
                   CURLOPT_CUSTOMREQUEST => 'POST',
                   CURLOPT_POSTFIELDS =>$json_data,
                     CURLOPT_HTTPHEADER => array(
-                      'Content-Type: application/json'
+                      'Content-Type: application/json',
+                      'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6' ,
+                      'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b'
                     )
                   ));
                   $response = curl_exec($curl);
