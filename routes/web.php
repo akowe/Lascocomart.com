@@ -410,7 +410,7 @@ Route::controller(WalletController::class)->group(function (){
     Route::get('create-wallet', 'createWallet');
     Route::post('store-wallet', 'storeWallet')->name('store-wallet');
     Route::get('bvn-verify-consent/{bvn}', 'bvnConsent');
-    Route::post('verify-otp', 'createWalletAccount')->name('verify-otp');
+    Route::post('create-wallet-account', 'createWalletAccount')->name('create-wallet-account');
 
 });
 

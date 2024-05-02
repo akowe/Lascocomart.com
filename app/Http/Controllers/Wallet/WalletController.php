@@ -77,16 +77,16 @@ class WalletController extends Controller
         $dob            = $request->dob;
         $bvn            = $request->bvn;
 
-        $wallet = new Wallet;
-        $wallet->user_id                = $id;
-        $wallet->cooperative_code       = $cooperativeCode;
-        $wallet->cooperative_role       = $role;
-        $wallet->firstname              = $firstname;
-        $wallet->surname                = $surname;
-        $wallet->phone                  = $phone;
-        $wallet->gender                 = $gender;
-        $wallete->dob                   = $dob;
-        $wallet->save();
+        // $wallet = new Wallet;
+        // $wallet->user_id                = $id;
+        // $wallet->cooperative_code       = $cooperativeCode;
+        // $wallet->cooperative_role       = $role;
+        // $wallet->firstname              = $firstname;
+        // $wallet->surname                = $surname;
+        // $wallet->phone                  = $phone;
+        // $wallet->gender                 = $gender;
+        // $wallete->dob                   = $dob;
+        // $wallet->save();
 
         if($wallet){
             $pin = mt_rand(100000, 999999)
@@ -162,110 +162,98 @@ class WalletController extends Controller
               }  
         }  
     }
-
+//for otp
     public function bvnConsent(Request $request, $bvn){
         return view('wallet.bvn-consent');
     }
 
     public function createWalletAccount(Request $request){
         $id = Auth::user()->id;
+        $cooperativeCode = Auth::user()->code;
+        $role = Auth::user()->role_name;
         $this->validate($request, [
-            'otp'         => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:6|max:6',
-            ]);
-        $otp = $request->otp;
-        $bvn = $request->bvn;
-        $checkOtp= Otp::where('code', $otp)->exists();
-        if($checkOtp){
-            $firstname = DB::table('wallet')
-            ->select(['firstname'])
-            ->where('user_id', $id)
-            ->where('deleted_at', '=', null)
-            ->pluck('firstname')->first();
+          'firstname'         => 'required|max:255',  
+          'surname'           => 'required|max:255',  
+          'phone'             => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:11',
+          'gender'            => 'required|max:255',
+          'date_of_birth'     => 'required|max:255',  
+          'bvn'               => 'required|min:11|max:11', 
+          ]);
+        $countryCode = '234';
+        $trimPhone = explode(',', ltrim($request->phone, "0"));
+        $getPhone = implode("", $trimPhone);
+        $phoneNumber =  $countryCode.$getPhone; 
 
-            $surname = DB::table('wallet')
-            ->select(['surname'])
-            ->where('user_id', $id)
-            ->where('deleted_at', '=', null)
-            ->pluck('surname')->first();
+        $firstname      = $request->firstname;
+        $surname        = $request->surname;
+        $phone          = $phoneNumber;
+        $gender         = $request->gender;
+        $dob            = $request->date_of_birth;
+        $bvn            = $request->bvn;
 
-            $phone = DB::table('wallet')
-            ->select(['phone'])
-            ->where('user_id', $id)
-            ->where('deleted_at', '=', null)
-            ->pluck('phone')->first();
+        // $checkOtp= Otp::where('code', $otp)->exists();
+        //Ogaranya Wallet Account 
+        //staging: https://api.staging.ogaranya.com/v1/2347033141516/wallet
+        //'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+        //'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+        //production:  https://api.ogaranya.com/v1/2347033141516/wallet
+        // 'token: MDY0OTgzMTkxNjIzNGViZDA3YWIxZWMwZTFjYzY2Mzk1OTAwYjYwNTc2ZjY4NzBlOTBlMGQzMjk5YzJlZmUxZA==',
+        // 'publickey: 4f223ac9cff724d03833fb8fb9e1a0638dc5125696420cc33c71bcf2e35a0af08beb8cd85a0c0c2eca2670d0244ca70bb9dff6bfa081def75cdaab1034beb1fe',
+        $json_url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet";
+        $data = array(
+          'firstname'     => $firstname,
+          'surname'       => $surname,
+          'phone'         => $phone,
+          'gender'        => $gender,
+          'dob'           => $dob,
+          'bvn'           => $bvn
+        );
+        $json_data = json_encode($data);
+        if($json_data) {
+              $curl = curl_init();
+              curl_setopt_array($curl, array(
+              CURLOPT_URL => $json_url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              CURLOPT_POSTFIELDS =>$json_data,
+              CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+                )
+              ));
+              $response = curl_exec($curl);
+              $err = curl_error($curl);
+              curl_close($curl);
+              $result =  json_decode($response, true);
+            }
+            if($result['status'] == 'success'){
+              $account_number = $result['data']['account_number'];
+              $fullname = $result['data']['full_name'];
+              $bank_name = $result['data']['bank_name'];
 
-            $gender = DB::table('wallet')
-            ->select(['gender'])
-            ->where('user_id', $id)
-            ->where('deleted_at', '=', null)
-            ->pluck('gender')->first();
+              $wallet = new Wallet;
+              $wallet->user_id                = $id;
+              $wallet->cooperative_code       = $cooperativeCode;
+              $wallet->cooperative_role       = $role;
+              $wallet->firstname              = $firstname;
+              $wallet->surname                = $surname;
+              $wallet->phone                  = $phone;
+              $wallet->gender                 = $gender;
+              $wallet->dob                    = $dob;
+              $wallet->wallet_account_number  = $account_number;
+              $wallet->fullname               = $fullname;
+              $wallet->bank_name              =  $bank_name;
+              $wallet->save();
 
-            $dob = DB::table('wallet')
-            ->select(['dob'])
-            ->where('user_id', $id)
-            ->where('deleted_at', '=', null)
-            ->pluck('dob')->first();
-            //Ogaranya Wallet Account 
-            //staging: https://api.staging.ogaranya.com/v1/2347033141516/wallet
-            //production:  https://api.ogaranya.com/v1/2347033141516/wallet
-            $json_url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet";
-            $data = array(
-                    'firstname'     => $firstname,
-                    'surname'       => $surname,
-                    'phone'         => $phone,
-                    'gender'        => $gender,
-                    'dob'           => $dob,
-                    'bvn'           => $bvn
-                );
-                $json_data = json_encode($data);
-                if($json_data) {
-                  $curl = curl_init();
-                  curl_setopt_array($curl, array(
-                  CURLOPT_URL => $json_url,
-                  CURLOPT_RETURNTRANSFER => true,
-                  CURLOPT_ENCODING => '',
-                  CURLOPT_MAXREDIRS => 10,
-                  CURLOPT_TIMEOUT => 0,
-                  CURLOPT_SSL_VERIFYPEER => false,
-                  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                  CURLOPT_CUSTOMREQUEST => 'POST',
-                  CURLOPT_POSTFIELDS =>$json_data,
-                    CURLOPT_HTTPHEADER => array(
-                      'Content-Type: application/json',
-                      'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6' ,
-                      'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b'
-                    )
-                  ));
-                  $response = curl_exec($curl);
-                  $err = curl_error($curl);
-                  $res = json_decode($response, true);
-                }
-                if($response->status == 'success'){
-                    $account_number  =  $response->data->account_number;
-                    $fullname        =  $response->data->full_name;
-                    $bankName        =  $response->data->bank_name;
-                     //update user wallet
-                     $updateWallet = Wallet::where('user_id', $id)
-                     ->update([
-                         'fullname'              => $fullname,
-                         'bank_name'             => $bankName,
-                         'wallet_account_number' => $account_number,
-                     ]);
-                         $message ="Wallet successfully created";             
-                         return redirect('wallet')->with('wallet', $message);
-                  }
-                  elseif($err){
-                    $message ="Opps! something went wrong";
-                    return redirect('create-wallet')->with('sms-error', $message);
-                  }
-                  else{ 
-                    $message ="Opps! something went wrong";
-                    return redirect('create-wallet')->with('sms-error', $message);
-                  }
+              $message ="Wallet successfully created";             
+              return redirect('wallet')->with('wallet', $message);
+              exit;
+            } else {
+              $error = $result['message'];
+              $message = $error ;               
+              return redirect('create-wallet')->with('sms-error', $message);
+            }
         }//end check otp
-        else{
-            $message ="Invalid Otp";
-            return redirect()->back()->with('otp-error', $message); 
-        }
-    }
+     
 }//class
