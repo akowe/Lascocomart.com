@@ -13,6 +13,7 @@ use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\WalletHistory;
+use App\Models\FundWallet;
 use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\LoanRepayment;
@@ -76,17 +77,6 @@ class WalletController extends Controller
         $gender         = $request->gender;
         $dob            = $request->dob;
         $bvn            = $request->bvn;
-
-        // $wallet = new Wallet;
-        // $wallet->user_id                = $id;
-        // $wallet->cooperative_code       = $cooperativeCode;
-        // $wallet->cooperative_role       = $role;
-        // $wallet->firstname              = $firstname;
-        // $wallet->surname                = $surname;
-        // $wallet->phone                  = $phone;
-        // $wallet->gender                 = $gender;
-        // $wallete->dob                   = $dob;
-        // $wallet->save();
 
         if($wallet){
             $pin = mt_rand(100000, 999999)
@@ -196,6 +186,7 @@ class WalletController extends Controller
         //staging: https://api.staging.ogaranya.com/v1/2347033141516/wallet
         //'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
         //'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+        
         //production:  https://api.ogaranya.com/v1/2347033141516/wallet
         // 'token: MDY0OTgzMTkxNjIzNGViZDA3YWIxZWMwZTFjYzY2Mzk1OTAwYjYwNTc2ZjY4NzBlOTBlMGQzMjk5YzJlZmUxZA==',
         // 'publickey: 4f223ac9cff724d03833fb8fb9e1a0638dc5125696420cc33c71bcf2e35a0af08beb8cd85a0c0c2eca2670d0244ca70bb9dff6bfa081def75cdaab1034beb1fe',
@@ -256,4 +247,10 @@ class WalletController extends Controller
             }
         }//end check otp
      
+        public function fundWalletAccount(Request $request){
+          if( Auth::user()){
+          }
+          else { return Redirect::to('/login');}
+
+        }
 }//class

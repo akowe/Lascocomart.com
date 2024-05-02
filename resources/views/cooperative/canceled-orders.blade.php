@@ -344,7 +344,7 @@ function approveOrder() {
 
       if (answer) {
             var id = document.getElementById('id').value;
-            var showRoute = "{{ route('order-update', ':id') }}";
+            var showRoute = "{{ route('approve-order', ':id') }}";
             url = showRoute.replace(':id', id);
 
             window.location = url;

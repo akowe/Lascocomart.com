@@ -209,17 +209,20 @@ class CooperativeController extends Controller
         $perPage = $request->perPage ?? 10;
         $search = $request->input('search');
         
-        $wallets = DB::table('wallet_history')->join('users', 'users.id', '=', 'wallet_history.user_id')
-        ->select(['wallet_history.*', 'users.fname'])
-        ->where('wallet_history.user_id', $id)
-        ->orderBy('wallet_history.created_at', 'desc')
+        $wallets = DB::table('wallet_transaction')
+        ->join('wallet', 'wallet.id', '=','wallet_transaction.wallet_id' )
+        ->join('users', 'users.id', '=', 'wallet.user_id')
+        ->select(['wallet_transaction.*', 'users.fname'])
+        ->where('wallet.user_id', $id)
+        ->orderBy('wallet_transaction.created_at', 'desc')
         ->where(function ($query) use ($search) {  // <<<
         $query->where('users.fname', 'LIKE', '%'.$search.'%')
-            ->orWhere('wallet_history.payment_status', 'LIKE', '%'.$search.'%')
-            ->orWhere('wallet_history.amount', 'LIKE', '%'.$search.'%')
-            ->orWhere('wallet_history.reciever', 'LIKE', '%'.$search.'%')
-            ->orWhere('wallet_history.payment_ref', 'LIKE', '%'.$search.'%')
-            ->orderBy('wallet_history.created_at', 'desc');
+            ->orWhere('wallet_transaction.transaction_type', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_transaction.credit', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_transaction.debit', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_transaction.reciever', 'LIKE', '%'.$search.'%')
+            ->orWhere('wallet_transaction.sender', 'LIKE', '%'.$search.'%')
+            ->orderBy('wallet_transaction.created_at', 'desc');
         })->paginate($perPage, $columns = ['*'], $pageName = 'wallets')
             ->appends(['per_page'   => $perPage]);
         

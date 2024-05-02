@@ -1527,8 +1527,7 @@
                                                                                                       </a>
                                                                                                       <a class="dropdown-item"
                                                                                                             href="{{ url('view-canceled-orders') }}">
-                                                                                                            Cancel
-                                                                                                            Orders
+                                                                                                            Cancel Orders
                                                                                                       </a>
 
                                                                                                 </div>
@@ -2661,6 +2660,63 @@
                                     </div>
 
                                     <!----end add member --->
+
+                                                                        <!--- fund wallet modal --->
+                                                                        <div class="modal modal-blur fade" id="modal-wallet" tabindex="-1" role="dialog"
+                                          aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                      <div class="modal-header">
+                                                            <h5 class="modal-title">Add Fund To Wallet </h5>
+                                                            <button type="button" class="btn-close"
+                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                          
+                                                            <form method="POST"
+                                                                  action="{{ route('fund-wallet-account') }}">
+                                                                  @csrf
+                                                                  <div class="mb-3">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <input type="text" class="form-control"
+                                                                              name="amount"
+                                                                              placeholder="Enter the amount you want to add">
+                                                                  </div>
+
+
+                                                                  <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-link link-secondary"
+                                                                              data-bs-dismiss="modal">
+                                                                              Cancel
+                                                                        </a>
+                                                                        <button type="submit" name="submit"
+                                                                              class="btn btn-danger ms-auto">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-send"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke-width="1.5"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none" />
+                                                                                    <path d="M10 14l11 -11" />
+                                                                                    <path
+                                                                                          d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                                                                              </svg>
+                                                                              Add Fund
+                                                                        </button>
+                                                                  </div>
+                                                            </form>
+                                                         
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <!--- end fund wallet modal --->
 
 
                                     <!-- Libs JS -->

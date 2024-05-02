@@ -411,6 +411,7 @@ Route::controller(WalletController::class)->group(function (){
     Route::post('store-wallet', 'storeWallet')->name('store-wallet');
     Route::get('bvn-verify-consent/{bvn}', 'bvnConsent');
     Route::post('create-wallet-account', 'createWalletAccount')->name('create-wallet-account');
+    Route::post('fund-wallet-account', 'fundWalletAccount')->name('fund-wallet-account');
 
 });
 
