@@ -58,7 +58,7 @@
 <div class="page-body">
       <div class="container-xl">
             <div class="pb-3">
-            <p><small class="text-muted"><strong class="text-danger">Fixed Rate</strong>: Admin
+            <p><small class="text-muted"><strong class="text-danger">Flat/Fixed Rate</strong>: Admin
                                     get's fixed
                                     annual interest regardless of the loan duration. <strong class="text-danger ">Simple
                                           Rate</strong>: The higher the loan duration, the more interest
@@ -88,7 +88,7 @@
                                     <div class="col-md-6">
                                           <div class="form-group">
                                                 <p></p>
-                                                <div class="form-label required">Rate</div>
+                                                <div class="form-label required">Rate type <i class="">(Choose)</i></div>
                                                 <select name="rate_type" id="" class="form-control">
                                                                         <option  value="{{$loantype->rate_type}}">{{$loantype->rate_type}}</option>
                                                                         <option value="flat rate">Flat /
