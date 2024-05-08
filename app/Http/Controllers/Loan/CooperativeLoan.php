@@ -588,7 +588,8 @@ class CooperativeLoan extends Controller
         if(Auth::user()->role_name == 'cooperative'){
             $code = Auth::user()->code;
             $memberName = User::all()->where('code', $code)->except(Auth::id()); 
-            $chooseLoanType = LoanType::select('*')
+            $chooseLoanType = LoanType::select('name', 'id')
+            ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
 
             $members='';
@@ -620,7 +621,8 @@ class CooperativeLoan extends Controller
             $getmMembers = User::whereIn('id', $userID)->get('*')->pluck('fname');
             $members = substr($getmMembers, 1, -1);
 
-            $chooseLoanType = LoanType::select('*')
+            $chooseLoanType = LoanType::select('name', 'id')
+            ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
             $loanTypeID = $id;
 

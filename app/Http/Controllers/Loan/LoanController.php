@@ -75,15 +75,18 @@ class LoanController extends Controller
             ->where('member_id', $id)
             ->get()->first();
 
-            if($checkExistingLoan){
-            return redirect('member-request-loan')->with('loanExist', 'You have unfinished loan');
-            }
-            elseif($checkLoanrequest) {
-                # code...
-                return redirect('member-request-loan')->with('loanExist',  'You have a pending loan request.  Contact admin');
+            // if($checkExistingLoan){
+            // return redirect('member-request-loan')->with('loanExist', 'You have unfinished loan');
+            // }
+            // elseif($checkLoanrequest) {
+            //     # code...
+            //     return redirect('member-request-loan')->with('loanExist',  'You have a pending loan request.  Contact admin');
                 
-            }
-            else{ 
+            // }
+            // else{ 
+                if($request->annual_interest < 1){
+                    return redirect('member-request-loan')->with('loan', 'Interest on cash loan can not be "0". Contact admin'); 
+                }
                 $loan = new Loan;
                 $loan->member_id            = $id;
                 $loan->cooperative_code     = $cooperativeCode;
@@ -109,7 +112,8 @@ class LoanController extends Controller
                 }
                 else{
                     return redirect('member-request-loan')->with('loan', 'Opps! Something went wrong');
-                }}
+                }
+            //}
           
            return redirect('member-loan-history')->with('loan', 'Loan request successful!');
 
@@ -142,15 +146,21 @@ class LoanController extends Controller
              ->where('loan_status', '=', 'approved')
              ->get('*')->pluck('principal');
 
-            if(!$checkExistingLoan->isEmpty()){
-            return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has unfinished loan');
-            }
-            elseif (!$checkLoanrequest->isEmpty()) {
-                # code...
-                return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has a pending loan request');
+            // if(!$checkExistingLoan->isEmpty()){
+            // return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has unfinished loan');
+            // }
+            // elseif (!$checkLoanrequest->isEmpty()) {
+            //     # code...
+            //     return redirect('cooperative-create-loan')->with('loanExist',  ''.$members.' has a pending loan request');
                 
+            // }
+           // else{ 
+            if($request->annual_interest < 1){
+                $setInterest = url('/cooperative-loan-type');
+                return redirect('cooperative-create-loan')->with('loan', 'Interest on cash loan can not be "0" . Click here set interest '.$setInterest); 
             }
-            else{ 
+          
+
                 $loan = new Loan;
                 $loan->member_id            = $request->memberID;
                 $loan->cooperative_code     = $code;
@@ -176,7 +186,8 @@ class LoanController extends Controller
                 }
                 else{
                     return redirect('cooperative-create-loan')->with('loan', 'Opps! Something went wrong');
-                }}
+                }
+            //}
           
            return redirect('cooperative-loan')->with('loan', 'Loan added successful!');
 

@@ -50,7 +50,8 @@ class MemberLoan extends Controller
     public function requestLoan(Request $request){
         if(Auth::user()->role_name == 'member'){
             $code = Auth::user()->code;
-            $chooseLoanType = LoanType::select('*')
+            $chooseLoanType = LoanType::select('name', 'id')
+            ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
             
             $principal = '';
@@ -75,7 +76,8 @@ class MemberLoan extends Controller
     public function calculateInterest(Request $request, $id, $amount, $duration){
         if(Auth::user()){
             $code = Auth::user()->code;
-            $chooseLoanType = LoanType::select('*')
+            $chooseLoanType = LoanType::select('name', 'id')
+            ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
             $loanTypeID = $id;
 
