@@ -1527,7 +1527,8 @@
                                                                                                       </a>
                                                                                                       <a class="dropdown-item"
                                                                                                             href="{{ url('view-canceled-orders') }}">
-                                                                                                            Cancel Orders
+                                                                                                            Cancel
+                                                                                                            Orders
                                                                                                       </a>
 
                                                                                                 </div>
@@ -1694,7 +1695,7 @@
                                                                                                                   class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
 
                                                                                                       </a>
-                                                                                                     
+
                                                                                                       <a href="{{ url('cooperative-loan-type') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Loan Type
@@ -2658,11 +2659,9 @@
                                                 </div>
                                           </div>
                                     </div>
-
                                     <!----end add member --->
-
-                                                                        <!--- fund wallet modal --->
-                                                                        <div class="modal modal-blur fade" id="modal-wallet" tabindex="-1" role="dialog"
+                                    <!--- fund wallet modal --->
+                                    <div class="modal modal-blur fade" id="modal-wallet" tabindex="-1" role="dialog"
                                           aria-hidden="true">
                                           <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
@@ -2672,15 +2671,35 @@
                                                                   data-bs-dismiss="modal" aria-label="Close"></button>
                                                       </div>
                                                       <div class="modal-body">
-                                                          
-                                                            <form method="POST"
-                                                                  action="{{ route('fund-wallet-account') }}">
+
+                                                            <form id="paymentForm" method="GET" name="submit">
                                                                   @csrf
+                                                                  <script src="https://js.paystack.co/v1/inline.js">
+                                                                  </script>
                                                                   <div class="mb-3">
                                                                         <label class="form-label">Amount</label>
+
+
+                                                                        @auth
+
+                                                                        <input type="hidden"
+                                                                              value="{{Auth::user()->email}}" id="email"
+                                                                              disabled>
+                                                                        <input type="hidden"
+                                                                              value="{{Auth::user()->id}}" id="user_id"
+                                                                              disabled>
+                                                                        @php
+                                                                        $walletID = \App\Models\Wallet::where('user_id',
+                                                                        Auth::user()->id)->pluck('id')->first();
+                                                                        @endphp
+                                                                        <input type="hidden" value="{{$walletID}}"
+                                                                              id="wallet_id" disabled>
+
                                                                         <input type="text" class="form-control"
                                                                               name="amount"
-                                                                              placeholder="Enter the amount you want to add">
+                                                                              placeholder="Enter the amount you want to add"
+                                                                              id="amount" value="">
+                                                                        @endauth
                                                                   </div>
 
 
@@ -2689,7 +2708,8 @@
                                                                               data-bs-dismiss="modal">
                                                                               Cancel
                                                                         </a>
-                                                                        <button type="submit" name="submit"
+                                                                        <button type="button" name="submit"
+                                                                              onclick=" payWithPaystack() "
                                                                               class="btn btn-danger ms-auto">
                                                                               <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     class="icon icon-tabler icon-tabler-send"
@@ -2710,7 +2730,7 @@
                                                                         </button>
                                                                   </div>
                                                             </form>
-                                                         
+
                                                       </div>
 
                                                 </div>
@@ -2732,18 +2752,79 @@
                                     <!-- Tabler Core -->
                                     <script src="/back/dist/js/tabler.min.js"></script>
                                     <script src="/back/dist/js/demo.min.js"></script>
+
+
+                                    <script>
+                                    var paymentForm = document.getElementById('paymentForm');
+                                    paymentForm.addEventListener('submit', payWithPaystack, false);
+
+                                    function payWithPaystack() {
+                                          var handler = PaystackPop.setup({
+                                                // pk_live_483aa57c04940d7f7565b235ab06f9621a15ef25
+                                                //pk_test_6ce6e9d31412d8fd2574af630c65d0e9aa78c5c7
+                                                key: 'pk_live_a8484bd7353caec4bfa924d6112c76439e5d7e99',
+                                                email: document.getElementById("email").value,
+                                                amount: document.getElementById("amount").value *
+                                                      100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+                                                currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+
+                                                reference: '' + Math.floor((Math.random() * 1000000000) +
+                                                      1
+                                                ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                                                metadata: {
+                                                      custom_fields: [{
+
+                                                      }]
+                                                },
+                                                callback: function(response) {
+                                                      var email = document.getElementById("email")
+                                                            .value;
+                                                      var amount = document.getElementById("amount")
+                                                            .value;
+                                                      var user_id = document.getElementById("user_id")
+                                                            .value;
+                                                      var wallet_id = document.getElementById(
+                                                            "wallet_id").value;
+
+                                                      var paystack_reference = response.reference;
+                                                      var reference = paystack_reference;
+
+                                                      var url = "{{ URL('fund-wallet-account/') }}" +
+                                                            "/" + reference + "/" +
+                                                            user_id + "/" + wallet_id + "/" + amount;
+                                                      location.href = url;
+
+                                                },
+
+
+                                                onClose: function() {
+                                                      alert(
+                                                      'Transaction was not completed, window closed.');
+                                                }
+                                          });
+                                          handler.openIframe();
+                                    }
+                                    </script>
                                     <script>
                                     $(document).ready(function() {
                                           $("#show_hide_wallet a").on('click', function(event) {
                                                 event.preventDefault();
-                                                if ($('#show_hide_wallet input').attr("type") == "text") {
-                                                      $('#show_hide_wallet input').attr('type', 'password');
-                                                      $('#show_hide_wallet i').addClass("fa-eye-slash");
-                                                      $('#show_hide_wallet i').removeClass("fa-eye");
-                                                } else if ($('#show_hide_wallet input').attr("type") == "password") {
-                                                      $('#show_hide_wallet input').attr('type', 'text');
-                                                      $('#show_hide_wallet i').removeClass("fa-eye-slash");
-                                                      $('#show_hide_wallet i').addClass("fa-eye");
+                                                if ($('#show_hide_wallet input').attr("type") ==
+                                                      "text") {
+                                                      $('#show_hide_wallet input').attr('type',
+                                                            'password');
+                                                      $('#show_hide_wallet i').addClass(
+                                                            "fa-eye-slash");
+                                                      $('#show_hide_wallet i').removeClass(
+                                                            "fa-eye");
+                                                } else if ($('#show_hide_wallet input').attr(
+                                                            "type") == "password") {
+                                                      $('#show_hide_wallet input').attr('type',
+                                                            'text');
+                                                      $('#show_hide_wallet i').removeClass(
+                                                            "fa-eye-slash");
+                                                      $('#show_hide_wallet i').addClass(
+                                                            "fa-eye");
                                                 }
                                           });
                                     });
@@ -3468,7 +3549,7 @@
                                           window.Litepicker && (new Litepicker({
                                                 element: document.getElementById(
                                                       'datepicker-icon'),
-                                                      
+
                                                 buttonText: {
                                                       previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
@@ -3573,7 +3654,65 @@
                                                       console.error(`Could not copy text: ${error}`);
                                                 });
                                     }
+
+                                    function copyAccountName(text) {
+                                          navigator.clipboard.writeText(text)
+                                                .then(() => {
+                                                      console.log(`Copied text to clipboard: ${text}`);
+                                                      alert(`${text} . Account name has been copied. `);
+                                                })
+                                                .catch((error) => {
+                                                      console.error(`Could not copy text: ${error}`);
+                                                });
+                                    }
+
+                                    function copyAccountNumber(text) {
+                                          navigator.clipboard.writeText(text)
+                                                .then(() => {
+                                                      console.log(`Copied text to clipboard: ${text}`);
+                                                      alert(`${text} . Account number has been copied. `);
+                                                })
+                                                .catch((error) => {
+                                                      console.error(`Could not copy text: ${error}`);
+                                                });
+                                    }
+
+                                    function copyBankName(text) {
+                                          navigator.clipboard.writeText(text)
+                                                .then(() => {
+                                                      console.log(`Copied text to clipboard: ${text}`);
+                                                      alert(`${text} . Bank Name has been copied. `);
+                                                })
+                                                .catch((error) => {
+                                                      console.error(`Could not copy text: ${error}`);
+                                                });
+                                    }
                                     </script>
+                                    <script>
+function download(file, text) {
+      //creating an invisible element
+      var element = document.createElement('a');
+      element.setAttribute('href',
+            'data:text/plain;charset=utf-8, ' +
+            encodeURIComponent(text));
+      element.setAttribute('download', file);
+      document.body.appendChild(element);
+      element.click();
+
+      document.body.removeChild(element);
+}
+
+// Start file download.
+
+document.getElementById("btnSave")
+      .addEventListener("click", function() {
+            var text =
+                  document.getElementById("text").value;
+            var filename = "wallet-account.txt";
+
+            download(filename, text);
+      }, false);
+</script>
 
 </body>
 

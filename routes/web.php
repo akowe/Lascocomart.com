@@ -406,13 +406,14 @@ Route::controller(MemberLoan::class)->group(function () {
 });
 //Wallet
 Route::controller(WalletController::class)->group(function (){
-    Route::get('wallet', 'userWallet');
+    Route::get('wallet', 'userWallet')->name('wallet');
     Route::get('create-wallet', 'createWallet');
     Route::post('store-wallet', 'storeWallet')->name('store-wallet');
     Route::get('bvn-verify-consent/{bvn}', 'bvnConsent');
     Route::post('create-wallet-account', 'createWalletAccount')->name('create-wallet-account');
-    Route::post('fund-wallet-account', 'fundWalletAccount')->name('fund-wallet-account');
-
+    Route::post('fund-wallet', 'fundWalletAccount')->name('fund-wallet');
+    Route::get('fund-wallet-account/{reference}/{user_id}/{wallet_id}/{amount}', 'fundWalletAccount');
+    Route::get('wallet-balance', 'walletAccountBalance')->name('wallet-balance');
 });
 
 //Admin Wallet
