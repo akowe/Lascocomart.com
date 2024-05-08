@@ -592,6 +592,15 @@ class CooperativeLoan extends Controller
             ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
 
+            $chooseLoanTypeName = LoanType::select('name')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('name')->first();
+
+
+            $chooseLoanTypeID = LoanType::select('id')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('id')->first();
+
             $members='';
             $memberID = '';
             $principal = '';
@@ -605,7 +614,7 @@ class CooperativeLoan extends Controller
             $loanTypeID = '';
             return view('loan.cooperative.create-loan', compact('members', 'memberName', 'memberID', 'chooseLoanType', 'loanType',
             'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
-            'rateType','duration', 'loanTypeID'));
+            'rateType','duration', 'loanTypeID', 'chooseLoanTypeName', 'chooseLoanTypeID'));
 
         }
         else{ return Redirect::to('/login');} 
@@ -624,6 +633,15 @@ class CooperativeLoan extends Controller
             $chooseLoanType = LoanType::select('name', 'id')
             ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
+
+            $chooseLoanTypeName = LoanType::select('name')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('name')->first();
+
+
+            $chooseLoanTypeID = LoanType::select('id')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('id')->first();
             $loanTypeID = $id;
 
             $getLoanTypeName = LoanType::select('name')
@@ -657,7 +675,7 @@ class CooperativeLoan extends Controller
             
             return view('loan.cooperative.create-loan', compact('memberName', 'members', 'memberID', 'chooseLoanType', 'loanType',
             'principal', 'maxTenure',  'percentage', 'annualInterest', 'totalDue',
-            'rateType', 'duration', 'loanTypeID'));
+            'rateType', 'duration', 'loanTypeID', 'chooseLoanTypeName', 'chooseLoanTypeID'));
         }
         else{ return Redirect::to('/login');} 
     }

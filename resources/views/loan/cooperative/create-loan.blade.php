@@ -187,16 +187,15 @@
                                                             <div class="col-md">
                                                                   <div class="form-label required">Choose Loan Type
                                                                   </div>
-                                                                  <select class="form-select" name="ratetype"
-                                                                        id="ratetype"  style="text-transform:capitalize;">
-                                                                        <option value="{{$loanTypeID}}">{{$loanType}}
-                                                                        </option>
-                                                                        @foreach($chooseLoanType as $loantype)
-                                                                        <option value="{{$loantype->id}}">
-                                                                              {{$loantype->name}}
-                                                                        </option>
-                                                                        @endforeach
-                                                                  </select>
+                                                            @if($loanType)
+                                                            <input type="text" name="ratetype"  class="form-control"
+                                                            value="{{$loanType}}" disabled>
+                                                            @else
+                                                            <input type="text" name="ratetype"  class="form-control"
+                                                            value="{{$chooseLoanTypeName}}" disabled>
+                                                            @endif 
+                                                            <input type="hidden" id="ratetype" value="{{$chooseLoanTypeID}}">
+
                                                                   <span id="loanError"></span>
                                                                   @error('loantype')
                                                                   <div class="alert alert-danger alert-dismissible"

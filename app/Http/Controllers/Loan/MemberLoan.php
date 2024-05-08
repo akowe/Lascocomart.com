@@ -50,9 +50,19 @@ class MemberLoan extends Controller
     public function requestLoan(Request $request){
         if(Auth::user()->role_name == 'member'){
             $code = Auth::user()->code;
+
             $chooseLoanType = LoanType::select('name', 'id')
             ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
+
+            $chooseLoanTypeName = LoanType::select('name')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('name')->first();
+
+
+            $chooseLoanTypeID = LoanType::select('id')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('id')->first();
             
             $principal = '';
             $annualInterest = '';
@@ -65,7 +75,7 @@ class MemberLoan extends Controller
             $loanTypeID = '';
             return view('loan.member.request-loan', compact('chooseLoanType', 'loanType',
             'principal', 'maxTenure', 'percentage', 'annualInterest', 'totalDue',
-            'rateType','duration', 'loanTypeID'));
+            'rateType','duration', 'loanTypeID', 'chooseLoanTypeName', 'chooseLoanTypeID'));
         }
         else{
             return Redirect::to('/login');
@@ -79,6 +89,16 @@ class MemberLoan extends Controller
             $chooseLoanType = LoanType::select('name', 'id')
             ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
+
+            $chooseLoanTypeName = LoanType::select('name')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('name')->first();
+
+
+            $chooseLoanTypeID = LoanType::select('id')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('id')->first();
+
             $loanTypeID = $id;
 
             $getLoanTypeName = LoanType::select('name')
@@ -112,7 +132,7 @@ class MemberLoan extends Controller
             
             return view('loan.member.request-loan', compact('chooseLoanType', 'loanType',
             'principal', 'maxTenure',  'percentage', 'annualInterest', 'totalDue',
-            'rateType', 'duration', 'loanTypeID'));
+            'rateType', 'duration', 'loanTypeID', 'chooseLoanTypeName', 'chooseLoanTypeID'));
         }
         else{ return Redirect::to('/login');} 
     }
