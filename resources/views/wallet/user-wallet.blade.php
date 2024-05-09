@@ -181,7 +181,77 @@
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                   </div>
                   @endif
-            </div>
+
+                  <!---wallet history --->
+                  <div class="col-12">
+                        <div class="card">
+                              <div class="card-header">
+                                    <h3 class="card-title">Transaction (s) </h3>
+                              </div>
+                         
+
+                              <div class="table-responsive" id="card">
+                                    <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
+                                          <thead>
+                                                <tr>
+                                                      <th class="w-1"><input class="form-check-input m-0 align-middle"
+                                                                  type="checkbox" aria-label="Select all product"></th>
+                                   
+                                                      <th>Transaction Ref.</th>
+                                                      <th>Amount</th>
+                                                      <th>Description </th>
+                                                      <th>Balance</th>
+                                                      <th>Date</th>
+                                                      
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                          @if(empty($walletTransaction))
+                                          @else
+                                                @foreach($walletTransaction as $data)
+                                                <tr>
+                                                      <td><input class="form-check-input m-0 align-middle"
+                                                                  type="checkbox" aria-label="Select"></td>
+                                                      <td>{{$data['reference']}}</td>
+                                                     
+                                                   
+                                                      <td>
+                                                      @if(Str::contains($data['narration'], 'CREDIT'))
+                                                      {{$data['amount']}} <small>   <span class="badge bg-green-lt">Credit</span></small>
+                                                      @else
+                                                      {{$data['amount']}} <small><span class="badge bg-danger-lt">Debit</span></small>
+                                                      @endif 
+                                                      </td>
+                                                   
+                                                      <td>{{$data['narration']}}</td>
+                                                      <td>{{$data['balance']}}</td>
+                                                      <td>{{ date('m/d/Y', strtotime($data['transaction_date']))}} </td>
+                                                     
+                                                </tr>
+                                                @endforeach
+                                                @endif 
+
+                                          </tbody>
+
+                                    </table>
+                              </div>
+                              <div class="card-footer d-flex align-items-center">
+                                    <p class="m-0 text-secondary">
+
+                                         
+                                    </p>
+
+                                    <ul class="pagination m-0 ms-auto">
+                                         
+
+
+                                    </ul>
+                              </div>
+                        </div>
+                        <!--- card-->
+
+                  </div>
+            </div><!---row deck--->
       </div>
 </div>
 

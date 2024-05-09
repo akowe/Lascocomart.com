@@ -15,6 +15,7 @@ use App\Models\ShippingDetail;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
 use App\Mail\MemberWelcomeEmail;
+use App\Models\Wallet;
 use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\LoanRepayment;
@@ -112,6 +113,31 @@ class MembersController extends Controller
          ->where('loan.member_id', $id)
          ->get('loan_repayment.next_due_date')->pluck('next_due_date')->first();
 
+         $WalletAccountNumber =  DB::table('wallet')
+         ->select(['wallet_account_number'])
+         ->where('user_id', $id)
+         ->pluck('wallet_account_number')->first();
+        
+         $WalletAccountName = DB::table('wallet')
+         ->select(['fullname'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('fullname')->first(); 
+
+         $WalletBankName = DB::table('wallet')
+         ->select(['bank_name'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('bank_name')->first(); 
+
+         $phoneNumber = DB::table('wallet')
+         ->select(['phone'])
+         ->where('user_id', $id)
+         ->pluck('phone')->first();
+         
+         $lastTenDays = Carbon::now()->subDays(10)->format('Y-m-d');
+         $todayDate = Carbon::now()->format('Y-m-d');
+
         $perPage = $request->perPage ?? 10;
         $search = $request->input('search');
         
@@ -131,6 +157,104 @@ class MembersController extends Controller
         })->paginate($perPage, $columns = ['*'], $pageName = 'orders')
         ->appends(['per_page'   => $perPage]);
 
+         //Ogaranya Wallet Account 
+         //staging: https://api.staging.ogaranya.com/v1/2347033141516/wallet
+         //'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+         //'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+         
+         //production:  https://api.ogaranya.com/v1/2347033141516/wallet
+         // 'token: MDY0OTgzMTkxNjIzNGViZDA3YWIxZWMwZTFjYzY2Mzk1OTAwYjYwNTc2ZjY4NzBlOTBlMGQzMjk5YzJlZmUxZA==',
+         // 'publickey: 4f223ac9cff724d03833fb8fb9e1a0638dc5125696420cc33c71bcf2e35a0af08beb8cd85a0c0c2eca2670d0244ca70bb9dff6bfa081def75cdaab1034beb1fe',
+         $data = array(
+          "phone"            => $phoneNumber,
+          "account_number"   => $WalletAccountNumber,
+          );
+          $jsonData = json_encode($data);
+           $url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/info";
+          if($jsonData) {
+                   $curl = curl_init();
+                   curl_setopt_array($curl, array(
+                   CURLOPT_URL => $url,
+                   CURLOPT_RETURNTRANSFER => true,
+                   CURLOPT_CUSTOMREQUEST => 'POST',
+                   CURLOPT_POSTFIELDS =>$jsonData,
+                   CURLOPT_HTTPHEADER => array(
+                     'Content-Type: application/json',
+                     'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                      'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+        
+                     )
+                   ));
+                $res = curl_exec($curl);
+                $error = curl_error($curl);
+                curl_close($curl);
+                $result =  json_decode($res, true);
+                //dd($result);
+              }
+               if($result['status'] == 'success'){
+                $accountBalance = $result['data']['available_balance'];      
+               }
+               if($result['status'] == 'error'){
+                return view('members.dashboard',  compact(
+                  'perPage', 
+                  'credit', 
+                  'countOrders',
+                  'orders',
+                  'approvedOrders',
+                  'getCooperativeLogo',
+                  'wallets', 
+                  'loan',
+                  'dueDtae','loanPeriod', 'WalletAccountNumber',
+                      'WalletAccountName', 'WalletBankName'));
+                 }
+                 $walletdData = array(
+                  "phone"            => $phoneNumber,
+                  "account_number"   => $WalletAccountNumber,
+                  "from"             => $lastTenDays,
+                  "to"               => $todayDate,
+                  );
+
+                  $jsonWalletData = json_encode($walletdData);
+                 // dd($jsonWalletData);
+                  $walletHistoryUrl = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/history";
+                  if($jsonWalletData) {
+                           $curlopt = curl_init();
+                           curl_setopt_array($curlopt, array(
+                           CURLOPT_URL => $walletHistoryUrl,
+                           CURLOPT_RETURNTRANSFER => true,
+                           CURLOPT_CUSTOMREQUEST => 'POST',
+                           CURLOPT_POSTFIELDS =>$jsonWalletData,
+                           CURLOPT_HTTPHEADER => array(
+                             'Content-Type: application/json',
+                             'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                              'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+                
+                            )
+                           ));
+                        $response = curl_exec($curlopt);
+                        $error = curl_error($curlopt);
+                        curl_close($curlopt);
+                        $detail =  json_decode($response, true);
+                      }
+                      if($detail['status'] == 'success'){
+                        $arrayWalletTransaction = $detail['data'];
+                        $getWalletAmount = Arr::pluck($arrayWalletTransaction, 'amount');
+                        $walletAmount = implode(" ",$getWalletAmount);
+                        $walletTransaction = $detail['data'];
+                      }
+                       if($detail['status'] == 'error'){
+                        return view('members.dashboard', compact(
+                            'perPage', 
+                            'credit', 
+                            'countOrders',
+                            'orders',
+                            'approvedOrders',
+                            'getCooperativeLogo',
+                            'wallets', 
+                            'loan',
+                            'dueDtae','loanPeriod', 'WalletAccountNumber',
+                              'WalletAccountName', 'WalletBankName'));
+                      }       
         $pagination = $orders->appends ( array ('search' => $search) );
           if (count ( $pagination ) > 0){
               return view ('members.dashboard' ,  compact(
@@ -157,7 +281,8 @@ class MembersController extends Controller
         'approvedOrders',
         'getCooperativeLogo',
         'wallets', 'loan',
-      'dueDtae','loanPeriod'));
+      'dueDtae','loanPeriod', 'WalletAccountNumber',
+      'WalletAccountName', 'WalletBankName', 'accountBalance',  'walletTransaction'));
       }  
       else { return Redirect::to('/login');}
     }

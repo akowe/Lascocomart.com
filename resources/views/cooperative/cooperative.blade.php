@@ -677,169 +677,58 @@
                               <div class="card-header">
                                     <h3 class="card-title">Wallet Transaction (s) </h3>
                               </div>
-                              <div class="card-body border-bottom py-3">
-                                    <div class="d-flex">
-                                          <div class="text-secondary">
-                                                Show
-                                                <div class="mx-2 d-inline-block">
-                                                      <select id="pagination" class="form-control form-control-sm"
-                                                            name="perPage">
-                                                            <option value="5" @if($perPage==5) selected @endif>5
-                                                            </option>
-                                                            <option value="10" @if($perPage==10) selected @endif>10
-                                                            </option>
-                                                            <option value="25" @if($perPage==25) selected @endif>25
-                                                            </option>
-                                                            <option value="50" @if($perPage==50) selected @endif>50
-                                                            </option>
-                                                      </select>
-                                                </div>
-                                                records
-                                          </div>
-                                          <div class="ms-auto text-secondary">
-                                                <!--search text here -->
-                                                Search:
-                                                <div class="ms-2 d-inline-block">
-                                                      <form action="/cooperative" method="GET" role="search">
-                                                            {{ csrf_field() }}
-                                                            <div class="input-group mb-2">
-                                                                  <input type="text" class="form-control"
-                                                                        placeholder="Search for…" name="search">
-                                                                  <button type="submit" class="btn"
-                                                                        type="button">Go!</button>
-                                                            </div>
-                                                      </form>
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
+                         
 
                               <div class="table-responsive" id="card">
-                                    <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
+                              <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
                                           <thead>
                                                 <tr>
                                                       <th class="w-1"><input class="form-check-input m-0 align-middle"
                                                                   type="checkbox" aria-label="Select all product"></th>
-                                                      <th class="w-1">Date
-                                                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                  class="icon icon-sm icon-thick" width="24" height="24"
-                                                                  viewBox="0 0 24 24" stroke-width="2"
-                                                                  stroke="currentColor" fill="none"
-                                                                  stroke-linecap="round" stroke-linejoin="round">
-                                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                  <path d="M6 15l6 -6l6 6" />
-                                                            </svg>
-                                                      </th>
-
-
-                                                      <th>Ref</th>
+                                   
+                                                      <th>Transaction Ref.</th>
                                                       <th>Amount</th>
-                                                      <th>Status</th>
-                                                      <th>Reciever</th>
-                                                      <th></th>
+                                                      <th>Description </th>
+                                                      <th>Balance</th>
+                                                      <th>Date</th>
+                                                      
                                                 </tr>
                                           </thead>
                                           <tbody>
-                                                @foreach($wallets as $wallet)
+                                          @if(empty($walletTransaction))
+                                          @else
+                                                @foreach($walletTransaction as $data)
                                                 <tr>
                                                       <td><input class="form-check-input m-0 align-middle"
                                                                   type="checkbox" aria-label="Select"></td>
-                                                      <td><span class="text-secondary">
-                                                                  {{ date('m/d/Y', strtotime($wallet->created_at))}}</span>
+                                                      <td>{{$data['reference']}}</td>
+                                                     
+                                                   
+                                                      <td>
+                                                      @if(Str::contains($data['narration'], 'CREDIT'))
+                                                      {{$data['amount']}} <small>   <span class="badge bg-green-lt">Credit</span></small>
+                                                      @else
+                                                      {{$data['amount']}} <small><span class="badge bg-danger-lt">Debit</span></small>
+                                                      @endif 
                                                       </td>
-
-                                                      <td>{{$wallet->paymemnt_ref}}</td>
-                                                      <td>{{number_format($wallet->amount)}}</td>
-                                                      <td>{{$wallet->payment_status}}</td>
-                                                      <td>{{$wallet->reciever}}</td>
-                                                      <td class="">
-                                                            @if($wallet->payment_status =='debit')
-                                                            <span
-                                                                  class="badge bg-red-lt">{{$wallet->payment_status}}</span>
-
-                                                            @elseif($wallet->payment_status =='credit')
-                                                            <span
-                                                                  class="badge bg-green-lt">{{$wallet->payment_status}}</span>
-                                                            @else
-                                                            @endif
-
-                                                      </td>
-                                                      <td class="text-end">
-                                                            <span class="dropdown">
-                                                                  <button
-                                                                        class="btn dropdown-toggle align-text-top text-red"
-                                                                        data-bs-boundary="viewport"
-                                                                        data-bs-toggle="dropdown">Actions</button>
-                                                                  <div class="dropdown-menu dropdown-menu-sm-start">
-                                                                        <a class="dropdown-item"
-                                                                              href="admin-reciept/{{$wallet->id}}">
-                                                                              View
-                                                                        </a>
-
-                                                                  </div>
-                                                            </span>
-                                                      </td>
+                                                   
+                                                      <td>{{$data['narration']}}</td>
+                                                      <td>{{$data['balance']}}</td>
+                                                      <td>{{ date('m/d/Y', strtotime($data['transaction_date']))}} </td>
+                                                     
+           
 
 
                                                 </tr>
                                                 @endforeach
+                                                @endif 
 
                                           </tbody>
 
                                     </table>
                               </div>
                               <div class="card-footer d-flex align-items-center">
-                                    <p class="m-0 text-secondary">
-
-                                          Showing
-                                          {{ ($wallets->currentPage() - 1) * $wallets->perPage() + 1; }} to
-                                          {{ min($wallets->currentPage()* $wallets->perPage(), $wallets->total()) }}
-                                          of
-                                          {{$wallets->total()}} entries
-                                    </p>
-
-                                    <ul class="pagination m-0 ms-auto">
-                                          @if(isset($wallets))
-                                          @if($wallets->currentPage() > 1)
-                                          <li class="page-item ">
-                                                <a class="page-link text-danger"
-                                                      href="{{ $wallets->previousPageUrl() }}" tabindex="-1"
-                                                      aria-disabled="true">
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                                            stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M15 6l-6 6l6 6" />
-                                                      </svg>
-                                                      prev
-                                                </a>
-                                          </li>
-                                          @endif
-
-
-                                          <li class="page-item">
-                                                {{ $wallets->appends(compact('perPage'))->links()  }}
-                                          </li>
-                                          @if($wallets->hasMorePages())
-                                          <li class="page-item">
-                                                <a class="page-link text-danger" href="{{ $wallets->nextPageUrl() }}">
-                                                      next
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                                            stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M9 6l6 6l-6 6" />
-                                                      </svg>
-                                                </a>
-                                          </li>
-                                          @endif
-                                          @endif
-                                    </ul>
+                   
                               </div>
                         </div>
                         <!--- card-->

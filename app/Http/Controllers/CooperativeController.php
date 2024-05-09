@@ -222,10 +222,14 @@ class CooperativeController extends Controller
            ->where('user_id', $id)
            ->where('cooperative_code', $code)
            ->pluck('bank_name')->first(); 
+
            $phoneNumber = DB::table('wallet')
            ->select(['phone'])
            ->where('user_id', $id)
            ->pluck('phone')->first();
+
+           $lastTenDays = Carbon::now()->subDays(10)->format('Y-m-d');
+           $todayDate = Carbon::now()->format('Y-m-d');
  
         $perPage = $request->perPage ?? 10;
         $search = $request->input('search');
@@ -293,6 +297,51 @@ class CooperativeController extends Controller
                         'countShippedItem', 'loan', 'payOutLoan', 'WalletAccountNumber',
                         'WalletAccountName', 'WalletBankName'));
                    }
+                   $walletdData = array(
+                    "phone"            => $phoneNumber,
+                    "account_number"   => $WalletAccountNumber,
+                    "from"             => $lastTenDays,
+                    "to"               => $todayDate,
+                    );
+  
+                    $jsonWalletData = json_encode($walletdData);
+                   // dd($jsonWalletData);
+                    $walletHistoryUrl = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/history";
+                    if($jsonWalletData) {
+                             $curlopt = curl_init();
+                             curl_setopt_array($curlopt, array(
+                             CURLOPT_URL => $walletHistoryUrl,
+                             CURLOPT_RETURNTRANSFER => true,
+                             CURLOPT_CUSTOMREQUEST => 'POST',
+                             CURLOPT_POSTFIELDS =>$jsonWalletData,
+                             CURLOPT_HTTPHEADER => array(
+                               'Content-Type: application/json',
+                               'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                                'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+                  
+                              )
+                             ));
+                          $response = curl_exec($curlopt);
+                          $error = curl_error($curlopt);
+                          curl_close($curlopt);
+                          $detail =  json_decode($response, true);
+                        }
+                        if($detail['status'] == 'success'){
+                          $arrayWalletTransaction = $detail['data'];
+                          $getWalletAmount = Arr::pluck($arrayWalletTransaction, 'amount');
+                          $walletAmount = implode(" ",$getWalletAmount);
+                          $walletTransaction = $detail['data'];
+                        }
+                         if($detail['status'] == 'error'){
+                           
+                            return view('cooperative.cooperative', compact(
+                                'perPage', 'wallets', 'members', 'memberOrders',  'credit', 
+                                'count_product', 'countMyCustomerOrder', 'sales', 
+                                'allocated_funds', 'sumApproveOrder', 'all_orders_id',
+                                'countSoldProducts', 'countApprovedProduct', 'adminActiveMember',
+                                'countShippedItem', 'loan', 'payOutLoan', 'WalletAccountNumber',
+                                'WalletAccountName', 'WalletBankName'));
+                        }
               
                 $pagination = $wallets->appends ( array ('search' => $search) );
                 if (count ( $pagination ) > 0){
@@ -314,7 +363,7 @@ class CooperativeController extends Controller
                 'allocated_funds', 'sumApproveOrder', 'all_orders_id',
                 'countSoldProducts', 'countApprovedProduct', 'adminActiveMember',
                 'countShippedItem', 'loan', 'payOutLoan', 'WalletAccountNumber',
-                'WalletAccountName', 'WalletBankName', 'accountBalance'));
+                'WalletAccountName', 'WalletBankName', 'accountBalance',  'walletTransaction'));
         }
         else { return Redirect::to('/login');}
     }

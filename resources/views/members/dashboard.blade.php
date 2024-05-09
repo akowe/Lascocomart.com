@@ -14,23 +14,15 @@
                         </h2>
                   </div>
                   <!-- Page title actions -->
+                     <!-- Page title actions -->
+                     @if(empty($WalletAccountNumber))
                   <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
                               <span class="d-block ">
-                                    <div class="input-group " id="show_hide_wallet">
-                                    <span class="input-group-text">
-                                        Wallet
-                                          </span>
-                                          <input type="password" value="₦ " class="btn" style="width:140px; color:#00;" disabled>
-                                          <span class="input-group-text">
-                                                <a href="" class="text-secondary">
-                                                      <i class="fa fa-eye-slash"></i>
-                                                </a>
-                                          </span>
-                                    </div>
+                                    <a href="#" class="btn d-none ">
+                                    </a>
                               </span>
-                              <a href="#" class="btn btn-danger d-none d-sm-inline-block" data-bs-toggle="modal"
-                                    data-bs-target="#modal-fund">
+                              <a href="{{ url('create-wallet')  }}" class="btn btn-danger d-none d-sm-inline-block">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                           viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -39,10 +31,67 @@
                                           <path d="M12 5l0 14" />
                                           <path d="M5 12l14 0" />
                                     </svg>
-                                    Fuund Wallet
+
+                                    Create A Wallet
                               </a>
-                              <a href="#" class="btn btn-danger d-sm-none btn-icon" data-bs-toggle="modal"
-                                    data-bs-target="#modal-fund" aria-label="Create new report">
+                              <a href="{{ url('create-wallet')  }}" class="btn btn-danger d-sm-none btn-icon">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                          stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path d="M12 5l0 14" />
+                                          <path d="M5 12l14 0" />
+                                    </svg>
+
+                              </a>
+                        </div>
+                  </div>
+                  @else
+                  <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                              <span class="d-block ">
+                                  @if(empty($accountBalance))
+                                    <div class="input-group " id="show_hide_wallet">
+                                          <span class="input-group-text">
+                                                Wallet
+                                          </span>
+                                          <input type="password" value="₦ 0" class="btn text-secondary" style="width:140px;" >
+                                          <span class="input-group-text">
+                                                <a href="" class="text-secondary">
+                                                      <i class="fa fa-eye-slash"></i>
+                                                </a>
+                                          </span>
+                                    </div>
+                                    @else 
+                                    <div class="input-group " id="show_hide_wallet">
+                                          <span class="input-group-text">
+                                                Wallet
+                                          </span>
+                                          <input type="password" value="₦ {{number_format($accountBalance)}}" class="btn text-secondary" style="width:140px;" >
+                                          <span class="input-group-text">
+                                                <a href="" class="text-secondary">
+                                                      <i class="fa fa-eye-slash"></i>
+                                                </a>
+                                          </span>
+                                    </div>
+                                    @endif 
+
+                              </span>
+                              <a href="#" class="btn btn-danger d-none d-sm-inline-block" data-bs-toggle="modal"
+                                    data-bs-target="#modal-showWalletAcount">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                          stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path d="M12 5l0 14" />
+                                          <path d="M5 12l14 0" />
+                                    </svg>
+                                    Fund Wallet
+                              </a>
+                              <a href="#" class="btn btn-danger d-sm-none btn-icon"  data-bs-toggle="modal"
+                                    data-bs-target="#modal-showWalletAcount">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                           viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -54,6 +103,7 @@
                               </a>
                         </div>
                   </div>
+                  @endif
             </div>
       </div>
 </div>
