@@ -63,7 +63,7 @@ class WalletController extends Controller
             ->where('cooperative_code', $code)
             ->pluck('wallet_account_number')->first();
             if(empty($WalletAccountNumber)){
-                Session::flash('no-wallet', ' You do not have a wallet. Click the  "+ " sign to create one!'); 
+                Session::flash('no-wallet', ' You do not have a wallet. Click the  "+ " sign to create one'); 
             }
             $WalletAccountName = DB::table('wallet')
             ->select(['fullname'])
