@@ -117,7 +117,7 @@ class WalletController extends Controller
                   $error = curl_error($curl);
                   curl_close($curl);
                   $result =  json_decode($res, true);
-                  //dd($result);
+                 // dd($result);
                 }
                  if($result['status'] == 'success'){
                   $accountBalance = $result['data']['available_balance'];
@@ -126,7 +126,8 @@ class WalletController extends Controller
                   return view('wallet.user-wallet', compact('WalletAccountNumber',
                   'WalletAccountName', 'WalletBankName', 'phoneNumber'));
                 }
-
+             
+              //transaction history
                 $walletdData = array(
                   "phone"            => $phoneNumber,
                   "account_number"   => $WalletAccountNumber,
@@ -166,6 +167,8 @@ class WalletController extends Controller
                         return view('wallet.user-wallet', compact('WalletAccountNumber',
                         'WalletAccountName', 'WalletBankName', 'phoneNumber'));
                       }
+
+                   
 
             return view('wallet.user-wallet', compact('WalletAccountNumber',
             'WalletAccountName', 'WalletBankName', 'phoneNumber', 'accountBalance', 'walletTransaction'));
@@ -304,6 +307,7 @@ class WalletController extends Controller
         $data = array(
           'firstname'     => $firstname,
           'surname'       => $surname,
+          'account_name'  => 'LascocoMart/'.$firstname .$surname,
           'phone'         => $phone,
           'gender'        => $gender,
           'dob'           => $dob,
@@ -327,6 +331,7 @@ class WalletController extends Controller
               $err = curl_error($curl);
               curl_close($curl);
               $result =  json_decode($response, true);
+              dd($result);
             }
             if($result['status'] == 'success'){
               $account_number = $result['data']['account_number'];
@@ -512,7 +517,7 @@ class WalletController extends Controller
           return redirect('wallet')->with('wallet', $message);
         }
 
-        public function walletAccountBalance(Request $request){
+        public function walletHistory(Request $request){
           $id = Auth::user()->id;
           $code = Auth::user()->code; 
           $phoneNumber = DB::table('wallet')
@@ -520,53 +525,59 @@ class WalletController extends Controller
           ->where('user_id', $id)
           ->where('cooperative_code', $code)
           ->pluck('phone')->first();
+
           $accountNumber = DB::table('wallet')
           ->select(['wallet_account_number'])
           ->where('user_id', $id)
           ->where('cooperative_code', $code)
           ->pluck('wallet_account_number')->first();
 
-          //Ogaranya Wallet Account 
-        //staging: https://api.staging.ogaranya.com/v1/2347033141516/wallet
-        //'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
-        //'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
-        
-        //production:  https://api.ogaranya.com/v1/2347033141516/wallet
-        // 'token: MDY0OTgzMTkxNjIzNGViZDA3YWIxZWMwZTFjYzY2Mzk1OTAwYjYwNTc2ZjY4NzBlOTBlMGQzMjk5YzJlZmUxZA==',
-        // 'publickey: 4f223ac9cff724d03833fb8fb9e1a0638dc5125696420cc33c71bcf2e35a0af08beb8cd85a0c0c2eca2670d0244ca70bb9dff6bfa081def75cdaab1034beb1fe',
-        $data = array(
-          "phone"            => $phoneNumber,
-          "account_number"   => $accountNumber,
-          );
-          $jsonData = json_encode($data);
-           $url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/info";
-          if($jsonData) {
-                   $curl = curl_init();
-                   curl_setopt_array($curl, array(
-                   CURLOPT_URL => $url,
-                   CURLOPT_RETURNTRANSFER => true,
-                   CURLOPT_CUSTOMREQUEST => 'POST',
-                   CURLOPT_POSTFIELDS =>$jsonData,
-                   CURLOPT_HTTPHEADER => array(
-                     'Content-Type: application/json',
-                     'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
-                      'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
-        
-                     )
-                   ));
-                $res = curl_exec($curl);
-                $error = curl_error($curl);
-                curl_close($curl);
-                $result =  json_decode($res, true);
-                //dd($result);
-              }
-               if($result['status'] == 'success'){
-                $accountBalance = $result['data']['available_balance'];
+          $from =date('Y-d-m', strtotime($request->from));
+          $to = date('Y-d-m', strtotime($request->to));
+          if(empty($to)){
+            Session::flash('no-wallet', 'To search, enter date.'); 
+            return view('wallet.user-wallet', compact('WalletAccountNumber',
+                   'WalletAccountName', 'WalletBankName', 'phoneNumber',  'accountBalance', 'walletTransaction',));
+          }
+          $walletdData = array(
+            "phone"            => $phoneNumber,
+            "account_number"   => $accountNumber,
+            "from"             => $from,
+            "to"               => $to,
+            );
+
+            $jsonWalletData = json_encode($walletdData);
+           // dd($from);
+            $walletHistoryUrl = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/history";
+            if($jsonWalletData) {
+                     $curlopt = curl_init();
+                     curl_setopt_array($curlopt, array(
+                     CURLOPT_URL => $walletHistoryUrl,
+                     CURLOPT_RETURNTRANSFER => true,
+                     CURLOPT_CUSTOMREQUEST => 'POST',
+                     CURLOPT_POSTFIELDS =>$jsonWalletData,
+                     CURLOPT_HTTPHEADER => array(
+                       'Content-Type: application/json',
+                       'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                        'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+          
+                      )
+                     ));
+                  $response = curl_exec($curlopt);
+                  $error = curl_error($curlopt);
+                  curl_close($curlopt);
+                  $detail =  json_decode($response, true);
+                 // dd($response);
+                }
               
-                //dd($accountBalance);
-                              
-                return redirect()->back();
-               }
-         
+                if($detail['status'] == 'success'){
+                  $data = $detail['data'];
+                }
+                 if($detail['status'] == 'error'){
+                 // Session::flash('no-wallet', $error); 
+                  return redirect()->back()->with('no-wallet', $error);
+                }
+
+                return view('wallet.history', compact('data'));
         }
 }//class

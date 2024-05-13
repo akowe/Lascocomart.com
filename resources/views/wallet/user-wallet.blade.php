@@ -7,7 +7,7 @@
                   <div class="col">
                         <!-- Page pre-title -->
                         <div class="page-pretitle">
-                              Wallet History
+                              Wallet 
                         </div>
                         <h2 class="page-title">
                               <span class=" d-none  d-md-block">Wallet</span>
@@ -50,15 +50,15 @@
                   <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
                               <span class="d-block ">
-                                    
+
                                     <div class="input-group " id="show_hide_wallet">
                                           <span class="input-group-text">
                                                 Balance
                                           </span>
-                                          <input type="password" value="₦ {{number_format($accountBalance)}}" class="btn text-secondary" style="width:140px;"
-                                               >
+                                          <input type="password" value="₦ {{number_format($accountBalance)}}"
+                                                class="btn text-secondary" style="width:140px;">
                                           <span class="input-group-text">
-                                                <a href="" class="text-secondary" >
+                                                <a href="" class="text-secondary">
                                                       <i class="fa fa-eye-slash"></i>
                                                 </a>
                                           </span>
@@ -184,52 +184,147 @@
 
                   <!---wallet history --->
                   <div class="col-12">
+
+                        <div class="d-flex">
+                              <div class="text-secondary">
+
+                              </div>
+                              <div class="ms-auto text-secondary">
+                                    <!--search text here -->
+                                    Filter:
+                                    <div class="ms-2 d-inline-block">
+                                          <form action="wallet-history" method="get" role="submit">
+                                                @csrf 
+                                                <div class="input-group mb-2">
+                                                      <div class="row">
+                                                            <div class="col-md">
+                                                                  From <div class="input-icon mb-2">
+                                                                        <span class="input-icon-addon">
+                                                                              <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon" width="24" height="24"
+                                                                                    viewBox="0 0 24 24" stroke-width="2"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z" fill="none">
+                                                                                    </path>
+                                                                                    <path
+                                                                                          d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z">
+                                                                                    </path>
+                                                                                    <path d="M16 3v4"></path>
+                                                                                    <path d="M8 3v4"></path>
+                                                                                    <path d="M4 11h16"></path>
+                                                                                    <path d="M11 15h1"></path>
+                                                                                    <path d="M12 15v3"></path>
+                                                                              </svg>
+                                                                        </span>
+                                                                        <input type="text" class="form-control "
+                                                                              placeholder="Select old date"
+                                                                              id="datepicker-icon" name="from" value="">
+                                                                  </div>
+                                                            </div>
+
+                                                            <div class="col-md">
+                                                                  To
+                                                                  <div class="input-icon mb-2">
+                                                                        <span class="input-icon-addon">
+                                                                              <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                                                                              <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon" width="24" height="24"
+                                                                                    viewBox="0 0 24 24" stroke-width="2"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none"
+                                                                                          d="M0 0h24v24H0z" fill="none">
+                                                                                    </path>
+                                                                                    <path
+                                                                                          d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z">
+                                                                                    </path>
+                                                                                    <path d="M16 3v4"></path>
+                                                                                    <path d="M8 3v4"></path>
+                                                                                    <path d="M4 11h16"></path>
+                                                                                    <path d="M11 15h1"></path>
+                                                                                    <path d="M12 15v3"></path>
+                                                                              </svg>
+                                                                        </span>
+                                                                        <div class="input-group mb-2">
+                                                                              <input type="text" class="form-control "
+                                                                                    placeholder="Select recent date"
+                                                                                    id="datepicker-default" name="to"
+                                                                                    value="">
+                                                                              <button type="submit" name="submit" class="btn"
+                                                                                    type="button">Go!</button>
+                                                                        </div>
+                                                                  </div>
+
+                                                            </div>
+                                                      </div>
+
+
+
+
+
+                                                </div>
+                                          </form>
+                                    </div>
+                              </div>
+                        </div>
+
+                  </div>
+
+               
+                  <div class="col-12">
                         <div class="card">
                               <div class="card-header">
                                     <h3 class="card-title">Transaction (s) </h3>
                               </div>
-                         
-
                               <div class="table-responsive" id="card">
                                     <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
                                           <thead>
                                                 <tr>
                                                       <th class="w-1"><input class="form-check-input m-0 align-middle"
-                                                                  type="checkbox" aria-label="Select all product"></th>
-                                   
+                                                                  type="checkbox" aria-label="Select all product">
+                                                      </th>
+
                                                       <th>Transaction Ref.</th>
                                                       <th>Amount</th>
                                                       <th>Description </th>
                                                       <th>Balance</th>
                                                       <th>Date</th>
-                                                      
+
                                                 </tr>
                                           </thead>
-                                          <tbody>
-                                          @if(empty($walletTransaction))
-                                          @else
+
+                                          <tbody>@if(empty($walletTransaction))
+                                                @else
                                                 @foreach($walletTransaction as $data)
                                                 <tr>
                                                       <td><input class="form-check-input m-0 align-middle"
                                                                   type="checkbox" aria-label="Select"></td>
                                                       <td>{{$data['reference']}}</td>
-                                                     
-                                                   
+
+
                                                       <td>
-                                                      @if(Str::contains($data['narration'], 'CREDIT'))
-                                                      {{$data['amount']}} <small>   <span class="badge bg-green-lt">Credit</span></small>
-                                                      @else
-                                                      {{$data['amount']}} <small><span class="badge bg-danger-lt">Debit</span></small>
-                                                      @endif 
+                                                            @if(Str::contains($data['narration'], 'CREDIT'))
+                                                            {{$data['amount']}} <small> <span
+                                                                        class="badge bg-green-lt">Credit</span></small>
+                                                            @else
+                                                            {{$data['amount']}} <small><span
+                                                                        class="badge bg-danger-lt">Debit</span></small>
+                                                            @endif
                                                       </td>
-                                                   
+
                                                       <td>{{$data['narration']}}</td>
                                                       <td>{{$data['balance']}}</td>
-                                                      <td>{{ date('m/d/Y', strtotime($data['transaction_date']))}} </td>
-                                                     
+                                                      <td>{{ date('m/d/Y', strtotime($data['transaction_date']))}}
+                                                      </td>
+
                                                 </tr>
                                                 @endforeach
-                                                @endif 
+                                                @endif
 
                                           </tbody>
 
@@ -238,11 +333,11 @@
                               <div class="card-footer d-flex align-items-center">
                                     <p class="m-0 text-secondary">
 
-                                         
+
                                     </p>
 
                                     <ul class="pagination m-0 ms-auto">
-                                         
+
 
 
                                     </ul>
@@ -251,7 +346,8 @@
                         <!--- card-->
 
                   </div>
-            </div><!---row deck--->
+            </div>
+            <!---row deck--->
       </div>
 </div>
 
@@ -266,7 +362,8 @@
                   <div class="modal-body">
 
                         <div class="mb-3">
-                              <label class="form-label">Money transfer to this bank account will automatically top up
+                              <label class="form-label">Money transfer to this bank account will automatically top
+                                    up
                                     your LascocoMart wallet.</label>
                         </div>
                         <div class="row">
@@ -420,11 +517,9 @@ function checkbalance() {
             .catch(error => console.log(error));
 }
 
-function balance(){
+function balance() {
       var url = "{{ route('wallet') }}";
-      window.location =url;
+      window.location = url;
 }
-
-
 </script>
 @endsection

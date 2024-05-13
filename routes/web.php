@@ -413,7 +413,7 @@ Route::controller(WalletController::class)->group(function (){
     Route::post('create-wallet-account', 'createWalletAccount')->name('create-wallet-account');
     Route::post('fund-wallet', 'fundWalletAccount')->name('fund-wallet');
     Route::get('fund-wallet-account/{reference}/{user_id}/{wallet_id}/{amount}', 'fundWalletAccount');
-    Route::get('wallet-balance', 'walletAccountBalance')->name('wallet-balance');
+    Route::get('wallet-history', 'walletHistory')->name('wallet-history');
 });
 
 //Admin Wallet
