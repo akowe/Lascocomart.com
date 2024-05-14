@@ -461,8 +461,7 @@
                                                                                           Show all notifications
                                                                                     </a>
                                                                               </div>
-                                                                              <div class="col text-truncate"
-                                                                                    style="width:300px;">
+                                                                              <div class="col text-truncate">
                                                                                     <div
                                                                                           class="d-block text-secondary text-truncate mt-n1">
                                                                                           <div class=" text-secondary">
