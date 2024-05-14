@@ -22,3 +22,4 @@ storage/logs/laravel.log
 app/.DS_Store
 app/Http/Controllers/Wallet/WalletController.php
 *.php
+storage/logs/laravel.log
