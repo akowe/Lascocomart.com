@@ -51,11 +51,6 @@ class WalletController extends Controller
         if( Auth::user()){
             $code = Auth::user()->code; 
             $id = Auth::user()->id; 
-            $phoneNumber =  DB::table('wallet')
-            ->select(['phone'])
-            ->where('user_id', $id)
-            ->where('cooperative_code', $code)
-            ->pluck('phone')->first();
 
             $WalletAccountNumber =  DB::table('wallet')
             ->select(['wallet_account_number'])

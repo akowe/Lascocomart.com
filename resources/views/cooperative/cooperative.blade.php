@@ -3,14 +3,41 @@
 <!-- Page header -->
 <div class="page-header d-print-none">
       <div class="container-xl">
+              <!-- Mobile only -->
             <div class="row g-2 align-items-center">
-                  <div class="col">
+                  <div class="col d-sm-block d-md-none">
                         <!-- Page pre-title -->
                         <div class="page-pretitle">
                               Dashboard
                         </div>
                         <h2 class="page-title">
-                              <span class=" d-none  d-md-block">Cooperative ID:&nbsp;</span> {{Auth::user()->code}}
+                              <span>Cooperative ID:&nbsp;</span> {{Auth::user()->code}}
+
+                              <a href="" alt="Copy" title="Copy" class="text-danger"
+                                    onclick="copyToClipboard('{{Auth::user()->code}}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy  "
+                                          width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5"
+                                          stroke="currentColor" fill="none" stroke-linecap="round"
+                                          stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path
+                                                d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                                          <path
+                                                d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                                    </svg></a>
+                        </h2>
+                  </div>
+                  <p></p>
+            </div>
+   <!-- end  Mobile only -->
+            <div class="row g-2 align-items-center">
+                  <div class="col d-none  d-md-block">
+                        <!-- Page pre-title -->
+                        <div class="page-pretitle">
+                              Dashboard
+                        </div>
+                        <h2 class="page-title">
+                              <span>Cooperative ID:&nbsp;</span> {{Auth::user()->code}}
 
                               <a href="" alt="Copy" title="Copy" class="text-danger"
                                     onclick="copyToClipboard('{{Auth::user()->code}}')">
@@ -63,31 +90,33 @@
                   <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
                               <span class="d-block ">
-                                  @if(empty($accountBalance))
+                                    @if(empty($accountBalance))
                                     <div class="input-group " id="show_hide_wallet">
                                           <span class="input-group-text">
                                                 Wallet
                                           </span>
-                                          <input type="password" value="₦ 0" class="btn text-secondary" style="width:140px;" >
+                                          <input type="password" value="₦ 0" class="btn text-secondary"
+                                                style="width:200px;">
                                           <span class="input-group-text">
                                                 <a href="" class="text-secondary">
                                                       <i class="fa fa-eye-slash"></i>
                                                 </a>
                                           </span>
                                     </div>
-                                    @else 
+                                    @else
                                     <div class="input-group " id="show_hide_wallet">
                                           <span class="input-group-text">
                                                 Wallet
                                           </span>
-                                          <input type="password" value="₦ {{number_format($accountBalance)}}" class="btn text-secondary" style="width:140px;" >
+                                          <input type="password" value="₦ {{number_format($accountBalance)}}"
+                                                class="btn text-secondary" style="width:200px;">
                                           <span class="input-group-text">
                                                 <a href="" class="text-secondary">
                                                       <i class="fa fa-eye-slash"></i>
                                                 </a>
                                           </span>
                                     </div>
-                                    @endif 
+                                    @endif
 
                               </span>
                               <a href="#" class="btn btn-danger d-none d-sm-inline-block" data-bs-toggle="modal"
@@ -102,7 +131,7 @@
                                     </svg>
                                     Fund Wallet
                               </a>
-                              <a href="#" class="btn btn-danger d-sm-none btn-icon"  data-bs-toggle="modal"
+                              <a href="#" class="btn btn-danger d-sm-none btn-icon" data-bs-toggle="modal"
                                     data-bs-target="#modal-showWalletAcount">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -361,7 +390,8 @@
                                                 <div class="row align-items-center">
                                                       <div class="col-auto">
                                                             <span class="bg-azure text-white avatar">
-                                                                  <a href="{{ url('cooperative-loan') }}" class="text-white">
+                                                                  <a href="{{ url('cooperative-loan') }}"
+                                                                        class="text-white">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                               class="icon icon-tabler icon-tabler-coins"
                                                                               width="24" height="24" viewBox="0 0 24 24"
@@ -534,13 +564,13 @@
                                           ₦{{number_format($sumApproveOrder->sum('grandtotal'))}}
                                     </div>
                                     <div class="d-flex mb-2">
-                                          <div> Payment for each member order you approved</div>
+                                          <!-- <div> Payment for each member order you approved</div> -->
                                           <div class="ms-auto">
                                           </div>
                                     </div>
                                     <div class="card">
-                                          <a href="{{ route('bank-payment') }}" class="btn btn-danger btn-xs">
-                                                &nbsp;Pay Now</a>
+                                          <!-- <a href="{{ route('bank-payment') }}" class="btn btn-danger btn-xs">
+                                                &nbsp;Pay Now</a> -->
                                     </div>
                               </div>
 
@@ -677,58 +707,60 @@
                               <div class="card-header">
                                     <h3 class="card-title">Wallet Transaction (s) </h3>
                               </div>
-                         
+
 
                               <div class="table-responsive" id="card">
-                              <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
+                                    <table class="table card-table table-vcenter text-nowrap datatable" id="orders">
                                           <thead>
                                                 <tr>
                                                       <th class="w-1"><input class="form-check-input m-0 align-middle"
                                                                   type="checkbox" aria-label="Select all product"></th>
-                                   
+
                                                       <th>Transaction Ref.</th>
                                                       <th>Amount</th>
                                                       <th>Description </th>
                                                       <th>Balance</th>
                                                       <th>Date</th>
-                                                      
+
                                                 </tr>
                                           </thead>
                                           <tbody>
-                                          @if(empty($walletTransaction))
-                                          @else
+                                                @if(empty($walletTransaction))
+                                                @else
                                                 @foreach($walletTransaction as $data)
                                                 <tr>
                                                       <td><input class="form-check-input m-0 align-middle"
                                                                   type="checkbox" aria-label="Select"></td>
                                                       <td>{{$data['reference']}}</td>
-                                                     
-                                                   
+
+
                                                       <td>
-                                                      @if(Str::contains($data['narration'], 'CREDIT'))
-                                                      {{$data['amount']}} <small>   <span class="badge bg-green-lt">Credit</span></small>
-                                                      @else
-                                                      {{$data['amount']}} <small><span class="badge bg-danger-lt">Debit</span></small>
-                                                      @endif 
+                                                            @if(Str::contains($data['narration'], 'CREDIT'))
+                                                            {{$data['amount']}} <small> <span
+                                                                        class="badge bg-green-lt">Credit</span></small>
+                                                            @else
+                                                            {{$data['amount']}} <small><span
+                                                                        class="badge bg-danger-lt">Debit</span></small>
+                                                            @endif
                                                       </td>
-                                                   
+
                                                       <td>{{$data['narration']}}</td>
                                                       <td>{{$data['balance']}}</td>
                                                       <td>{{ date('m/d/Y', strtotime($data['transaction_date']))}} </td>
-                                                     
-           
+
+
 
 
                                                 </tr>
                                                 @endforeach
-                                                @endif 
+                                                @endif
 
                                           </tbody>
 
                                     </table>
                               </div>
                               <div class="card-footer d-flex align-items-center">
-                   
+
                               </div>
                         </div>
                         <!--- card-->

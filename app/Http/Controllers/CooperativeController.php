@@ -14,6 +14,7 @@ use App\Models\SMS;
 use App\Models\Profile;
 use App\Models\Voucher;
 use App\Models\Wallet;
+use App\Models\WalletHistory;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Loan;
@@ -480,6 +481,62 @@ class CooperativeController extends Controller
         ->where('users.id', $id)
         ->get('credit');  
 
+        $WalletAccountNumber =  DB::table('wallet')
+        ->select(['wallet_account_number'])
+        ->where('user_id', $id)
+        ->where('cooperative_code', $code)
+        ->pluck('wallet_account_number')->first();
+        $WalletAccountName = DB::table('wallet')
+       ->select(['fullname'])
+       ->where('user_id', $id)
+       ->where('cooperative_code', $code)
+       ->pluck('fullname')->first(); 
+
+       $WalletBankName = DB::table('wallet')
+       ->select(['bank_name'])
+       ->where('user_id', $id)
+       ->where('cooperative_code', $code)
+       ->pluck('bank_name')->first(); 
+
+       $phoneNumber = DB::table('wallet')
+       ->select(['phone'])
+       ->where('user_id', $id)
+       ->where('cooperative_code', $code)
+       ->pluck('phone')->first();
+
+       $data = array(
+          "phone"            => $phoneNumber,
+          "account_number"   => $WalletAccountNumber,
+          );
+          $jsonData = json_encode($data);
+           $url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/info";
+          if($jsonData) {
+                   $curl = curl_init();
+                   curl_setopt_array($curl, array(
+                   CURLOPT_URL => $url,
+                   CURLOPT_RETURNTRANSFER => true,
+                   CURLOPT_CUSTOMREQUEST => 'POST',
+                   CURLOPT_POSTFIELDS =>$jsonData,
+                   CURLOPT_HTTPHEADER => array(
+                     'Content-Type: application/json',
+                     'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                      'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+        
+                     )
+                   ));
+                $res = curl_exec($curl);
+                $error = curl_error($curl);
+                curl_close($curl);
+                $result =  json_decode($res, true);
+               // dd($result);
+              }
+               if($result['status'] == 'success'){
+                $accountBalance = $result['data']['available_balance'];
+              }
+               if($result['status'] == 'error'){
+                  Session::flash('error',  ' Oops! something went wrong'); 
+              }
+
         $perPage = $request->perPage ?? 10;
         $search = $request->input('search');
         $orders = User::join('orders', 'orders.user_id', '=', 'users.id')
@@ -508,7 +565,10 @@ class CooperativeController extends Controller
             'countMemberOrders', 
             'credit', 
             'orders', 
-            'sumApproveOrder'))->withDetails ( $pagination );     
+            'sumApproveOrder',
+            'WalletAccountNumber', 'accountBalance',
+            'WalletAccountName',
+            'WalletBankName'))->withDetails ( $pagination );     
              } 
              else{
                  redirect()->back()->with('status', 'No record found'); 
@@ -519,7 +579,10 @@ class CooperativeController extends Controller
         'countMemberOrders', 
         'credit', 
         'orders', 
-        'sumApproveOrder'));
+        'sumApproveOrder',
+        'WalletAccountNumber', 'accountBalance',
+        'WalletAccountName',
+        'WalletBankName'));
     }
 
     public function cancelMemberNewOrder($id)
@@ -812,6 +875,8 @@ class CooperativeController extends Controller
     public function approveMemberOrderPage(Request $request, $id){
         if( Auth::user()){
           $order = Order::find($id);
+         
+
           return view('cooperative.approve-member-order', compact('order')); 
        }
         else { return Redirect::to('/login');}   
@@ -820,6 +885,7 @@ class CooperativeController extends Controller
 
     public function approveOrder(Request $request){
         $id = Auth::user()->id;
+        $code = Auth::user()->code;
         $cooperative = Auth::user()->coopname;
         $order_id = $request->order_id;
         $order = Order::find($order_id);
@@ -835,9 +901,70 @@ class CooperativeController extends Controller
         $paymentDays = User::where('id', $id)->get('payment_days');
         $pluckPaymentDays = Arr::pluck($paymentDays, 'payment_days');
         $payment = implode('', $pluckPaymentDays);
+         // check admin wallet
+         $WalletAccountNumber =  DB::table('wallet')
+         ->select(['wallet_account_number'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('wallet_account_number')->first();
+         if(empty($WalletAccountNumber)){
+            Session::flash('no-wallet', ' You do not have a wallet. Click here to create one.'); 
+        }
+
+         $WalletAccountName = DB::table('wallet')
+         ->select(['fullname'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('fullname')->first(); 
+
+         $WalletBankName = DB::table('wallet')
+         ->select(['bank_name'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('bank_name')->first(); 
+
+         $phoneNumber = DB::table('wallet')
+         ->select(['phone'])
+         ->where('user_id', $id)
+         ->where('cooperative_code', $code)
+         ->pluck('phone')->first();
+
+         $data = array(
+            "phone"            => $phoneNumber,
+            "account_number"   => $WalletAccountNumber,
+            );
+            $jsonData = json_encode($data);
+             $url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/info";
+            if($jsonData) {
+                     $curl = curl_init();
+                     curl_setopt_array($curl, array(
+                     CURLOPT_URL => $url,
+                     CURLOPT_RETURNTRANSFER => true,
+                     CURLOPT_CUSTOMREQUEST => 'POST',
+                     CURLOPT_POSTFIELDS =>$jsonData,
+                     CURLOPT_HTTPHEADER => array(
+                       'Content-Type: application/json',
+                       'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                        'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+          
+                       )
+                     ));
+                  $res = curl_exec($curl);
+                  $error = curl_error($curl);
+                  curl_close($curl);
+                  $result =  json_decode($res, true);
+                 // dd($result);
+                }
+                 if($result['status'] == 'success'){
+                  $accountBalance = $result['data']['available_balance'];
+                }
+                 if($result['status'] == 'error'){
+                    Session::flash('error',  ' Oops! something went wrong'); 
+                }
         
-        //if admin has credit approve order
-        if($getCredit > $grandtotal ){
+        //if admin has credit $getCredit approve order
+        //if admin wallet balance is higher
+        if($accountBalance > $grandtotal ){
             //check if member has loan before approving order
             $memberID = Order::where('id',  $order_id)->get('user_id');
             $checkExistingLoan = Loan::whereIn('member_id', $memberID)
@@ -855,21 +982,81 @@ class CooperativeController extends Controller
               ->get('*')->pluck('principal');
  
              if(!$checkExistingLoan->isEmpty()){
-             return redirect('cooperative-loan')->with('loanExist',  ''.$members.' has unfinished loan');
+                Session::flash('loanExist',  ''.$members.' has unfinished loan'); 
+             //return redirect('cooperative-loan')->with('loanExist',  ''.$members.' has unfinished loan');
              }
+            
+            //debit wallet  here
+            //9 payment service bank. code 120001
+            $debitData = array(
+                "phone"                 => $phoneNumber,
+                "account_number"        => $WalletAccountNumber,
+                "amount"                => $grandtotal,
+                "payment_gateway_code"  => "12001"
+                );
+                $jsonDebitData = json_encode($debitData);
+                 $debit_url = "https://api.staging.ogaranya.com/v1/2347033141516/wallet/debit";
+                if($jsonDebitData) {
+                         $curlopt = curl_init();
+                         curl_setopt_array($curl, array(
+                         CURLOPT_URL => $debit_url,
+                         CURLOPT_RETURNTRANSFER => true,
+                         CURLOPT_CUSTOMREQUEST => 'POST',
+                         CURLOPT_POSTFIELDS =>$jsonDebitData,
+                         CURLOPT_HTTPHEADER => array(
+                           'Content-Type: application/json',
+                           'token: e4f3f028-c0b4-4c9b-b8ef-8be41a7613f6',
+                            'publickey: 62f2da03d13992642d5416b3b1977071bf3adfe99a93b8daea6194306b168b84901f49025f25a245f083b0d627c921f5642ff124047e4a143dfe4cc1dd526d1b',
+              
+                           )
+                         ));
+                      $response = curl_exec($curlopt);
+                      $error = curl_error($curlopt);
+                      curl_close($curlopt);
+                      $detail =  json_decode($res, true);
+                     // dd($result);
+                    }
+                     if($result['status'] == 'success'){
+                      $walletOrderID = $result['data']['order_id'];
+                      $walletPaymentReference = $result['data']['payment_reference'];
+                    }
+                     if($result['status'] == 'error'){
+                        Session::flash('error',  ' Oops! something went wrong'); 
+                    }
+            if(!empty($walletPaymentReference)){
+                $walletID =  DB::table('wallet')
+                ->select(['id'])
+                ->where('user_id', $id)
+                ->where('cooperative_code', $code)
+                ->pluck('id')->first();
 
-            $status = 'approved'; 
-            $approve = Order::where('id', $order_id)
-            ->update([
-            'status' => $status,
-            'admin_settlement_msg' => 'payment is ' .$payment
-            ]);
+                $debitWalletTransaction  = new WalletHistory;
+                $debitWalletTransaction->wallet_id                  = $walletID;
+                $debitWalletTransaction->debit_order_id             = $walletOrderID;
+                $debitWalletTransaction->debit_payment_reference    = $walletPaymentReference;
+                $debitWalletTransaction->debit                      = $grandtotal;
+                $debitWalletTransaction->transaction_type           = 'debit';
+                $debitWalletTransaction->save();
+                
+                $status     = 'paid'; 
+                $pay_status = 'success'; 
+                $pay_type   = 'admin wallet'; 
+                $approve = Order::where('id', $order_id)
+                ->update([
+                'status'     => $status,
+                'pay_status' => $pay_status,
+                'pay_type'   => $pay_type,
+                ]);
+                
+            }
+          
+
             \DB::table('vouchers')->where('user_id', Auth::user()->id)->decrement('credit',$grandtotal);
             $orderItem_quantity= OrderItem::Join('products', 'products.id', '=', 'order_items.product_id')
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('order_items.order_id', $order_id)
             ->get('order_quantity');
-
+            
            $seller_id = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
            ->where('order_items.order_id', $order_id)
            //->distinct()
@@ -890,22 +1077,12 @@ class CooperativeController extends Controller
            ->pluck('products.id')
            ->toArray();
 
-        
            $orderItem_quantity= Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
            ->where('order_items.order_id', $order_id)
            ->distinct()
            ->pluck('order_items.order_quantity')
            ->toArray();
     
-            //Wallet::whereIn('user_id', $seller_id)->increment('credit', $seller_price); 
-
-                //for every approve order decrease product quantity
-                //  $stock = \DB::table('products')->where('id', $case)->first()->quantity;
-                //  dd($stock);
-                //  if($stock > $orderItem_quantity){
-                //    \DB::table('products')->where('id', $product_id)->decrement('quantity',$orderItem_quantity);
-                //  }
-          
              \LogActivity::addToLog('Admin approve order');
              $memberID = Order::where('id',  $order_id)->get('user_id');
              $memberEmail = User::whereIn('id', $memberID)->get('email');
@@ -1014,7 +1191,7 @@ class CooperativeController extends Controller
             return redirect('admin-member-order')->with('success', 'Approved successful!'); 
         }
         else{
-            return redirect('admin-member-order')->with('error', 'Your credit is low kindly contact LascocoMart to get funds');   
+            return redirect('admin-member-order')->with('low-wallet-balance', 'Your wallet balance is low. Kindly fund your wallet');   
         }
        
     }
