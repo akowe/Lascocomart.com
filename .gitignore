@@ -24,3 +24,4 @@ app/Http/Controllers/Wallet/WalletController.php
 *.php
 storage/logs/laravel.log
 *.log
+*.log

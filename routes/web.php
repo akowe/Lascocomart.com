@@ -297,7 +297,9 @@ Route::controller(SellerController::class)->group(function () {
 //search product by category
 Route::controller(CategoriesController::class)->group(function () {
     Route::get('/category/', 'category')->name('category');
-    Route::get('autocomplete', 'autocomplete')->name('autocomplete');
+    Route::group(['middleware' => ['only.ajax']], function() {
+        Route::get('autocomplete', 'autocomplete')->name('autocomplete');
+    });  
 });
 
 Route::controller(OrderController::class)->group(function () {
