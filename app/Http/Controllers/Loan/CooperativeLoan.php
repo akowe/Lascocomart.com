@@ -109,7 +109,7 @@ class CooperativeLoan extends Controller
             $perPage = $request->perPage ?? 10;
             $search = $request->input('search');
             $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
-           ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+           ->join('loan_type', 'loan_type.name', '=', 'loan.loan_type')
             ->select(['loan.*', 'loan_type.name', 'users.fname'])
             ->where('loan.cooperative_code', $code)
             ->orderBy('loan.created_at', 'desc')
@@ -625,8 +625,9 @@ class CooperativeLoan extends Controller
 
      }
 
-     public function calculateInterest(Request $request, $id, $amount, $duration, $memberID){
+     public function calculateInterest(Request $request, $amount, $duration, $memberID){
         if(Auth::user()){
+            $admin_id = Auth::user()->id;
             $code = Auth::user()->code;
             $memberName = User::all()->where('code', $code)->except(Auth::id()); 
 
@@ -646,32 +647,48 @@ class CooperativeLoan extends Controller
             $chooseLoanTypeID = LoanType::select('id')
             ->where('name', 'cash')
             ->where('cooperative_code', $code)->pluck('id')->first();
-            $loanTypeID = $id;
+           
+            $loanTypeID = LoanType::select('name')
+            ->where('name', 'cash')
+            ->where('cooperative_code', $code)->pluck('name')->first();
 
             $getLoanTypeName = LoanType::select('name')
-            ->where('id', $id)
+            ->where('name', 'cash')
             ->where('cooperative_code', $code)->get();
             $loanTypeName =Arr::pluck($getLoanTypeName, 'name');
             $loanType = implode(" ",$loanTypeName); 
 
-            $getRateType = LoanType::select('rate_type')
-            ->where('id', $id)
-            ->where('cooperative_code', $code)->get();
-            $loanRateType =Arr::pluck($getRateType, 'rate_type');
-            $rateType = implode(" ",$loanRateType); 
-         
-            $getPercentage = LoanType::select('percentage_rate')
-            ->where('id', $id)
-            ->where('cooperative_code', $code)->get();
-            $loanPercentage =Arr::pluck($getPercentage, 'percentage_rate');
-            $percentageRate = implode(" ",$loanPercentage); 
-        
-            $getTenure = LoanType::select('max_duration')
-            ->where('id', $id)
-            ->where('cooperative_code', $code)->get();
-            $loanTenure =Arr::pluck($getTenure, 'max_duration');
-            $maxTenure = implode(" ",$loanTenure); 
+            // $getRateType = LoanSetting::select('rate_type')
+            // ->where('cooperative_code', $code)->get();
+            // $loanRateType =Arr::pluck($getRateType, 'rate_type');
+            // $rateType = implode(" ",$loanRateType); 
 
+            // $getPercentage = LoanSetting::select('percentage_rate')
+            // ->where('cooperative_code', $code)->get();
+            // $loanPercentage =Arr::pluck($getPercentage, 'percentage_rate');
+            // $percentageRate = implode(" ",$loanPercentage); 
+
+            // $getTenure = LoanSetting::select('max_duration')
+            // ->where('cooperative_code', $code)->get();
+            // $loanTenure =Arr::pluck($getTenure, 'max_duration');
+            // $maxTenure = implode(" ",$loanTenure); 
+
+            $rateType = DB::table('loan_settings')
+            ->select('rate_type')
+            ->where('cooperative_code', $code)
+            ->pluck('rate_type')->first();
+
+            $percentageRate =  DB::table('loan_settings')
+            ->select('percentage_rate')
+            ->where('cooperative_code', $code)
+            ->pluck('percentage_rate')->first();
+
+            $maxTenure =  DB::table('loan_settings')
+            ->select('max_duration')
+            ->where('cooperative_code', $code)
+            ->pluck('max_duration')->first();
+
+            
             $principal = (int)$amount;
             $percentage = $principal / 100 * $percentageRate ;
             $annualInterest = $percentage * $maxTenure; //for flat rate interest type
@@ -679,7 +696,7 @@ class CooperativeLoan extends Controller
             
             return view('loan.cooperative.create-loan', compact('memberName', 'members', 'memberID', 'chooseLoanType', 'loanType',
             'principal', 'maxTenure',  'percentage', 'annualInterest', 'totalDue',
-            'rateType', 'duration', 'loanTypeID', 'chooseLoanTypeName', 'chooseLoanTypeID'));
+            'rateType', 'duration', 'chooseLoanTypeName', 'chooseLoanTypeID', 'loanTypeID'));
         }
         else{ return Redirect::to('/login');} 
     }
@@ -691,7 +708,7 @@ class CooperativeLoan extends Controller
             $search = $request->input('search');
 
             $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
-            ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+            ->join('loan_type', 'loan_type.name', '=', 'loan.loan_type')
              ->select(['loan.*', 'loan_type.name', 'users.fname'])
              ->where('loan.cooperative_code', $code)
              ->where('loan.loan_status', 'request')

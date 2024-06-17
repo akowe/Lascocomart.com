@@ -90,7 +90,7 @@ class LoanController extends Controller
                 $loan = new Loan;
                 $loan->member_id            = $id;
                 $loan->cooperative_code     = $cooperativeCode;
-                $loan->loan_type_id         = $request->ratetype;
+                $loan->loan_type            = $request->ratetype;
                 $loan->principal            = $request->principal;
                 $loan->interest             = $request->annual_interest;
                 $loan->total                = $request->total_due;
@@ -103,7 +103,7 @@ class LoanController extends Controller
                     $loanRepayment->loan_id             = $loan->id;
                     $loanRepayment->member_id           = $id;
                     $loanRepayment->cooperative_code    = $cooperativeCode;
-                    $loanRepayment->loan_type_id        = $request->ratetype;
+                    $loanRepayment->loan_type           = $request->ratetype;
                     $loanRepayment->monthly_principal   = $request->monthly_principal;
                     $loanRepayment->monthly_interest     = $request->monthly_interest;
                     $loanRepayment->monthly_due         = $request->monthly_due;

@@ -391,7 +391,7 @@ Route::controller(CooperativeLoan::class)->group(function () {
     Route::get('calulate-loan-repayment/{id}/{date}', 'calLoanRepayment');
     Route::post('cooperative-loan-repayment', 'storeLoanRepayment')->name('cooperative-loan-repayment');
     Route::get('cooperative-create-loan', 'createMemberLoan');
-    Route::get('calculate-member-interest/{id}/{amount}/{duration}/{members}', 'calculateInterest')->name('calculate-member-interest');
+    Route::get('calculate-member-interest/{amount}/{duration}/{members}', 'calculateInterest')->name('calculate-member-interest');
     Route::get('requested-loans', 'requestedLoan');
     Route::get('approved-loans', 'approvedLoan');
     Route::get('payout-loans', 'payOutLoan');
@@ -406,7 +406,7 @@ Route::controller(CooperativeLoan::class)->group(function () {
 Route::controller(MemberLoan::class)->group(function () {
     Route::get('member-request-loan', 'requestLoan')->name('member-request-loan');
     Route::get('member-loan-history', 'loanHistory');
-    Route::get('calculate-interest/{id}/{amount}/{duration}', 'calculateInterest')->name('calculate-interest');  
+    Route::get('calculate-interest/{amount}/{duration}', 'calculateInterest')->name('calculate-interest');  
 });
 //Wallet
 Route::controller(WalletController::class)->group(function (){

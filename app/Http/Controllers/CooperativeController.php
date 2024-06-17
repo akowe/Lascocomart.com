@@ -198,7 +198,7 @@ class CooperativeController extends Controller
          ->where('order_items.seller_id', $id);
 
          $loan = DB::table('loan')->join('users', 'users.id', '=', 'loan.member_id')
-         ->join('loan_type', 'loan_type.id', '=', 'loan.loan_type_id')
+         ->join('loan_type', 'loan_type.name', '=', 'loan.loan_type')
           ->select(['loan.*', 'loan_type.name', 'users.fname'])
           ->where('loan.cooperative_code', $code);
 

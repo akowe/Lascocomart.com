@@ -721,14 +721,14 @@
                                           document.getElementById('amountError').innerHTML = '';
                                     }
 
-                                    if (id == null || id == "" || id == 0) {
-                                          document.getElementById('loanError').style.color = 'red';
-                                          document.getElementById('loanError').innerHTML = 'choose  a loan type';
-                                          return false;
+                                    // if (id == null || id == "" || id == 0) {
+                                    //       document.getElementById('loanError').style.color = 'red';
+                                    //       document.getElementById('loanError').innerHTML = 'choose  a loan type';
+                                    //       return false;
 
-                                    } else {
-                                          document.getElementById('loanError').innerHTML = '';
-                                    }
+                                    // } else {
+                                    //       document.getElementById('loanError').innerHTML = '';
+                                    // }
 
                                     if (duration == null || duration == "" || duration == 0) {
                                           document.getElementById('monthError').style.color = 'red';
@@ -737,8 +737,8 @@
 
                                     } else {
                                           document.getElementById('monthError').innerHTML = ' ';
-                                          var url = "{{ URL('calculate-member-interest/') }}" + "/" + id + "/" +
-                                                amount + "/" +
+                                          var url = "{{ URL('calculate-member-interest/') }}" + "/" + amount + "/" +
+                                              
                                                 duration + "/" +
                                                 selected;
                                           location.href = url;

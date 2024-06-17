@@ -132,7 +132,7 @@
                                                             data-mask="00000000,00" data-mask-visible="true"
                                                             placeholder="Enter the amount you are requsting"
                                                             data-mask-reverse="true" autocomplete="off"
-                                                            value="{{ $principal}}" required>
+                                                            value="{{$principal}}" required>
                                                       <span id="amountError"></span>
 
                                                       @error('amount')
@@ -454,14 +454,14 @@
                   document.getElementById('amountError').innerHTML = '';
             }
 
-            if (id == null || id == "" || id == 0) {
-                  document.getElementById('loanError').style.color = 'red';
-                  document.getElementById('loanError').innerHTML = 'choose  a loan type';
-                  return false;
+            // if (id == null || id == "" || id == 0) {
+            //       document.getElementById('loanError').style.color = 'red';
+            //       document.getElementById('loanError').innerHTML = 'choose  a loan type';
+            //       return false;
 
-            } else {
-                  document.getElementById('loanError').innerHTML = '';
-            }
+            // } else {
+            //       document.getElementById('loanError').innerHTML = '';
+            // }
 
             if (duration == null || duration == "" || duration == 0) {
                   document.getElementById('monthError').style.color = 'red';
@@ -471,7 +471,7 @@
             } else {
                   document.getElementById('preview').style.display = 'block';
                   document.getElementById('monthError').innerHTML = ' ';
-                  var url = "{{ URL('calculate-interest/') }}" + "/" + id + "/" + amount + "/" + duration;
+                  var url = "{{ URL('calculate-interest/') }}" + "/" + amount + "/" + duration;
                   location.href = url;
             }
 
