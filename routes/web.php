@@ -375,6 +375,8 @@ Route::controller(LoanController::class)->group(function () {
     Route::post('cooperative-add-loan', 'cooperativeAddLoan')->name('cooperative-add-loan');
     Route::get('admin-loan-statement/{id}', 'cooperativeloanInvoice')->name('admin-loan-statement');
     Route::get('loan-statement/{id}', 'memberloanInvoice')->name('loan-statement');
+    Route::get('signature-pad', 'signaturePad');
+    Route::post('signature-pad', 'uploadSignature')->name('signature.pad');
 
 });
 //Cooperative Loan
