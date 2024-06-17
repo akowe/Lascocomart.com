@@ -20,7 +20,7 @@
                                     <a href="#" class="btn d-none ">
                                     </a>
                               </span>
-                              <a href="" class="btn btn-danger d-none d-sm-inline-block" data-bs-toggle="modal"
+                              <a href="" class="btn btn-danger d-none " data-bs-toggle="modal"
                                     data-bs-target="#modal-loantype" aria-label="Create new report">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -33,7 +33,7 @@
 
                                     New Loan Type
                               </a>
-                              <a href="" class="btn btn-danger d-sm-none btn-icon" data-bs-toggle="modal"
+                              <a href="" class="btn btn-danger d-none" data-bs-toggle="modal"
                                     data-bs-target="#modal-loantype" aria-label="">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -126,7 +126,7 @@
                                                       </svg>
 
                                                 </div>
-                                                <div> <strong class="text-dark">Add your interest on product loan below.</strong> 
+                                                <div> 
                                                 When member (s) order for products, and Admin make's payment on their behalf, it becomes a <strong>"Product Loan"</strong>.
                                                 </div>
                                           </div>
@@ -137,32 +137,7 @@
                                     @endif
                               </div>
                               
-                              <div class="col-12">
-                              @if($cashLoanInterest =='0')
-                                    <div class="alert alert-important  alert-azure alert-dismissible" role="alert">
-                                          <div class="d-flex">
-                                                <div>
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
-                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                                            stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                                            <path d="M12 9h.01" />
-                                                            <path d="M11 12h1v4h1" />
-                                                      </svg>
-
-                                                </div>
-                                                <div><strong
-                                                            class="text-dark">Untill you add your interest on cash loan below, </strong> before member (s) can request for cash loan </div>
-                                          </div>
-                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                                    </div>
-
-                                    @else
-                                    @endif
-                              </div>
+                         
                         </div>
                   </div>
                   <!--- end product loan --->
@@ -421,136 +396,9 @@
                                                                         </div> -->
 
                               </div>
-                              <p></p>
-                              <div class="row g-3">
-
-                                    <div class="col-md">
-                                          <div class="form-label required">Rate type
-                                          </div>
-                                          <select name="rate_type" id="" class="form-control">
-                                                <option value="">Choose</option>
-                                                <option value="flat rate">Flat /
-                                                      Fixed Rate</option>
-                                                <option value="simple interest">
-                                                      Simple Interest Rate</option>
-                                          </select>
-                                          @error('rate_type')
-                                          <div class="alert alert-danger alert-dismissible" role="alert">
-                                                <div class="d-flex">
-                                                      <div>
-                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                  class="icon alert-icon" width="24" height="24"
-                                                                  viewBox="0 0 24 24" stroke-width="2"
-                                                                  stroke="currentColor" fill="none"
-                                                                  stroke-linecap="round" stroke-linejoin="round">
-                                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                  <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                                                  <path d="M12 8v4" />
-                                                                  <path d="M12 16h.01" />
-                                                            </svg>
-                                                      </div>
-                                                      <div>
-                                                            {{ $message }}
-                                                      </div>
-                                                </div>
-                                                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                                          </div>
-                                          @enderror
-                                    </div>
-
-                                    <div class="col-md">
-                                          <div class="mb-3">
-                                                <div class="form-label required">
-                                                      Interest
-                                                      %
-                                                </div>
-
-                                                <div class="value-button" id="decrease" onclick="decreaseRate()"
-                                                      value="decrease Value">-
-                                                </div>
-                                                <input type="text" name="rate" value="0" id="rate">
-                                                <div class="value-button" id="increase" onclick="increaseRate()"
-                                                      value="Increase Value">+
-                                                </div>
-
-                                                @error('rate')
-                                                <div class="alert alert-danger alert-dismissible" role="alert">
-                                                      <div class="d-flex">
-                                                            <div>
-                                                                  <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
-                                                                  <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon alert-icon" width="24" height="24"
-                                                                        viewBox="0 0 24 24" stroke-width="2"
-                                                                        stroke="currentColor" fill="none"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                              fill="none" />
-                                                                        <path
-                                                                              d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                                                        <path d="M12 8v4" />
-                                                                        <path d="M12 16h.01" />
-                                                                  </svg>
-                                                            </div>
-                                                            <div>
-                                                                  {{ $message }}
-                                                            </div>
-                                                      </div>
-                                                      <a class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="close"></a>
-                                                </div>
-                                                @enderror
-                                          </div>
-                                    </div>
-                              </div>
-
-                              <p></p>
-                              <div class="row g-3">
-                                    <div class="col-md">
-                                          <div class="form-label">Minimum Loan
-                                                Duration (in months)</div>
-                                          <div class="value-button" id="decrease" onclick="decreaseMin()"
-                                                value="decrease Value">-</div>
-                                          <input type="number" name="minimum_duration" value="1" id="min">
-
-                                          <div class="value-button" id="increase" onclick="increaseMin()"
-                                                value="Increase Value">+</div>
-                                    </div>
-
-
-                                    <div class="col-md">
-                                          <div class="form-label required">Maximum
-                                                Loan Duration (in months)</div>
-                                          <div class="value-button" id="decrease" onclick="decreaseMax()"
-                                                value="decrease Value">-</div>
-                                          <input type="number" name="maximum_duration" value="1" id="max">
-                                          @error('maximum_duration')
-                                          <div class="alert alert-danger alert-dismissible" role="alert">
-                                                <div class="d-flex">
-                                                      <div>
-                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                  class="icon alert-icon" width="24" height="24"
-                                                                  viewBox="0 0 24 24" stroke-width="2"
-                                                                  stroke="currentColor" fill="none"
-                                                                  stroke-linecap="round" stroke-linejoin="round">
-                                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                  <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                                                  <path d="M12 8v4" />
-                                                                  <path d="M12 16h.01" />
-                                                            </svg>
-                                                      </div>
-                                                      <div>
-                                                            {{ $message }}
-                                                      </div>
-                                                </div>
-                                                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                                          </div>
-                                          @enderror
-                                          <div class="value-button" id="increase" onclick="increaseMax()"
-                                                value="Increase Value">+</div>
-                                    </div>
-                              </div>
+                           
+                   
+                            
 
                               <p></p>
                               <div class="row g-3">

@@ -1695,10 +1695,10 @@
 
                                                                                                       </a>
 
-                                                                                                      <a href="{{ url('cooperative-loan-type') }}"
+                                                                                                      <!-- <a href="{{ url('cooperative-loan-type') }}"
                                                                                                             class="dropdown-item">
                                                                                                             Loan Type
-                                                                                                      </a>
+                                                                                                      </a> -->
                                                                                                       <a href=""
                                                                                                             class="dropdown-item">
                                                                                                             Repayments
@@ -2798,7 +2798,8 @@
 
                                                 onClose: function() {
                                                       alert(
-                                                      'Transaction was not completed, window closed.');
+                                                            'Transaction was not completed, window closed.'
+                                                            );
                                                 }
                                           });
                                           handler.openIframe();
@@ -2935,7 +2936,23 @@
                                     }
                                     </script>
 
+                                    <script>
+                                    // loan approval
+                                    function increaseApproval() {
+                                          var value = parseInt(document.getElementById('approval').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value++;
+                                          document.getElementById('approval').value = value;
+                                    }
 
+                                    function decreaseApproval() {
+                                          var value = parseInt(document.getElementById('approval').value, 10);
+                                          value = isNaN(value) ? 0 : value;
+                                          value < 1 ? value = 1 : '';
+                                          value--;
+                                          document.getElementById('approval').value = value;
+                                    }
+                                    </script>
 
                                     <script>
                                     // @formatter:off
@@ -3688,30 +3705,30 @@
                                     }
                                     </script>
                                     <script>
-function download(file, text) {
-      //creating an invisible element
-      var element = document.createElement('a');
-      element.setAttribute('href',
-            'data:text/plain;charset=utf-8, ' +
-            encodeURIComponent(text));
-      element.setAttribute('download', file);
-      document.body.appendChild(element);
-      element.click();
+                                    function download(file, text) {
+                                          //creating an invisible element
+                                          var element = document.createElement('a');
+                                          element.setAttribute('href',
+                                                'data:text/plain;charset=utf-8, ' +
+                                                encodeURIComponent(text));
+                                          element.setAttribute('download', file);
+                                          document.body.appendChild(element);
+                                          element.click();
 
-      document.body.removeChild(element);
-}
+                                          document.body.removeChild(element);
+                                    }
 
-// Start file download.
+                                    // Start file download.
 
-document.getElementById("btnSave")
-      .addEventListener("click", function() {
-            var text =
-                  document.getElementById("text").value;
-            var filename = "wallet-account.txt";
+                                    document.getElementById("btnSave")
+                                          .addEventListener("click", function() {
+                                                var text =
+                                                      document.getElementById("text").value;
+                                                var filename = "wallet-account.txt";
 
-            download(filename, text);
-      }, false);
-</script>
+                                                download(filename, text);
+                                          }, false);
+                                    </script>
 
 </body>
 

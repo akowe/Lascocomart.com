@@ -15,6 +15,32 @@
 <!-- Alert start --->
 <div class="container-xl">
       <div class="row ">
+      <div class="col-12">
+                              @if($interest =='0')
+                                    <div class="alert alert-important  alert-azure alert-dismissible" role="alert">
+                                          <div class="d-flex">
+                                                <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                            <path d="M12 9h.01" />
+                                                            <path d="M11 12h1v4h1" />
+                                                      </svg>
+
+                                                </div>
+                                                <div><strong
+                                                            class="text-dark">Untill you add your interest rate on loan , </strong> before member (s) can request for cash / product loan </div>
+                                          </div>
+                                          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                    </div>
+
+                                    @else
+                                    @endif
+                              </div>
             <div class="col-12">
                   <p></p>
                   @if(session('profile'))
@@ -55,6 +81,27 @@
                                     </svg>
                               </div>
                               <div> {!! session('loan-repayment') !!}</div>
+                        </div>
+                        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                  </div>
+                  @endif
+
+                  @if(session('loan'))
+                  <div class="alert  alert-danger alert-dismissible" role="alert">
+                        <div class="d-flex">
+                              <div>
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24"
+                                          height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                          fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                          <path
+                                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                          <path d="M12 9v4" />
+                                          <path d="M12 17h.01" />
+                                    </svg>
+                              </div>
+                              <div> {!! session('loan') !!}</div>
                         </div>
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                   </div>
@@ -149,12 +196,12 @@
                                           <a href="#tabs-bank" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Bank
                                                 Details</a>
-                                       
+
                                           <a href="#tabs-loan-settings" data-bs-toggle="tab"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Loan
-                                                </a> 
-                                          <a href="#tabs-savings-settings" data-bs-toggle="tab"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Savings</a> 
+                                          </a>
+                                          <!-- <a href="#tabs-savings-settings" data-bs-toggle="tab"
+                                                class="list-group-item list-group-item-action d-flex align-items-center">Savings</a> -->
 
                                           @else
                                           <a href="#tabs-home-5" data-bs-toggle="tab"
@@ -766,13 +813,13 @@
                                           </div>
                                           <!----bank tab end ---->
 
-                                                 <!----Loan settings tab start ---->
-                                                 <div class="tab-pane" id="tabs-loan-settings">
+                                          <!----Loan settings tab start ---->
+                                          <div class="tab-pane" id="tabs-loan-settings">
                                                 <h4> </h4>
                                                 <form method="post" action="loan-settings" name="submit"
                                                       enctype="multipart/form-data">
                                                       @csrf
-                                                      <div class="row ">
+                                                      <!-- <div class="row ">
                                                             <div class="col-md">
                                                                   <div class="mb-3">
                                                                         <div class="form-label">Loan Processing Fee
@@ -785,13 +832,14 @@
                                                                         <div class="value-button" id="decrease"
                                                                               onclick="decreaseFee()"
                                                                               value="decrease Value">-</div>
-                                                                              @if(empty($cooperativeProessFee))
-                                                                              <input type="number" name="processing_fee"
-                                                                              value="0" id="fee">
-                                                                              @else
+                                                                        @if(empty($cooperativeProessFee))
                                                                         <input type="number" name="processing_fee"
-                                                                              value="{{$cooperativeProessFee}}" id="fee">
-                                                                              @endif 
+                                                                              value="0" id="fee">
+                                                                        @else
+                                                                        <input type="number" name="processing_fee"
+                                                                              value="{{$cooperativeProessFee}}"
+                                                                              id="fee">
+                                                                        @endif
                                                                         <div class="value-button" id="increase"
                                                                               onclick="increaseFee()"
                                                                               value="Increase Value">+</div>
@@ -811,42 +859,198 @@
                                                                         <div class="value-button" id="decrease"
                                                                               onclick="decreaseMax()"
                                                                               value="decrease Value">-</div>
-                                                                              @if(empty($cooperativeMaxLoan))
-                                                                              <input type="number" name="maximum_loan"
+                                                                        @if(empty($cooperativeMaxLoan))
+                                                                        <input type="number" name="maximum_loan"
                                                                               value="0" id="max">
-                                                                              @else
+                                                                        @else
                                                                         <input type="number" name="maximum_loan"
                                                                               value="{{ $cooperativeMaxLoan}}" id="max">
-                                                                              @endif 
+                                                                        @endif
                                                                         <div class="value-button" id="increase"
                                                                               onclick="increaseMax()"
                                                                               value="Increase Value">+</div>
                                                                   </div>
                                                             </div>
+                                                      </div> -->
+                                                      <p></p>
+                              <div class="row g-3">
+                                    <div class="col-md">
+                                          <div class="form-label">Minimum Loan
+                                                Duration (in months)</div>
+                                          <div class="value-button" id="decrease" onclick="decreaseMin()"
+                                                value="decrease Value">-</div>
+                                          <input type="number" name="min_duration" value="{{$minimumDuration}}" id="min">
+
+                                          <div class="value-button" id="increase" onclick="increaseMin()"
+                                                value="Increase Value">+</div>
+                                    </div>
+
+
+                                    <div class="col-md">
+                                          <div class="form-label required">Maximum
+                                                Loan Duration (in months)</div>
+                                          <div class="value-button" id="decrease" onclick="decreaseMax()"
+                                                value="decrease Value">-</div>
+                                          <input type="number" name="max_duration" value="{{$maximumDuration}}" id="max">
+                                          @error('maximum_duration')
+                                          <div class="alert alert-danger alert-dismissible" role="alert">
+                                                <div class="d-flex">
+                                                      <div>
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                  class="icon alert-icon" width="24" height="24"
+                                                                  viewBox="0 0 24 24" stroke-width="2"
+                                                                  stroke="currentColor" fill="none"
+                                                                  stroke-linecap="round" stroke-linejoin="round">
+                                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                  <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                  <path d="M12 8v4" />
+                                                                  <path d="M12 16h.01" />
+                                                            </svg>
                                                       </div>
+                                                      <div>
+                                                            {{ $message }}
+                                                      </div>
+                                                </div>
+                                                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                                          </div>
+                                          @enderror
+                                          <div class="value-button" id="increase" onclick="increaseMax()"
+                                                value="Increase Value">+</div>
+                                    </div>
+                              </div>
                                                       <!--loan row-->
+                                                      <p></p>
+                                                      <div class="row g-3">
+                                                      <div class="col-md">
+                                                                  <div class="mb-3">
+                                                                        <div class="form-label required">
+                                                                              Interest Rate
+                                                                              %
+                                                                        </div>
+
+                                                                        <div class="value-button" id="decrease"
+                                                                              onclick="decreaseRate()"
+                                                                              value="decrease Value">-
+                                                                        </div>
+                                                                        <input type="text" name="interest" value="{{$interest}}"
+                                                                              id="rate">
+                                                                        <div class="value-button" id="increase"
+                                                                              onclick="increaseRate()"
+                                                                              value="Increase Value">+
+                                                                        </div>
+
+                                                                        @error('interest')
+                                                                        <div class="alert alert-danger alert-dismissible"
+                                                                              role="alert">
+                                                                              <div class="d-flex">
+                                                                                    <div>
+                                                                                          <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                          <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="icon alert-icon"
+                                                                                                width="24" height="24"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke-width="2"
+                                                                                                stroke="currentColor"
+                                                                                                fill="none"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round">
+                                                                                                <path stroke="none"
+                                                                                                      d="M0 0h24v24H0z"
+                                                                                                      fill="none" />
+                                                                                                <path
+                                                                                                      d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                                <path d="M12 8v4" />
+                                                                                                <path d="M12 16h.01" />
+                                                                                          </svg>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                          {{ $message }}
+                                                                                    </div>
+                                                                              </div>
+                                                                              <a class="btn-close"
+                                                                                    data-bs-dismiss="alert"
+                                                                                    aria-label="close"></a>
+                                                                        </div>
+                                                                        @enderror
+                                                                  </div>
+                                                            </div>
+
+                                                            <div class="col-md">
+                                                                  <div class="form-label required">Rate type
+                                                                  </div>
+                                                                  <select name="rate_type" id="" class="form-control text-capitalize">
+                                                                       @if(empty($rateType))
+                                                                        <option value="">Choose</option>
+                                                                        @else
+                                                                  <option value="{{$rateType}}">{{$rateType}}</option>
+                                                                       @endif 
+                                                                        <option value="flat rate">Flat /
+                                                                              Fixed Rate</option>
+                                                                        <option value="simple interest">
+                                                                              Simple Interest Rate</option>
+                                                                  </select>
+                                                                  @error('rate_type')
+                                                                  <div class="alert alert-danger alert-dismissible"
+                                                                        role="alert">
+                                                                        <div class="d-flex">
+                                                                              <div>
+                                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                          class="icon alert-icon"
+                                                                                          width="24" height="24"
+                                                                                          viewBox="0 0 24 24"
+                                                                                          stroke-width="2"
+                                                                                          stroke="currentColor"
+                                                                                          fill="none"
+                                                                                          stroke-linecap="round"
+                                                                                          stroke-linejoin="round">
+                                                                                          <path stroke="none"
+                                                                                                d="M0 0h24v24H0z"
+                                                                                                fill="none" />
+                                                                                          <path
+                                                                                                d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                                          <path d="M12 8v4" />
+                                                                                          <path d="M12 16h.01" />
+                                                                                    </svg>
+                                                                              </div>
+                                                                              <div>
+                                                                                    {{ $message }}
+                                                                              </div>
+                                                                        </div>
+                                                                        <a class="btn-close" data-bs-dismiss="alert"
+                                                                              aria-label="close"></a>
+                                                                  </div>
+                                                                  @enderror
+                                                            </div>
+
+                                                         
+                                                      </div>
+
 
                                                       <div class="row ">
                                                             <div class="col-md">
                                                                   <div class="mb-3">
-                                                                        <div class="form-label required">Loan Approval Level
+                                                                        <div class="form-label required">Loan Approval
+                                                                              Level
                                                                         </div>
                                                                         <p>
                                                                               <small class="text-muted">Number of Excos
                                                                                     that must approve</small>
                                                                         </p>
                                                                         <div class="value-button" id="decrease"
-                                                                              onclick="decreaseMin()"
+                                                                              onclick="decreaseApproval()"
                                                                               value="decrease Value">-</div>
-                                                                              @if(empty($cooperativeApprovalLevel))
-                                                                              <input type="number" name="approval_level"
-                                                                              value="" id="min" >
-                                                                              @else
+                                                                        @if(empty($cooperativeApprovalLevel))
                                                                         <input type="number" name="approval_level"
-                                                                              value="{{$cooperativeApprovalLevel }}" id="min" >
-                                                                              @endif 
+                                                                              value="" id="approval">
+                                                                        @else
+                                                                        <input type="number" name="approval_level"
+                                                                              value="{{$cooperativeApprovalLevel }}"
+                                                                              id="approval">
+                                                                        @endif
                                                                         <div class="value-button" id="increase"
-                                                                              onclick="increaseMin()"
+                                                                              onclick="increaseApproval()"
                                                                               value="Increase Value">+</div>
                                                                   </div>
                                                                   @error('approval_level')
@@ -894,13 +1098,14 @@
                                                                         <div class="value-button" id="decrease"
                                                                               onclick="decreaseValue()"
                                                                               value="decrease Value">-</div>
-                                                                              @if(empty($cooperativeLoanRepayment))
-                                                                              <input type="number" name="repayment" value=""
-                                                                              id="number" >
-                                                                              @else
-                                                                        <input type="number" name="repayment" value="{{$cooperativeLoanRepayment }}"
-                                                                              id="number" >
-                                                                              @endif 
+                                                                        @if(empty($cooperativeLoanRepayment))
+                                                                        <input type="number" name="repayment" value=""
+                                                                              id="number">
+                                                                        @else
+                                                                        <input type="number" name="repayment"
+                                                                              value="{{$cooperativeLoanRepayment }}"
+                                                                              id="number">
+                                                                        @endif
                                                                         <div class="value-button" id="increase"
                                                                               onclick="increaseValue()"
                                                                               value="Increase Value">+</div>
@@ -3028,7 +3233,7 @@ function check_account_number() {
             document.getElementById('check_account').innerHTML = ' ';
             document.getElementById('show-progress').style.display = '';
 
- 
+
             // Make the fetch request with the variables
             //Test secret key: sk_test_b665e0b51fe5f6df4ea0f29a56d8d84b74eca251
             //live secret key : sk_live_883a3c48aa5da65d6793526046220d82ea0f1c16

@@ -355,6 +355,18 @@ input#max {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+input#approval {
+  text-align: center;
+  background: transparent;
+  margin: 0px;
+  width: 75%;
+  height: 40px;
+  border: var(--tblr-border-width) solid var(--tblr-border-color);
+  border-radius: var(--tblr-border-radius);
+  box-shadow: var(--tblr-box-shadow-input);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 input#fee {
   text-align: center;
   background: transparent;

@@ -156,7 +156,7 @@ class LoanController extends Controller
             // }
            // else{ 
             if($request->annual_interest < 1){
-                $setInterest = url('/cooperative-loan-type');
+                $setInterest = url('/account-settings');
                 return redirect('cooperative-create-loan')->with('loan', 'Interest on cash loan can not be "0" . Click here set interest '.$setInterest); 
             }
 

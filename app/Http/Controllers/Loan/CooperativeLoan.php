@@ -176,14 +176,6 @@ class CooperativeLoan extends Controller
             ->pluck('percentage_rate')->first();
 
 
-            $cashLoanInterest = DB::table('loan_type')
-            ->select(['loan_type.percentage_rate'])
-            ->where('admin_id', $id)
-            ->where('name', 'cash')
-            ->where('cooperative_code', $code)
-            ->where('deleted_at', '=', null)
-            ->pluck('percentage_rate')->first();
-
             $productLoanMinimumDuration = DB::table('loan_type')
             ->select(['loan_type.min_duration'])
             ->where('admin_id', $id)
@@ -272,7 +264,11 @@ class CooperativeLoan extends Controller
             $this->validate($request, [ 
                 'approval_level'    => 'required|string|max:255',
                 'repayment'         => 'required|string|max:255',
-                 ]);
+                'interest'          => 'required|string|max:255',
+                'rate_type'         => 'required|string|max:255',
+                'max_duration'      => 'required|string|max:255',
+                 ]);       
+
             $repayment = $request->repayment;
             if($repayment == 0){
                 return redirect()->back()->with('loan-repayment', 'Loan repayment date can not be "0" ');
@@ -283,8 +279,12 @@ class CooperativeLoan extends Controller
                 $newSetting  = new LoanSetting;
                 $newSetting->cooperative_code  = $code;
                 $newSetting->user_id           = $id;
-                $newSetting->processing_fee    = $request->processing_fee;
-                $newSetting->max_loan          = $request->maximum_loan;
+                $newSetting->percentage_rate   = $request->interest;
+                $newSetting->rate_type          = $request->rate_type;
+                // $newSetting->processing_fee    = $request->processing_fee;
+                // $newSetting->max_loan          = $request->maximum_loan;
+                $newSetting->max_duration      = $request->max_duration;
+                $newSetting->min_duration      = $request->min_duration;
                 $newSetting->approval_level    = $request->approval_level;
                 $newSetting->start_repayment   = $repayment; 
                 $newSetting->save();   
@@ -294,10 +294,14 @@ class CooperativeLoan extends Controller
                 $loanSeeting = LoanSetting::where('cooperative_code', $code)
                 ->update([
                 'user_id'           => $id,
-                'processing_fee'    => $request->processing_fee,
-                'max_loan'          => $request->maximum_loan,
+                // 'processing_fee'    => $request->processing_fee,
+                // 'max_loan'          => $request->maximum_loan,
                 'approval_level'    => $request->approval_level,
                 'start_repayment'   => $repayment,
+                'max_duration'      => $request->max_duration,
+                'min_duration'      => $request->min_duration,
+                'percentage_rate'   => $request->interest,
+                'rate_type'          => $request->rate_type
                 ]);
                 return redirect()->back()->with('success', 'Loan settings successfully added');
             } 
@@ -311,8 +315,8 @@ class CooperativeLoan extends Controller
             $cooperativeCode = Auth::user()->code;
             $this->validate($request, [  
             'name'              => 'required|string|max:255',
-            'rate'              => 'required|string|max:255',
-            'rate_type'         => 'required|string|max:255',
+           // 'rate'              => 'required|string|max:255',
+            //'rate_type'         => 'required|string|max:255',
             // 'guarantor'         => 'max:255',
             'minimum_duration'  => 'string|max:255',
             'maximum_duration'  => 'required|string|max:255',
@@ -323,8 +327,8 @@ class CooperativeLoan extends Controller
             $addLoan->admin_id          = $user_id;
             $addLoan->cooperative_code  = $cooperativeCode;
             $addLoan->name              = $request->name;
-            $addLoan->percentage_rate   = $request->rate;
-            $addLoan->rate_type         = $request->rate_type;
+            //$addLoan->percentage_rate   = $request->rate;
+            //$addLoan->rate_type         = $request->rate_type;
             // $addLoan->guarantor         = $request->guarantor;
             $addLoan->min_duration      = $request->minimum_duration;
             $addLoan->max_duration      = $request->maximum_duration;

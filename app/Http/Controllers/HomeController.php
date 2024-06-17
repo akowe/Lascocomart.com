@@ -111,6 +111,31 @@ class HomeController extends Controller
             ->select('loan_service_charge')
             ->pluck('loan_service_charge')->first();
 
+            $interest = DB::table('loan_settings')
+            ->select(['percentage_rate'])
+            ->where('user_id', $id)
+            ->where('cooperative_code', $code)
+            ->pluck('percentage_rate')->first();
+
+            $rateType = DB::table('loan_settings')
+            ->select(['rate_type'])
+            ->where('user_id', $id)
+            ->where('cooperative_code', $code)
+            ->pluck('rate_type')->first();
+
+
+            $minimumDuration = DB::table('loan_settings')
+            ->select(['min_duration'])
+            ->where('user_id', $id)
+            ->where('cooperative_code', $code)
+            ->pluck('min_duration')->first();
+
+            $maximumDuration = DB::table('loan_settings')
+            ->select(['max_duration'])
+            ->where('user_id', $id)
+            ->where('cooperative_code', $code)
+            ->pluck('max_duration')->first();
+
             $cooperativeProessFee = DB::table('loan_settings')
             ->where('cooperative_code', $code)
             ->select('*')
@@ -133,8 +158,11 @@ class HomeController extends Controller
             
             \LogActivity::addToLog('Profile');
             return view('profile', compact('users', 
-            'companyName', 'selectBankName', 'appServiceCharge', 'cooperativeProessFee',
-            'cooperativeMaxLoan', 'cooperativeApprovalLevel', 'cooperativeLoanRepayment'
+            'companyName', 'selectBankName', 'appServiceCharge', 
+            'cooperativeProessFee',
+            'cooperativeMaxLoan', 'cooperativeApprovalLevel', 
+            'cooperativeLoanRepayment', 'interest', 'rateType', 'minimumDuration',
+            'maximumDuration'
             ));
         }
         else{
